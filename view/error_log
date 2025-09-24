@@ -1,0 +1,125 @@
+[21-Oct-2024 08:56:32 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[21-Oct-2024 08:56:32 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[21-Oct-2024 08:56:32 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[21-Oct-2024 08:56:43 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/add_rights.php on line 18
+[21-Oct-2024 09:01:03 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[21-Oct-2024 09:01:03 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[21-Oct-2024 09:01:03 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[21-Oct-2024 09:01:59 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[21-Oct-2024 09:01:59 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[21-Oct-2024 09:01:59 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[21-Oct-2024 09:02:20 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[21-Oct-2024 09:02:20 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[21-Oct-2024 09:02:20 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[21-Oct-2024 09:10:37 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[21-Oct-2024 09:10:37 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[21-Oct-2024 09:10:37 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[21-Oct-2024 11:35:01 UTC] PHP Warning:  Undefined array key "store_id" in /home/dortxpbw/tonnac.dorthpro.com/view/expire_soon.php on line 3
+[21-Oct-2024 12:35:03 Africa/Lagos] PHP Warning:  Undefined array key "store_id" in /home/dortxpbw/tonnac.dorthpro.com/view/reached_reorder.php on line 5
+[21-Oct-2024 11:36:00 UTC] PHP Warning:  Undefined array key "store_id" in /home/dortxpbw/tonnac.dorthpro.com/view/post_expense.php on line 3
+[21-Oct-2024 12:36:00 Africa/Lagos] PHP Warning:  Undefined variable $user_id in /home/dortxpbw/tonnac.dorthpro.com/view/post_expense.php on line 21
+[21-Oct-2024 11:36:05 UTC] PHP Warning:  Undefined array key "store_id" in /home/dortxpbw/tonnac.dorthpro.com/view/pay_debt.php on line 3
+[21-Oct-2024 11:36:13 UTC] PHP Warning:  Undefined array key "store_id" in /home/dortxpbw/tonnac.dorthpro.com/view/pay_debt.php on line 3
+[21-Oct-2024 15:26:36 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[21-Oct-2024 15:26:37 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[21-Oct-2024 15:26:37 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[28-Oct-2024 09:30:39 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[28-Oct-2024 09:30:39 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[28-Oct-2024 09:30:39 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[28-Oct-2024 09:32:00 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[28-Oct-2024 09:32:00 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[28-Oct-2024 09:32:00 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[28-Oct-2024 09:32:14 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[28-Oct-2024 09:32:14 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[28-Oct-2024 09:32:14 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[04-Nov-2024 09:36:13 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[04-Nov-2024 09:36:13 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[04-Nov-2024 09:36:13 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[04-Nov-2024 09:37:26 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[04-Nov-2024 09:37:26 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[04-Nov-2024 09:37:26 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[04-Nov-2024 09:40:21 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[04-Nov-2024 09:40:21 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[04-Nov-2024 09:40:21 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[05-Nov-2024 07:24:33 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[05-Nov-2024 07:24:33 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[05-Nov-2024 07:24:33 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[11-Nov-2024 12:05:11 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[11-Nov-2024 12:05:12 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[11-Nov-2024 12:05:12 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[13-Nov-2024 11:11:32 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[13-Nov-2024 11:11:32 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[13-Nov-2024 11:11:32 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[19-Nov-2024 15:32:25 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[19-Nov-2024 15:32:25 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[19-Nov-2024 15:32:25 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[19-Nov-2024 15:34:11 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[19-Nov-2024 15:34:11 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[19-Nov-2024 15:34:11 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[28-Nov-2024 07:59:50 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[28-Nov-2024 07:59:50 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[28-Nov-2024 07:59:50 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[05-Dec-2024 08:47:50 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[05-Dec-2024 08:47:50 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[05-Dec-2024 08:47:50 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[02-Jan-2025 12:14:15 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[02-Jan-2025 12:14:15 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[02-Jan-2025 12:14:15 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[14-Feb-2025 08:55:46 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[14-Feb-2025 08:55:46 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[14-Feb-2025 08:55:46 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[14-Feb-2025 08:59:36 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/post_fixed_asset.php on line 34
+[14-Feb-2025 08:59:40 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/post_depreciation.php on line 35
+[14-Feb-2025 09:05:34 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/post_fixed_asset.php on line 34
+[14-Feb-2025 09:05:40 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/post_depreciation.php on line 35
+[14-Feb-2025 09:24:35 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[14-Feb-2025 09:24:35 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[14-Feb-2025 09:24:35 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[14-Feb-2025 12:20:42 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[14-Feb-2025 12:20:42 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[14-Feb-2025 12:20:42 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[14-Feb-2025 12:21:45 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[14-Feb-2025 12:21:45 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[14-Feb-2025 12:21:45 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[17-Feb-2025 10:09:33 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[17-Feb-2025 10:09:33 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[17-Feb-2025 10:09:33 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[17-Feb-2025 11:07:47 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[17-Feb-2025 11:07:47 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[17-Feb-2025 11:07:47 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[17-Feb-2025 15:09:00 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[17-Feb-2025 15:09:00 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[17-Feb-2025 15:09:00 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[18-Feb-2025 13:30:46 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[18-Feb-2025 13:30:47 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[18-Feb-2025 13:30:47 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[18-Feb-2025 14:21:20 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[18-Feb-2025 14:21:20 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[18-Feb-2025 14:21:20 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[05-Mar-2025 17:23:28 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[05-Mar-2025 17:23:28 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[05-Mar-2025 17:23:28 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[12-Mar-2025 10:01:04 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[12-Mar-2025 10:01:04 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[12-Mar-2025 10:01:04 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[12-Mar-2025 10:06:21 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[12-Mar-2025 10:06:21 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[12-Mar-2025 10:06:21 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[12-Mar-2025 10:07:34 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[12-Mar-2025 10:07:34 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[12-Mar-2025 10:07:34 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[12-Mar-2025 10:32:27 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[12-Mar-2025 10:32:27 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[12-Mar-2025 10:32:27 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[10-May-2025 16:11:50 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[10-May-2025 16:11:50 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[10-May-2025 16:11:50 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[02-Jun-2025 07:11:06 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[02-Jun-2025 07:11:06 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[02-Jun-2025 07:11:06 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[03-Aug-2025 12:44:56 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[03-Aug-2025 12:44:56 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[03-Aug-2025 12:44:56 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256
+[25-Aug-2025 07:26:15 Africa/Lagos] PHP Warning:  foreach() argument must be of type array|object, string given in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 186
+[25-Aug-2025 07:26:15 Africa/Lagos] PHP Warning:  Undefined variable $month in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 248
+[25-Aug-2025 07:26:15 Africa/Lagos] PHP Warning:  Undefined variable $revenue in /home/dortxpbw/tonnac.dorthpro.com/view/users.php on line 256

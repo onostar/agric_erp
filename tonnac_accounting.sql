@@ -1,0 +1,1953 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Oct 18, 2024 at 04:31 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.1.17
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `tonnac_accounting`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `account_class`
+--
+
+CREATE TABLE `account_class` (
+  `class_id` int(11) NOT NULL,
+  `account_group` int(11) NOT NULL,
+  `sub_group` int(11) NOT NULL,
+  `class` varchar(1024) NOT NULL,
+  `class_code` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `account_class`
+--
+
+INSERT INTO `account_class` (`class_id`, `account_group`, `sub_group`, `class`, `class_code`) VALUES
+(1, 1, 1, 'Bank', 0),
+(2, 1, 1, 'Cash', 0),
+(3, 1, 1, 'Inventories', 0),
+(4, 1, 1, 'Trade Receivables', 0),
+(5, 1, 2, 'Properties, Plants And Equipment', 0),
+(6, 1, 2, 'Accum Depre Properties, Plant And Equipment', 0),
+(7, 2, 3, 'Account Payables', 0),
+(8, 2, 3, 'Tax Payables', 0),
+(9, 2, 3, 'Other Payables', 0),
+(10, 2, 4, 'Loans', 0),
+(11, 3, 5, 'Revenue', 0),
+(12, 4, 6, 'Admin And General Expense', 0),
+(13, 4, 6, 'Other Expense', 0),
+(14, 4, 7, 'Cost Of Sales', 0),
+(15, 4, 8, 'Depreciation', 0),
+(16, 5, 9, 'Share Capital', 0),
+(17, 5, 9, 'Retained Earnings', 0),
+(18, 4, 10, 'Loss On Disposal Of Asset', 0),
+(19, 3, 5, 'Other Revenue', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `account_groups`
+--
+
+CREATE TABLE `account_groups` (
+  `account_id` int(11) NOT NULL,
+  `account_group` varchar(50) NOT NULL,
+  `account_code` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `account_groups`
+--
+
+INSERT INTO `account_groups` (`account_id`, `account_group`, `account_code`) VALUES
+(1, 'Assets', 0),
+(2, 'Liabilities', 0),
+(3, 'Income', 0),
+(4, 'Expenses', 0),
+(5, 'Equity', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `account_sub_groups`
+--
+
+CREATE TABLE `account_sub_groups` (
+  `sub_group_id` int(11) NOT NULL,
+  `account_group` int(11) NOT NULL,
+  `sub_group` varchar(1024) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `account_sub_groups`
+--
+
+INSERT INTO `account_sub_groups` (`sub_group_id`, `account_group`, `sub_group`) VALUES
+(1, 1, 'Current Asset'),
+(2, 1, 'Fixed Assets'),
+(3, 2, 'Current Liabilities'),
+(4, 2, 'Non Current Liabilities'),
+(5, 3, 'Income'),
+(6, 4, 'Operating Expenses'),
+(7, 4, 'Cost Of Sales'),
+(8, 4, 'Depreciation'),
+(9, 5, 'Share Capital'),
+(10, 4, 'Disposal Of Asset');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `assets`
+--
+
+CREATE TABLE `assets` (
+  `asset_id` int(11) NOT NULL,
+  `asset` varchar(255) NOT NULL,
+  `asset_no` varchar(50) NOT NULL,
+  `location` int(11) NOT NULL,
+  `supplier` varchar(255) NOT NULL,
+  `cost` decimal(12,2) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `accum_dep` decimal(12,2) NOT NULL,
+  `useful_life` float NOT NULL,
+  `salvage_value` decimal(12,2) NOT NULL,
+  `book_value` decimal(12,2) NOT NULL,
+  `ledger` int(50) NOT NULL,
+  `specification` text NOT NULL,
+  `asset_status` int(11) NOT NULL,
+  `purchase_date` date DEFAULT NULL,
+  `deployment_date` date DEFAULT NULL,
+  `post_date` datetime DEFAULT NULL,
+  `posted_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `asset_locations`
+--
+
+CREATE TABLE `asset_locations` (
+  `location_id` int(11) NOT NULL,
+  `location` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `asset_locations`
+--
+
+INSERT INTO `asset_locations` (`location_id`, `location`) VALUES
+(1, 'SECURITY POST'),
+(2, 'FRONT DESK'),
+(3, 'ICT'),
+(4, 'PROCUREMENT'),
+(5, 'HEAD OFFICE');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `asset_postings`
+--
+
+CREATE TABLE `asset_postings` (
+  `asset_id` int(11) NOT NULL,
+  `asset` int(11) NOT NULL,
+  `store` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `asset_ledger` int(11) NOT NULL,
+  `contra_ledger` int(11) NOT NULL,
+  `details` varchar(1024) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `total_amount` decimal(12,2) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `trans_date` date DEFAULT NULL,
+  `post_date` datetime DEFAULT NULL,
+  `posted_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `audit_trail`
+--
+
+CREATE TABLE `audit_trail` (
+  `audit_id` int(11) NOT NULL,
+  `store` int(11) NOT NULL,
+  `item` int(11) NOT NULL,
+  `transaction` varchar(255) NOT NULL,
+  `previous_qty` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `posted_by` int(11) NOT NULL,
+  `post_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `banks`
+--
+
+CREATE TABLE `banks` (
+  `bank_id` int(11) NOT NULL,
+  `bank` varchar(255) NOT NULL,
+  `account_number` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cash_flows`
+--
+
+CREATE TABLE `cash_flows` (
+  `fow_id` int(11) NOT NULL,
+  `account` int(11) NOT NULL,
+  `details` varchar(1024) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `trans_type` varchar(50) NOT NULL,
+  `activity` varchar(50) NOT NULL,
+  `post_date` datetime DEFAULT NULL,
+  `posted_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `categories`
+--
+
+CREATE TABLE `categories` (
+  `category_id` int(11) NOT NULL,
+  `department` varchar(255) NOT NULL,
+  `category` varchar(1024) NOT NULL,
+  `price` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `categories`
+--
+
+INSERT INTO `categories` (`category_id`, `department`, `category`, `price`) VALUES
+(30, '11', 'RAW MATERIALS', 0),
+(31, '12', 'PRODUCTS', 0),
+(32, '13', 'CONSUMABLE', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `companies`
+--
+
+CREATE TABLE `companies` (
+  `company_id` int(11) NOT NULL,
+  `company` varchar(255) NOT NULL,
+  `logo` varchar(255) DEFAULT NULL,
+  `date_created` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `companies`
+--
+
+INSERT INTO `companies` (`company_id`, `company`, `logo`, `date_created`) VALUES
+(1, 'Tonnac Recycling Technologies', 'icon.png', '2024-08-28 14:46:39');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cost_of_sales`
+--
+
+CREATE TABLE `cost_of_sales` (
+  `cost_of_sales_id` int(11) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `details` varchar(1024) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `store` int(11) NOT NULL,
+  `trans_date` date DEFAULT NULL,
+  `post_date` datetime DEFAULT NULL,
+  `posted_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customers`
+--
+
+CREATE TABLE `customers` (
+  `customer_id` int(11) NOT NULL,
+  `customer` varchar(50) NOT NULL,
+  `ledger_id` int(11) NOT NULL,
+  `acn` int(50) NOT NULL,
+  `customer_type` varchar(20) NOT NULL,
+  `phone_numbers` varchar(20) NOT NULL,
+  `customer_address` varchar(100) NOT NULL,
+  `customer_email` varchar(50) NOT NULL,
+  `wallet_balance` int(11) NOT NULL,
+  `amount_due` int(11) NOT NULL,
+  `reg_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `customer_trail`
+--
+
+CREATE TABLE `customer_trail` (
+  `id` int(11) NOT NULL,
+  `customer` int(11) NOT NULL,
+  `description` varchar(1024) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `store` int(11) NOT NULL,
+  `posted_by` int(11) NOT NULL,
+  `post_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `debtors`
+--
+
+CREATE TABLE `debtors` (
+  `debtor_id` int(11) NOT NULL,
+  `customer` int(11) NOT NULL,
+  `invoice` varchar(50) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `store` int(11) NOT NULL,
+  `debt_status` int(11) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `posted_by` int(11) NOT NULL,
+  `post_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `departments`
+--
+
+CREATE TABLE `departments` (
+  `department_id` int(11) NOT NULL,
+  `department` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `departments`
+--
+
+INSERT INTO `departments` (`department_id`, `department`) VALUES
+(11, 'Raw Materials'),
+(12, 'Products'),
+(13, 'Consumables');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `deposits`
+--
+
+CREATE TABLE `deposits` (
+  `deposit_id` int(11) NOT NULL,
+  `store` int(11) NOT NULL,
+  `customer` int(11) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `payment_mode` varchar(50) NOT NULL,
+  `bank` int(11) NOT NULL,
+  `invoice` varchar(50) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `details` varchar(255) NOT NULL,
+  `trans_date` date DEFAULT NULL,
+  `post_date` datetime DEFAULT NULL,
+  `posted_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `depreciation`
+--
+
+CREATE TABLE `depreciation` (
+  `depreciation_id` int(11) NOT NULL,
+  `asset` int(11) NOT NULL,
+  `cost` decimal(12,2) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `useful_life` float NOT NULL,
+  `salvage_value` decimal(12,2) NOT NULL,
+  `dr_ledger` int(11) NOT NULL,
+  `contra_ledger` int(11) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `accum_dep` decimal(12,2) NOT NULL,
+  `book_value` decimal(12,2) NOT NULL,
+  `details` varchar(1024) NOT NULL,
+  `trx_date` date NOT NULL,
+  `post_date` datetime DEFAULT NULL,
+  `posted_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `director_posting`
+--
+
+CREATE TABLE `director_posting` (
+  `director_id` int(11) NOT NULL,
+  `financier` int(11) NOT NULL,
+  `contra_ledger` int(11) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `trans_type` varchar(50) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `details` varchar(1024) NOT NULL,
+  `store` int(11) NOT NULL,
+  `trans_date` date DEFAULT NULL,
+  `post_date` datetime DEFAULT NULL,
+  `posted_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `disposed_assets`
+--
+
+CREATE TABLE `disposed_assets` (
+  `disposed_id` int(11) NOT NULL,
+  `asset` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `accum_dep` decimal(12,2) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `reason` varchar(1024) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `disposed_date` datetime DEFAULT NULL,
+  `disposed_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `expenses`
+--
+
+CREATE TABLE `expenses` (
+  `expense_id` int(11) NOT NULL,
+  `store` int(11) NOT NULL,
+  `posted_by` int(11) NOT NULL,
+  `expense_head` varchar(255) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `contra` int(11) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `details` text NOT NULL,
+  `expense_date` datetime NOT NULL,
+  `post_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `expense_heads`
+--
+
+CREATE TABLE `expense_heads` (
+  `exp_head_id` int(11) NOT NULL,
+  `expense_head` varchar(255) NOT NULL,
+  `ledger_id` int(11) NOT NULL,
+  `acn` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `expense_heads`
+--
+
+INSERT INTO `expense_heads` (`exp_head_id`, `expense_head`, `ledger_id`, `acn`) VALUES
+(4, 'UTILITY BILLS', 37, 40601237),
+(5, 'TRANSPORTATION', 38, 40601238),
+(6, 'SALARIES AND WAGES', 39, 40601239),
+(7, 'DEPRECIATION', 40, 40801540),
+(8, 'AMORTIZATION - SOFTWARE COST', 41, 40801541),
+(9, 'LOSS ON DISPOSAL OF ASSET', 60, 401001860),
+(10, 'COST OF SALES', 63, 40701463),
+(11, 'COMPANY INCOME TAX', 67, 40601267),
+(12, 'LOAN FEES', 68, 40601368),
+(13, 'BANK CHARGES', 69, 40601369),
+(14, 'LOSS DUE TO DAMAGE', 81, 40601381);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `finance_cost`
+--
+
+CREATE TABLE `finance_cost` (
+  `finance_id` int(11) NOT NULL,
+  `financier` int(11) NOT NULL,
+  `contra_ledger` int(11) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `trans_type` varchar(50) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `details` varchar(1024) NOT NULL,
+  `store` int(11) NOT NULL,
+  `trans_date` date DEFAULT NULL,
+  `post_date` datetime DEFAULT NULL,
+  `posted_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `inventory`
+--
+
+CREATE TABLE `inventory` (
+  `inventory_id` int(11) NOT NULL,
+  `item` int(11) NOT NULL,
+  `item_type` varchar(50) DEFAULT NULL,
+  `store` int(11) NOT NULL,
+  `cost_price` float NOT NULL,
+  `quantity` float NOT NULL,
+  `batch_number` int(11) NOT NULL,
+  `expiration_date` date DEFAULT NULL,
+  `reorder_level` float NOT NULL,
+  `post_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `issue_items`
+--
+
+CREATE TABLE `issue_items` (
+  `issue_id` int(11) NOT NULL,
+  `from_store` int(11) NOT NULL,
+  `item` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `issue_status` int(11) NOT NULL,
+  `invoice` varchar(50) NOT NULL,
+  `cost_price` int(11) DEFAULT NULL,
+  `posted_by` int(11) NOT NULL,
+  `post_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `items`
+--
+
+CREATE TABLE `items` (
+  `item_id` int(11) NOT NULL,
+  `department` varchar(255) NOT NULL,
+  `category` int(11) NOT NULL,
+  `item_name` varchar(255) NOT NULL,
+  `item_type` varchar(50) DEFAULT NULL,
+  `cost_price` float NOT NULL,
+  `sales_price` float NOT NULL,
+  `pack_size` float NOT NULL,
+  `pack_price` float NOT NULL,
+  `wholesale` float NOT NULL,
+  `wholesale_pack` float NOT NULL,
+  `reorder_level` float NOT NULL,
+  `barcode` varchar(255) NOT NULL,
+  `item_status` int(11) NOT NULL,
+  `date_created` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `items`
+--
+
+INSERT INTO `items` (`item_id`, `department`, `category`, `item_name`, `item_type`, `cost_price`, `sales_price`, `pack_size`, `pack_price`, `wholesale`, `wholesale_pack`, `reorder_level`, `barcode`, `item_status`, `date_created`) VALUES
+(319, '11', 30, 'PET', 'Raw material', 1500, 0, 0, 0, 0, 0, 100, '', 0, '2024-09-16 14:46:37'),
+(320, '11', 30, 'HDPE', 'Raw material', 1000, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:46:48'),
+(321, '11', 30, 'LDPE', 'Raw material', 500, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:46:55'),
+(322, '11', 30, 'PVC', 'Raw material', 1000, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:46:59'),
+(323, '11', 30, 'POLYPROPELENE', 'Raw material', 0, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:47:11'),
+(324, '11', 30, 'POLYSTYRENE', 'Raw material', 0, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:47:37'),
+(325, '12', 31, 'PET FLAKES', 'Product', 180, 1000, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:47:54'),
+(326, '12', 31, 'PVC POWDER', 'Product', 1000, 4000, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:48:01'),
+(327, '12', 31, 'POLYSTYRENE FLAKES', 'Product', 0, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:48:35'),
+(328, '12', 31, 'POLYPROPYLENE FLAKES', 'Product', 0, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:48:53'),
+(329, '12', 31, 'PET MOULD', 'Product', 30, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:49:05'),
+(330, '13', 32, 'HANDGLOVES', 'Consumable', 0, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:51:18'),
+(331, '12', 31, 'HDPE FLAKES', 'Product', 800, 3000, 0, 0, 0, 0, 10, '', 0, '2024-09-16 15:36:26'),
+(332, '12', 31, 'LDPE FLAKES', 'Product', 0, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 15:36:32');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `item_transfers`
+--
+
+CREATE TABLE `item_transfers` (
+  `transfer_id` int(11) NOT NULL,
+  `item_from` int(11) NOT NULL,
+  `item_to` int(11) NOT NULL,
+  `removed_qty` int(11) NOT NULL,
+  `added_qty` int(11) NOT NULL,
+  `store` int(11) NOT NULL,
+  `posted_by` int(11) NOT NULL,
+  `post_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ledgers`
+--
+
+CREATE TABLE `ledgers` (
+  `ledger_id` int(11) NOT NULL,
+  `account_group` int(11) NOT NULL,
+  `sub_group` int(11) NOT NULL,
+  `class` int(11) NOT NULL,
+  `ledger` varchar(1024) NOT NULL,
+  `acn` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `ledgers`
+--
+
+INSERT INTO `ledgers` (`ledger_id`, `account_group`, `sub_group`, `class`, `ledger`, `acn`) VALUES
+(24, 1, 2, 5, 'LAND AND BUILDING', 1020524),
+(25, 1, 2, 5, 'OFFICE EQUIPMENT', 1020525),
+(28, 1, 1, 2, 'CASH ACCOUNT', 1010228),
+(29, 1, 1, 3, 'INVENTORIES', 1010329),
+(30, 3, 5, 11, 'GENERAL REVENUE', 30501130),
+(37, 4, 6, 12, 'UTILITY BILLS', 40601237),
+(38, 4, 6, 12, 'TRANSPORTATION', 40601238),
+(39, 4, 6, 12, 'SALARIES AND WAGES', 40601239),
+(40, 4, 8, 15, 'DEPRECIATION EXPENSE', 40801540),
+(41, 4, 8, 15, 'AMORTIZATION - SOFTWARE COST', 40801541),
+(42, 1, 2, 6, 'ACCUM DEPRE - LAND AND BUILDING', 1020642),
+(44, 1, 2, 6, 'ACCUM DEPRE - OFFICE EQUIPMENT', 1020644),
+(45, 5, 9, 16, 'EQUITY CAPITAL', 50901645),
+(46, 5, 9, 17, 'RETAINED EARNINGS', 50901746),
+(47, 1, 2, 5, 'MOTOR VEHICLES', 1020547),
+(48, 1, 2, 5, 'FURNITURE AND FITTINGS', 1020548),
+(49, 5, 9, 16, 'DIRECTOR CURRENT ACCOUNT', 50901649),
+(60, 4, 10, 18, 'LOSS ON DISPOSAL OF ASSET', 401001860),
+(61, 3, 5, 19, 'GAIN ON DISPOSAL OF ASSET', 30501961),
+(62, 1, 2, 6, 'ACCUM DEPRE - MOTOR VEHICLES', 1020662),
+(63, 4, 7, 14, 'COST OF SALES', 40701463),
+(67, 4, 6, 13, 'COMPANY INCOME TAX', 40601267),
+(68, 4, 6, 13, 'LOAN FEES', 40601368),
+(69, 4, 6, 13, 'BANK CHARGES', 40601369),
+(70, 2, 3, 9, 'SHORT TERM LOANS', 2030970),
+(71, 2, 4, 10, 'LONG TERM LOANS', 20401071),
+(81, 4, 6, 13, 'INVENTORY ADJUSTMENT', 40601381);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `loans`
+--
+
+CREATE TABLE `loans` (
+  `loan_id` int(11) NOT NULL,
+  `financier` int(11) NOT NULL,
+  `loan_account` int(11) NOT NULL,
+  `contra_ledger` int(11) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `details` varchar(1024) NOT NULL,
+  `trans_type` varchar(50) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `trans_date` date DEFAULT NULL,
+  `store` int(11) NOT NULL,
+  `post_date` datetime DEFAULT NULL,
+  `posted_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `menus`
+--
+
+CREATE TABLE `menus` (
+  `menu_id` int(11) NOT NULL,
+  `menu` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `menus`
+--
+
+INSERT INTO `menus` (`menu_id`, `menu`) VALUES
+(1, 'Admin menu'),
+(2, 'Sales menu'),
+(3, 'Inventory'),
+(4, 'Financial mgt'),
+(5, 'Reports'),
+(6, 'Financial reports'),
+(7, 'Production'),
+(9, 'Chart Of Account'),
+(10, 'Asset Management');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `multiple_payments`
+--
+
+CREATE TABLE `multiple_payments` (
+  `id` int(11) NOT NULL,
+  `store` int(11) NOT NULL,
+  `invoice` varchar(255) NOT NULL,
+  `cash` decimal(12,2) NOT NULL,
+  `transfer` decimal(12,2) NOT NULL,
+  `pos` decimal(12,2) NOT NULL,
+  `bank` int(11) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `posted_by` int(11) NOT NULL,
+  `post_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `opening_balance`
+--
+
+CREATE TABLE `opening_balance` (
+  `balance_id` int(11) NOT NULL,
+  `ledger` int(11) NOT NULL,
+  `trans_type` varchar(50) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `trans_date` date DEFAULT NULL,
+  `store` int(11) NOT NULL,
+  `details` varchar(1024) NOT NULL,
+  `post_date` datetime DEFAULT NULL,
+  `posted_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `other_income`
+--
+
+CREATE TABLE `other_income` (
+  `income_id` int(11) NOT NULL,
+  `income_head` varchar(255) NOT NULL,
+  `activity` varchar(50) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `details` varchar(1024) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `post_date` datetime DEFAULT NULL,
+  `posted_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `other_payments`
+--
+
+CREATE TABLE `other_payments` (
+  `payment_id` int(11) NOT NULL,
+  `customer` int(11) NOT NULL,
+  `invoice` varchar(50) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `payment_mode` varchar(20) NOT NULL,
+  `store` int(11) NOT NULL,
+  `posted_by` int(11) NOT NULL,
+  `post_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `other_transactions`
+--
+
+CREATE TABLE `other_transactions` (
+  `trx_id` int(11) NOT NULL,
+  `store` int(11) NOT NULL,
+  `ledger` int(11) NOT NULL,
+  `contra_ledger` int(11) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `details` varchar(1024) NOT NULL,
+  `trans_type` varchar(50) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `trans_date` date DEFAULT NULL,
+  `post_date` datetime DEFAULT NULL,
+  `posted_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `outstanding`
+--
+
+CREATE TABLE `outstanding` (
+  `id` int(11) NOT NULL,
+  `customer` int(11) NOT NULL,
+  `amount` int(11) NOT NULL,
+  `post_date` datetime DEFAULT NULL,
+  `posted_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payments`
+--
+
+CREATE TABLE `payments` (
+  `payment_id` int(11) NOT NULL,
+  `sales_type` varchar(11) NOT NULL,
+  `customer` int(11) NOT NULL,
+  `amount_due` decimal(12,2) NOT NULL,
+  `store` int(11) NOT NULL,
+  `amount_paid` decimal(12,2) NOT NULL,
+  `discount` decimal(12,2) NOT NULL,
+  `payment_mode` varchar(255) NOT NULL,
+  `bank` int(11) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `post_date` datetime DEFAULT NULL,
+  `posted_by` int(11) NOT NULL,
+  `invoice` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `production`
+--
+
+CREATE TABLE `production` (
+  `product_id` int(11) NOT NULL,
+  `product` int(11) NOT NULL,
+  `product_number` varchar(50) DEFAULT NULL,
+  `product_qty` int(11) NOT NULL,
+  `raw_material` int(11) NOT NULL,
+  `raw_quantity` int(11) NOT NULL,
+  `unit_cost` int(11) NOT NULL,
+  `store` int(11) NOT NULL,
+  `posted_by` int(11) NOT NULL,
+  `post_date` datetime DEFAULT NULL,
+  `product_status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchases`
+--
+
+CREATE TABLE `purchases` (
+  `purchase_id` int(11) NOT NULL,
+  `store` int(11) NOT NULL,
+  `invoice` varchar(255) NOT NULL,
+  `item` int(11) NOT NULL,
+  `cost_price` decimal(12,2) NOT NULL,
+  `sales_price` int(255) NOT NULL,
+  `vendor` int(255) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `waybill` decimal(12,2) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `expiration_date` date NOT NULL,
+  `purchase_status` int(11) NOT NULL,
+  `purchase_date` date DEFAULT NULL,
+  `posted_by` int(11) NOT NULL,
+  `post_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchase_payments`
+--
+
+CREATE TABLE `purchase_payments` (
+  `payment_id` int(11) NOT NULL,
+  `vendor` int(11) NOT NULL,
+  `invoice` varchar(50) NOT NULL,
+  `product_cost` decimal(12,2) NOT NULL,
+  `waybill` decimal(12,2) NOT NULL,
+  `amount_due` decimal(12,2) NOT NULL,
+  `amount_paid` decimal(12,2) NOT NULL,
+  `payment_mode` varchar(20) NOT NULL,
+  `store` int(11) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `trans_date` date DEFAULT NULL,
+  `posted_by` int(11) NOT NULL,
+  `post_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `remove_items`
+--
+
+CREATE TABLE `remove_items` (
+  `remove_id` int(11) NOT NULL,
+  `item` int(11) NOT NULL,
+  `store` int(11) NOT NULL,
+  `previous_qty` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `cost` decimal(12,2) NOT NULL,
+  `total_amount` decimal(12,2) NOT NULL,
+  `reason` varchar(255) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `removed_by` int(11) NOT NULL,
+  `removed_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `remove_reasons`
+--
+
+CREATE TABLE `remove_reasons` (
+  `remove_id` int(11) NOT NULL,
+  `reason` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `remove_reasons`
+--
+
+INSERT INTO `remove_reasons` (`remove_id`, `reason`) VALUES
+(2, 'Damages');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rights`
+--
+
+CREATE TABLE `rights` (
+  `right_id` int(11) NOT NULL,
+  `menu` int(11) NOT NULL,
+  `sub_menu` int(11) NOT NULL,
+  `user` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sales`
+--
+
+CREATE TABLE `sales` (
+  `sales_id` int(11) NOT NULL,
+  `item` int(11) NOT NULL,
+  `store` int(11) NOT NULL,
+  `sales_type` varchar(11) NOT NULL,
+  `customer` int(11) NOT NULL,
+  `invoice` varchar(255) NOT NULL,
+  `quantity` float NOT NULL,
+  `price` decimal(12,2) NOT NULL,
+  `discount` decimal(12,2) NOT NULL,
+  `total_amount` decimal(12,2) NOT NULL,
+  `cost` decimal(12,2) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `posted_by` int(11) NOT NULL,
+  `sales_status` int(11) NOT NULL,
+  `post_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sales_returns`
+--
+
+CREATE TABLE `sales_returns` (
+  `return_id` int(11) NOT NULL,
+  `invoice` varchar(255) NOT NULL,
+  `store` int(11) NOT NULL,
+  `item` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `amount` int(11) NOT NULL,
+  `reason` varchar(1024) NOT NULL,
+  `returned_by` int(11) NOT NULL,
+  `return_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stock_adjustments`
+--
+
+CREATE TABLE `stock_adjustments` (
+  `adjust_id` int(11) NOT NULL,
+  `item` int(11) NOT NULL,
+  `store` int(11) NOT NULL,
+  `adjusted_by` int(11) NOT NULL,
+  `previous_qty` int(11) NOT NULL,
+  `new_qty` int(11) NOT NULL,
+  `adjust_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stores`
+--
+
+CREATE TABLE `stores` (
+  `store_id` int(11) NOT NULL,
+  `company` int(11) NOT NULL,
+  `store` varchar(124) NOT NULL,
+  `store_address` varchar(255) NOT NULL,
+  `phone_number` varchar(50) NOT NULL,
+  `date_created` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `stores`
+--
+
+INSERT INTO `stores` (`store_id`, `company`, `store`, `store_address`, `phone_number`, `date_created`) VALUES
+(1, 1, 'Main Office', '9 Market Road, Rumuomasi, Portharcourt, Rivers State', '', '2024-08-28 19:54:43');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `sub_menus`
+--
+
+CREATE TABLE `sub_menus` (
+  `sub_menu_id` int(11) NOT NULL,
+  `menu` int(11) NOT NULL,
+  `sub_menu` varchar(255) NOT NULL,
+  `url` varchar(50) NOT NULL,
+  `status` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `sub_menus`
+--
+
+INSERT INTO `sub_menus` (`sub_menu_id`, `menu`, `sub_menu`, `url`, `status`) VALUES
+(1, 1, 'Add Users', 'add_user', 0),
+(2, 1, 'Disable User', 'disable_user', 0),
+(3, 1, 'Activate User', 'activate_user', 0),
+(4, 1, 'Reset Password', 'reset_password', 0),
+(5, 1, 'Add Category', 'add_department', 0),
+(6, 1, 'Add Sub-category', 'add_category', 0),
+(7, 1, 'Add Items', 'add_item', 0),
+(8, 1, 'Modify Item Name', 'modify_item', 0),
+(9, 1, 'Add Bank', 'add_bank', 1),
+(10, 1, 'Manage Prices', 'item_price', 0),
+(11, 1, 'Add Remove Reasons', 'add_remove_reasons', 0),
+(12, 2, 'Direct Sales', 'direct_sales', 1),
+(13, 2, 'Sales Order', 'sales_order', 1),
+(14, 2, 'Post Sales Order', 'post_sales_order', 1),
+(15, 2, 'Sales Return', 'sales_return', 0),
+(16, 2, 'Reprint Receipt', 'print_receipt', 0),
+(17, 3, 'Set Reorder Level', 'reorder_level', 0),
+(18, 3, 'Product Balance', 'stock_balance', 1),
+(19, 3, 'Receive Purchases', 'stockin_purchase', 0),
+(20, 3, 'Add Supplier', 'add_vendor', 0),
+(21, 3, 'Adjust Quantity', 'stock_adjustment', 0),
+(22, 3, 'Remove Item', 'remove_item', 0),
+(23, 3, 'Adjust Expiration', 'adjust_expiration', 0),
+(24, 4, 'Add Expense Head', 'add_exp_head', 1),
+(25, 4, 'Post Expense', 'post_expense', 0),
+(26, 5, 'Item List', 'item_list', 0),
+(27, 5, 'Bank List', 'bank_list', 0),
+(28, 5, 'List Of Suppliers', 'vendor_list', 0),
+(29, 5, 'Sales Return Report', 'sales_return_report', 0),
+(30, 5, 'Stock Adjustment Report', 'stock_adjustment_report', 0),
+(31, 5, 'Item Removed Report', 'item_removed_report', 0),
+(33, 5, 'Purchase Reports', 'purchase_reports', 0),
+(34, 5, 'Out Of Stock', 'out_of_stock', 0),
+(35, 5, 'Soon To Expire', 'expire_soon', 0),
+(36, 5, 'Expired Items', 'expired_items', 0),
+(37, 5, 'Reached Reorder Level', 'reached_reorder', 0),
+(38, 5, 'Item History', 'item_history', 0),
+(39, 5, 'Purchase By Item', 'purchase_by_item', 0),
+(40, 5, 'Purchase Per Vendor', 'purchase_per_vendor', 0),
+(41, 6, 'Sales Report', 'revenue_report', 0),
+(42, 6, 'Cash Payments', 'cash_list', 0),
+(43, 6, 'POS Payments', 'pos_list', 0),
+(44, 6, 'Transfer Payments', 'transfer_list', 0),
+(45, 6, 'Cashier Report', 'cashier_report', 0),
+(46, 6, 'Revenue By Category', 'revenue_by_category', 0),
+(47, 6, 'Daily Income Statement', 'profit_and_loss', 0),
+(48, 6, 'Expense Report', 'expense_report', 0),
+(49, 5, 'Highest Selling Items', 'highest_selling', 0),
+(50, 5, 'Fast Selling Items', 'fast_selling', 0),
+(51, 1, 'Change Category', 'change_category', 0),
+(52, 1, 'Update Item Barcode', 'update_barcode', 1),
+(53, 3, 'Transfer Items', 'transfer_item', 1),
+(54, 3, 'Pending Transfer', 'pending_transfer', 1),
+(55, 3, 'Accept Items', 'accept_items', 1),
+(56, 3, 'Returned Transfer', 'returned_transfer', 1),
+(57, 5, 'Transferred Items Report', 'transfer_report', 1),
+(58, 5, 'Accept Items Report', 'accept_report', 1),
+(59, 3, 'All Store Balance', 'all_store_balance', 1),
+(60, 2, 'Wholesale', 'wholesale', 1),
+(62, 1, 'Add Customer', 'add_customer', 0),
+(63, 5, 'Customer List', 'customer_list', 0),
+(64, 6, 'Retail Sales', 'retail_sales', 1),
+(65, 6, 'Wholesale Report', 'wholesale_report', 1),
+(66, 6, 'Customer Statement', 'customer_statement', 0),
+(67, 6, 'Credit Sales List', 'credit_sales_list', 0),
+(68, 6, 'Debtors Report', 'debtors_list', 0),
+(69, 4, 'Pay Debt', 'pay_debt', 0),
+(70, 6, 'Debt Payment Report', 'debt_payment_report', 0),
+(71, 1, 'Add Menu', 'add_menu', 1),
+(72, 1, 'Add Sub-menu', 'add_sub_menu', 1),
+(73, 1, 'Edit Sub Menu', 'edit_sub_menu', 1),
+(74, 1, 'Manage Profile', 'manage_profile', 1),
+(75, 1, 'Add Store', 'add_store', 1),
+(76, 1, 'Update Store Details', 'update_store', 0),
+(77, 1, 'Add User Rights', 'add_rights', 1),
+(78, 1, 'Delete Rights', 'delete_right', 1),
+(79, 1, 'Edit Customer Info', 'edit_customer_info', 0),
+(80, 4, 'Customer Payments', 'fund_wallet', 0),
+(81, 4, 'Reverse Deposit', 'reverse_deposit', 1),
+(82, 1, 'Adjust Expiration', 'adjust_expiration', 1),
+(83, 3, 'Transfer Qty Btw Items', 'transfer_qty', 1),
+(85, 5, 'List Of Users', 'user_list', 0),
+(86, 3, 'Reprint Transfer Receipt', 'reprint_transfer', 1),
+(87, 1, 'Give Rights', 'give_user_right', 0),
+(89, 1, 'Manage Cost Price', 'raw_material_price', 1),
+(90, 3, 'Stock Balance', 'raw_material_balance', 0),
+(91, 5, 'Raw Materials', 'raw_material_list', 0),
+(92, 7, 'Make Product', 'make_product', 0),
+(93, 7, 'Pending Production', 'pending_production', 0),
+(94, 5, 'Production Report', 'production_report', 0),
+(96, 2, 'Make Sales', 'wholesale', 0),
+(97, 5, 'Production Statistics', 'production_statistics', 0),
+(98, 3, 'Consumables', 'consumables', 1),
+(99, 3, 'Issue Items', 'issue_items', 0),
+(100, 5, 'Issued Items Report', 'issue_report', 0),
+(101, 3, 'Pending Issued Items', 'pending_issued', 0),
+(102, 5, 'Issued Item History', 'issued_item_stats', 0),
+(103, 4, 'Reverse Expense Posting', 'reverse_expense', 1),
+(104, 6, 'Customer Payment Reports', 'deposit_report', 0),
+(105, 4, 'Post Debt Balance', 'post_debt', 1),
+(106, 4, 'Post Purchases', 'post_purchase', 0),
+(107, 4, 'Vendor Payments', 'post_vendor_payments', 0),
+(108, 6, 'Vendor Payment Report', 'vendor_payments', 0),
+(109, 6, 'Vendor Statement', 'vendor_statement', 0),
+(110, 4, 'Post Vendor Balance', 'post_vendor_balance', 1),
+(111, 5, 'Transfer Qty Bwt Reports', 'transfer_qty_btw_reports', 1),
+(112, 7, 'Make Ice Cream', 'make_ice_cream', 1),
+(113, 5, 'Ice Cream Productions', 'ice_cream_production', 1),
+(114, 6, 'Outstanding Debts Posting', 'outstanding_debts', 1),
+(115, 1, 'Merge Customer Files', 'merge_files', 0),
+(119, 6, 'Cash Sales Report', 'cash_sales_list', 0),
+(120, 6, 'Pos Sales Report', 'pos_sales_report', 0),
+(121, 6, 'Transfer Sales Report', 'transfer_sales', 0),
+(122, 6, 'Vendor Payables', 'payables', 0),
+(123, 9, 'Account Group', 'account_group', 0),
+(124, 9, 'Account Sub-group', 'account_sub_group', 0),
+(125, 9, 'Account Class', 'account_class', 0),
+(126, 9, 'Account Ledgers', 'account_ledger', 0),
+(127, 9, 'View Chart Of Account', 'chart_of_account', 0),
+(128, 9, 'Update Ledger', 'update_ledger', 0),
+(129, 4, 'Post Opening Balance', 'post_opening_balance', 0),
+(130, 6, 'Trial Balance', 'trial_balance', 0),
+(131, 6, 'Asset Postings', 'asset_posting', 0),
+(132, 6, 'Depreciation Report', 'depreciation_report', 0),
+(133, 6, 'Monthly Financial Position', 'monthly_financial_position', 0),
+(134, 6, 'Yearly Financial Position', 'yearly_financial_position', 0),
+(135, 6, 'Cash Flow', 'cash_flow', 0),
+(136, 6, 'Account Statement', 'account_statement', 0),
+(137, 6, 'Loans Received', 'loans', 0),
+(138, 6, 'Loan Transactions', 'loan_postings', 0),
+(139, 6, 'Director Transactions', 'director_postings', 0),
+(140, 6, 'Finance Costs Trx', 'other_postings', 0),
+(141, 6, 'Yearly Income Statement', 'yearly_income_statement', 0),
+(142, 6, 'Other Transactions', 'other_transactions', 0),
+(143, 4, 'Reverse Transaction', 'reverse_transactions', 0),
+(144, 10, 'Add Asset Location', 'add_asset_location', 0),
+(145, 10, 'Add New Asset', 'add_asset', 0),
+(146, 10, 'Asset Register', 'asset_register', 0),
+(147, 10, 'Allocate Asset', 'allocate_asset', 0),
+(148, 10, 'Dispose Asset', 'dispose_asset', 0),
+(149, 10, 'View Disposed Assets', 'disposed_assets', 0),
+(150, 10, 'Delete Asset', 'delete_asset', 0),
+(151, 4, 'Post Fixed Asset', 'post_fixed_asset', 0),
+(152, 4, 'Post Depreciation', 'post_depreciation', 0),
+(153, 4, 'Post Other Transactions', 'post_other_trx', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transactions`
+--
+
+CREATE TABLE `transactions` (
+  `transaction_id` int(11) NOT NULL,
+  `account_type` int(11) NOT NULL,
+  `sub_group` int(11) NOT NULL,
+  `class` int(11) NOT NULL,
+  `account` int(50) NOT NULL,
+  `debit` decimal(12,3) NOT NULL,
+  `credit` decimal(12,3) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `details` varchar(1024) NOT NULL,
+  `trx_status` int(11) NOT NULL,
+  `trans_date` date DEFAULT NULL,
+  `post_date` datetime DEFAULT NULL,
+  `posted_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `transfers`
+--
+
+CREATE TABLE `transfers` (
+  `transfer_id` int(11) NOT NULL,
+  `item` int(11) NOT NULL,
+  `from_store` int(11) NOT NULL,
+  `to_store` int(11) NOT NULL,
+  `invoice` varchar(50) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `cost_price` int(11) NOT NULL,
+  `sales_price` int(11) NOT NULL,
+  `expiration` date NOT NULL,
+  `transfer_status` int(11) NOT NULL,
+  `posted_by` int(11) NOT NULL,
+  `accept_by` int(11) NOT NULL,
+  `post_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `user_id` int(11) NOT NULL,
+  `full_name` varchar(1024) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `user_role` varchar(255) NOT NULL,
+  `user_password` varchar(1024) NOT NULL,
+  `status` int(11) NOT NULL,
+  `store` int(11) NOT NULL,
+  `reg_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`user_id`, `full_name`, `username`, `user_role`, `user_password`, `status`, `store`, `reg_date`) VALUES
+(1, 'Administrator', 'Sysadmin', 'Admin', '$2y$10$dcUrnR/.PvfK7XeYcP60hOyW2qnPSSvEq/Wxee6lv5DETW8pbGXYu', 0, 1, '2022-09-27 13:47:21');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vendors`
+--
+
+CREATE TABLE `vendors` (
+  `vendor_id` int(11) NOT NULL,
+  `vendor` varchar(1024) NOT NULL,
+  `contact_person` varchar(255) NOT NULL,
+  `phone` varchar(255) NOT NULL,
+  `email_address` varchar(255) NOT NULL,
+  `balance` int(11) NOT NULL,
+  `account_no` int(11) NOT NULL,
+  `ledger_id` int(11) NOT NULL,
+  `created_date` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `waybills`
+--
+
+CREATE TABLE `waybills` (
+  `waybill_id` int(11) NOT NULL,
+  `invoice` varchar(50) NOT NULL,
+  `vendor` int(11) NOT NULL,
+  `invoice_amount` decimal(12,2) NOT NULL,
+  `waybill` decimal(12,2) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `store` int(11) NOT NULL,
+  `post_date` datetime DEFAULT NULL,
+  `posted_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `account_class`
+--
+ALTER TABLE `account_class`
+  ADD PRIMARY KEY (`class_id`);
+
+--
+-- Indexes for table `account_groups`
+--
+ALTER TABLE `account_groups`
+  ADD PRIMARY KEY (`account_id`);
+
+--
+-- Indexes for table `account_sub_groups`
+--
+ALTER TABLE `account_sub_groups`
+  ADD PRIMARY KEY (`sub_group_id`);
+
+--
+-- Indexes for table `assets`
+--
+ALTER TABLE `assets`
+  ADD PRIMARY KEY (`asset_id`);
+
+--
+-- Indexes for table `asset_locations`
+--
+ALTER TABLE `asset_locations`
+  ADD PRIMARY KEY (`location_id`);
+
+--
+-- Indexes for table `asset_postings`
+--
+ALTER TABLE `asset_postings`
+  ADD PRIMARY KEY (`asset_id`);
+
+--
+-- Indexes for table `audit_trail`
+--
+ALTER TABLE `audit_trail`
+  ADD PRIMARY KEY (`audit_id`);
+
+--
+-- Indexes for table `banks`
+--
+ALTER TABLE `banks`
+  ADD PRIMARY KEY (`bank_id`);
+
+--
+-- Indexes for table `cash_flows`
+--
+ALTER TABLE `cash_flows`
+  ADD PRIMARY KEY (`fow_id`);
+
+--
+-- Indexes for table `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`category_id`);
+
+--
+-- Indexes for table `companies`
+--
+ALTER TABLE `companies`
+  ADD PRIMARY KEY (`company_id`);
+
+--
+-- Indexes for table `cost_of_sales`
+--
+ALTER TABLE `cost_of_sales`
+  ADD PRIMARY KEY (`cost_of_sales_id`);
+
+--
+-- Indexes for table `customers`
+--
+ALTER TABLE `customers`
+  ADD PRIMARY KEY (`customer_id`);
+
+--
+-- Indexes for table `customer_trail`
+--
+ALTER TABLE `customer_trail`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `debtors`
+--
+ALTER TABLE `debtors`
+  ADD PRIMARY KEY (`debtor_id`);
+
+--
+-- Indexes for table `departments`
+--
+ALTER TABLE `departments`
+  ADD PRIMARY KEY (`department_id`);
+
+--
+-- Indexes for table `deposits`
+--
+ALTER TABLE `deposits`
+  ADD PRIMARY KEY (`deposit_id`);
+
+--
+-- Indexes for table `depreciation`
+--
+ALTER TABLE `depreciation`
+  ADD PRIMARY KEY (`depreciation_id`);
+
+--
+-- Indexes for table `director_posting`
+--
+ALTER TABLE `director_posting`
+  ADD PRIMARY KEY (`director_id`);
+
+--
+-- Indexes for table `disposed_assets`
+--
+ALTER TABLE `disposed_assets`
+  ADD PRIMARY KEY (`disposed_id`);
+
+--
+-- Indexes for table `expenses`
+--
+ALTER TABLE `expenses`
+  ADD PRIMARY KEY (`expense_id`);
+
+--
+-- Indexes for table `expense_heads`
+--
+ALTER TABLE `expense_heads`
+  ADD PRIMARY KEY (`exp_head_id`);
+
+--
+-- Indexes for table `finance_cost`
+--
+ALTER TABLE `finance_cost`
+  ADD PRIMARY KEY (`finance_id`);
+
+--
+-- Indexes for table `inventory`
+--
+ALTER TABLE `inventory`
+  ADD PRIMARY KEY (`inventory_id`);
+
+--
+-- Indexes for table `issue_items`
+--
+ALTER TABLE `issue_items`
+  ADD PRIMARY KEY (`issue_id`);
+
+--
+-- Indexes for table `items`
+--
+ALTER TABLE `items`
+  ADD PRIMARY KEY (`item_id`);
+
+--
+-- Indexes for table `item_transfers`
+--
+ALTER TABLE `item_transfers`
+  ADD PRIMARY KEY (`transfer_id`);
+
+--
+-- Indexes for table `ledgers`
+--
+ALTER TABLE `ledgers`
+  ADD PRIMARY KEY (`ledger_id`);
+
+--
+-- Indexes for table `loans`
+--
+ALTER TABLE `loans`
+  ADD PRIMARY KEY (`loan_id`);
+
+--
+-- Indexes for table `menus`
+--
+ALTER TABLE `menus`
+  ADD PRIMARY KEY (`menu_id`);
+
+--
+-- Indexes for table `multiple_payments`
+--
+ALTER TABLE `multiple_payments`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `opening_balance`
+--
+ALTER TABLE `opening_balance`
+  ADD PRIMARY KEY (`balance_id`);
+
+--
+-- Indexes for table `other_income`
+--
+ALTER TABLE `other_income`
+  ADD PRIMARY KEY (`income_id`);
+
+--
+-- Indexes for table `other_payments`
+--
+ALTER TABLE `other_payments`
+  ADD PRIMARY KEY (`payment_id`);
+
+--
+-- Indexes for table `other_transactions`
+--
+ALTER TABLE `other_transactions`
+  ADD PRIMARY KEY (`trx_id`);
+
+--
+-- Indexes for table `outstanding`
+--
+ALTER TABLE `outstanding`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `payments`
+--
+ALTER TABLE `payments`
+  ADD PRIMARY KEY (`payment_id`);
+
+--
+-- Indexes for table `production`
+--
+ALTER TABLE `production`
+  ADD PRIMARY KEY (`product_id`);
+
+--
+-- Indexes for table `purchases`
+--
+ALTER TABLE `purchases`
+  ADD PRIMARY KEY (`purchase_id`);
+
+--
+-- Indexes for table `purchase_payments`
+--
+ALTER TABLE `purchase_payments`
+  ADD PRIMARY KEY (`payment_id`);
+
+--
+-- Indexes for table `remove_items`
+--
+ALTER TABLE `remove_items`
+  ADD PRIMARY KEY (`remove_id`);
+
+--
+-- Indexes for table `remove_reasons`
+--
+ALTER TABLE `remove_reasons`
+  ADD PRIMARY KEY (`remove_id`);
+
+--
+-- Indexes for table `rights`
+--
+ALTER TABLE `rights`
+  ADD PRIMARY KEY (`right_id`);
+
+--
+-- Indexes for table `sales`
+--
+ALTER TABLE `sales`
+  ADD PRIMARY KEY (`sales_id`);
+
+--
+-- Indexes for table `sales_returns`
+--
+ALTER TABLE `sales_returns`
+  ADD PRIMARY KEY (`return_id`);
+
+--
+-- Indexes for table `stock_adjustments`
+--
+ALTER TABLE `stock_adjustments`
+  ADD PRIMARY KEY (`adjust_id`);
+
+--
+-- Indexes for table `stores`
+--
+ALTER TABLE `stores`
+  ADD PRIMARY KEY (`store_id`);
+
+--
+-- Indexes for table `sub_menus`
+--
+ALTER TABLE `sub_menus`
+  ADD PRIMARY KEY (`sub_menu_id`);
+
+--
+-- Indexes for table `transactions`
+--
+ALTER TABLE `transactions`
+  ADD PRIMARY KEY (`transaction_id`);
+
+--
+-- Indexes for table `transfers`
+--
+ALTER TABLE `transfers`
+  ADD PRIMARY KEY (`transfer_id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`user_id`);
+
+--
+-- Indexes for table `vendors`
+--
+ALTER TABLE `vendors`
+  ADD PRIMARY KEY (`vendor_id`);
+
+--
+-- Indexes for table `waybills`
+--
+ALTER TABLE `waybills`
+  ADD PRIMARY KEY (`waybill_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `account_class`
+--
+ALTER TABLE `account_class`
+  MODIFY `class_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT for table `account_groups`
+--
+ALTER TABLE `account_groups`
+  MODIFY `account_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `account_sub_groups`
+--
+ALTER TABLE `account_sub_groups`
+  MODIFY `sub_group_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `assets`
+--
+ALTER TABLE `assets`
+  MODIFY `asset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT for table `asset_locations`
+--
+ALTER TABLE `asset_locations`
+  MODIFY `location_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `asset_postings`
+--
+ALTER TABLE `asset_postings`
+  MODIFY `asset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+
+--
+-- AUTO_INCREMENT for table `audit_trail`
+--
+ALTER TABLE `audit_trail`
+  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2550;
+
+--
+-- AUTO_INCREMENT for table `banks`
+--
+ALTER TABLE `banks`
+  MODIFY `bank_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `cash_flows`
+--
+ALTER TABLE `cash_flows`
+  MODIFY `fow_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=170;
+
+--
+-- AUTO_INCREMENT for table `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+
+--
+-- AUTO_INCREMENT for table `companies`
+--
+ALTER TABLE `companies`
+  MODIFY `company_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `cost_of_sales`
+--
+ALTER TABLE `cost_of_sales`
+  MODIFY `cost_of_sales_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+
+--
+-- AUTO_INCREMENT for table `customers`
+--
+ALTER TABLE `customers`
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT for table `customer_trail`
+--
+ALTER TABLE `customer_trail`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+
+--
+-- AUTO_INCREMENT for table `debtors`
+--
+ALTER TABLE `debtors`
+  MODIFY `debtor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+
+--
+-- AUTO_INCREMENT for table `departments`
+--
+ALTER TABLE `departments`
+  MODIFY `department_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
+-- AUTO_INCREMENT for table `deposits`
+--
+ALTER TABLE `deposits`
+  MODIFY `deposit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+
+--
+-- AUTO_INCREMENT for table `depreciation`
+--
+ALTER TABLE `depreciation`
+  MODIFY `depreciation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+
+--
+-- AUTO_INCREMENT for table `director_posting`
+--
+ALTER TABLE `director_posting`
+  MODIFY `director_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `disposed_assets`
+--
+ALTER TABLE `disposed_assets`
+  MODIFY `disposed_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+
+--
+-- AUTO_INCREMENT for table `expenses`
+--
+ALTER TABLE `expenses`
+  MODIFY `expense_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `expense_heads`
+--
+ALTER TABLE `expense_heads`
+  MODIFY `exp_head_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `finance_cost`
+--
+ALTER TABLE `finance_cost`
+  MODIFY `finance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
+-- AUTO_INCREMENT for table `inventory`
+--
+ALTER TABLE `inventory`
+  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=532;
+
+--
+-- AUTO_INCREMENT for table `issue_items`
+--
+ALTER TABLE `issue_items`
+  MODIFY `issue_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+
+--
+-- AUTO_INCREMENT for table `items`
+--
+ALTER TABLE `items`
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=333;
+
+--
+-- AUTO_INCREMENT for table `item_transfers`
+--
+ALTER TABLE `item_transfers`
+  MODIFY `transfer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT for table `ledgers`
+--
+ALTER TABLE `ledgers`
+  MODIFY `ledger_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+
+--
+-- AUTO_INCREMENT for table `loans`
+--
+ALTER TABLE `loans`
+  MODIFY `loan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT for table `menus`
+--
+ALTER TABLE `menus`
+  MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `multiple_payments`
+--
+ALTER TABLE `multiple_payments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `opening_balance`
+--
+ALTER TABLE `opening_balance`
+  MODIFY `balance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+
+--
+-- AUTO_INCREMENT for table `other_income`
+--
+ALTER TABLE `other_income`
+  MODIFY `income_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT for table `other_payments`
+--
+ALTER TABLE `other_payments`
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `other_transactions`
+--
+ALTER TABLE `other_transactions`
+  MODIFY `trx_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `outstanding`
+--
+ALTER TABLE `outstanding`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `payments`
+--
+ALTER TABLE `payments`
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=194;
+
+--
+-- AUTO_INCREMENT for table `production`
+--
+ALTER TABLE `production`
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+
+--
+-- AUTO_INCREMENT for table `purchases`
+--
+ALTER TABLE `purchases`
+  MODIFY `purchase_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=533;
+
+--
+-- AUTO_INCREMENT for table `purchase_payments`
+--
+ALTER TABLE `purchase_payments`
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+
+--
+-- AUTO_INCREMENT for table `remove_items`
+--
+ALTER TABLE `remove_items`
+  MODIFY `remove_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `remove_reasons`
+--
+ALTER TABLE `remove_reasons`
+  MODIFY `remove_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `rights`
+--
+ALTER TABLE `rights`
+  MODIFY `right_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=176;
+
+--
+-- AUTO_INCREMENT for table `sales`
+--
+ALTER TABLE `sales`
+  MODIFY `sales_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1226;
+
+--
+-- AUTO_INCREMENT for table `sales_returns`
+--
+ALTER TABLE `sales_returns`
+  MODIFY `return_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+
+--
+-- AUTO_INCREMENT for table `stock_adjustments`
+--
+ALTER TABLE `stock_adjustments`
+  MODIFY `adjust_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+
+--
+-- AUTO_INCREMENT for table `stores`
+--
+ALTER TABLE `stores`
+  MODIFY `store_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT for table `sub_menus`
+--
+ALTER TABLE `sub_menus`
+  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=154;
+
+--
+-- AUTO_INCREMENT for table `transactions`
+--
+ALTER TABLE `transactions`
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=815;
+
+--
+-- AUTO_INCREMENT for table `transfers`
+--
+ALTER TABLE `transfers`
+  MODIFY `transfer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=361;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT for table `vendors`
+--
+ALTER TABLE `vendors`
+  MODIFY `vendor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `waybills`
+--
+ALTER TABLE `waybills`
+  MODIFY `waybill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
