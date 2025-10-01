@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 18, 2024 at 04:31 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.1.17
+-- Generation Time: Oct 01, 2025 at 10:07 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `tonnac_accounting`
+-- Database: `agric`
 --
 
 -- --------------------------------------------------------
@@ -199,6 +199,20 @@ CREATE TABLE `audit_trail` (
   `post_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `audit_trail`
+--
+
+INSERT INTO `audit_trail` (`audit_id`, `store`, `item`, `transaction`, `previous_qty`, `quantity`, `posted_by`, `post_date`) VALUES
+(1, 1, 18, 'purchase', 0, 30, 1, '2025-09-18 17:41:09'),
+(2, 1, 18, 'task', 30, 1, 1, '2025-09-18 17:56:44'),
+(3, 1, 15, 'harvest', 0, 20, 1, '2025-09-18 18:46:55'),
+(4, 1, 15, 'sales', 20, 3, 1, '2025-09-18 21:37:26'),
+(5, 1, 15, 'sales', 17, 1, 1, '2025-09-19 10:26:23'),
+(6, 1, 18, 'task', 29, 2, 1, '2025-09-19 10:41:25'),
+(7, 1, 16, 'harvest', 0, 10, 1, '2025-09-19 10:44:23'),
+(8, 1, 18, 'purchase', 27, 400, 1, '2025-09-19 13:16:56');
+
 -- --------------------------------------------------------
 
 --
@@ -229,6 +243,13 @@ CREATE TABLE `cash_flows` (
   `posted_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `cash_flows`
+--
+
+INSERT INTO `cash_flows` (`fow_id`, `account`, `details`, `trx_number`, `amount`, `trans_type`, `activity`, `post_date`, `posted_by`) VALUES
+(1, 1010228, 'Net Income', 'TR676180925093726', 15000.00, 'inflow', 'operating', '2025-09-18 21:37:26', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -247,9 +268,14 @@ CREATE TABLE `categories` (
 --
 
 INSERT INTO `categories` (`category_id`, `department`, `category`, `price`) VALUES
-(30, '11', 'RAW MATERIALS', 0),
-(31, '12', 'PRODUCTS', 0),
-(32, '13', 'CONSUMABLE', 0);
+(32, '13', 'CONSUMABLE', 0),
+(33, '11', 'SEEDLINGS', 0),
+(34, '11', 'FERTILIZERS', 0),
+(35, '11', 'FEEDS', 0),
+(36, '12', 'LIVESTOCK', 0),
+(37, '12', 'CROPS', 0),
+(38, '1', 'FERTILIZER', 0),
+(39, '1', 'SEEDLINGS', 0);
 
 -- --------------------------------------------------------
 
@@ -261,6 +287,7 @@ CREATE TABLE `companies` (
   `company_id` int(11) NOT NULL,
   `company` varchar(255) NOT NULL,
   `logo` varchar(255) DEFAULT NULL,
+  `amount` float NOT NULL,
   `date_created` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -268,8 +295,8 @@ CREATE TABLE `companies` (
 -- Dumping data for table `companies`
 --
 
-INSERT INTO `companies` (`company_id`, `company`, `logo`, `date_created`) VALUES
-(1, 'Tonnac Recycling Technologies', 'icon.png', '2024-08-28 14:46:39');
+INSERT INTO `companies` (`company_id`, `company`, `logo`, `amount`, `date_created`) VALUES
+(1, 'Demo Farms', 'icon.png', 200000, '2025-08-28 14:46:39');
 
 -- --------------------------------------------------------
 
@@ -287,6 +314,46 @@ CREATE TABLE `cost_of_sales` (
   `post_date` datetime DEFAULT NULL,
   `posted_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `cost_of_sales`
+--
+
+INSERT INTO `cost_of_sales` (`cost_of_sales_id`, `amount`, `details`, `trx_number`, `store`, `trans_date`, `post_date`, `posted_by`) VALUES
+(1, 1500.00, 'cost of sales', 'TR676180925093726', 1, '2025-09-18', '2025-09-18 21:37:26', 1),
+(2, 500.00, 'cost of sales', 'TR314190925102623', 1, '2025-09-19', '2025-09-19 10:26:23', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `crop_cycles`
+--
+
+CREATE TABLE `crop_cycles` (
+  `cycle_id` int(11) NOT NULL,
+  `field` int(11) NOT NULL,
+  `farm` int(11) NOT NULL,
+  `crop` int(11) NOT NULL,
+  `variety` varchar(255) NOT NULL,
+  `start_date` datetime DEFAULT NULL,
+  `expected_harvest` datetime DEFAULT NULL,
+  `area_used` decimal(10,2) NOT NULL,
+  `cycle_status` int(11) NOT NULL,
+  `notes` text NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` int(11) NOT NULL,
+  `end_date` datetime DEFAULT NULL,
+  `ended_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `crop_cycles`
+--
+
+INSERT INTO `crop_cycles` (`cycle_id`, `field`, `farm`, `crop`, `variety`, `start_date`, `expected_harvest`, `area_used`, `cycle_status`, `notes`, `created_at`, `created_by`, `end_date`, `ended_by`) VALUES
+(2, 1, 1, 15, 'yoruba maize', '2025-09-18 00:00:00', '2025-12-18 00:00:00', 24.00, 0, '2025-12-18', '2025-09-18 12:35:31', 1, NULL, 0),
+(3, 2, 1, 16, 'foreign rice', '2025-09-18 00:00:00', '2025-09-26 00:00:00', 25.00, 0, '2025-09-26', '2025-09-18 12:39:28', 1, NULL, 0),
+(4, 3, 1, 16, 'foreign rice', '2025-09-19 00:00:00', '2026-05-30 00:00:00', 10.00, 0, 'nil', '2025-09-19 10:38:04', 1, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -308,6 +375,13 @@ CREATE TABLE `customers` (
   `reg_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `customers`
+--
+
+INSERT INTO `customers` (`customer_id`, `customer`, `ledger_id`, `acn`, `customer_type`, `phone_numbers`, `customer_address`, `customer_email`, `wallet_balance`, `amount_due`, `reg_date`) VALUES
+(1, 'TEST CUSTOMER', 83, 1010483, '', '08100653788', 'Benin', '', 0, 0, '2025-09-18 21:36:17');
+
 -- --------------------------------------------------------
 
 --
@@ -324,6 +398,13 @@ CREATE TABLE `customer_trail` (
   `posted_by` int(11) NOT NULL,
   `post_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `customer_trail`
+--
+
+INSERT INTO `customer_trail` (`id`, `customer`, `description`, `amount`, `trx_number`, `store`, `posted_by`, `post_date`) VALUES
+(1, 1, 'Credit sales', 5000.00, '', 1, 1, '2025-09-19 10:26:23');
 
 -- --------------------------------------------------------
 
@@ -343,6 +424,13 @@ CREATE TABLE `debtors` (
   `post_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `debtors`
+--
+
+INSERT INTO `debtors` (`debtor_id`, `customer`, `invoice`, `amount`, `store`, `debt_status`, `trx_number`, `posted_by`, `post_date`) VALUES
+(1, 1, 'TO119092510251533', 5000.00, 1, 0, 'TR314190925102623', 1, '2025-09-19 10:26:23');
+
 -- --------------------------------------------------------
 
 --
@@ -359,7 +447,7 @@ CREATE TABLE `departments` (
 --
 
 INSERT INTO `departments` (`department_id`, `department`) VALUES
-(11, 'Raw Materials'),
+(1, 'Farm inputs'),
 (12, 'Products'),
 (13, 'Consumables');
 
@@ -499,6 +587,34 @@ INSERT INTO `expense_heads` (`exp_head_id`, `expense_head`, `ledger_id`, `acn`) 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `fields`
+--
+
+CREATE TABLE `fields` (
+  `field_id` int(11) NOT NULL,
+  `farm` int(11) NOT NULL,
+  `field_name` varchar(255) NOT NULL,
+  `field_size` decimal(10,2) NOT NULL,
+  `soil_type` varchar(255) NOT NULL,
+  `soil_ph` decimal(10,2) NOT NULL,
+  `topography` varchar(1024) NOT NULL,
+  `field_status` int(11) NOT NULL,
+  `created_at` datetime DEFAULT NULL,
+  `created_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `fields`
+--
+
+INSERT INTO `fields` (`field_id`, `farm`, `field_name`, `field_size`, `soil_type`, `soil_ph`, `topography`, `field_status`, `created_at`, `created_by`) VALUES
+(1, 1, 'LOWLAND BLOCK A', 50.00, 'Sandy Clay', 6.00, 'gentle slope, irrigated', 0, '2025-09-18 10:45:38', 1),
+(2, 1, 'LOWLAND BLOCK C', 65.00, 'Alluvial soil', 7.20, 'elevated, well-drained', 0, '2025-09-18 10:49:31', 1),
+(3, 1, 'RICE FIELD', 25.00, 'sandy loamy', 7.10, 'irrigated dry land', 0, '2025-09-19 10:31:58', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `finance_cost`
 --
 
@@ -519,6 +635,31 @@ CREATE TABLE `finance_cost` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `harvests`
+--
+
+CREATE TABLE `harvests` (
+  `harvest_id` int(11) NOT NULL,
+  `cycle` int(11) NOT NULL,
+  `crop` int(11) NOT NULL,
+  `farm` int(11) NOT NULL,
+  `field` int(11) NOT NULL,
+  `quantity` float NOT NULL,
+  `posted_by` int(11) NOT NULL,
+  `post_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `harvests`
+--
+
+INSERT INTO `harvests` (`harvest_id`, `cycle`, `crop`, `farm`, `field`, `quantity`, `posted_by`, `post_date`) VALUES
+(1, 2, 15, 1, 1, 20, 1, '2025-09-18 18:46:55'),
+(2, 4, 16, 1, 3, 10, 1, '2025-09-19 10:44:23');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `inventory`
 --
 
@@ -534,6 +675,15 @@ CREATE TABLE `inventory` (
   `reorder_level` float NOT NULL,
   `post_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `inventory`
+--
+
+INSERT INTO `inventory` (`inventory_id`, `item`, `item_type`, `store`, `cost_price`, `quantity`, `batch_number`, `expiration_date`, `reorder_level`, `post_date`) VALUES
+(1, 18, 'Farm Input', 1, 2500, 427, 0, NULL, 5, NULL),
+(2, 15, 'Crop', 1, 500, 16, 0, NULL, 10, NULL),
+(3, 16, 'Crop', 1, 0, 10, 0, NULL, 10, NULL);
 
 -- --------------------------------------------------------
 
@@ -582,20 +732,10 @@ CREATE TABLE `items` (
 --
 
 INSERT INTO `items` (`item_id`, `department`, `category`, `item_name`, `item_type`, `cost_price`, `sales_price`, `pack_size`, `pack_price`, `wholesale`, `wholesale_pack`, `reorder_level`, `barcode`, `item_status`, `date_created`) VALUES
-(319, '11', 30, 'PET', 'Raw material', 1500, 0, 0, 0, 0, 0, 100, '', 0, '2024-09-16 14:46:37'),
-(320, '11', 30, 'HDPE', 'Raw material', 1000, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:46:48'),
-(321, '11', 30, 'LDPE', 'Raw material', 500, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:46:55'),
-(322, '11', 30, 'PVC', 'Raw material', 1000, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:46:59'),
-(323, '11', 30, 'POLYPROPELENE', 'Raw material', 0, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:47:11'),
-(324, '11', 30, 'POLYSTYRENE', 'Raw material', 0, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:47:37'),
-(325, '12', 31, 'PET FLAKES', 'Product', 180, 1000, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:47:54'),
-(326, '12', 31, 'PVC POWDER', 'Product', 1000, 4000, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:48:01'),
-(327, '12', 31, 'POLYSTYRENE FLAKES', 'Product', 0, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:48:35'),
-(328, '12', 31, 'POLYPROPYLENE FLAKES', 'Product', 0, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:48:53'),
-(329, '12', 31, 'PET MOULD', 'Product', 30, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:49:05'),
-(330, '13', 32, 'HANDGLOVES', 'Consumable', 0, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 14:51:18'),
-(331, '12', 31, 'HDPE FLAKES', 'Product', 800, 3000, 0, 0, 0, 0, 10, '', 0, '2024-09-16 15:36:26'),
-(332, '12', 31, 'LDPE FLAKES', 'Product', 0, 0, 0, 0, 0, 0, 10, '', 0, '2024-09-16 15:36:32');
+(15, '12', 37, 'MAIZE', 'Crop', 500, 5000, 0, 0, 0, 0, 10, '', 0, '2025-09-18 12:23:46'),
+(16, '12', 37, 'RICE', 'Crop', 0, 120000, 0, 0, 0, 0, 10, '', 0, '2025-09-18 12:23:59'),
+(17, '12', 36, 'COW', 'Livestock', 0, 0, 0, 0, 0, 0, 10, '', 0, '2025-09-18 12:24:10'),
+(18, '1', 38, 'NPK FERTILIZER', 'Farm Input', 2500, 0, 0, 0, 0, 0, 5, '', 0, '2025-09-18 15:04:22');
 
 -- --------------------------------------------------------
 
@@ -660,7 +800,9 @@ INSERT INTO `ledgers` (`ledger_id`, `account_group`, `sub_group`, `class`, `ledg
 (69, 4, 6, 13, 'BANK CHARGES', 40601369),
 (70, 2, 3, 9, 'SHORT TERM LOANS', 2030970),
 (71, 2, 4, 10, 'LONG TERM LOANS', 20401071),
-(81, 4, 6, 13, 'INVENTORY ADJUSTMENT', 40601381);
+(81, 4, 6, 13, 'INVENTORY ADJUSTMENT', 40601381),
+(82, 2, 3, 7, 'ABC LIMITED', 2030782),
+(83, 1, 1, 4, 'TEST CUSTOMER', 1010483);
 
 -- --------------------------------------------------------
 
@@ -707,7 +849,8 @@ INSERT INTO `menus` (`menu_id`, `menu`) VALUES
 (6, 'Financial reports'),
 (7, 'Production'),
 (9, 'Chart Of Account'),
-(10, 'Asset Management');
+(10, 'Asset Management'),
+(11, 'Farm Management');
 
 -- --------------------------------------------------------
 
@@ -731,6 +874,30 @@ CREATE TABLE `multiple_payments` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `observations`
+--
+
+CREATE TABLE `observations` (
+  `observation_id` int(11) NOT NULL,
+  `farm` int(11) NOT NULL,
+  `field` int(11) NOT NULL,
+  `cycle` int(11) NOT NULL,
+  `description` text NOT NULL,
+  `done_by` int(11) NOT NULL,
+  `post_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `observations`
+--
+
+INSERT INTO `observations` (`observation_id`, `farm`, `field`, `cycle`, `description`, `done_by`, `post_date`) VALUES
+(1, 1, 1, 2, 'Observed Early Signs Of Pest Damage', 1, '2025-09-18 18:04:49'),
+(2, 1, 3, 4, 'Rain Destriyed Part Of The Crop', 1, '2025-09-19 10:42:12');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `opening_balance`
 --
 
@@ -746,6 +913,13 @@ CREATE TABLE `opening_balance` (
   `post_date` datetime DEFAULT NULL,
   `posted_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `opening_balance`
+--
+
+INSERT INTO `opening_balance` (`balance_id`, `ledger`, `trans_type`, `amount`, `trx_number`, `trans_date`, `store`, `details`, `post_date`, `posted_by`) VALUES
+(1, 45, 'Credit', 1000000.00, 'TR887281024093309', '2024-01-01', 1, 'Opening Balance As At &quot;01-Jan-2024&quot;', '2024-10-28 09:33:09', 1);
 
 -- --------------------------------------------------------
 
@@ -837,6 +1011,14 @@ CREATE TABLE `payments` (
   `invoice` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `payments`
+--
+
+INSERT INTO `payments` (`payment_id`, `sales_type`, `customer`, `amount_due`, `store`, `amount_paid`, `discount`, `payment_mode`, `bank`, `trx_number`, `post_date`, `posted_by`, `invoice`) VALUES
+(1, 'Wholesale', 1, 15000.00, 1, 15000.00, 0.00, 'Cash', 0, 'TR676180925093726', '2025-09-18 21:37:26', 1, 'TO118092509371987'),
+(2, 'Wholesale', 1, 5000.00, 1, 0.00, 0.00, 'Credit', 0, 'TR314190925102623', '2025-09-19 10:26:23', 1, 'TO119092510251533');
+
 -- --------------------------------------------------------
 
 --
@@ -881,6 +1063,14 @@ CREATE TABLE `purchases` (
   `post_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `purchases`
+--
+
+INSERT INTO `purchases` (`purchase_id`, `store`, `invoice`, `item`, `cost_price`, `sales_price`, `vendor`, `quantity`, `waybill`, `trx_number`, `expiration_date`, `purchase_status`, `purchase_date`, `posted_by`, `post_date`) VALUES
+(1, 1, 'iuojklnkjn', 18, 3000.00, 0, 1, 30, 3000.00, '', '0000-00-00', 0, NULL, 1, '2025-09-18 17:41:09'),
+(2, 1, '786786', 18, 2500.00, 0, 1, 400, 2000.00, 'TR591190925011913', '0000-00-00', 1, NULL, 1, '2025-09-19 13:16:56');
+
 -- --------------------------------------------------------
 
 --
@@ -902,6 +1092,13 @@ CREATE TABLE `purchase_payments` (
   `posted_by` int(11) NOT NULL,
   `post_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `purchase_payments`
+--
+
+INSERT INTO `purchase_payments` (`payment_id`, `vendor`, `invoice`, `product_cost`, `waybill`, `amount_due`, `amount_paid`, `payment_mode`, `store`, `trx_number`, `trans_date`, `posted_by`, `post_date`) VALUES
+(1, 1, '786786', 1000000.00, 2000.00, 1002000.00, 0.00, 'Credit', 1, 'TR591190925011913', '2025-09-19', 1, '2025-09-19 13:19:13');
 
 -- --------------------------------------------------------
 
@@ -944,6 +1141,26 @@ INSERT INTO `remove_reasons` (`remove_id`, `reason`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `renewals`
+--
+
+CREATE TABLE `renewals` (
+  `renewal_id` int(11) NOT NULL,
+  `company` int(11) NOT NULL,
+  `email_address` varchar(255) NOT NULL,
+  `package` varchar(255) NOT NULL,
+  `amount` float NOT NULL,
+  `processing_fee` float NOT NULL,
+  `total_due` float NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `previous_date` date DEFAULT NULL,
+  `new_due_date` date DEFAULT NULL,
+  `renew_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `rights`
 --
 
@@ -953,6 +1170,195 @@ CREATE TABLE `rights` (
   `sub_menu` int(11) NOT NULL,
   `user` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `rights`
+--
+
+INSERT INTO `rights` (`right_id`, `menu`, `sub_menu`, `user`) VALUES
+(1, 1, 1, 20),
+(2, 1, 2, 20),
+(3, 1, 3, 20),
+(4, 1, 4, 20),
+(5, 1, 5, 20),
+(6, 1, 6, 20),
+(7, 1, 7, 20),
+(8, 1, 8, 20),
+(9, 1, 10, 20),
+(10, 1, 11, 20),
+(11, 1, 51, 20),
+(12, 1, 62, 20),
+(13, 1, 76, 20),
+(14, 1, 79, 20),
+(15, 1, 87, 20),
+(16, 1, 115, 20),
+(17, 2, 15, 20),
+(18, 2, 16, 20),
+(19, 2, 96, 20),
+(20, 3, 17, 20),
+(21, 3, 19, 20),
+(22, 3, 20, 20),
+(23, 3, 21, 20),
+(24, 3, 22, 20),
+(25, 3, 23, 20),
+(26, 3, 90, 20),
+(27, 3, 99, 20),
+(28, 3, 101, 20),
+(29, 4, 25, 20),
+(30, 4, 69, 20),
+(31, 4, 80, 20),
+(32, 4, 106, 20),
+(33, 4, 107, 20),
+(34, 4, 129, 20),
+(35, 4, 143, 20),
+(36, 4, 151, 20),
+(37, 4, 152, 20),
+(38, 4, 153, 20),
+(39, 5, 26, 20),
+(40, 5, 27, 20),
+(41, 5, 28, 20),
+(42, 5, 29, 20),
+(43, 5, 30, 20),
+(44, 5, 31, 20),
+(45, 5, 33, 20),
+(46, 5, 34, 20),
+(47, 5, 35, 20),
+(48, 5, 36, 20),
+(49, 5, 37, 20),
+(50, 5, 38, 20),
+(51, 5, 39, 20),
+(52, 5, 40, 20),
+(53, 5, 49, 20),
+(54, 5, 50, 20),
+(55, 5, 63, 20),
+(56, 5, 85, 20),
+(57, 5, 91, 20),
+(58, 5, 94, 20),
+(59, 5, 97, 20),
+(60, 5, 100, 20),
+(61, 5, 102, 20),
+(62, 6, 41, 20),
+(63, 6, 42, 20),
+(64, 6, 43, 20),
+(65, 6, 44, 20),
+(66, 6, 45, 20),
+(67, 6, 46, 20),
+(68, 6, 47, 20),
+(69, 6, 48, 20),
+(70, 6, 66, 20),
+(71, 6, 67, 20),
+(72, 6, 68, 20),
+(73, 6, 70, 20),
+(74, 6, 104, 20),
+(75, 6, 108, 20),
+(76, 6, 109, 20),
+(77, 6, 119, 20),
+(78, 6, 120, 20),
+(79, 6, 121, 20),
+(80, 6, 122, 20),
+(81, 6, 130, 20),
+(82, 6, 131, 20),
+(83, 6, 132, 20),
+(84, 6, 133, 20),
+(85, 6, 134, 20),
+(86, 6, 135, 20),
+(87, 6, 136, 20),
+(88, 6, 137, 20),
+(89, 6, 138, 20),
+(90, 6, 139, 20),
+(91, 6, 140, 20),
+(92, 6, 141, 20),
+(93, 6, 142, 20),
+(94, 7, 92, 20),
+(95, 7, 93, 20),
+(96, 9, 123, 20),
+(97, 9, 124, 20),
+(98, 9, 125, 20),
+(99, 9, 126, 20),
+(100, 9, 127, 20),
+(101, 9, 128, 20),
+(102, 10, 144, 20),
+(103, 10, 145, 20),
+(104, 10, 146, 20),
+(105, 10, 147, 20),
+(106, 10, 148, 20),
+(107, 10, 149, 20),
+(108, 10, 150, 20),
+(109, 10, 144, 21),
+(110, 10, 145, 21),
+(111, 10, 146, 21),
+(112, 10, 147, 21),
+(113, 10, 148, 21),
+(114, 10, 149, 21),
+(115, 10, 150, 21),
+(116, 9, 123, 21),
+(117, 9, 124, 21),
+(118, 9, 125, 21),
+(119, 9, 126, 21),
+(120, 9, 127, 21),
+(121, 9, 128, 21),
+(122, 6, 41, 21),
+(123, 6, 42, 21),
+(124, 6, 43, 21),
+(125, 6, 44, 21),
+(126, 6, 45, 21),
+(127, 6, 46, 21),
+(128, 6, 47, 21),
+(129, 6, 48, 21),
+(130, 6, 66, 21),
+(131, 6, 67, 21),
+(132, 6, 68, 21),
+(133, 6, 70, 21),
+(134, 6, 104, 21),
+(135, 6, 108, 21),
+(136, 6, 109, 21),
+(137, 6, 119, 21),
+(138, 6, 120, 21),
+(139, 6, 121, 21),
+(140, 6, 122, 21),
+(141, 6, 130, 21),
+(142, 6, 131, 21),
+(143, 6, 132, 21),
+(144, 6, 133, 21),
+(145, 6, 134, 21),
+(146, 6, 135, 21),
+(147, 6, 136, 21),
+(148, 6, 137, 21),
+(149, 6, 138, 21),
+(150, 6, 139, 21),
+(151, 6, 140, 21),
+(152, 6, 141, 21),
+(153, 6, 142, 21),
+(154, 5, 26, 21),
+(155, 5, 33, 21),
+(156, 5, 39, 21),
+(157, 5, 40, 21),
+(158, 5, 49, 21),
+(159, 5, 50, 21),
+(160, 5, 85, 21),
+(161, 5, 63, 21),
+(162, 5, 94, 21),
+(163, 5, 29, 21),
+(164, 5, 30, 21),
+(165, 5, 27, 21),
+(166, 5, 28, 21),
+(167, 4, 25, 21),
+(168, 4, 69, 21),
+(169, 4, 80, 21),
+(170, 4, 106, 21),
+(171, 4, 107, 21),
+(172, 4, 129, 21),
+(173, 4, 143, 21),
+(174, 4, 151, 21),
+(175, 4, 152, 21),
+(176, 4, 153, 21),
+(177, 3, 90, 21),
+(178, 2, 15, 21),
+(179, 2, 16, 21),
+(180, 1, 2, 21),
+(181, 1, 4, 21),
+(182, 1, 115, 21),
+(183, 3, 19, 22);
 
 -- --------------------------------------------------------
 
@@ -977,6 +1383,14 @@ CREATE TABLE `sales` (
   `sales_status` int(11) NOT NULL,
   `post_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `sales`
+--
+
+INSERT INTO `sales` (`sales_id`, `item`, `store`, `sales_type`, `customer`, `invoice`, `quantity`, `price`, `discount`, `total_amount`, `cost`, `trx_number`, `posted_by`, `sales_status`, `post_date`) VALUES
+(1, 15, 1, 'Wholesale', 1, 'TO118092509371987', 3, 5000.00, 0.00, 15000.00, 1500.00, 'TR676180925093726', 1, 2, '2025-09-18 21:37:26'),
+(2, 15, 1, 'Wholesale', 1, 'TO119092510251533', 1, 5000.00, 0.00, 5000.00, 500.00, 'TR314190925102623', 1, 2, '2025-09-19 10:26:23');
 
 -- --------------------------------------------------------
 
@@ -1032,7 +1446,8 @@ CREATE TABLE `stores` (
 --
 
 INSERT INTO `stores` (`store_id`, `company`, `store`, `store_address`, `phone_number`, `date_created`) VALUES
-(1, 1, 'Main Office', '9 Market Road, Rumuomasi, Portharcourt, Rivers State', '', '2024-08-28 19:54:43');
+(1, 1, 'Ajah Farm', 'Demo farm way', '', '2024-08-28 19:54:43'),
+(9, 1, 'Davidorlah Farm', 'lekki', '9080987', '2025-09-19 10:29:09');
 
 -- --------------------------------------------------------
 
@@ -1125,7 +1540,7 @@ INSERT INTO `sub_menus` (`sub_menu_id`, `menu`, `sub_menu`, `url`, `status`) VAL
 (72, 1, 'Add Sub-menu', 'add_sub_menu', 1),
 (73, 1, 'Edit Sub Menu', 'edit_sub_menu', 1),
 (74, 1, 'Manage Profile', 'manage_profile', 1),
-(75, 1, 'Add Store', 'add_store', 1),
+(75, 11, 'Add Farm', 'add_store', 0),
 (76, 1, 'Update Store Details', 'update_store', 0),
 (77, 1, 'Add User Rights', 'add_rights', 1),
 (78, 1, 'Delete Rights', 'delete_right', 1),
@@ -1197,7 +1612,42 @@ INSERT INTO `sub_menus` (`sub_menu_id`, `menu`, `sub_menu`, `url`, `status`) VAL
 (150, 10, 'Delete Asset', 'delete_asset', 0),
 (151, 4, 'Post Fixed Asset', 'post_fixed_asset', 0),
 (152, 4, 'Post Depreciation', 'post_depreciation', 0),
-(153, 4, 'Post Other Transactions', 'post_other_trx', 0);
+(153, 4, 'Post Other Transactions', 'post_other_trx', 0),
+(154, 11, 'Farm Fields', 'farm_fields', 0),
+(155, 11, 'Crop Cycle', 'crop_cycle', 0),
+(156, 11, 'General Tasks', 'general_task', 0),
+(157, 11, 'Livestock Management', 'livestock_management', 0),
+(158, 5, 'Crop Cycle Reports', 'crop_cycle_report', 0),
+(159, 5, 'Tasks Done', 'tasks_done', 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tasks`
+--
+
+CREATE TABLE `tasks` (
+  `task_id` int(11) NOT NULL,
+  `farm` int(11) NOT NULL,
+  `field` int(11) NOT NULL,
+  `cycle` int(11) NOT NULL,
+  `title` varchar(1024) NOT NULL,
+  `description` text NOT NULL,
+  `item` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `done_by` int(11) NOT NULL,
+  `post_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `tasks`
+--
+
+INSERT INTO `tasks` (`task_id`, `farm`, `field`, `cycle`, `title`, `description`, `item`, `quantity`, `done_by`, `post_date`) VALUES
+(1, 1, 1, 2, 'APPLIED FERTILIZER', 'Applied Fertilizer To Each Part Of The Crop', 0, 0, 1, '2025-09-18 17:29:39'),
+(2, 1, 1, 2, 'FERTILIZER APPLICATION', 'Applid Fertilizer At The Back', 18, 0, 1, '2025-09-18 17:42:04'),
+(3, 1, 2, 3, 'WEEDING', 'Weed The Flower', 18, 1, 1, '2025-09-18 17:56:44'),
+(4, 1, 3, 4, 'WEEDING ', 'Wed The Rice F', 18, 2, 1, '2025-09-19 10:41:25');
 
 -- --------------------------------------------------------
 
@@ -1220,6 +1670,25 @@ CREATE TABLE `transactions` (
   `post_date` datetime DEFAULT NULL,
   `posted_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `transactions`
+--
+
+INSERT INTO `transactions` (`transaction_id`, `account_type`, `sub_group`, `class`, `account`, `debit`, `credit`, `trx_number`, `details`, `trx_status`, `trans_date`, `post_date`, `posted_by`) VALUES
+(1, 5, 9, 0, 50901645, 0.000, 1000000.000, 'TR887281024093309', 'Opening Balance As At &quot;01-Jan-2024&quot;', 1, '2024-01-01', '2024-10-28 09:33:09', 1),
+(2, 1, 1, 4, 1010483, 15000.000, 0.000, 'TR676180925093726', 'Customer Invoice', 0, '2025-09-18', '2025-09-18 21:37:26', 1),
+(3, 3, 5, 11, 30501130, 0.000, 15000.000, 'TR676180925093726', 'Customer Invoice', 0, '2025-09-18', '2025-09-18 21:37:26', 1),
+(4, 1, 1, 2, 1010228, 15000.000, 0.000, 'TR676180925093726', 'Payment for goods sold', 0, '2025-09-18', '2025-09-18 21:37:26', 1),
+(5, 1, 1, 4, 1010483, 0.000, 15000.000, 'TR676180925093726', 'Payment for goods sold', 0, '2025-09-18', '2025-09-18 21:37:26', 1),
+(6, 4, 7, 14, 40701463, 1500.000, 0.000, 'TR676180925093726', 'Cost of sales', 0, '2025-09-18', '2025-09-18 21:37:26', 1),
+(7, 1, 1, 3, 1010329, 0.000, 1500.000, 'TR676180925093726', 'Cost of sales', 0, '2025-09-18', '2025-09-18 21:37:26', 1),
+(8, 1, 1, 4, 1010483, 5000.000, 0.000, 'TR314190925102623', 'Customer Invoice', 0, '2025-09-19', '2025-09-19 10:26:23', 1),
+(9, 3, 5, 11, 30501130, 0.000, 5000.000, 'TR314190925102623', 'Customer Invoice', 0, '2025-09-19', '2025-09-19 10:26:23', 1),
+(10, 4, 7, 14, 40701463, 500.000, 0.000, 'TR314190925102623', 'Cost of sales', 0, '2025-09-19', '2025-09-19 10:26:23', 1),
+(11, 1, 1, 3, 1010329, 0.000, 500.000, 'TR314190925102623', 'Cost of sales', 0, '2025-09-19', '2025-09-19 10:26:23', 1),
+(12, 1, 1, 3, 1010329, 1002000.000, 0.000, 'TR591190925011913', 'Inventory Purchase', 0, '2025-09-19', '2025-09-19 13:19:13', 1),
+(13, 2, 3, 7, 2030782, 0.000, 1002000.000, 'TR591190925011913', 'Inventory Purchase', 0, '2025-09-19', '2025-09-19 13:19:13', 1);
 
 -- --------------------------------------------------------
 
@@ -1265,7 +1734,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `full_name`, `username`, `user_role`, `user_password`, `status`, `store`, `reg_date`) VALUES
-(1, 'Administrator', 'Sysadmin', 'Admin', '$2y$10$dcUrnR/.PvfK7XeYcP60hOyW2qnPSSvEq/Wxee6lv5DETW8pbGXYu', 0, 1, '2022-09-27 13:47:21');
+(1, 'Administrator', 'Sysadmin', 'Admin', '$2y$10$dcUrnR/.PvfK7XeYcP60hOyW2qnPSSvEq/Wxee6lv5DETW8pbGXYu', 0, 1, '2022-09-27 13:47:21'),
+(20, 'Godwin Alabi', 'Godwin', 'Accountant', '$2y$10$MxYFDweEJ6AHKeAF79cvOe.Js21/y5mDBTSVX2LpVOSu0V5MKkDy6', 0, 1, '2024-10-21 03:59:17'),
+(21, 'Helen Kalams Udodirim', 'Helen', 'Accountant', '$2y$10$CIYVML3NBcRpfYZWVRHT0.OJ/5yjeABqOnj6wo3EZVb.OBvymDwZa', 0, 1, '2024-10-21 04:01:55'),
+(22, 'James John', 'John', 'Inventory Officer', '$2y$10$iczDHrQ0fNdFBh/p79aheurXCShSCALfL6aoqd0hRkW/SSI0pGREa', 0, 9, '2025-09-19 10:51:58');
 
 -- --------------------------------------------------------
 
@@ -1285,6 +1757,13 @@ CREATE TABLE `vendors` (
   `created_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `vendors`
+--
+
+INSERT INTO `vendors` (`vendor_id`, `vendor`, `contact_person`, `phone`, `email_address`, `balance`, `account_no`, `ledger_id`, `created_date`) VALUES
+(1, 'ABC LIMITED', 'Abc', '0-90808', 'kk', 0, 2030782, 82, '2025-09-18 17:40:42');
+
 -- --------------------------------------------------------
 
 --
@@ -1302,6 +1781,13 @@ CREATE TABLE `waybills` (
   `post_date` datetime DEFAULT NULL,
   `posted_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `waybills`
+--
+
+INSERT INTO `waybills` (`waybill_id`, `invoice`, `vendor`, `invoice_amount`, `waybill`, `trx_number`, `store`, `post_date`, `posted_by`) VALUES
+(1, '786786', 1, 1000000.00, 2000.00, 'TR591190925011913', 1, '2025-09-19 13:19:13', 1);
 
 --
 -- Indexes for dumped tables
@@ -1380,6 +1866,12 @@ ALTER TABLE `cost_of_sales`
   ADD PRIMARY KEY (`cost_of_sales_id`);
 
 --
+-- Indexes for table `crop_cycles`
+--
+ALTER TABLE `crop_cycles`
+  ADD PRIMARY KEY (`cycle_id`);
+
+--
 -- Indexes for table `customers`
 --
 ALTER TABLE `customers`
@@ -1440,10 +1932,22 @@ ALTER TABLE `expense_heads`
   ADD PRIMARY KEY (`exp_head_id`);
 
 --
+-- Indexes for table `fields`
+--
+ALTER TABLE `fields`
+  ADD PRIMARY KEY (`field_id`);
+
+--
 -- Indexes for table `finance_cost`
 --
 ALTER TABLE `finance_cost`
   ADD PRIMARY KEY (`finance_id`);
+
+--
+-- Indexes for table `harvests`
+--
+ALTER TABLE `harvests`
+  ADD PRIMARY KEY (`harvest_id`);
 
 --
 -- Indexes for table `inventory`
@@ -1492,6 +1996,12 @@ ALTER TABLE `menus`
 --
 ALTER TABLE `multiple_payments`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `observations`
+--
+ALTER TABLE `observations`
+  ADD PRIMARY KEY (`observation_id`);
 
 --
 -- Indexes for table `opening_balance`
@@ -1560,6 +2070,12 @@ ALTER TABLE `remove_reasons`
   ADD PRIMARY KEY (`remove_id`);
 
 --
+-- Indexes for table `renewals`
+--
+ALTER TABLE `renewals`
+  ADD PRIMARY KEY (`renewal_id`);
+
+--
 -- Indexes for table `rights`
 --
 ALTER TABLE `rights`
@@ -1594,6 +2110,12 @@ ALTER TABLE `stores`
 --
 ALTER TABLE `sub_menus`
   ADD PRIMARY KEY (`sub_menu_id`);
+
+--
+-- Indexes for table `tasks`
+--
+ALTER TABLE `tasks`
+  ADD PRIMARY KEY (`task_id`);
 
 --
 -- Indexes for table `transactions`
@@ -1651,7 +2173,7 @@ ALTER TABLE `account_sub_groups`
 -- AUTO_INCREMENT for table `assets`
 --
 ALTER TABLE `assets`
-  MODIFY `asset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `asset_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `asset_locations`
@@ -1663,31 +2185,31 @@ ALTER TABLE `asset_locations`
 -- AUTO_INCREMENT for table `asset_postings`
 --
 ALTER TABLE `asset_postings`
-  MODIFY `asset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `asset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `audit_trail`
 --
 ALTER TABLE `audit_trail`
-  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2550;
+  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `banks`
 --
 ALTER TABLE `banks`
-  MODIFY `bank_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `bank_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `cash_flows`
 --
 ALTER TABLE `cash_flows`
-  MODIFY `fow_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=170;
+  MODIFY `fow_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `companies`
@@ -1699,25 +2221,31 @@ ALTER TABLE `companies`
 -- AUTO_INCREMENT for table `cost_of_sales`
 --
 ALTER TABLE `cost_of_sales`
-  MODIFY `cost_of_sales_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `cost_of_sales_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `crop_cycles`
+--
+ALTER TABLE `crop_cycles`
+  MODIFY `cycle_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `customer_trail`
 --
 ALTER TABLE `customer_trail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `debtors`
 --
 ALTER TABLE `debtors`
-  MODIFY `debtor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `debtor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `departments`
@@ -1729,31 +2257,31 @@ ALTER TABLE `departments`
 -- AUTO_INCREMENT for table `deposits`
 --
 ALTER TABLE `deposits`
-  MODIFY `deposit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `deposit_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `depreciation`
 --
 ALTER TABLE `depreciation`
-  MODIFY `depreciation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `depreciation_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `director_posting`
 --
 ALTER TABLE `director_posting`
-  MODIFY `director_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `director_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `disposed_assets`
 --
 ALTER TABLE `disposed_assets`
-  MODIFY `disposed_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `disposed_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `expenses`
 --
 ALTER TABLE `expenses`
-  MODIFY `expense_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `expense_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `expense_heads`
@@ -1762,16 +2290,28 @@ ALTER TABLE `expense_heads`
   MODIFY `exp_head_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
+-- AUTO_INCREMENT for table `fields`
+--
+ALTER TABLE `fields`
+  MODIFY `field_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `finance_cost`
 --
 ALTER TABLE `finance_cost`
-  MODIFY `finance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `finance_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `harvests`
+--
+ALTER TABLE `harvests`
+  MODIFY `harvest_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=532;
+  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `issue_items`
@@ -1783,7 +2323,7 @@ ALTER TABLE `issue_items`
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=333;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `item_transfers`
@@ -1795,49 +2335,55 @@ ALTER TABLE `item_transfers`
 -- AUTO_INCREMENT for table `ledgers`
 --
 ALTER TABLE `ledgers`
-  MODIFY `ledger_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `ledger_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
 
 --
 -- AUTO_INCREMENT for table `loans`
 --
 ALTER TABLE `loans`
-  MODIFY `loan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `loan_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `menus`
 --
 ALTER TABLE `menus`
-  MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `multiple_payments`
 --
 ALTER TABLE `multiple_payments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `observations`
+--
+ALTER TABLE `observations`
+  MODIFY `observation_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `opening_balance`
 --
 ALTER TABLE `opening_balance`
-  MODIFY `balance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `balance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `other_income`
 --
 ALTER TABLE `other_income`
-  MODIFY `income_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `income_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `other_payments`
 --
 ALTER TABLE `other_payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `other_transactions`
 --
 ALTER TABLE `other_transactions`
-  MODIFY `trx_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `trx_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `outstanding`
@@ -1849,31 +2395,31 @@ ALTER TABLE `outstanding`
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=194;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `production`
 --
 ALTER TABLE `production`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `purchase_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=533;
+  MODIFY `purchase_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `purchase_payments`
 --
 ALTER TABLE `purchase_payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `remove_items`
 --
 ALTER TABLE `remove_items`
-  MODIFY `remove_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `remove_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `remove_reasons`
@@ -1882,70 +2428,82 @@ ALTER TABLE `remove_reasons`
   MODIFY `remove_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `renewals`
+--
+ALTER TABLE `renewals`
+  MODIFY `renewal_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `rights`
 --
 ALTER TABLE `rights`
-  MODIFY `right_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=176;
+  MODIFY `right_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=184;
 
 --
 -- AUTO_INCREMENT for table `sales`
 --
 ALTER TABLE `sales`
-  MODIFY `sales_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1226;
+  MODIFY `sales_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `sales_returns`
 --
 ALTER TABLE `sales_returns`
-  MODIFY `return_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `return_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `stock_adjustments`
 --
 ALTER TABLE `stock_adjustments`
-  MODIFY `adjust_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `adjust_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `stores`
 --
 ALTER TABLE `stores`
-  MODIFY `store_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `store_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `sub_menus`
 --
 ALTER TABLE `sub_menus`
-  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=154;
+  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=160;
+
+--
+-- AUTO_INCREMENT for table `tasks`
+--
+ALTER TABLE `tasks`
+  MODIFY `task_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=815;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `transfers`
 --
 ALTER TABLE `transfers`
-  MODIFY `transfer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=361;
+  MODIFY `transfer_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `vendors`
 --
 ALTER TABLE `vendors`
-  MODIFY `vendor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `vendor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `waybills`
 --
 ALTER TABLE `waybills`
-  MODIFY `waybill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=61;
+  MODIFY `waybill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
