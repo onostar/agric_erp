@@ -5,8 +5,7 @@
 
 
 ?>
-    <div class="info"></div>
-<div class="displays allResults" id="staff_list" style="width:90%!important;margin:20px 50px!important">
+<div class="displays allResults" id="farm_fields" style="width:90%!important;margin:20px 50px!important">
     <h2>Farm Fields</h2>
     <hr>
     <div class="search">
@@ -17,20 +16,21 @@
             <tr style="background:var(--moreColor)">
                 <td>S/N</td>
                 <td>Field</td>
-                <td>Farm</td>
+                <td>Owned By</td>
                 <td>Field Size (Hec)</td>
                 <td>Soil Type</td>
                 <td>Soil PH</td>
                 <td>Topography</td>
                 <td>Status</td>
-                <td>Created</td>
+                <td></td>
+                <!-- <td>Created</td> -->
             </tr>
         </thead>
         <tbody>
             <?php
                 $n = 1;
                 $get_details = new selects();
-                $details = $get_details->fetch_details('fields');
+                $details = $get_details->fetch_details_order('fields', 'field_name');
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
@@ -39,10 +39,16 @@
                 <td><?php echo $detail->field_name?></td>
                 <td style="color:var(--primaryColor)">
                     <?php 
-                        //get store
-                        $get_store = new selects();
-                        $str = $get_store->fetch_details_group('stores', 'store', 'store_id', $detail->farm);
-                        echo $str->store;
+                        //get customer
+                        $strs = $get_details->fetch_details_cond('customers', 'customer_id', $detail->customer);
+                        if(is_array($strs)){
+                            foreach($strs as $str){
+                                $customer = $str->customer;
+                            }
+                        }else{
+                            $customer = "Not Assigned";
+                        }
+                        echo $customer;
                     ?>
                 </td>
                 <td><?php echo $detail->field_size?></td>
@@ -58,8 +64,10 @@
                         }
                     ?>
                 </td>
-                <td><?php echo date("d-m-Y", strtotime($detail->created_at))?></td>
-                
+                <!-- <td><?php echo date("d-m-Y", strtotime($detail->created_at))?></td> -->
+                <td>
+                    <a href="javascript:void(0)" onclick="showPage('view_field.php?field=<?php echo $detail->field_id?>')" style="color:#fff; background:var(--tertiaryColor); padding:6px 8px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;">Update <i class="fas fa-edit"></i></a>
+                </td>
                 
             </tr>
             

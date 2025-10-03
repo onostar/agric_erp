@@ -7,6 +7,28 @@ date_default_timezone_set("Africa/Lagos");
             $update->bindValue("$condition", $condition_value);
             $update->execute();
         }
+        //update any table with a condition
+       public function updateAny($table, $data, $con, $val) {
+            // Build SET part of the query
+            $setPart = implode(", ", array_map(function($key) {
+                return "$key = :$key";
+            }, array_keys($data)));
+
+            // Prepare the query
+            $sql = "UPDATE $table SET $setPart WHERE $con = :where_$con";
+            $update = $this->connectdb()->prepare($sql);
+
+            // Bind SET values
+            foreach($data as $column => $value) {
+                $update->bindValue(":$column", $value);
+            }
+
+            // Bind WHERE condition
+            $update->bindValue(":where_$con", $val);
+
+            // Execute
+            return $update->execute();
+        }
         //update single with 2 condition
         public function update2cond($table, $column, $condition, $condition2, $value, $condition_value, $condition_value2){
             $update = $this->connectdb()->prepare("UPDATE $table SET $column = :$column WHERE $condition = :$condition AND $condition2 = :$condition2");

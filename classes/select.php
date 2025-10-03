@@ -13,7 +13,18 @@
                 $rows = "<p class='no_result'>No Tables found</p>";
             }
         }
+         //fetch details from any table order by
+        public function fetch_details_order($table, $order){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table ORDER BY $order");
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
 
+            }else{
+                $rows = "<p class='no_result'>No records found</p>";
+            }
+        }
         //check for columns
         public function fetch_column($table, $column){
             $get_user = $this->connectdb()->prepare("SHOW COLUMNS FROM $table LIKE '$column'");

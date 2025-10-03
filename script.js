@@ -6408,3 +6408,73 @@ function harvest(){
           })
      }
 }
+
+//get owners of field
+function getFieldOwners(input){
+     let item = input;
+     $("#search_results").show();
+     if(item.length >= 3){
+          $.ajax({
+               type : "POST",
+               url : "../controller/get_owner_name.php",
+               data : {item:item},
+               success : function(response){
+                    $("#search_results").html(response);
+               }
+          })
+     }
+     
+}
+
+//add correct owner  for updating fields
+function addFieldOwner(id, name){
+     let customer = document.getElementById("customer");
+     let item = document.getElementById("item");
+     customer.value = id;
+     item.value = name;
+     $("#search_results").html('');
+}
+
+ // update farmfield details
+function updateField(){
+     let field_id = document.getElementById("field_id").value;
+     let field = document.getElementById("field").value;
+     let field_size = document.getElementById("field_size").value;
+     let soil_type = document.getElementById("soil_type").value;
+     let soil_ph = document.getElementById("soil_ph").value;
+     let topography = document.getElementById("topography").value;
+     let customer = document.getElementById("customer").value;
+     if(field.length == 0 || field.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input field name!");
+          $("#field").focus();
+          return;
+     }else if(field_size.length == 0 || field_size.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input field size!");
+          $("#field_size").focus();
+          return;
+     }else if(soil_type.length == 0 || soil_type.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input soil type!");
+          $("#soil_type").focus();
+          return;
+     }else if(soil_ph.length == 0 || soil_ph.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input soil ph!");
+          $("#soil_ph").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/update_field.php",
+               data : {field:field, field_id:field_id,field_size:field_size, soil_type:soil_type, soil_ph:soil_ph, topography:topography, customer:customer},
+               beforeSend: function(){
+                    $("#farm_fields").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+               $("#farm_fields").html(response);
+               }
+          })
+          setTimeout(function(){
+               $("#farm_fields").load("farm_fields.php #farm_fields");
+          }, 2000);
+          return false; 
+     }
+}
