@@ -54,6 +54,8 @@
                 $area = $adm->area_used;
                 $note = $adm->notes;
                 $cycle_status = $adm->cycle_status;
+                $closed_on = $adm->end_date;
+                $closed_by = $adm->ended_by;
                 $created_by = $adm->created_by;
             }
             //get field details
@@ -70,7 +72,7 @@
                 $crop_name = $row->item_name;
             }
 ?>
-        <a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222; position:fixed;"href="javascript:void(0)" onclick="showPage('crop_cycle.php')"><i class="fas fa-close"></i> Close</a>
+        <a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222; position:fixed;"href="javascript:void(0)" onclick="showPage('crop_cycle_report.php')"><i class="fas fa-close"></i> Close</a>
 
     <div id="patient_details">
         <h3 style="background:var(--tertiaryColor); color:#fff">Crop Cycle for <?php echo $crop_name?></h3>
@@ -97,12 +99,31 @@
                 
                 <div class="data">
                     <label for="customer_store">Start Date:</label>
-                    <input type="text" value="<?php echo date("Y-m-d", strtotime($start))?>">
+                    <?php
+                        /* $date = new DateTime($start);
+                        $closed = new DateTime($closed_on);
+                        $interval = $closed->diff($date); */
+                    ?>
+                    <input type="text" value="<?php echo date("Y-m-d", strtotime($start));?>">
                 </div>
                 <div class="data">
                     <label for="phone_number">Expected Harvest Date:</label>
                     <input type="text" required value="<?php echo date("d-M-Y", strtotime($end))?>" readonly>
                 </div>
+                <?php
+                    if($cycle_status != 0){
+                ?>
+                <div class="data">
+                    <label for="phone_number">Days Completed:</label>
+                    <?php
+                        $date = new DateTime($start);
+                        $closed = new DateTime($closed_on);
+                        $interval = $closed->diff($date);
+                        $days_done = $interval->days;
+                    ?>
+                    <input type="text" style="color:var(--tertiaryColor)" required value="<?php echo $days_done.' days'; ?>" readonly>
+                </div>
+                <?php }else{?>
                 <div class="data">
                     <label for="phone_number">Days Remaining:</label>
                     <?php
@@ -113,6 +134,7 @@
                     ?>
                     <input type="text" style="color:var(--secondaryColor)" required value="<?php echo $days_remaining.' days'; ?>" readonly>
                 </div>
+                <?php }?>
                 <div class="data">
                     <?php
                         //get created by
@@ -135,20 +157,26 @@
                     ?>
                     <input type="text" value="<?php echo $status?>">
                 </div>
-                
-                
+                <?php
+                    if($cycle_status != 0){
+                ?>
+                <div class="data">
+                    <label for="closed" style="color:var(--secondaryColor)">Date CLosed:</label>
+                    <input type="text" required value="<?php echo date("d-M-Y", strtotime($closed_on))?>" readonly>
+                </div>
+                <div class="data">
+                    <?php
+                        //get closed by
+                        $checks = $get_visits->fetch_details_cond('users',  'user_id', $closed_by);
+                        foreach($checks as $check){
+                            $ended_by = $check->full_name;
+                        }
+                    ?>
+                    <label for="closed" style="color:var(--moreColor)">Closed By:</label>
+                    <input type="text" required value="<?php echo $ended_by?>" readonly>
+                </div>
+                <?php }?>
             </div>
-        </section>
-        <section id="allergy" style="width:auto; background:transparent; box-shadow:none; margin:10px 0">
-            <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('add_cycle_task.php?cycle=<?php echo $cycle?>&crop=<?php echo $crop?>')">Add Task <i class="fas fa-tasks"></i></button>
-            <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('add_observation.php?cycle=<?php echo $cycle?>&crop=<?php echo $crop?>')">Add Observations <i class="fas fa-pen-clip"></i></button>
-            <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('start_harvest_crop.php?cycle=<?php echo $cycle?>&crop=<?php echo $crop?>')">Harvest Crop <i class="fas fa-seedling"></i></button>
-            <button style="background:green;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#fff; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="closeCycle('<?php echo $cycle?>')" title="complete crop cycle">Close Cycle <i class="fas fa-check-double"></i></button>
-            <button style="background:brown; border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#fff; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="abandonCycle('<?php echo $cycle?>')" title="Abandon crop cycle">Abandon Cycle <i class="fas fa-close"></i></button>
-
-        </section>
-        <section id="all_forms">
-
         </section>
         <section id="last_consult">
             <h3>Harvests</h3>

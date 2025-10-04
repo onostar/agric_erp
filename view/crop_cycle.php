@@ -1,3 +1,4 @@
+<div id="cycles">
 <?php
 
     include "../classes/dbh.php";
@@ -30,7 +31,7 @@
             <?php
                 $n = 1;
                 $get_details = new selects();
-                $details = $get_details->fetch_details_cond('crop_cycles', 'cycle_status', 0);
+                $details = $get_details->fetch_details_condOrder('crop_cycles', 'cycle_status', 0, 'created_at');
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
@@ -77,4 +78,5 @@
             echo "<p class='no_result'>'$details'</p>";
         }
     ?>
+</div>
 </div>

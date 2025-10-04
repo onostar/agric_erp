@@ -6322,21 +6322,12 @@ function selectCycleItem(id, name, quantity){
     
 }
 
-//add task
+//add task for a crop cycle
 function addCycleTask(){
      let cycle = document.getElementById("cycle").value;
      let task_title = document.getElementById("task_title").value;
      let description = document.getElementById("description").value;
-     let task_item = document.getElementById("task_item")?.value || 0;
-     let quantity = document.getElementById("quantity")?.value || 0;
-     let item_qty = document.getElementById("item_qty")
-     if(item_qty.style.display == "block"){
-          if(parseFloat(quantity) <= 0){
-               alert("quantity cannot be less than 0");
-               $("#quantity").focus();
-               return;
-          }
-     }
+     let workers = document.getElementById("workers").value;
      if(task_title.length == 0 || task_title.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input task title!");
           $("#task_title").focus();
@@ -6345,11 +6336,15 @@ function addCycleTask(){
           alert("Please input task description!");
           $("#description").focus();
           return;
+     }else if(workers.length == 0 || workers.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input assigned workers!");
+          $("#workers").focus();
+          return;
      }else{
           $.ajax({
                type : "POST",
                url : "../controller/complete_cycle_task.php",
-               data : {task_title:task_title, task_item:task_item, description:description, quantity:quantity, cycle:cycle},
+               data : {task_title:task_title, description:description, workers:workers, cycle:cycle},
                beforeSend: function(){
                     $("#all_forms").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -6476,5 +6471,109 @@ function updateField(){
                $("#farm_fields").load("farm_fields.php #farm_fields");
           }, 2000);
           return false; 
+     }
+}
+
+//complete crop cycle
+function closeCycle(cycle_id){
+     let confirm_close = confirm("Are you sure you want to close this crop cycle?", "");
+     if(confirm_close){
+          $.ajax({
+               type : "GET",
+               url : "../controller/close_cycle.php?cycle_id="+cycle_id,
+               beforeSend: function(){
+                    $("#cycles").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#cycles").html(response);
+               }
+          })
+          setTimeout(function(){
+               $("#cycles").load("crop_cycle.php #cycles");
+          }, 2000);
+          return false;
+     }else{
+          return;
+     }
+}
+//abandon crop cycle
+function abandonCycle(cycle_id){
+     let confirm_close = confirm("Are you sure you want to abandon this crop cycle?", "");
+     if(confirm_close){
+          $.ajax({
+               type : "GET",
+               url : "../controller/abandon_cycle.php?cycle_id="+cycle_id,
+               beforeSend: function(){
+                    $("#cycles").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#cycles").html(response);
+               }
+          })
+          setTimeout(function(){
+               $("#cycles").load("crop_cycle.php #cycles");
+          }, 2000);
+          return false;
+     }else{
+          return;
+     }
+}
+
+//get crops during adding new cycle
+function getCrops(input){
+     let item = input;
+     $("#search_results").show();
+     if(item.length >= 3){
+          $.ajax({
+               type : "POST",
+               url : "../controller/get_crop_name.php",
+               data : {item:item},
+               success : function(response){
+                    $("#search_results").html(response);
+               }
+          })
+     }
+     
+}
+
+//add crop during adding new cycle
+function addCrop(id, name){
+     let crop = document.getElementById("crop");
+     let item = document.getElementById("item");
+     crop.value = id;
+     item.value = name;
+     $("#search_results").html('');
+}
+
+//add itemused fo a task
+function addTaskItem(){
+     let task_id = document.getElementById("task_id").value;
+     let task_item = document.getElementById("task_item").value;
+     let quantity = document.getElementById("quantity").value;
+     if(task_item.length == 0 || task_item.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input item name!");
+          $("#task_item").focus();
+          return;
+     }else if(parseFloat(quantity) <= 0){
+          alert("Please input quantity used!");
+          $("#quantity").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/add_task_item.php",
+               data : {task_id:task_id, task_item:task_item, quantity:quantity},
+               beforeSend : function(){
+                    document.getElementById("new_data").scrollIntoView();
+                    $("#new_data").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#new_data").html(response);
+               }
+          });
+          $("#task_item").val("");
+          $("#item").val("");
+          $("#quantity").val("");
+          $("#task_item").focus();
      }
 }

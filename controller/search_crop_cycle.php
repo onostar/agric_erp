@@ -70,7 +70,7 @@
                     ?>
                 </td>
                 <td><?php echo date("d-m-Y", strtotime($detail->created_at))?></td>
-                <td><a href="javascript:void(0)" title="view details" style="background:var(--tertiaryColor); color:#fff; padding:4px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222" onclick="showPage('cycle_details.php?cycle=<?php echo $detail->cycle_id?>')">View <i class="fas fa-eye"></i></a></td>
+                <td><a href="javascript:void(0)" title="view details" style="background:var(--tertiaryColor); color:#fff; padding:4px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222" onclick="showPage('cycle_report_details.php?cycle=<?php echo $detail->cycle_id?>')">View <i class="fas fa-eye"></i></a></td>
                 
             </tr>
             <?php $n++; }?>
@@ -81,18 +81,5 @@
         echo "<p class='no_result'>'$details'</p>";
     }
    
-    // get sum
-    $get_total = new selects();
-    $amounts = $get_total->fetch_sum_2col2date1con('purchases', 'cost_price', 'quantity', 'date(post_date)', $from, $to, 'store', $store);
-    foreach($amounts as $amount){
-        echo "<p class='total_amount' style='color:green; text-align:right'>Total Goods Purchased: ₦".number_format($amount->total, 2)."</p>";
-    }
-     //get waybill
-     $get_bill = new selects();
-     $bills = $get_bill->fetch_sum_2date1CondGr('purchases', 'waybill', 'store', 'date(post_date)', $from, $to, $store, 'invoice');
-     foreach($bills as $bill){
-         $logistics = $bill->total;
-     }
-   
-     echo "<p class='total_amount' style='color:red; text-align:right;'>Total Logistics: ₦".number_format($logistics, 2)."</p>";
+    
 ?>

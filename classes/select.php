@@ -68,6 +68,19 @@
                 return $rows;
             }
         }
+        //fetch details with condition order by
+        public function fetch_details_condOrder($table, $column, $condition, $order){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column ORDER BY $order");
+            $get_user->bindValue("$column", $condition);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch details with condition greater than
         public function fetch_details_greater($table, $column, $condition){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column > :$column");

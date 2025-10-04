@@ -31,15 +31,11 @@
                 </div>
                 <div class="data" style="width:30%">
                     <label for="crop">Crop</label>
-                    <select name="crop" id="crop" required>
-                        <option value=""selected disabled>Select Crop</option>
-                        <?php
-                            $rows = $get_dep->fetch_details_cond('items', 'item_type', 'Crop');
-                            foreach($rows as $row){
-                        ?>
-                        <option value="<?php echo $row->item_id?>"><?php echo $row->item_name?></option>
-                        <?php } ?>
-                    </select>
+                    <input type="text" name="item" id="item" oninput="getCrops(this.value)" placeholder="Enter crop name" required>
+                    <div id="search_results" style="position:relative;">
+
+                    </div>
+                    <input type="hidden" name="crop" id="crop">
                 </div>
                 
                 <div class="data" style="width:30%;">

@@ -80,7 +80,7 @@
                     ?>
                 </td>
                 <td><?php echo date("H:i:sa", strtotime($detail->created_at))?></td>
-                <td><a href="javascript:void(0)" title="view details" style="background:var(--tertiaryColor); color:#fff; padding:4px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222" onclick="showPage('cycle_details.php?cycle=<?php echo $detail->cycle_id?>')">View <i class="fas fa-eye"></i></a></td>
+                <td><a href="javascript:void(0)" title="view details" style="background:var(--tertiaryColor); color:#fff; padding:4px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222" onclick="showPage('cycle_report_details.php?cycle=<?php echo $detail->cycle_id?>')">View <i class="fas fa-eye"></i></a></td>
                 
             </tr>
             
