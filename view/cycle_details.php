@@ -28,8 +28,10 @@
     padding:5px;
  }
  .tasks_done{
-    border-bottom:1px solid #cdcdcd!important;
-
+    margin-bottom:5px!important;
+    border-bottom:1px solid #b3b3b3ff!important;
+    padding:0 20px 0!important;
+    box-shadow: 2px 2px 2px #222!important;
  }
  </style>
 <?php
@@ -211,15 +213,7 @@
                             foreach($cons as $con){
                                 $done_by = $con->full_name;
                             };
-                            //get item name
-                            $serv = $get_visits->fetch_details_cond('items', 'item_id', $tsk->item);
-                            if(is_array($serv)){
-                                foreach($serv as $ser){
-                                    $item_name = $ser->item_name;
-                                };
-                            }else{
-                                $item_name = "None";
-                            }
+                           
                         ?>
                         <p>Done By: <span style="color:brown; text-transform:uppercase"><?php echo $done_by?></span></p>
                         <p>Date: <span style="color:brown; text-transform:uppercase"><?php echo date("d M, Y, H:ia", strtotime($tsk->post_date))?></span></p>
@@ -231,21 +225,70 @@
                                 <input type="text" readonly value="<?php echo $tsk->title?>">
                             </div>
                             
-                            <div class="data" style="width:100%!important">
+                            <div class="data" style="width:48%!important">
                                 <label for="notes">Description</label>
-                                <textarea name="note" id="note" readonly><?php echo $tsk->description?></textarea>
+                                <textarea name="note" id="note" readonly style="min-height:100px"><?php echo $tsk->description?></textarea>
                             </div>
-                            <div class="data" style="width:50%!important">
-                                <label for="notes">Item Used</label>
-                                <input type="text" id="note" readonly value="<?php echo $item_name?>">
+                            <div class="data" style="width:48%!important">
+                                <label for="notes">Assigned Workers</label>
+                                <textarea name="workers" id="workers" readonly style="min-height:100px"><?php echo $tsk->workers?></textarea>
                             </div>
-                            <div class="data">
-                                <label for="notes">Quantity Used</label>
-                                <input type="number" readonly value="<?php echo $tsk->quantity?>">
-                            </div>
+                           
                         </div>
                     </form>
+                    <div class="allResults" style="width:100%!important;margin:0!important">
+                        <h4 style="background:#222; color:#fff; padding:5px">Items Used for this task</h4>
+                        <table id="data_table" class="searchTable">
+                            <thead>
+                                <tr style="background:transparent!important; color:#000!important;">
+                                    <td>S/N</td>
+                                    <td>Item</td>
+                                    <td>Qty</td>
+                                    <td>Unit Cost</td>
+                                    <td>Total</td>
+                                    <td>Date Used</td>
+                                    <td>Posted by</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                    $m = 1;
+                                    $items = $get_users->fetch_details_cond('task_items', 'task_id', $tsk->task_id);
+                                    if(gettype($items) === 'array'){
+                                    foreach($items as $item):
+                                ?>
+                                <tr>
+                                    <td style="text-align:center; color:red;"><?php echo $m?></td>
+                                    <td style="color:var(--moreColor)">
+                                        <?php 
+                                            $str = $get_users->fetch_details_group('items', 'item_name', 'item_id', $item->item);
+                                            echo $str->item_name;
+                                        ?>
+                                    </td>
+                                    <td><?php echo $item->quantity?></td>
+                                    <td><?php echo number_format($item->unit_cost)?></td>
+                                    <td><?php echo number_format($item->total_cost)?></td>
+                                    
+                                    <td><?php echo date("d-m-Y h:ia", strtotime($item->post_date));?></td>
+                                    <td>
+                                        <?php
+                                            //get posted by
+                                            $get_posted_by = new selects();
+                                            $checks = $get_posted_by->fetch_details_cond('users',  'user_id', $item->posted_by);
+                                            foreach($checks as $check){
+                                                $full_name = $check->full_name;
+                                            }
+                                            echo $full_name;
+                                        ?>
+                                    </td>
+                                    
+                                </tr>
+                                <?php $m++; endforeach;}?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+                <hr>
                 <?php }}?>
             </section>
             <section id="main_consult" class="observations notes">
