@@ -3612,8 +3612,11 @@ color: rgb(231, 226, 226);
     flex-wrap:wrap;
     align-items: flex-start;
 }
-.tasks_notes .notes{
-    width:49%;
+.tasks_notes .tasks{
+    width:60%;
+}
+.tasks_notes .observations{
+    width:38%;
 }
 #tasks_done{
     border-bottom: 1px solid #cdcdcd;

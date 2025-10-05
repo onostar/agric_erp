@@ -141,14 +141,24 @@
                     <label for="customer_store">Cost Incurred:</label>
                     <?php
                         //get total cost of items used in this cycle
-                        $inc_costs = $get_visits->fetch_sum_single('task_items', 'total_cost', 'cycle', $cycle);
-                        if(is_array($inc_costs)){
-                            foreach($inc_costs as $inc_cost){
-                                $cost_incurred = $inc_cost->total;
+                        $itm_costs = $get_visits->fetch_sum_single('task_items', 'total_cost', 'cycle', $cycle);
+                        if(is_array($itm_costs)){
+                            foreach($itm_costs as $itm_cost){
+                                $item_cost = $itm_cost->total;
                             }
                         }else{
-                            $cost_incurred = 0;
+                            $item_cost = 0;
                         }
+                        //get total labour cost for this cycle
+                        $lab_costs = $get_visits->fetch_sum_single('tasks', 'labour_cost', 'cycle', $cycle);
+                        if(is_array($lab_costs)){
+                            foreach($lab_costs as $lab_cost){
+                                $labs_cost = $lab_cost->total;
+                            }
+                        }else{
+                            $labs_cost = 0;
+                        }
+                        $cost_incurred = $item_cost + $labs_cost;
                     ?>
                     <input type="text" value="<?php echo "₦".number_format($cost_incurred, 2)?>" style="color:var(--secondaryColor)" readonly>
                 </div>
@@ -220,7 +230,7 @@
                     
                 ?>
                 <div id="tasks_done">
-                    <div class="consultant" style="display:flex; gap:1rem; flex-wrap:wrap; padding:5px; margin-bottom:10px">
+                    <div class="consultant" style="display:flex; gap:1rem; flex-wrap:wrap; padding:5px; margin-bottom:0">
                         <?php
                             //get consultant name
                             $cons = $get_visits->fetch_details_cond('users', 'user_id', $tsk->done_by);
@@ -235,9 +245,9 @@
                     </div>
                     <form>
                         <div class="inputs">
-                            <div class="data" style="width:100%!important">
+                            <div class="data" style="width:100%!important; margin-top:0!important">
                                 <!-- <label for="notes" style="background:none; color:#000; text-align:left">Task</label> -->
-                                <input type="text" readonly value="<?php echo $tsk->title?>" style="border:1px solid #cdcdcd!important">
+                                <input type="text" readonly value="<?php echo $tsk->title?>" style="border:1px solid #cdcdcd!important; background:#cdcdcd">
                             </div>
                             
                             <div class="data" style="width:48.5%!important">
@@ -325,8 +335,25 @@
                         
                         ?>
                     </div>
+                    <?php if($role == "Admin" || $role == "Accountant"){?>
+                    <!-- labour cost -->
+                    <p style="text-align:right; margin:10px 0; font-weight:bold; color:#222">Labour Cost: ₦<?php echo number_format($tsk->labour_cost, 2)?></p>
+                    <hr>
+                    <?php
+                    //get total cost of items used
+                    $totals = $get_visits->fetch_sum_single('task_items', 'total_cost', 'task_id', $tsk->task_id);
+                    if(is_array($totals)){
+                        foreach($totals as $tot){
+                            $total_cost = $tot->total;
+                        }
+                    }else{
+                        $total_cost = 0;
+                    }
+                    ?>
+                    <p style="text-align:right; margin:10px 0; font-weight:bold; color:green">Total Cost (Items + Labour): ₦<?php echo number_format($total_cost + $tsk->labour_cost, 2)?></p>
+                    <?php }?>
                 </div>
-                <hr>
+                
                 <?php }}?>
             </section>
             <section id="main_consult" class="observations notes">

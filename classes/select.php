@@ -827,7 +827,8 @@
                 $rows = "No records found";
                 return $rows;
             }
-        }//fetch sum with 2 condition
+        }
+        //fetch sum with 2 condition
         public function fetch_sum_double($table, $column1, $condition, $value, $condition2, $value2){
             $get_user = $this->connectdb()->prepare("SELECT SUM($column1) AS total FROM $table WHERE $condition = :$condition AND $condition2 = :$condition2");
             $get_user->bindValue("$condition", $value);
@@ -841,6 +842,7 @@
                 return $rows;
             }
         }
+       
         //fetch sum with current date
         public function fetch_sum_curdate($table, $column1, $column2){
             $get_user = $this->connectdb()->prepare("SELECT SUM($column1) AS total FROM $table WHERE date($column2) = CURDATE()");

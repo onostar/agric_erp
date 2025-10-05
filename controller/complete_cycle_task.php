@@ -21,15 +21,7 @@
         $field = $row->field;
         $farm = $row->farm;
     }
-    //get current date
-    $todays_date = date("dmyhis");
-    $ran_num ="";
-    for($i = 0; $i < 3; $i++){
-        $random_num = random_int(0, 9);
-        $ran_num .= $random_num;
-    }
-    //generate transaction number
-    $trx_num = "TR".$ran_num.$todays_date;
+
     $data = array(
         "cycle" => $cycle,
         "farm" => $farm,
@@ -38,7 +30,7 @@
         "description" => $description,
         "workers" => $workers,
         "labour_cost" => $labour_cost,
-        "trx_number" => $trx_num,
+        "payment_status" => 0,
         "done_by" => $user,
         "post_date" => $date
     );
