@@ -21,17 +21,17 @@
         $item_type = $row->item_type;
         $reorder_level = $row->reorder_level;
         $crop_name = $row->item_name;
+        $cost = $row->cost_price;
     }
     //gert fields
     $fds = $get_details->fetch_details_group('crop_cycles', 'field', 'cycle_id', $cycle);
     $field = $fds->field;
     $prev_qtys = $get_details->fetch_details_2cond('inventory', 'item', 'store', $crop, $farm);
-    if(gettype($prev_qtys) === 'array'){
+    if(is_array($prev_qtys)){
         foreach($prev_qtys as $prev_qty){
             $inv_qty = $prev_qty->quantity;
         }
-    }
-    if(gettype($prev_qtys) === 'string'){
+    }else{
         $inv_qty = 0;
     }
     //check if item is in store inventory
@@ -39,14 +39,14 @@
         //update current quantity in inventory
         $new_qty = $inv_qty + $quantity;
         $update_inventory = new Update_table();
-        $update_inventory->update_double2Cond('inventory', 'quantity', $new_qty, 'cost_price', 0, 'item', $crop, 'store', $farm);
+        $update_inventory->update_double2Cond('inventory', 'quantity', $new_qty, 'cost_price', $cost, 'item', $crop, 'store', $farm);
     }
     //add to inventory if not found
     if(gettype($prev_qtys) === 'string'){
         //data to insert into inventory
         $inventory_data = array(
             'item' => $crop,
-            'cost_price' => 0,
+            'cost_price' => $cost,
             // 'expiration_date' => $expiration,
             'quantity' => $quantity,
             'reorder_level' => $reorder_level,

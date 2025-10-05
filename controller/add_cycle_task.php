@@ -29,7 +29,10 @@
                     <label for="description">Assigned Workers</label>
                     <textarea name="workers" id="workers" placeholder="Input Names of Workers involved in this task (seperate by a comma)" required></textarea>
                 </div>
-                
+                <div class="data" style="width:50%">
+                    <label for="labour_cost">Labour Cost (NGN)</label>
+                    <input type="number" name="labour_cost" id="labour_cost" value="0" placeholder="Input labour cost for this task" required>
+                </div>
                 <div class="data" style="width:auto">
                     <button type="submit" id="add_cat" name="add_cat" onclick="addCycleTask()">Save <i class="fas fa-layer-group"></i></button>
                     <a style="border-radius:15px; background:brown;color:#fff;padding:8px; box-shadow:1px 1px 1px #222"href="javascript:void(0)" onclick="closeAllForms()"><i class="fas fa-close"></i> Close</a>

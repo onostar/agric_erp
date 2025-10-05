@@ -29,14 +29,14 @@
  }
  .tasks_done{
     margin-bottom:5px!important;
-    border-bottom:1px solid #b3b3b3ff!important;
+    /* border-bottom:1px solid #b3b3b3ff!important; */
     padding:0 20px 0!important;
-    box-shadow: 2px 2px 2px #222!important;
  }
  </style>
 <?php
     session_start();
     $store = $_SESSION['store_id'];
+    $role = $_SESSION['role'];
     include "../classes/dbh.php";
     include "../classes/select.php";
     if(isset($_SESSION['user_id'])){
@@ -137,7 +137,21 @@
                     ?>
                     <input type="text" value="<?php echo $status?>">
                 </div>
-                
+                <div class="data">
+                    <label for="customer_store">Cost Incurred:</label>
+                    <?php
+                        //get total cost of items used in this cycle
+                        $inc_costs = $get_visits->fetch_sum_single('task_items', 'total_cost', 'cycle', $cycle);
+                        if(is_array($inc_costs)){
+                            foreach($inc_costs as $inc_cost){
+                                $cost_incurred = $inc_cost->total;
+                            }
+                        }else{
+                            $cost_incurred = 0;
+                        }
+                    ?>
+                    <input type="text" value="<?php echo "₦".number_format($cost_incurred, 2)?>" style="color:var(--secondaryColor)" readonly>
+                </div>
                 
             </div>
         </section>
@@ -215,21 +229,22 @@
                             };
                            
                         ?>
-                        <p>Done By: <span style="color:brown; text-transform:uppercase"><?php echo $done_by?></span></p>
                         <p>Date: <span style="color:brown; text-transform:uppercase"><?php echo date("d M, Y, H:ia", strtotime($tsk->post_date))?></span></p>
+                        <p>Posted By: <span style="color:brown; text-transform:uppercase"><?php echo $done_by?></span></p>
+                        
                     </div>
                     <form>
                         <div class="inputs">
                             <div class="data" style="width:100%!important">
-                                <label for="notes">Task</label>
-                                <input type="text" readonly value="<?php echo $tsk->title?>">
+                                <!-- <label for="notes" style="background:none; color:#000; text-align:left">Task</label> -->
+                                <input type="text" readonly value="<?php echo $tsk->title?>" style="border:1px solid #cdcdcd!important">
                             </div>
                             
-                            <div class="data" style="width:48%!important">
-                                <label for="notes">Description</label>
+                            <div class="data" style="width:48.5%!important">
+                                <label for="notes">Description/Notes</label>
                                 <textarea name="note" id="note" readonly style="min-height:100px"><?php echo $tsk->description?></textarea>
                             </div>
-                            <div class="data" style="width:48%!important">
+                            <div class="data" style="width:48.5%!important">
                                 <label for="notes">Assigned Workers</label>
                                 <textarea name="workers" id="workers" readonly style="min-height:100px"><?php echo $tsk->workers?></textarea>
                             </div>
@@ -237,16 +252,18 @@
                         </div>
                     </form>
                     <div class="allResults" style="width:100%!important;margin:0!important">
-                        <h4 style="background:#222; color:#fff; padding:5px">Items Used for this task</h4>
+                        <h4 style="background:var(--otherColor); color:#fff; padding:5px">Items Used for this task</h4>
                         <table id="data_table" class="searchTable">
                             <thead>
                                 <tr style="background:transparent!important; color:#000!important;">
                                     <td>S/N</td>
                                     <td>Item</td>
                                     <td>Qty</td>
+                                    <?php if($role == "Admin" || $role == "Accountant"){?>
                                     <td>Unit Cost</td>
                                     <td>Total</td>
-                                    <td>Date Used</td>
+                                    <?php }?>
+                                    <td>Date</td>
                                     <td>Posted by</td>
                                 </tr>
                             </thead>
@@ -266,9 +283,10 @@
                                         ?>
                                     </td>
                                     <td><?php echo $item->quantity?></td>
-                                    <td><?php echo number_format($item->unit_cost)?></td>
-                                    <td><?php echo number_format($item->total_cost)?></td>
-                                    
+                                    <?php if($role == "Admin" || $role == "Accountant"){?>
+                                    <td><?php echo number_format($item->unit_cost,2)?></td>
+                                    <td><?php echo number_format($item->total_cost,2)?></td>
+                                    <?php } ?>
                                     <td><?php echo date("d-m-Y h:ia", strtotime($item->post_date));?></td>
                                     <td>
                                         <?php
@@ -286,6 +304,26 @@
                                 <?php $m++; endforeach;}?>
                             </tbody>
                         </table>
+                        <?php
+                            if(is_array($items)){
+                                if($role == "Admin" || $role == "Accountant"){
+                                    //get total cost of items used
+                                    $totals = $get_visits->fetch_sum_single('task_items', 'total_cost', 'task_id', $tsk->task_id);
+                                    if(is_array($totals)){
+                                        foreach($totals as $tot){
+                                            $total_cost = $tot->total;
+                                        }
+                                    }else{
+                                        $total_cost = 0;
+                                    }
+                                    echo "<h4 style='text-align:right; padding:5px; background:var(--tertiaryColor); color:#fff;'>Total Cost of items used: ₦".number_format($total_cost, 2)."</h4>";
+                                    
+                                }
+                            }else{
+                                echo "<p style='font-size:.8rem;' class='no_result'>'No farm input used'</p>";
+                            }
+                        
+                        ?>
                     </div>
                 </div>
                 <hr>
@@ -310,8 +348,8 @@
                             };
 
                         ?>
-                        <p>Posted By: <span style="color:brown; text-transform:uppercase"><?php echo $done_by?></span></p>
                         <p>Date: <span style="color:brown; text-transform:uppercase"><?php echo date("d M, Y, H:ia", strtotime($tsk->post_date))?></span></p>
+                        <p>Posted By: <span style="color:brown; text-transform:uppercase"><?php echo $done_by?></span></p>
                     </div>
                     <form>
                         <div class="inputs">

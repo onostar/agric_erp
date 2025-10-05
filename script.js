@@ -6267,10 +6267,10 @@ function showForm(url){
           type : "GET",
           url : "../controller/"+url,
           beforeSend : function(){
-               document.getElementById("all_forms").scrollIntoView();
                $("#all_forms").html("<div class='processing'><div class='loader'></div></div>");
           },
           success : function(response){
+               document.getElementById("all_forms").scrollIntoView();
                $("#all_forms").html(response)
           }
      })
@@ -6328,6 +6328,7 @@ function addCycleTask(){
      let task_title = document.getElementById("task_title").value;
      let description = document.getElementById("description").value;
      let workers = document.getElementById("workers").value;
+     let labour_cost = document.getElementById("labour_cost").value;
      if(task_title.length == 0 || task_title.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input task title!");
           $("#task_title").focus();
@@ -6340,11 +6341,15 @@ function addCycleTask(){
           alert("Please input assigned workers!");
           $("#workers").focus();
           return;
+     }else if(parseFloat(labour_cost) < 0){
+          alert("Labour Cost must be a number!");
+          $("#labour_cost").focus();
+          return;
      }else{
           $.ajax({
                type : "POST",
                url : "../controller/complete_cycle_task.php",
-               data : {task_title:task_title, description:description, workers:workers, cycle:cycle},
+               data : {task_title:task_title, description:description, workers:workers, cycle:cycle, labour_cost:labour_cost},
                beforeSend: function(){
                     $("#all_forms").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -6575,5 +6580,24 @@ function addTaskItem(){
           $("#item").val("");
           $("#quantity").val("");
           $("#task_item").focus();
+     }
+}
+
+//remove item added to task
+function removeTaskItem(id){
+     let confirm_removal = confirm("Are you sure you want to remove this item?", "");
+     if(confirm_removal){
+          $.ajax({
+               type : "GET",
+               url : "../controller/remove_task_item.php?task_item_id="+id,
+               beforeSend : function(){
+                    $("#new_data").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#new_data").html(response);
+               }
+          })
+     }else{
+          return;
      }
 }

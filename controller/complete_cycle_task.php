@@ -7,6 +7,7 @@
     $task = strtoupper(htmlspecialchars(stripslashes($_POST['task_title'])));
     $workers = strtoupper(htmlspecialchars(stripslashes($_POST['workers'])));
     $description = ucwords(htmlspecialchars(stripslashes($_POST['description'])));
+    $labour_cost = htmlspecialchars(stripslashes($_POST['labour_cost']));
     // $quantity = htmlspecialchars(stripslashes($_POST['quantity']));
     
     include "../classes/dbh.php";
@@ -20,7 +21,15 @@
         $field = $row->field;
         $farm = $row->farm;
     }
-
+    //get current date
+    $todays_date = date("dmyhis");
+    $ran_num ="";
+    for($i = 0; $i < 3; $i++){
+        $random_num = random_int(0, 9);
+        $ran_num .= $random_num;
+    }
+    //generate transaction number
+    $trx_num = "TR".$ran_num.$todays_date;
     $data = array(
         "cycle" => $cycle,
         "farm" => $farm,
@@ -28,6 +37,8 @@
         "title" => $task,
         "description" => $description,
         "workers" => $workers,
+        "labour_cost" => $labour_cost,
+        "trx_number" => $trx_num,
         "done_by" => $user,
         "post_date" => $date
     );
@@ -49,7 +60,7 @@
                 <input type="hidden" name="task_id" id="task_id" value="<?php echo $task_id?>">
                 <div class="data" style="width:100%!important; margin:5px 0">
                     <label for="item" style="background:none; color:#000; padding:0;margin:0; text-align:left">Item Used</label>
-                    <input type="text" name="item" id="item" style="padding:8px;" required placeholder="Search item" onkeyup="getItemDetails(this.value, 'get_task_items.php')">
+                    <input type="text" name="item" id="item" style="padding:8px;" required placeholder="Search item" onkeyup="getItemDetails(this.value, 'get_task_items.php')" autofocus>
                     <div id="sales_item">
                         
                     </div>
