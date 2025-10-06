@@ -22,6 +22,7 @@
             <tr style="background:var(--primaryColor)">
                 <td>S/N</td>
                 <td>field</td>
+                <td>Type</td>
                 <td>title</td>
                 <td>Details</td>
                 <td>Labour Cost</td>
@@ -49,6 +50,7 @@
                         echo $rows->field_name;
                     ?>
                 </td>
+                <td><?php echo $detail->task_type?></td>
                 <td>
                     <?php 
                         echo $detail->title;

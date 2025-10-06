@@ -69,7 +69,11 @@
             if($add_data){
                 //add into accounting data
                 //get farm input ledger
-                $inps = $get_details->fetch_details_cond('ledgers', 'ledger', 'FARM INPUTS');
+                if($cycle == 0 || $cycle == ""){    
+                    $inps = $get_details->fetch_details_cond('ledgers', 'ledger', 'GENERAL FIELD MAINTENANCE');
+                }else{
+                    $inps = $get_details->fetch_details_cond('ledgers', 'ledger', 'FARM INPUTS');
+                }
                 foreach($inps as $inp){
                     $contra_ledger = $inp->acn;
                     $contra_type = $inp->account_group;

@@ -59,7 +59,7 @@
                         <option value="<?php echo $field?>" selected><?php echo $field_name?></option>
                         <?php
                             $get_dep = new selects();
-                            $rows = $get_dep->fetch_details_cond('fields', 'field_status', 0);
+                            $rows = $get_dep->fetch_details_2cond('fields', 'farm', 'field_status', $store, 0);
                             foreach($rows as $row){
                         ?>
                         <option value="<?php echo $row->field_id?>"><?php echo $row->field_name?></option>

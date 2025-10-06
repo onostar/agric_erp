@@ -1,6 +1,8 @@
 <?php
     include "../classes/dbh.php";
     include "../classes/select.php";
+    session_start();
+    $farm = $_SESSION['store_id'];
 ?>
 
 <div id="crop_cycle" class="displays">
@@ -18,7 +20,7 @@
                         <option value=""selected disabled>Select Farm Field</option>
                         <?php
                             $get_dep = new selects();
-                            $rows = $get_dep->fetch_details_cond('fields', 'field_status', 0);
+                            $rows = $get_dep->fetch_details_2cond('fields', 'farm', 'field_status', $farm, 0);
                             foreach($rows as $row){
                         ?>
                         <option value="<?php echo $row->field_id?>"><?php echo $row->field_name?></option>

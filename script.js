@@ -6705,3 +6705,45 @@ function editCropCycle(){
           return false;    
      }
 }
+
+//add general task / field maintenance
+function addTask(){
+     let field = document.getElementById("field").value;
+     let task_title = document.getElementById("task_title").value;
+     let description = document.getElementById("description").value;
+     let workers = document.getElementById("workers").value;
+     let labour_cost = document.getElementById("labour_cost").value;
+     if(field.length == 0 || field.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select field!");
+          $("#field").focus();
+          return;
+     }else if(task_title.length == 0 || task_title.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input task title!");
+          $("#task_title").focus();
+          return;
+     }else if(description.length == 0 || description.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input task description!");
+          $("#description").focus();
+          return;
+     }else if(workers.length == 0 || workers.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input assigned workers!");
+          $("#workers").focus();
+          return;
+     }else if(parseFloat(labour_cost) < 0){
+          alert("Labour Cost must be a number!");
+          $("#labour_cost").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/add_general_task.php",
+               data : {task_title:task_title, description:description, workers:workers, field:field, labour_cost:labour_cost},
+               beforeSend: function(){
+                    $("#general_tasks").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#general_tasks").html(response);
+               }
+          })
+     }
+}

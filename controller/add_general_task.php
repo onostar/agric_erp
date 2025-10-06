@@ -3,25 +3,19 @@
     date_default_timezone_set("Africa/Lagos");
     $date = date("Y-m-d H:i:s");
     $user = $_SESSION['user_id'];
-    $cycle = htmlspecialchars(stripslashes($_POST['cycle']));
+    $field = htmlspecialchars(stripslashes($_POST['field']));
     $task = strtoupper(htmlspecialchars(stripslashes($_POST['task_title'])));
     $workers = strtoupper(htmlspecialchars(stripslashes($_POST['workers'])));
     $description = ucwords(htmlspecialchars(stripslashes($_POST['description'])));
     $labour_cost = htmlspecialchars(stripslashes($_POST['labour_cost']));
-    // $quantity = htmlspecialchars(stripslashes($_POST['quantity']));
+    $farm = $_SESSION['store_id'];
     
     include "../classes/dbh.php";
     include "../classes/select.php";
     include "../classes/inserts.php";
     include "../classes/update.php";
-    
-    //get cycle details
     $get_details = new selects();
-    $rows = $get_details->fetch_details_cond('crop_cycles', 'cycle_id', $cycle);
-    foreach($rows as $row){
-        $field = $row->field;
-        $farm = $row->farm;
-    }
+   
     //generate receipt invoice
     //get current date
     $todays_date = date("dmyh");
@@ -39,11 +33,11 @@
     }
     $data = array(
         "task_number" => $task_no,
-        "cycle" => $cycle,
+        // "cycle" => $cycle,
         "farm" => $farm,
         "field" => $field,
         "title" => $task,
-        "task_type" => "crop cycle",
+        "task_type" => "general maintenance",
         "description" => $description,
         "workers" => $workers,
         "labour_cost" => $labour_cost,
@@ -59,7 +53,7 @@
         $task_id = $ids->task_id;
         
     ?>
-        <div class="notify"><p>Task added Successfully</p></div>
+        <div class="notify"><p>Task Posted Successfully</p></div>
 
         <div class="add_user_form" style="width:95%; margin:10px">
         <h3 style="padding:8px; font-size:.8rem;text-align:left;background:var(--tertiaryColor)">Add Item used for this task (<?php echo $task?>)</h3>
@@ -81,7 +75,7 @@
                 </div>
                 <div class="data" style="width:auto!important; margin:5px 0!important">
                     <button type="submit" id="add_cat" name="add_cat" onclick="addTaskItem()">Save <i class="fas fa-layer-group"></i></button>
-                    <a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222"href="javascript:void(0)" onclick="showPage('cycle_details.php?cycle=<?php echo $cycle?>')"><i class="fas fa-close"></i> Close</a>
+                    <a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222"href="javascript:void(0)" onclick="showPage('general_task.php')"><i class="fas fa-close"></i> Close</a>
                 </div>
             </div>
             
