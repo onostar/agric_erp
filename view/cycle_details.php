@@ -247,7 +247,7 @@
                         <div class="inputs">
                             <div class="data" style="width:100%!important; margin-top:0!important">
                                 <!-- <label for="notes" style="background:none; color:#000; text-align:left">Task</label> -->
-                                <input type="text" readonly value="<?php echo $tsk->title?>" style="border:1px solid #cdcdcd!important; background:#cdcdcd">
+                                <input type="text" readonly value="<?php echo $tsk->title.' ('.$tsk->task_number.')'?>" style="border:1px solid #cdcdcd!important; background:#cdcdcd">
                             </div>
                             
                             <div class="data" style="width:48.5%!important">

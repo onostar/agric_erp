@@ -25,24 +25,25 @@ session_start();
                 <label>Select to Date</label><br>
                 <input type="date" name="to_date" id="to_date"><br>
             </div>
-            <button type="submit" name="search_date" id="search_date" onclick="search('search_director_posting.php')">Search <i class="fas fa-search"></i></button>
+            <button type="submit" name="search_date" id="search_date" onclick="search('search_labour_posting.php')">Search <i class="fas fa-search"></i></button>
         </section>
     </div>
 <div class="displays allResults new_data" id="bar_items">
-    <h2>Director's Daily Transactions</h2>
+    <h2>Labour Cost Transactions for Today</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchRoom" placeholder="Enter keyword" onkeyup="searchData(this.value)">
-        <a class="download_excel" href="javascript:void(0)" onclick="convertToExcel('item_list_table', 'Director Transactions')"title="Download to excel"><i class="fas fa-file-excel"></i></a>
+        <a class="download_excel" href="javascript:void(0)" onclick="convertToExcel('item_list_table', 'Labour Cost Transactions')"title="Download to excel"><i class="fas fa-file-excel"></i></a>
     </div>
     <table id="item_list_table" class="searchTable">
         <thead>
             <tr style="background:var(--tertiaryColor)">
                 <td>S/N</td>
-                <td>Transaction Date</td>
-                <td>Financier</td>
+                <td>Trx. Date</td>
+                <td>Task</td>
+                <td>Expense Head</td>
                 <td>Contra Ledger</td>
-                <td>Type</td>
+                <td>Trx. No.</td>
                 <td>Amount</td>
                 <td>Post Time</td>
                 <td>Posted by</td>
@@ -53,7 +54,7 @@ session_start();
             <?php
                 $n = 1;
                 $get_items = new selects();
-                $details = $get_items->fetch_details_curdateCon('director_posting', 'post_date', 'store', $store);
+                $details = $get_items->fetch_details_curdateCon('labour_payments', 'post_date', 'store', $store);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
@@ -64,19 +65,23 @@ session_start();
                 </td>
                 <td>
                     <?php 
-                        $get_loaner = new selects();
-                        $row = $get_loaner->fetch_details_group('ledgers', 'ledger', 'ledger_id', $detail->financier);
-                        echo $row->ledger
+                        $row = $get_items->fetch_details_group('tasks', 'title', 'task_id', $detail->task);
+                        echo $row->title
                     ?>
                 </td>
                 <td>
                     <?php 
-                        $get_loanee = new selects();
-                        $rows = $get_loanee->fetch_details_group('ledgers', 'ledger', 'ledger_id', $detail->contra_ledger);
+                        $rows = $get_items->fetch_details_group('ledgers', 'ledger', 'ledger_id', $detail->exp_head);
                         echo $rows->ledger
                     ?>
                 </td>
-                <td><?php echo $detail->trans_type?></td>
+                <td>
+                    <?php 
+                        $rows = $get_items->fetch_details_group('ledgers', 'ledger', 'ledger_id', $detail->contra);
+                        echo $rows->ledger
+                    ?>
+                </td>
+                <td><?php echo $detail->trx_number?></td>
                 <td style="color:red;"><?php echo "₦".number_format($detail->amount, 2)?></td>
                 
                 <td style="color:var(--moreColor)"><?php echo date("H:i:sa", strtotime($detail->post_date))?></td>
@@ -106,29 +111,17 @@ session_start();
         <?php
              //get contribution
             $get_cash = new selects();
-            $cashs = $get_cash->fetch_sum_curdate2Con('director_posting', 'amount', 'date(post_date)', 'trans_type', 'Director contribution', 'store', $store);
+            $cashs = $get_cash->fetch_sum_curdateCon('labour_payments', 'amount', 'post_date', 'store', $store);
             if(gettype($cashs) === "array"){
                 foreach($cashs as $cash){
                 ?>
-                    <p class="sum_amount" style="background:var(--otherColor)"><strong>Total Contribution</strong>: ₦ <?php echo number_format($cash->total, 2)?></p>
+                    <p class="sum_amount" style="background:var(--tertiaryColor)"><strong>Total Cost</strong>: ₦ <?php echo number_format($cash->total, 2)?></p>
 
                 <?php
                 }
             }
         ?>
-        <?php
-             //get remuneration
-            $get_cash = new selects();
-            $cashs = $get_cash->fetch_sum_curdate2Con('director_posting', 'amount', 'post_date', 'trans_type', 'Director remuneration', 'store', $store);
-            if(gettype($cashs) === "array"){
-                foreach($cashs as $cash){
-                ?>
-                    <p class="sum_amount" style="background:var(--primaryColor)"><strong>Total Remunerations</strong>: ₦ <?php echo number_format($cash->total, 2)?></p>
-
-                <?php
-                }
-            }
-        ?>
+        
     </div>
 </div>
 <?php }?>

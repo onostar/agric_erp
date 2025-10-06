@@ -14,6 +14,7 @@
     include "../classes/select.php";
     include "../classes/inserts.php";
     include "../classes/update.php";
+    
     //get cycle details
     $get_details = new selects();
     $rows = $get_details->fetch_details_cond('crop_cycles', 'cycle_id', $cycle);
@@ -21,8 +22,23 @@
         $field = $row->field;
         $farm = $row->farm;
     }
-
+    //generate receipt invoice
+    //get current date
+    $todays_date = date("dmyh");
+    $ran_num ="";
+    for($i = 0; $i < 3; $i++){
+        $random_num = random_int(0, 9);
+        $ran_num .= $random_num;
+    }
+    $task_no = "TK".$farm.$todays_date.$ran_num.$user;
+    //check if there is labour cost
+    if($labour_cost == 0 || $labour_cost == ""){
+        $status = 1;
+    }else{
+        $status = 0;
+    }
     $data = array(
+        "task_number" => $task_no,
         "cycle" => $cycle,
         "farm" => $farm,
         "field" => $field,
@@ -30,7 +46,7 @@
         "description" => $description,
         "workers" => $workers,
         "labour_cost" => $labour_cost,
-        "payment_status" => 0,
+        "payment_status" => $status,
         "done_by" => $user,
         "post_date" => $date
     );

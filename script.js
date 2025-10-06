@@ -6601,3 +6601,44 @@ function removeTaskItem(id){
           return;
      }
 }
+
+//post labour cost
+function postLabour(){
+     let total_amount = document.getElementById("total_amount").value;
+     let task = document.getElementById("task").value;
+     let store = document.getElementById("store").value;
+     let contra = document.getElementById("contra").value;
+     let exp_head = document.getElementById("exp_head").value;
+     if(contra.length == 0 || contra.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select contra ledger!");
+          $("#contra").focus();
+          return;
+     }else if(exp_head.length == 0 || exp_head.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select expense ledger!");
+          $("#exp_head").focus();
+          return;
+          
+     }else{
+          let confirmPost = confirm("Are you sure you want to post this payment?", "");
+          if(confirmPost){
+               $.ajax({
+                    type : "POST",
+                    url : "../controller/post_labour_cost.php",
+                    data : {store:store, task:task, total_amount:total_amount, contra:contra, exp_head:exp_head},
+                    beforeSend : function(){
+                         $("#post_purchase").html("<div class='processing'><div class='loader'></div></div>");
+                    },
+                    success : function(response){
+                         $("#post_purchase").html(response);
+                    }
+               })
+               setTimeout(function(){
+                    $("#post_purchase").load("post_labour.php #post_purchase");
+               }, 1000);
+               return false;
+          
+          }else{
+               return;
+          }
+     }
+}

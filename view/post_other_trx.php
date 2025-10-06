@@ -21,7 +21,7 @@
                     <div class="inputs" style="padding:20px">
                         <!-- bar items form -->
                         <div class="data" id="bar_items" style="width:100%; margin:20px 0">
-                            <a style="background:#e8e8e8;color:#222; padding:8px; border-radius:15px; box-shadow:1px 1px 1px #222; margin:10px; border:1px solid #fff" href="javascript:void(0)" onclick="showPage('post_labour.php')" title="Post Labour cost"><i class="fas fa-hard-hat"></i> Labour Cost</a>
+                            <!-- <a style="background:#e8e8e8;color:#222; padding:8px; border-radius:15px; box-shadow:1px 1px 1px #222; margin:10px; border:1px solid #fff" href="javascript:void(0)" onclick="showPage('post_labour.php')" title="Post Labour cost"><i class="fas fa-hard-hat"></i> Labour Cost</a> -->
                             <a style="background:#e8e8e8;color:#222; padding:8px; border-radius:15px; box-shadow:1px 1px 1px #222; margin:10px; border:1px solid #fff" href="javascript:void(0)" onclick="showPage('post_loans.php')" title="Post Loans"><i class="fas fa-hand-holding-dollar"></i> Loans</a>
                             <a style="background:#e8e8e8;color:#222; padding:8px; border-radius:15px; box-shadow:1px 1px 1px #222; margin:10px; border:1px solid #fff" href="javascript:void(0)" onclick="showPage('post_director_trx.php')" title="Director Transactions"><i class="fas fa-user-tie"></i> Director's Transactions</a>
                             <a style="background:#e8e8e8;color:#222; padding:8px; border-radius:15px; box-shadow:1px 1px 1px #222; margin:10px; border:1px solid #fff" href="javascript:void(0)" onclick="showPage('post_finance_cost.php')" title="Other Finance Cost"><i class="fas fa-bank"></i> Loan Fees, Bank charges & Tax</a>

@@ -88,6 +88,30 @@
                 </tr>
                 <tr>
                     <td style="color:#222; text-align:left">
+                        Labour Cost
+                    </td>
+                    <td>
+                        <?php 
+                            //get all cash flow from customers
+                            $get_inflow = new selects();
+                            $rows = $get_inflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details',
+                            $from, $to, 'operating',  'Labour Cost');
+                            if(gettype($rows) == 'array'){
+                                foreach($rows as $row){
+                                    $purchase = $row->total;
+                                }
+                                echo number_format($purchase, 2);
+                            }
+                            if(gettype($rows) == 'string'){
+                                echo "0.00";
+                            }
+                            
+                        ?>
+                    </td>
+                    
+                </tr>
+                <tr>
+                    <td style="color:#222; text-align:left">
                         General Expense
                     </td>
                     <td>

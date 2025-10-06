@@ -20,7 +20,7 @@
                 
                 <div class="data" style="width:100%">
                     <label for="description">Observation / Remark</label>
-                    <input type="text" name="description" id="description" placeholder="Brief description of task done" required>
+                    <input type="text" name="description" id="description" placeholder="Input Observations" required>
                 </div>
                 <div class="data" style="width:auto">
                     <button type="submit" id="add_cat" name="add_cat" onclick="addObservation()">Save <i class="fas fa-layer-group"></i></button>
