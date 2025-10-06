@@ -55,7 +55,7 @@
     ?>
         <div class="notify"><p>Task Posted Successfully</p></div>
 
-        <div class="add_user_form" style="width:95%; margin:10px">
+        <div class="add_user_form" style="width:50%; margin:10px">
         <h3 style="padding:8px; font-size:.8rem;text-align:left;background:var(--tertiaryColor)">Add Item used for this task (<?php echo $task?>)</h3>
         <!-- <form method="POST" id="addUserForm"> -->
         <section>

@@ -32,6 +32,7 @@ include "../classes/inserts.php";
             $invoices = $get_details->fetch_details_cond('tasks', 'task_id', $task);
             foreach($invoices as $receipt){
                 $trans_date = $receipt->post_date;
+                $cycle = $receipt->cycle;
                 // $trans_date = $date;
             }
             
@@ -121,7 +122,23 @@ include "../classes/inserts.php";
                 );
                 $add_flow = new add_data('cash_flows', $flow_data);
                 $add_flow->create_data();
-           
+                //check to addto expense if task  is not for crop cycle
+                if($cycle == 0 || $cycle == ""){
+                    //add to expenses
+                    $expense_data = array(
+                        'expense_head' => $exp_head,
+                        'amount' => $amount,
+                        'contra' => $contra,
+                        'details' => $details,
+                        'trx_number' => $trx_num,
+                        'expense_date' => $trans_date,
+                        'posted_by' => $user,
+                        'store' => $store,
+                        'post_date' => $date
+                    );
+                    $add_expense = new add_data('expenses', $expense_data);
+                    $add_expense->create_data();
+                }
                 echo "<div class='success'><p>Transaction posted successfully! <i class='fas fa-thumbs-up'></i></p></div>";
             }
             
