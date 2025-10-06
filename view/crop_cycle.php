@@ -65,7 +65,10 @@
                     ?>
                 </td> -->
                 <td><?php echo date("d-m-Y", strtotime($detail->created_at))?></td>
-                <td><a href="javascript:void(0)" title="view details" style="background:var(--tertiaryColor); color:#fff; padding:4px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222" onclick="showPage('cycle_details.php?cycle=<?php echo $detail->cycle_id?>')">View <i class="fas fa-eye"></i></a></td>
+                <td>
+                    <a href="javascript:void(0)" title="view details" style="background:var(--tertiaryColor); color:#fff; padding:4px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222" onclick="showPage('cycle_details.php?cycle=<?php echo $detail->cycle_id?>')">View <i class="fas fa-eye"></i></a>
+                    <a href="javascript:void(0)" title="edit cycle details" style="color:#fff; background:var(--otherColor); padding:5px; font-size:.8rem; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222" onclick="showPage('edit_crop_cycle.php?cycle=<?php echo $detail->cycle_id?>')"><i class="fas fa-edit"></i></a>
+                </td>
                 
             </tr>
             

@@ -100,7 +100,7 @@
                 
                 <div class="data">
                     <label for="customer_store">Start Date:</label>
-                    <input type="text" value="<?php echo date("Y-m-d", strtotime($start))?>">
+                    <input type="text" value="<?php echo date("d-M-Y", strtotime($start))?>">
                 </div>
                 <div class="data">
                     <label for="phone_number">Expected Harvest Date:</label>
@@ -190,6 +190,8 @@
                             <td>S/N</td>
                             <td>Date</td>
                             <td>Quantity</td>
+                            <td>Unit Cost</td>
+                            <td>Total Cost</td>
                             <td>Posted by</td>
                         </tr>
                     </thead>
@@ -205,7 +207,20 @@
                             <td style="text-align:center; color:red;"><?php echo $n?></td>
                             <td style="color:var(--moreColor)"><?php echo date("d-m-Y h:ia", strtotime($detail->post_date));?></td>
                             <td><?php echo $detail->quantity ?></td>
-                            
+                            <td><?php echo "₦".number_format($detail->unit_cost, 2);?></td>
+                            <td style="color:red">
+                                <?php
+                                    //get total cost
+                                    $costs = $get_users->fetch_sum_2colCond('harvests', 'quantity', 'unit_cost', 'harvest_id', $detail->harvest_id);
+                                    if(is_array($costs)){
+                                        foreach($costs as $cost){
+                                            echo "₦".number_format($cost->total, 2);
+                                        }
+                                    }else{
+                                        echo "₦0.00";
+                                    }
+                                ?>
+                            </td>
                             <td>
                                 <?php
                                     //get posted by

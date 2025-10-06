@@ -6647,3 +6647,61 @@ function postLabour(){
           }
      }
 }
+
+// edit a crop cycle details
+function editCropCycle(){
+     let cycle = document.getElementById("cycle").value;
+     let field = document.getElementById("field").value;
+     let crop = document.getElementById("crop").value;
+     let area_used = document.getElementById("area_used").value;
+     let variety = document.getElementById("variety").value;
+     let start_date = document.getElementById("start_date").value;
+     let harvest = document.getElementById("harvest").value;
+     let yield = document.getElementById("yield").value;
+     let notes = document.getElementById("notes").value;
+     if(field.length == 0 || field.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please Select field!");
+          $("#field").focus();
+          return;
+     }else if(crop.length == 0 || crop.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select crop!");
+          $("#crop").focus();
+          return;
+     }else if(area_used.length == 0 || area_used.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input area used in hacters");
+          $("#area_used").focus();
+          return;
+     }else if(variety.length == 0 || variety.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input crop variety!");
+          $("#variety").focus();
+          return;
+     }else if(start_date.length == 0 || start_date.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input cycle start date!");
+          $("#start_date").focus();
+          return;
+     }else if(harvest.length == 0 || harvest.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input expected harvest date!");
+          $("#harvest").focus();
+          return;
+     }else if(yield.length == 0 || yield.replace(/^\s+|\s+$/g, "").length == 0 || yield <= 0){
+          alert("Please input expected harvest yield!");
+          $("#yield").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/edit_crop_cycle.php",
+               data : {cycle:cycle, field:field, crop:crop, area_used:area_used, variety:variety, start_date:start_date, harvest:harvest, notes:notes, yield:yield},
+               beforeSend: function(){
+                    $("#crop_cycle").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+               $("#crop_cycle").html(response);
+               }
+          })
+          setTimeout(function(){
+               $("#crop_cycle").load("crop_cycle.php #crop_cycle");
+          }, 2000)
+          return false;    
+     }
+}

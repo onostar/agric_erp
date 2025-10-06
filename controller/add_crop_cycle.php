@@ -29,10 +29,11 @@
     include "../classes/dbh.php";
     include "../classes/select.php";
     include "../classes/inserts.php";
+    include "../classes/update.php";
     $check = new selects();
     //get field name
     $fields = $check->fetch_details_group('fields', 'field_name', 'field_id', $field);
-    $field_nanme = $fields->field_name;
+    $field_name = $fields->field_name;
     //get crop name
     $crops = $check->fetch_details_group('items', 'item_name', 'item_id', $crop);
     $crop_name = $crops->item_name;
@@ -44,6 +45,9 @@
         //create item
         $add_data = new add_data('crop_cycles', $data);
         $add_data->create_data();
+        //update field status to occupied
+        $update_field = new update_table;
+        $update_field->update('fields', 'field_status', 'field_id', 1, $field);
         if($add_data){
             echo "<div class='success'><p>Crop Cycle started for $crop_name successfully! <i class='fas fa-thumbs-up'></i></p></div>";
         }else{

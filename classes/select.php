@@ -1658,7 +1658,7 @@
         }
         //fetch sum with current month
         public function fetch_sum_curMonth($table, $column1, $column2){
-            $get_user = $this->connectdb()->prepare("SELECT SUM($column1) AS total FROM $table WHERE MONTH($column2) = MONTH(CURDATE())");
+            $get_user = $this->connectdb()->prepare("SELECT SUM($column1) AS total FROM $table WHERE MONTH($column2) = MONTH(CURDATE()) AND YEAR($column2) = YEAR(CURDATE())");
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 $rows = $get_user->fetchAll();
@@ -1670,7 +1670,7 @@
         }
         //fetch sum with current month
         public function fetch_sum_curMonth1con($table, $column1, $column2, $con, $value){
-            $get_user = $this->connectdb()->prepare("SELECT SUM($column1) AS total FROM $table WHERE $con = :$con AND MONTH($column2) = MONTH(CURDATE())");
+            $get_user = $this->connectdb()->prepare("SELECT SUM($column1) AS total FROM $table WHERE $con = :$con AND MONTH($column2) = MONTH(CURDATE()) AND YEAR($column2) = YEAR(CURDATE())");
             $get_user->bindValue("$con", $value);
             $get_user->execute();
             if($get_user->rowCount() > 0){

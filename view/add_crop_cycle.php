@@ -18,7 +18,7 @@
                         <option value=""selected disabled>Select Farm Field</option>
                         <?php
                             $get_dep = new selects();
-                            $rows = $get_dep->fetch_details('fields');
+                            $rows = $get_dep->fetch_details_cond('fields', 'field_status', 0);
                             foreach($rows as $row){
                         ?>
                         <option value="<?php echo $row->field_id?>"><?php echo $row->field_name?></option>

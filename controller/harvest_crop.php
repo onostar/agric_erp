@@ -22,6 +22,11 @@
         $field = $cyc->field;
         $yield = $cyc->expected_yield;
     }
+    //get field details
+    $fids = $get_details->fetch_details_cond('fields', 'field_id', $field);
+    foreach($fids as $fid){
+        $field_name = $fid->field_name;
+    }
     //generate transaction number
     //get current date
     $todays_date = date("dmyhis");
@@ -31,7 +36,6 @@
         $ran_num .= $random_num;
     }
     $trx_num = "TR".$ran_num.$todays_date;
-    $details = "Harvested $quantity of $crop from field";
     $rows = $get_details->fetch_details_cond('items', 'item_id', $crop);
     foreach($rows as $row){
         $item_type = $row->item_type;
@@ -39,6 +43,7 @@
         $crop_name = $row->item_name;
         // $cost = $row->cost_price;
     }
+    $details = "Harvested $quantity of $crop_name from $field_name field";
     //get ratio of expected yield to quantity harvested
     $ratio = $quantity / $yield;
     //get cycle tasks cost and items used for task total cost
@@ -123,6 +128,7 @@
         'farm' => $farm,
         'field' => $field,
         'quantity' => $quantity,
+        'unit_cost' => $unit_cost,
         'posted_by' => $user,
         'post_date' => $date
     );
@@ -212,6 +218,15 @@
         //add credit for labour
         $add_credit = new add_data('transactions', $credit_labour);
         $add_credit->create_data();
+        //check if total quantity harvested has reached expected yield to close cycle
+        if($total_quantity >= $yield){
+            //update cycle to closed
+            $update_cycle = new Update_table();
+            $update_cycle->update('crop_cycles', 'cycle_status', 'cycle_id', 1, $cycle);
+            //update field status to available
+            $update_field = new Update_table();
+            $update_field->update('fields', 'field_status', 'field_id', 0, $field);
+        }
         echo "<div class='success'><p>$quantity $crop_name Harvested successfully! <i class='fas fa-thumbs-up'></i></p></div>";
     }else{
         echo "<p style='background:red; color:#fff; padding:5px'>Failed to harvest crop <i class='fas fa-thumbs-down'></i></p>";

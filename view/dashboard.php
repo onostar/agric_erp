@@ -2,6 +2,7 @@
 <div class="dashboard_all">
     <h3><i class="fas fa-home"></i> Dashboard for <span style="color:var(--secondaryColor);font-size:1rem"><?php echo $store?></span></h3>
     <?php 
+        $get_prds = new selects();
         if($role === "Admin" || $role === "Accountant"){
     ?>
     
@@ -22,56 +23,44 @@
                         if(gettype($rows) == 'string'){
                             $amount = 0;
                         }
-                        //if credit was sold
-                        /* $get_credit = new selects();
-                        $credits = $get_credit->fetch_sum_curMonth2con('payments', 'amount_due', 'post_date', 'payment_mode', 'Credit', 'store', $store_id);
-                        if(gettype($credits) === "array"){
-                            foreach($credits as $credit){
-                                $owed_amount = $credit->total;
-                            }
-                            $total_revenue = $owed_amount + $amount;
-                            echo "₦".number_format($total_revenue, 2);
+                        
+                        echo "₦".number_format($amount, 2);
 
-                        } */
-                        //if no credit sales
-                        /* if(gettype($credits) === "string"){ */
-                           
-                            echo "₦".number_format($amount, 2);
-
-                        // }
-                        /* if(gettype($rows) == "array"){
-                            echo "₦".number_format($amount, 2);
-                            
-                        }
-                        if(gettype($rows) == "string"){
-                            echo "₦0.00";
-                            
-                        } */
+                        
                     ?>
                     </p>
                 </div>
             </a>
         </div> 
         <div class="cards" id="card1">
-            <a href="javascript:void(0)"onclick="showPage('production_report.php')"class="page_navs">
+            <a href="javascript:void(0)" class="page_navs">
                 <div class="infos">
                     <p><i class="fas fa-clipboard-list"></i> Production cost</p>
                     <p>
                     <?php
-                        if($store == "Creamella Treat"){
-                            $get_prds = new selects();
-                            $prds = $get_prds->fetch_sum_2colCurDate1ConGroup('ice_cream', 'raw_quantity', 'unit_cost', 'date(post_date)', 'store', $store_id, 'product_number');
-                            $total = 0;
-                            if(gettype($prds) === 'array'){
-                                foreach($prds as $prd){
-                                    $total += $prd->total;
-                                    
+                        if($store_id == "1"){
+                            //first get labour cost for farm
+                            $labs = $get_prds->fetch_sum_curMonth1con('tasks', 'labour_cost', 'post_date', 'farm', $store_id);
+                            if(is_array($labs)){
+                                foreach($labs as $lab){
+                                    $labour_total = $lab->total;
                                 }
-                                echo "₦".number_format($total, 2);
+                            }else{
+                                $labour_total = 0;
                             }
-                            if(gettype($prds) == "string"){
-                                echo "₦0.00";
+                            //then get raw materials cost for farm
+                            $inps = $get_prds->fetch_sum_curMonth1con('task_items', 'total_cost', 'post_date', 'farm', $store_id);
+                            $total = 0;
+                            if(is_array($inps)){
+                                foreach($inps as $inp){
+                                    $inputs_total = $inp->total;
+                                }
+                            }else{
+                                $inputs_total = 0;
                             }
+                            $total_production = $labour_total + $inputs_total;
+                            echo "₦".number_format($total_production, 2);
+                           
                         }else{
                             $get_prds = new selects();
                             $prds = $get_prds->fetch_sum_2colCurDate1Con('production', 'raw_quantity', 'unit_cost', 'date(post_date)', 'store', $store_id);
@@ -84,15 +73,13 @@
                                 echo "₦0.00";
                             }
                         }
-                    /* if(gettype($prds) == "string"){
-                        echo "₦0.00";
-                    } */
+                    
                     ?>
                     </p>
                 </div>
             </a>
         </div> 
-        <div class="cards" id="card5">
+        <div class="cards" id="card5" style="background: var(--moreColor)">
             <a href="javascript:void(0)" class="page_navs" onclick="showPage('expense_report.php')">
                 <div class="infos">
                     <p><i class="fas fa-hand-holding-dollar"></i> Monthly Expense</p>
