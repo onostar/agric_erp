@@ -29,7 +29,7 @@ session_start();
         </section>
     </div>
 <div class="displays allResults new_data" id="bar_items">
-    <h2>Labour Cost Transactions for Today</h2>
+    <h2>Labour Cost Payments for Today</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchRoom" placeholder="Enter keyword" onkeyup="searchData(this.value)">
@@ -88,8 +88,7 @@ session_start();
                 <td>
                     <?php
                         //get posted by
-                        $get_posted_by = new selects();
-                        $checkedin_by = $get_posted_by->fetch_details_group('users', 'full_name', 'user_id', $detail->posted_by);
+                        $checkedin_by = $get_items->fetch_details_group('users', 'full_name', 'user_id', $detail->posted_by);
                         echo $checkedin_by->full_name;
                     ?>
                 </td>
@@ -109,7 +108,7 @@ session_start();
     ?>
     <div class="all_modes">
         <?php
-             //get contribution
+            //get contribution
             $get_cash = new selects();
             $cashs = $get_cash->fetch_sum_curdateCon('labour_payments', 'amount', 'post_date', 'store', $store);
             if(gettype($cashs) === "array"){

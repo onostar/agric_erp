@@ -50,7 +50,11 @@
                    <label for="harvest">Expected Harvest Date</label>
                    <input type="date" name="harvest" id="harvest" required>
                 </div>
-                <div class="data" style="width:50%;">
+                <div class="data" style="width:30%;">
+                   <label for="harvest">Expected Yield</label>
+                   <input type="number" name="yield" id="yield" required>
+                </div>
+                <div class="data" style="width:60%;">
                    <label for="harvest">Other Notes</label>
                    <input type="text" name="notes" id="notes">
                 </div>

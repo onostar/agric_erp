@@ -6218,6 +6218,7 @@ function addCropCycle(){
      let variety = document.getElementById("variety").value;
      let start_date = document.getElementById("start_date").value;
      let harvest = document.getElementById("harvest").value;
+     let yield = document.getElementById("yield").value;
      let notes = document.getElementById("notes").value;
      if(field.length == 0 || field.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please Select field!");
@@ -6243,11 +6244,15 @@ function addCropCycle(){
           alert("Please input expected harvest date!");
           $("#harvest").focus();
           return;
+     }else if(yield.length == 0 || yield.replace(/^\s+|\s+$/g, "").length == 0 || yield <= 0){
+          alert("Please input expected harvest yield!");
+          $("#yield").focus();
+          return;
      }else{
           $.ajax({
                type : "POST",
                url : "../controller/add_crop_cycle.php",
-               data : {field:field, crop:crop, area_used:area_used, variety:variety, start_date:start_date, harvest:harvest, notes:notes},
+               data : {field:field, crop:crop, area_used:area_used, variety:variety, start_date:start_date, harvest:harvest, notes:notes, yield:yield},
                beforeSend: function(){
                     $("#crop_cycle").html("<div class='processing'><div class='loader'></div></div>");
                },

@@ -18,11 +18,10 @@
                 <td>S/N</td>
                 <td>Field</td>
                 <td>Crop</td>
-                <td>Crop Variety</td>
                 <td>Area Used (Hec)</td>
                 <td>Start Date</td>
                 <td>Expected Harvest</td>
-                <!-- <td>Status</td> -->
+                <td>Expected Yield</td>
                 <td>Created</td>
                 <td></td>
             </tr>
@@ -49,10 +48,11 @@
                         echo $str->item_name;
                     ?>
                 </td>
-                <td><?php echo $detail->variety?></td>
+                <!-- <td><?php echo $detail->variety?></td> -->
                 <td style="color:red"><?php echo $detail->area_used?></td>
                 <td><?php echo date("d-M-Y", strtotime($detail->start_date))?></td>
                 <td style="color:var(--tertiaryColor)"><?php echo date("d-M-Y", strtotime($detail->expected_harvest))?></td>
+                <td style="text-align:center"><?php echo $detail->expected_yield?></td>
                 <!-- <td>
                     <?php
                         /* if($detail->cycle_status == 0){

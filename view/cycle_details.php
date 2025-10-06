@@ -57,6 +57,7 @@
                 $note = $adm->notes;
                 $cycle_status = $adm->cycle_status;
                 $created_by = $adm->created_by;
+                $yield = $adm->expected_yield;
             }
             //get field details
             $vis = $get_visits->fetch_details_cond('fields', 'field_id', $field);
@@ -104,6 +105,10 @@
                 <div class="data">
                     <label for="phone_number">Expected Harvest Date:</label>
                     <input type="text" required value="<?php echo date("d-M-Y", strtotime($end))?>" readonly>
+                </div>
+                <div class="data">
+                    <label for="phone_number">Expected yield:</label>
+                    <input type="text" required value="<?php echo $yield?>" readonly style="color:green">
                 </div>
                 <div class="data">
                     <label for="phone_number">Days Remaining:</label>

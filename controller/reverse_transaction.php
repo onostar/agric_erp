@@ -13,24 +13,21 @@
         
         //get all tables
         $get_tables = new selects();
-        $tables = $get_tables->fetch_tables('tonnac_accounting');
+        $tables = $get_tables->fetch_tables('agric');
         foreach($tables as $table){
             //check for transaction number column exist in each table and delete it when thenumber is seen
             $check_column = new selects();
             $cols = $check_column->fetch_column($table->table_name, 'trx_number');
             if($cols){
+                //check if transaction is in labour payments table
                 if($table->table_name == 'labour_payments'){
                     //get task id
-                    $tasks = $check_column->fetch_details_group('labour_payments', 'task', 'trx_number', $trx_number);
+                    $tasks = $check_column->fetch_details_cond('labour_payments', 'trx_number', $trx_number);
                     foreach($tasks as $task){
                         $task_id = $task->task;
                     }
-                    //update payment status on task table
-                    $data = array(
-                        'payment_status' => 0
-                    );
                     $update_task = new Update_table();
-                    $update_task->updateAny('tasks', $data, 'task_id', $task_id);
+                    $update_task->update('tasks', 'payment_status', 'task_id', 0, $task_id);
                 }
                 $delete_tx = new deletes();
                 $delete_tx->delete_item($table->table_name, 'trx_number', $trx_number);
