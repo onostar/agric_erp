@@ -40,7 +40,7 @@
                     <?php
                         if($store_id == "1"){
                             //first get labour cost for farm
-                            $labs = $get_prds->fetch_sum_curMonth1con('tasks', 'labour_cost', 'post_date', 'farm', $store_id);
+                            $labs = $get_prds->fetch_sum_curMonth1con1neg('tasks', 'labour_cost', 'post_date', 'farm', $store_id, 'cycle', 0);
                             if(is_array($labs)){
                                 foreach($labs as $lab){
                                     $labour_total = $lab->total;

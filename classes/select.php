@@ -1681,9 +1681,23 @@
                 return $rows;
             }
         }
+        //fetch sum with current month and 1 negative condition
+        public function fetch_sum_curMonth1con1neg($table, $column1, $column2, $con, $value, $negCon, $negValue){
+            $get_user = $this->connectdb()->prepare("SELECT SUM($column1) AS total FROM $table WHERE $con = :$con AND $negCon != :$negCon AND MONTH($column2) = MONTH(CURDATE()) AND YEAR($column2) = YEAR(CURDATE())");
+            $get_user->bindValue("$negCon", $negValue);
+            $get_user->bindValue("$con", $value);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch sum with current month
         public function fetch_sum_curMonth2con($table, $column1, $column2, $con, $value, $con2, $value2){
-            $get_user = $this->connectdb()->prepare("SELECT SUM($column1) AS total FROM $table WHERE $con = :$con AND $con2 = :$con2 AND MONTH($column2) = MONTH(CURDATE())");
+            $get_user = $this->connectdb()->prepare("SELECT SUM($column1) AS total FROM $table WHERE $con = :$con AND $con2 = :$con2 AND MONTH($column2) = MONTH(CURDATE()) AND YEAR($column2) = YEAR(CURDATE())");
             $get_user->bindValue("$con", $value);
             $get_user->bindValue("$con2", $value2);
             $get_user->execute();
