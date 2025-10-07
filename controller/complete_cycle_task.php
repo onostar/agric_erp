@@ -43,7 +43,7 @@
         "farm" => $farm,
         "field" => $field,
         "title" => $task,
-        "task_type" => "crop cycle",
+        "task_type" => "Crop Cycle",
         "description" => $description,
         "workers" => $workers,
         "labour_cost" => $labour_cost,

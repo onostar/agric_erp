@@ -2957,6 +2957,9 @@ function printSalesTicket(invoice){
                type: "POST",
                url: "../controller/"+url,
                data: {from_date:from_date, to_date:to_date},
+               beforeSend : function(){
+                    $(".new_data").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success: function(response){
                $(".new_data").html(response);
                }

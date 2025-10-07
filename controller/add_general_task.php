@@ -37,7 +37,7 @@
         "farm" => $farm,
         "field" => $field,
         "title" => $task,
-        "task_type" => "general maintenance",
+        "task_type" => "General Maintenance",
         "description" => $description,
         "workers" => $workers,
         "labour_cost" => $labour_cost,
