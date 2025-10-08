@@ -144,8 +144,8 @@
             <tr>
                 <td colspan="3" style="color:#222;text-align:left; font-weight:bold; text-transform:uppercase">Expenses</td>
             </tr>
-            <tr>
-                <td style="color:#222;text-align:left">Operating Expense</td>
+            <tr style="display:none">
+                <!-- <td style="color:#222;text-align:left">Operating Expense</td>
                 <td>
                     <?php    
                         //get waybill
@@ -169,10 +169,10 @@
                         echo number_format($prev_logistic, 2);
                         
                     ?>
-                </td>
+                </td> -->
             </tr>
             <tr>
-                <td style="color:#222;text-align:left; cursor:pointer" onclick="toggleExpense()">Admin Expense</td>
+                <td style="color:#222;text-align:left; cursor:pointer" onclick="toggleExpense()">Operating Expense</td>
                 <td>
                     <?php    
                         //get expense

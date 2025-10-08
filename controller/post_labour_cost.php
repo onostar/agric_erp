@@ -111,6 +111,7 @@ include "../classes/inserts.php";
                 //cash flow data
                 $flow_data = array(
                     'account' => $contra_ledger,
+                    'destination' => $labour_ledger,
                     'details' => $details,
                     'trx_number' => $trx_num,
                     'amount' => $amount,

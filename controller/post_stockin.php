@@ -32,7 +32,7 @@
             $random_num = random_int(0, 9);
             $ran_num .= $random_num;
         }
-        $trx_num = "TR".$ran_num.$todays_date;
+        $trx_num = "TR".$ran_num.$todays_date;*/
         $data = array(
             'invoice' => $invoice,
             'vendor' => $supplier,
@@ -40,12 +40,12 @@
             'invoice_amount' => $invoice_amount,
             'post_date' => $date,
             'posted_by' => $user,
-            'store' => $store,
-            'trx_number' => $trx_num
+            'store' => $store
+            // 'trx_number' => $trx_num
 
         );
         $add_waybill = new add_data('waybills', $data);
-        $add_waybill->create_data(); */
+        $add_waybill->create_data();
         //update invoice
             $update_debt = new Update_table();
             $update_debt->update2cond('purchases', 'waybill', 'vendor', 'invoice', $waybill, $supplier, $invoice);

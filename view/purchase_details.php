@@ -100,13 +100,13 @@
                                 <input type="text" name="waybill" id="waybill" style="padding:10px;border-radius:5px;" value="<?php echo $waybill?>">
                             </div>
                             
-                            <input type="hidden" name="total_amount" id="total_amount" value="<?php echo $detail->total?>">
+                            <input type="hidden" name="total_amount" id="total_amount" value="<?php echo $total_amount?>">
                             <input type="hidden" name="vendor" id="vendor" value="<?php echo $vendor?>">
                             <input type="hidden" name="purchase_invoice" id="purchase_invoice" value="<?php echo $invoice?>">
                             <input type="hidden" name="store" id="store" value="<?php echo $store?>">
                             <div class="data" style="width:100%">
-                                <label for="">Total Amount</label>
-                                <input type="text" name="invoice_amount" id="invoice_amount" value="<?php echo number_format($total_amount + $waybill, 2)?>" readonly>
+                                <label for="">Invoice Amount Due</label>
+                                <input type="text" name="invoice_amount" id="invoice_amount" value="<?php echo number_format($total_amount, 2)?>" readonly>
                             </div>
                             <div class="data" style="width:100%">
                                 <label for="payment_type">Payment options</label>

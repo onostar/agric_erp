@@ -64,8 +64,8 @@
 
                         }
                         //get total plus waybil
-                        $total_due = $detail->waybill + $item_cost;
-                        echo "₦".number_format($total_due, 2);
+                        // $total_due = $detail->waybill + $item_cost;
+                        echo "₦".number_format($item_cost, 2);
                     ?>
                 </td>
                 <td style="color:var(--otherColor)"><?php echo date("d-m-Y", strtotime($detail->post_date));?></td>
@@ -94,11 +94,11 @@
         $invoice_amount = $amount->total;
     }
     //get sum of waybill - waybill amount is grouped - so we are picking one per invoice
-    $ways = $get_total->fetch_curdateWaybillDates($from, $to, $store);
+    /* $ways = $get_total->fetch_curdateWaybillDates($from, $to, $store);
     foreach($ways as $way){
         $logistic = $way->total;
-    }
-    $total_due = $invoice_amount + $logistic;
+    } */
+    $total_due = $invoice_amount;
     echo "<p class='total_amount' style='color:green; text-align:center'>Total: ₦".number_format($total_due, 2)."</p>";
     }else{
         echo "<p class='no_result'>'$details'</p>";

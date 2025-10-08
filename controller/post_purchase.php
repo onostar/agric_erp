@@ -21,7 +21,7 @@ include "../classes/inserts.php";
             $type = "Wholesale";
             $details = "Inventory Purchase";
             $date = date("Y-m-d H:i:s");
-            $grand_total = intval($total_amount) + intval($waybill);
+            $grand_total = intval($total_amount);
              //generate transaction number
             //get current date
             $todays_date = date("dmyhis");
@@ -32,16 +32,15 @@ include "../classes/inserts.php";
             }
             $trx_num = "TR".$ran_num.$todays_date;
             //get invoice details
-            $get_invoice = new selects();
-            $invoices = $get_invoice->fetch_details_cond('purchases', 'invoice', $invoice);
+            $get_details = new selects();
+            $invoices = $get_details->fetch_details_cond('purchases', 'invoice', $invoice);
             foreach($invoices as $receipt){
                 // $trans_date = $receipt->purchase_date;
                 $trans_date = $date;
 
             }
             //get vendor details
-            $get_vendor = new selects();
-            $vends = $get_vendor->fetch_details_cond('vendors', 'vendor_id', $vendor);
+            $vends = $get_details->fetch_details_cond('vendors', 'vendor_id', $vendor);
             foreach($vends as $vend){
                 $vendor_name = $vend->vendor;
                 $balance = $vend->balance;
@@ -49,8 +48,7 @@ include "../classes/inserts.php";
             }
             
             //get ledger type
-            $get_type = new selects();
-            $types = $get_type->fetch_details_cond('ledgers', 'acn', $vendor_ledger);
+            $types = $get_details->fetch_details_cond('ledgers', 'acn', $vendor_ledger);
             foreach($types as $type){
                 $vendor_type = $type->account_group;
                 $vendor_sub = $type->sub_group;
@@ -63,14 +61,24 @@ include "../classes/inserts.php";
             }else{
                 $amount_paid = 0;
             }
-             
+            //get contra ledger details
+            $cons = $get_details->fetch_details_cond('ledgers', 'ledger_id', $contra);
+            if(is_array($cons)){
+                foreach($cons as $con){
+                    $contra_ledger = $con->acn;
+                    $contra_type = $con->account_group;
+                    $contra_sub_group = $con->sub_group;
+                    $contra_class = $con->class;
+                    $contra_name = $con->ledger;
+                }
+            }
             //insert into purchase payment
             $data = array(
                 'vendor' => $vendor,
                 'invoice' => $invoice,
                 'product_cost' => $total_amount,
                 'waybill' => $waybill,
-                'amount_due' => $grand_total,
+                'amount_due' => $total_amount,
                 'amount_paid' => $amount_paid,
                 'payment_mode' => $payment_type,
                 'posted_by' => $user,
@@ -81,14 +89,34 @@ include "../classes/inserts.php";
             );
             $add_payment = new add_data('purchase_payments', $data);
             $add_payment->create_data();
-               
+            //check if payment is made a and  add to vendor payment
+            if($payment_type != "Credit"){
+                if($contra_name == "CASH ACCOUNT"){
+                    $mode = "Cash";
+                }else{
+                    $mode = "Bank";
+                }
+                //insert into vendor payment
+                $vendor_data = array(
+                    'vendor' => $vendor,
+                    'amount' => $amount_paid,
+                    'contra' => $contra,
+                    'payment_mode' => $mode,
+                    'posted_by' => $user,
+                    'store' => $store,
+                    'post_date' => $date,
+                    'trans_date' => $trans_date,
+                    'trx_number' => $trx_num
+                );
+                $add_vendor_pay = new add_data('vendor_payments', $vendor_data);
+                $add_vendor_pay->create_data();
+            }            
             if($add_payment){
                 //update purchase status and waybill
                 $update_status = new Update_table();
                 $update_status->update_double2Cond('purchases', 'purchase_status', 1, 'waybill', $waybill, 'vendor', $vendor, 'invoice', $invoice);
                 //check if invoice exist in waybill
-                $get_waybill = new selects();
-                $bills = $get_waybill->fetch_count_2cond('waybills', 'invoice', $invoice, 'vendor', $vendor);
+                $bills = $get_details->fetch_count_2cond('waybills', 'invoice', $invoice, 'vendor', $vendor);
                 if($bills > 0 ){
                     //update way bill on waybil table
                     $update_status = new Update_table();
@@ -110,8 +138,7 @@ include "../classes/inserts.php";
                 }
                 //insert into transaction table
                 //get inventory legder id
-                $get_inv = new selects();
-                $invs = $get_inv->fetch_details_cond('ledgers', 'ledger', 'INVENTORIES');
+                $invs = $get_details->fetch_details_cond('ledgers', 'ledger', 'INVENTORIES');
                 foreach($invs as $inv){
                     $inventory_ledger = $inv->acn;
                     $inv_type = $inv->account_group;
@@ -119,6 +146,8 @@ include "../classes/inserts.php";
                     $inv_class = $inv->class;
 
                 }
+                
+                
                 if($payment_type == "Credit"){
                     //debit inventory of invoice amount
                     $debit_data = array(
@@ -126,7 +155,7 @@ include "../classes/inserts.php";
                         'account_type' => $inv_type,
                         'sub_group' => $inv_sub_group,
                         'class' => $inv_class,
-                        'debit' => $grand_total,
+                        'debit' => $total_amount,
                         'post_date' => $date,
                         'posted_by' => $user,
                         'trx_number' => $trx_num,
@@ -139,12 +168,13 @@ include "../classes/inserts.php";
                         'account_type' => $vendor_type,
                         'sub_group' => $vendor_sub,
                         'class' => $vendor_class,
-                        'credit' => $grand_total,
+                        'credit' => $total_amount,
                         'post_date' => $date,
                         'posted_by' => $user,
                         'trx_number' => $trx_num,
                         'details' => $details,
-                        'trans_date' => $trans_date
+                        'trans_date' => $trans_date,
+                        'store' => $store
                     );
                     //add debit
                     $add_debit = new add_data('transactions', $debit_data);
@@ -153,100 +183,119 @@ include "../classes/inserts.php";
                     $add_credit = new add_data('transactions', $credit_data);
                     $add_credit->create_data();
                 }elseif($payment_type == "Deposit"){
-                    $amount = $deposit;
-                    $debit_data = array(
+                    //debit inventory of invoice amount
+                    $debit_inv = array(
+                        'account' => $inventory_ledger,
+                        'account_type' => $inv_type,
+                        'sub_group' => $inv_sub_group,
+                        'class' => $inv_class,
+                        'debit' => $total_amount,
+                        'post_date' => $date,
+                        'posted_by' => $user,
+                        'trx_number' => $trx_num,
+                        'details' => $details,
+                        'trans_date' => $trans_date,
+                        'store' => $store
+
+                    );
+                    //add debit
+                    $add_inv_debit = new add_data('transactions', $debit_inv);
+                    $add_inv_debit->create_data();
+                    //credit vendor of invoice amount
+                    $credit_vendor = array(
                         'account' => $vendor_ledger,
                         'account_type' => $vendor_type,
                         'sub_group' => $vendor_sub,
                         'class' => $vendor_class,
-                        'debit' => $amount,
+                        'credit' => $total_amount,
                         'post_date' => $date,
                         'posted_by' => $user,
                         'trx_number' => $trx_num,
                         'details' => $details,
                         'trans_date' => $trans_date,
-                        'trans_date' => $trans_date
+                        'store' => $store
                     );
-                    $credit_data = array(
-                        'account' => $inventory_ledger,
-                        'account_type' => $inv_type,
-                        'sub_group' => $inv_sub_group,
-                        'class' => $inv_class,
-                        'credit' => $amount,
+                    //add credit
+                    $add_vendor_credit = new add_data('transactions', $credit_vendor);
+                    $add_vendor_credit->create_data();
+                    //debit vendor of deposit amount
+                    $debit_vendor = array(
+                        'account' => $vendor_ledger,
+                        'account_type' => $vendor_type,
+                        'sub_group' => $vendor_sub,
+                        'class' => $vendor_class,
+                        'debit' => $deposit,
                         'post_date' => $date,
                         'posted_by' => $user,
                         'trx_number' => $trx_num,
-                        'details' => $details,
+                        'details' => 'Deposit for '.$details,
                         'trans_date' => $trans_date,
-                        'trans_date' => $trans_date
-
+                        'store' => $store
                     );
                     //add debit
-                    $add_debit = new add_data('transactions', $debit_data);
-                    $add_debit->create_data();      
+                    $add_vendor_debit = new add_data('transactions', $debit_vendor);
+                    $add_vendor_debit->create_data();
+                    //credit cash/bank of deposit amount
+                    $credit_contra = array(
+                        'account' => $contra_ledger,
+                        'account_type' => $contra_type,
+                        'sub_group' => $contra_sub_group,
+                        'class' => $contra_class,
+                        'credit' => $deposit,
+                        'post_date' => $date,
+                        'posted_by' => $user,
+                        'trx_number' => $trx_num,
+                        'details' => 'Deposit for '.$details,
+                        'trans_date' => $trans_date,
+                        'store' => $store
+                    );
                     //add credit
-                    $add_credit = new add_data('transactions', $credit_data);
-                    $add_credit->create_data();
-
+                    $add_contra_credit = new add_data('transactions', $credit_contra);
+                    $add_contra_credit->create_data();
                     //cash flow data
                     $flow_data = array(
-                        'account' => $inventory_ledger,
+                        'account' => $contra_ledger,
+                        'destination' => $vendor_ledger,
                         'details' => 'inventory purchase',
                         'trx_number' => $trx_num,
-                        'amount' => $amount,
+                        'amount' => $deposit,
                         'trans_type' => 'outflow',
                         'activity' => 'operating',
                         'post_date' => $date,
-                        'posted_by' => $user
+                        'posted_by' => $user,
+                        'store' => $store
                     );
                     $add_flow = new add_data('cash_flows', $flow_data);
                     $add_flow->create_data();
                 }else{
-                    $amount = $grand_total;
-                    //get contra ledger details
-                    $get_inv = new selects();
-                    $invs = $get_inv->fetch_details_cond('ledgers', 'ledger_id', $contra);
-                    foreach($invs as $inv){
-                        $contra_ledger = $inv->acn;
-                        $contra_type = $inv->account_group;
-                        $contra_sub_group = $inv->sub_group;
-                        $contra_class = $inv->class;
-
-                    }
-                    //get inventory legder id
-                    $get_inv = new selects();
-                    $invs = $get_inv->fetch_details_cond('ledgers', 'ledger', 'INVENTORIES');
-                    foreach($invs as $inv){
-                        $inventory_ledger = $inv->acn;
-                        $inv_type = $inv->account_group;
-                        $inv_sub_group = $inv->sub_group;
-                        $inv_class = $inv->class;
-
-                    }
+                    //debit inventory of invoice amount
                     $debit_data = array(
                         'account' => $inventory_ledger,
                         'account_type' => $inv_type,
                         'sub_group' => $inv_sub_group,
                         'class' => $inv_class,
-                        'debit' => $amount,
+                        'debit' => $total_amount,
                         'post_date' => $date,
                         'posted_by' => $user,
                         'trx_number' => $trx_num,
                         'details' => $details,
-                        'trans_date' => $trans_date
+                        'trans_date' => $trans_date,
+                        'store' => $store
 
                     );
+                    //credit contra account of invoice amount
                     $credit_data = array(
                         'account' => $contra_ledger,
                         'account_type' => $contra_type,
                         'sub_group' => $contra_sub_group,
                         'class' => $contra_class,
-                        'credit' => $amount,
+                        'credit' => $total_amount,
                         'post_date' => $date,
                         'posted_by' => $user,
                         'trx_number' => $trx_num,
                         'details' => $details,
-                        'trans_date' => $trans_date
+                        'trans_date' => $trans_date,
+                        'store' => $store
 
                     );
                     //add debit
@@ -259,93 +308,20 @@ include "../classes/inserts.php";
                     //cash flow data
                     $flow_data = array(
                         'account' => $contra_ledger,
+                        'destination' => $inventory_ledger,
                         'details' => 'inventory purchase',
                         'trx_number' => $trx_num,
-                        'amount' => $amount,
+                        'amount' => $total_amount,
                         'trans_type' => 'outflow',
                         'activity' => 'operating',
                         'post_date' => $date,
-                        'posted_by' => $user
+                        'posted_by' => $user,
+                        'store' => $store
                     );
                     $add_flow = new add_data('cash_flows', $flow_data);
                     $add_flow->create_data();
                 }
                 
-
-                    //cost of sales data
-                    //get current date
-                    /* $todays_date = date("dmyhis");
-                    $ran_num ="";
-                    for($i = 0; $i < 3; $i++){
-                        $random_num = random_int(0, 9);
-                        $ran_num .= $random_num;
-                    }
-                    $trx_num = "TR".$ran_num.$todays_date; */
-                    /* $amount = $grand_total;
-                    $cos_data = array(
-                        'posted_by' => $user,
-                        'trans_date' => $date,
-                        'store' => $store,
-                        'amount' => $total_amount,
-                        'details' => 'cost of sales',
-                        'post_date' => $date,
-                        'trx_number' => $trx_num
-                    );
-                    //get ledger account numbers and account type
-                    $get_exp = new selects();
-                    $exps = $get_exp->fetch_details_cond('ledgers', 'ledger', 'COST OF SALES');
-                    foreach($exps as $exp){
-                        $cos_ledger = $exp->acn;
-                        $cos_type = $exp->account_group;
-                        $cos_group = $exp->sub_group;
-                        $cos_class = $exp->class;
-                    }
-                    //get contra ledger account number
-                    $get_contra = new selects();
-                    $cons = $get_contra->fetch_details_cond('ledgers', 'ledger', 'INVENTORIES');
-                    foreach($cons as $con){
-                        $inv_ledger = $con->acn;
-                        $inv_type = $con->account_group;
-                        $inv_group = $con->sub_group;
-                        $inv_class = $con->class;
-                    }
-                    //post INVENTORIES
-                    $add_data = new add_data('cost_of_sales', $cos_data);
-                    $add_data->create_data(); */
-
-                    //insert into transaction table
-                /* $debit_data = array(
-                    'account' => $cos_ledger,
-                    'account_type' => $cos_type,
-                    'sub_group' => $cos_group,
-                    'class' => $cos_class,
-                    'debit' => $total_amount,
-                    'details' => 'Cost of sales',
-                    'post_date' => $date,
-                    'posted_by' => $user,
-                    'trx_number' => $trx_num,
-                    'trans_date' => $trans_date
-
-                );
-                $credit_data = array(
-                    'account' => $inv_ledger,
-                    'account_type' => $inv_type,
-                    'sub_group' => $inv_group,
-                    'class' => $inv_class,
-                    'credit' => $total_amount,
-                    'details' => 'Cost of sales',
-                    'post_date' => $date,
-                    'posted_by' => $user,
-                    'trx_number' => $trx_num,
-                    'trans_date' => $trans_date
-
-                ); */
-                //add debit
-               /*  $add_debit = new add_data('transactions', $debit_data);
-                $add_debit->create_data();      
-                //add credit
-                $add_credit = new add_data('transactions', $credit_data);
-                $add_credit->create_data();  */
                 //update invoice with trxnumber
                 $update_invoice = new Update_table();
                 $update_invoice->update2cond('purchases', 'trx_number', 'vendor', 'invoice', $trx_num, $vendor, $invoice);
@@ -357,6 +333,8 @@ include "../classes/inserts.php";
 <?php
  
     }else{
-        header("Location: ../index.php");
+        echo "Your session has expired. Please log in again";
+        exit();
+        // header("Location: ../index.php");
     } 
 ?>

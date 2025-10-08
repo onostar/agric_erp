@@ -730,6 +730,9 @@ function getForm(item, link){
      $.ajax({
           type : "GET",
           url : "../controller/"+link+"?item_id="+item,
+          beforeSend : function(){
+               $(".info").html("<div class='processing'><div class='loader'></div></div>");
+          },
           success : function(response){
                $(".info").html(response);
                window.scrollTo(0, 0);
@@ -854,12 +857,15 @@ function getCustomerStatement(customer_id){
      
  }
  //display vendor statement/transaction history
-function getVendorStatement(customer_id){
+function getVendorStatement(customer_id, fromDate, toDate){
      let customer = customer_id;
           
           $.ajax({
                type : "GET",
-               url : "../controller/vendor_statement.php?vendor="+customer,
+               url : "../controller/vendor_statement.php?vendor="+customer+"&fromDate="+fromDate+"&toDate="+toDate,
+               beforeSend : function(){
+                    $("#customer_statement").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success : function(response){
                     $("#customer_statement").html(response);
                }
@@ -913,10 +919,13 @@ function viewVendorInvoice(invoice_id, vendor){
           $.ajax({
                type : "GET",
                url : "../controller/vendor_invoices.php?invoice="+invoice+"&vendor="+vendor,
+               beforeSend : function(){
+                    document.getElementById("customer_invoices").scrollIntoView();
+                    $("#customer_invoices").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success : function(response){
                     $("#customer_invoices").html(response);
                     // window.scrollTo(0, 0);
-                    document.getElementById("customer_invoices").scrollIntoView();
                }
           })
           $("#sales_item").html("");
@@ -1769,6 +1778,9 @@ function getVendor(customer_id){
                     type : "POST",
                     url :"../controller/get_vendor.php",
                     data : {customer:customer, fromDate:fromDate, toDate:toDate},
+                    beforeSend : function(){
+                         $("#sales_item").html("<p>Searching....</p>")
+                    },
                     success : function(response){
                          $("#sales_item").html(response);
                     }
@@ -4474,6 +4486,9 @@ function postPayment(){
                type : "POST",
                url : "../controller/post_vendor_payments.php",
                data: {vendor:vendor, amount:amount, trans_date:trans_date, contra:contra},
+               beforeSend :function(){
+                    $("#post_debt").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success : function(response){
                     $("#post_debt").html(response);
                }

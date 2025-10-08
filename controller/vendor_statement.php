@@ -1,17 +1,18 @@
 <?php
     session_start();
+    if(isset($_SESSION['user_id'])){
     $store = $_SESSION['store_id'];
     if(isset($_GET['vendor'])){
         $customer = $_GET['vendor'];
-    }
-    $from = $_SESSION['fromDate'];
-    $to = $_SESSION['toDate'];
+        $from = $_GET['fromDate'];
+        $to = $_GET['toDate'];
+    
     // instantiate classes
     include "../classes/dbh.php";
     include "../classes/select.php";
     //get customer details
-    $get_customer = new selects();
-    $rows = $get_customer->fetch_details_cond('vendors', 'vendor_id', $customer);
+    $get_details = new selects();
+    $rows = $get_details->fetch_details_cond('vendors', 'vendor_id', $customer);
     foreach($rows as $row){
         $name = $row->vendor;
         $contact = $row->contact_person;
@@ -21,8 +22,7 @@
         $debt = $row->balance;
         $acn = $row->account_no;
     }
-    $get_balance = new selects();
-    $bals = $get_balance->fetch_vendor_balance($acn);
+    $bals = $get_details->fetch_vendor_balance($acn);
     if(gettype($bals) == 'array'){
         foreach($bals as $bal){
             $balance = $bal->balance;
@@ -61,7 +61,7 @@
             <p><?php echo "₦".number_format($balance, 2)?></p>
         </div>
     </div>
-    <h3 style="background:red; text-align:center; color:#fff; padding:10px;margin:0;">Transactions</h3>
+    <!-- <h3 style="background:red; text-align:center; color:#fff; padding:10px;margin:0;">Transactions</h3> -->
     <div class="transactions">
         <div class="all_credit allResults">
             <h3 style="background:var(--otherColor); color:#fff">All purchase transaction</h3>
@@ -78,8 +78,7 @@
                 <tbody>
                     <?php
                         //get transaction history
-                        $get_transactions = new selects();
-                        $details = $get_transactions->fetch_details_dateGro1con('purchases', 'date(post_date)', $from, $to, 'vendor', $customer, 'invoice');
+                        $details = $get_details->fetch_details_dateGro1con('purchases', 'date(post_date)', $from, $to, 'vendor', $customer, 'invoice');
                         $n = 1;
                         if(gettype($details) === 'array'){
                         foreach($details as $detail){
@@ -87,25 +86,22 @@
                     ?>
                     <tr>
                         <td style="text-align:center; color:red;"><?php echo $n?></td>
-                        <td style="color:var(--moreColor)"><?php echo date("d-m-Y", strtotime($detail->purchase_date));?></td>
+                        <td style="color:var(--moreColor)"><?php echo date("d-M-Y", strtotime($detail->post_date));?></td>
                         <td><a style="color:green" href="javascript:void(0)" title="View invoice details" onclick="viewVendorInvoice('<?php echo $detail->invoice?>', '<?php echo $customer?>')"><?php echo $detail->invoice?></a></td>  
                         <td style="text-align:center">
                             <?php
                                 //get items in invoice;
-                                $get_items = new selects();
-                                $items = $get_items->fetch_count_cond('purchases', 'invoice', $detail->invoice);
+                                $items = $get_details->fetch_count_2cond('purchases', 'invoice', $detail->invoice, 'vendor', $detail->vendor);
                                 echo $items;
                             ?>
                         </td>   
                         <td>
                             <?php 
-                                
-                                    $get_sum = new selects();
-                                    $sums = $get_sum->fetch_sum_2colCond('purchases', 'cost_price', 'quantity',  'invoice', $detail->invoice);
-                                    foreach($sums as $sum){
-                                        echo "₦".number_format($sum->total, 2);
+                                $sums = $get_details->fetch_sum_2colCond('purchases', 'cost_price', 'quantity',  'invoice', $detail->invoice);
+                                foreach($sums as $sum){
+                                    echo "₦".number_format($sum->total, 2);
 
-                                    }
+                                }
                                 
                                 
                             ?>
@@ -120,13 +116,12 @@
                     echo "<p class='no_result'>'$details'</p>";
                 }
                 // get sum
-                $get_total = new selects();
-                $amounts = $get_total->fetch_sum_2col2date1con('purchases', 'quantity', 'cost_price', 'date(post_date)', $from, $to, 'vendor', $customer);
+                $amounts = $get_details->fetch_sum_2col2date1con('purchases', 'quantity', 'cost_price', 'date(post_date)', $from, $to, 'vendor', $customer);
                 foreach($amounts as $amount){
                     $paid_amount = $amount->total;
                 }
                 
-                    echo "<p class='total_amount' style='color:green'>Invoice Total: ₦".number_format($paid_amount, 2)."</p>";
+                echo "<p class='total_amount' style='color:green'>Invoice Total: ₦".number_format($paid_amount, 2)."</p>";
                     
                 //get total logistics
                 $get_log = new selects();
@@ -137,8 +132,8 @@
                 echo "<p class='total_amount' style='color:#222'>Total Logistics: ₦".number_format($logistics, 2)."</p>";
             ?>
         </div>
-        <div class="all_credit allResults">
-            <h3 style="background:var(--primaryColor); color:#fff">Payments</h3>
+        <div class="all_credit allResults"style="border-left:1px solid #cdcdcd;">
+            <h3 style="background:var(--otherColor); color:#fff">Payments</h3>
             <table id="data_table" class="searchTable">
                 <thead>
                 <tr style="background:var(--primaryColor)">
@@ -151,9 +146,8 @@
                 </thead>
                 <tbody>
                     <?php
-                        //get deposit history
-                        $get_transactions = new selects();
-                        $details = $get_transactions->fetch_details_2date1Con1Neg('purchase_payments', 'date(post_date)', $from, $to, 'vendor', $customer, 'payment_mode', 'Credit');
+                         //get deposit history
+                        $details = $get_details->fetch_details_2dateConOrder('vendor_payments', 'vendor', 'date(post_date)', $from, $to,  $customer, 'post_date');
                         $n = 1;
                         if(gettype($details) === 'array'){
                         foreach($details as $detail){
@@ -161,10 +155,10 @@
                     ?>
                     <tr>
                         <td style="text-align:center; color:red;"><?php echo $n?></td>
-                        <td style="color:var(--moreColor)"><?php echo date("d-m-Y", strtotime($detail->post_date));?></td>
+                        <td style="color:var(--moreColor)"><?php echo date("d-M-Y", strtotime($detail->post_date));?></td>
                         <td><?php echo $detail->payment_mode?></td>  
                         <td>
-                            <?php echo "₦".number_format($detail->amount_paid, 2);
+                            <?php echo "₦".number_format($detail->amount, 2);
 
                             ?>
                         </td>
@@ -177,9 +171,8 @@
                 if(gettype($details) == "string"){
                     echo "<p class='no_result'>'$details'</p>";
                 }
-                // get sum of deposits
-                $get_credits = new selects();
-                $credits = $get_credits->fetch_sum_double1Neg('purchase_payments', 'amount_paid', 'vendor', $customer, 'payment_mode', 'Credit');
+                 // get sum of deposits
+                $credits = $get_details->fetch_sum_single('vendor_payments', 'amount', 'vendor', $customer);
                 foreach($credits as $credit){
                     $deposits = $credit->total;
                 }
@@ -191,9 +184,9 @@
                 } */
                 /* $total_due = $debt;
                     if($total_due > 0){ */
-                        echo "<p class='total_amount' style='color:green;font-size:1rem;'>Total Deposit: ₦".number_format($deposits, 2)."</p>";    
+                echo "<p class='total_amount' style='color:green;font-size:1rem;'>Total Deposit: ₦".number_format($deposits, 2)."</p>";    
                     // }else{
-                        echo "<p class='total_amount' style='color:red;font-size:1rem;'>Amount due: ₦".number_format($balance, 2)."</p>";
+                echo "<p class='total_amount' style='color:red;font-size:1rem;'>Amount due: ₦".number_format($balance, 2)."</p>";
 
                     // }
                 
@@ -204,3 +197,11 @@
         
     </div>
 </div>
+<?php
+    }else{
+        echo "<p class='no_result'>No vendor selected</p>";
+    }
+}else{
+    echo "<p class='no_result'>Session has expired, please log in again</p>";
+    exit();
+}

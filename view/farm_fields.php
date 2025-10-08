@@ -58,9 +58,9 @@
                 <td>
                     <?php
                         if($detail->field_status == 0){
-                            echo "<span style='color:green'>Active</span>";
+                            echo "<span style='color:green'>Available</span>";
                         }else{
-                            echo "<span style='color:red'>Inactive</span>";
+                            echo "<span style='color:red'>Unavailable</span>";
                         }
                     ?>
                 </td>

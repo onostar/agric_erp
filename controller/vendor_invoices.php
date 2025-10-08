@@ -8,7 +8,6 @@
         $invoice = $_GET['invoice'];
         $vendor = $_GET['vendor'];
         //get invoice details
-
 ?>
 
 
@@ -82,12 +81,12 @@
                     echo "₦".number_format($logistic, 2);
                 ?>
                 </p>
-                <h2>Total Amount: 
+                <!-- <h2>Total Amount: 
                 <?php
                     
-                    echo "₦".number_format($logistic + $invoice_amount, 2);
+                    /* echo "₦".number_format($logistic + $invoice_amount, 2); */
                 ?>
-                </h2>
+                </h2> -->
 
                 
             </div>

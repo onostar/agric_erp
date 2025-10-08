@@ -53,8 +53,7 @@
                 <td>
                     <?php
                         //get customer
-                        $get_customer = new selects();
-                        $client = $get_customer->fetch_details_group('vendors', 'vendor', 'vendor_id', $detail->vendor);
+                        $client = $get_users->fetch_details_group('vendors', 'vendor', 'vendor_id', $detail->vendor);
                         echo $client->vendor;
                     ?>
                 </td>
@@ -70,8 +69,7 @@
                 <td>
                     <?php
                         //get posted by
-                        $get_posted_by = new selects();
-                        $checkedin_by = $get_posted_by->fetch_details_group('users', 'full_name', 'user_id', $detail->posted_by);
+                        $checkedin_by = $get_users->fetch_details_group('users', 'full_name', 'user_id', $detail->posted_by);
                         echo $checkedin_by->full_name;
                     ?>
                 </td>

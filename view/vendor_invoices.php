@@ -15,7 +15,7 @@
         $custs = $get_customer->fetch_details_cond('vendors', 'vendor_id', $vendor);
         foreach($custs as $cust){
             $client = $cust->vendor;
-            $balance = $cust->balance;
+            // $balance = $cust->balance;
         }
 
 ?>
@@ -42,9 +42,10 @@
                             <td>S/N</td>
                             <td>Invoice</td>
                             <td>Items</td>
-                            <td>Amount</td>
+                            <td>Invoice Amount</td>
+                            <td>Mode</td>
+                            <td>Deposit</td>
                             <td>Date</td>
-                            <!-- <td></td> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -62,29 +63,53 @@
                             <td><a style="color:green" href="javascript:void(0)" title="View invoice details" onclick="viewVendorInvoice('<?php echo $detail->invoice?>', '<?php echo $detail->vendor?>')"><?php echo $detail->invoice?></a></td>  
                             <td style="text-align:center">
                                 <?php
-                                    //get items in invoice;
-                                    $get_items = new selects();
-                                    $items = $get_items->fetch_count_cond('purchases', 'invoice', $detail->invoice);
+                                    //get items in invoice;();
+                                    $items = $get_transactions->fetch_count_2cond('purchases', 'invoice', $detail->invoice, 'vendor', $detail->vendor);
                                     echo $items;
                                 ?>
                             </td>   
                             <td>
                                 <?php 
                                     //get sum of invoice
-                                    $get_sum = new selects();
-                                    $sums = $get_sum->fetch_sum_2colCond('purchases', 'cost_price', 'quantity', 'invoice', $detail->invoice);
+                                    $sums = $get_transactions->fetch_sum_2col2Cond('purchases', 'cost_price', 'quantity', 'invoice', $detail->invoice, 'vendor', $detail->vendor);
                                     foreach($sums as $sum){
                                         $invoice_total = $sum->total;
                                         
                                     }
-                                    $grand_total = $invoice_total + $detail->waybill;
+                                    $grand_total = $invoice_total;
                                     echo "₦".number_format($grand_total, 2);
                                 ?>
                             </td>
+                            <td>
+                                <?php 
+                                    //get payment mode
+                                    $modes = $get_transactions->fetch_details_2cond('purchase_payments', 'vendor', 'invoice', $detail->vendor, $detail->invoice);
+                                    if(is_array($modes)){
+                                        foreach($modes as $mode){
+                                            echo $mode->payment_mode;
+                                        }
+                                    }else{
+                                        echo "<span style='color:red'>Not Posted</span>";
+                                    }
+                                ?>
+                            </td>
+                            <td style="color:green">
+                                <?php 
+                                    //get sum of amount paid
+                                    $paids = $get_transactions->fetch_details_2cond('purchase_payments',  'vendor', 'invoice', $detail->vendor, $detail->invoice);
+                                    if(is_array($paids)){
+                                        foreach($paids as $paid){
+                                            $amount_paid = $paid->amount_paid;
+                                        }
+                                    }else{
+                                        $amount_paid = 0;
+                                    }
+                                    
+                                    echo "₦".number_format($amount_paid, 2);
+                                ?>
+                            </td>
+                           
                             <td style="color:var(--moreColor)"><?php echo date("d-m-Y", strtotime($detail->post_date));?></td>
-                            <!-- <td>
-                                <a style="color:#fff;background:var(--primaryColor); padding:5px; border-radius:5px" href="javascript:void(0)" title="View invoice details" onclick="payDebt('<?php echo $detail->invoice?>', '<?php echo $customer?>', '<?php echo $balance?>', '<?php echo $invoice_total?>')">Pay <i class="fas fa-hand-holding-usd"></i></a>
-                            </td> -->
                         </tr>
                         <?php $n++; }}?>
                     </tbody>
@@ -93,12 +118,23 @@
                     if(gettype($details) == "string"){
                         echo "<p class='no_result'>'$details'</p>";
                     }
-                    // get sum
-                    /* $get_total = new selects();
-                    $amounts = $get_total->fetch_sum_double('debtors', 'amount', 'customer', $customer, 'debt_status', 0);
-                    foreach($amounts as $amount){
-                        echo "<p class='total_amount' style='color:red; font-size:1rem;'>Total Due: ₦".number_format($amount->total, 2)."</p>";
-                    } */
+                    //get invoice total
+                    $details = $get_transactions->fetch_sum_2col2Cond('purchases', 'cost_price', 'quantity', 'vendor', $vendor, 'purchase_status', 1);
+                    foreach($details as $detail){
+                        $invoice_amount = $detail->total;
+                        echo "<p class='total_amount' style='color:#222; font-size:1rem;'>Total Invoice Amount: ₦".number_format($invoice_amount, 2)."</p>";
+                    }
+                    // get sum of total payment
+                    $amounts = $get_transactions->fetch_sum_single('vendor_payments', 'amount', 'vendor', $vendor);
+                    if(gettype($amounts) === 'array'){
+                        foreach($amounts as $amount){
+                            $total_paid = $amount->total;
+                        }
+                    }else{
+                        $total_paid = 0;
+                    }
+                    echo "<p class='total_amount' style='color:green; font-size:1rem;'>Total Paid: ₦".number_format($total_paid, 2)."</p>";
+                    $balance = $invoice_amount - $total_paid;
                     if($balance > 0){
                         echo "<p class='total_amount' style='color:red; font-size:1rem;'>Total Due: ₦".number_format($balance, 2)."</p>";
                     }

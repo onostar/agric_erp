@@ -77,7 +77,7 @@
                 <input type="hidden" name="sales_invoice" id="sales_invoice" value="<?php echo $invoice?>">
                 <div class="data">
                     <label for="" style="color:var(--tertiaryColor)">Waybill/Frieght</label>
-                    <input type="number" name="waybill" id="waybill">
+                    <input type="number" name="waybill" id="waybill" value="0">
                 </div>
                 <div class="data">
                     <button onclick="postStockin()" style="background:green; padding:8px; border-radius:5px;font-size:.9rem;">Post Stockin <i class="fas fa-power-off"></i></button>

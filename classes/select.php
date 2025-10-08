@@ -1894,6 +1894,19 @@
                 return $rows;
             }
         }
+        //fetch between two dates and Condition order
+        public function fetch_details_2dateConOrder($table, $column, $condition1, $value1, $value2, $column_value, $order){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column AND $condition1 BETWEEN '$value1' AND '$value2' ORDER BY $order");
+            $get_user->bindValue("$column", $column_value);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch sum between two dates and  2 condition with 1 negative
         public function fetch_sum_2date2Cond1neg($table, $column1, $column2, $condition1, $condition2, $value1, $value2, $value3, $value4){
             $get_user = $this->connectdb()->prepare("SELECT SUM($column1) as total FROM $table WHERE $condition1 = :$condition1 AND $condition2 != :$condition2 AND $column2 BETWEEN '$value1' AND '$value2'");
