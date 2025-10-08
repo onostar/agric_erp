@@ -451,7 +451,8 @@ function addSupplier(){
      let supplier = document.getElementById("supplier").value;
      let contact_person = document.getElementById("contact_person").value;
      let phone = document.getElementById("phone").value;
-     let email = document.getElementById("email").value;
+     // let email = document.getElementById("email").value;
+     let address = document.getElementById("address").value;
      if(supplier.length == 0 || supplier.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input supplier name!");
           $("#supplier").focus();
@@ -472,7 +473,10 @@ function addSupplier(){
           $.ajax({
                type : "POST",
                url : "../controller/add_vendor.php",
-               data : {supplier:supplier, contact_person:contact_person, phone:phone, email:email},
+               data : {supplier:supplier, contact_person:contact_person, phone:phone, address:address},
+                beforeSend : function(){
+                    $(".info").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success : function(response){
                $(".info").html(response);
                }
@@ -481,7 +485,7 @@ function addSupplier(){
      $("#supplier").val('');
      $("#contact_person").val('');
      $("#phone").val('');
-     $("#email").val('');
+     $("#address").val('');
      $("#supplier").focus();
      return false;    
 }
@@ -742,12 +746,17 @@ function displayStockinForm(item_id){
           $.ajax({
                type : "GET",
                url : "../controller/get_stockin_details.php?item="+item,
+               beforeSend : function(){
+                    $(".info").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success : function(response){
                     $(".info").html(response);
+                    document.getElementById("info").scrollIntoView();
                }
           })
           $("#sales_item").html("");
           $("#item").val('');
+          $("#quantity").focus();
 
           return false;
      // }
@@ -989,6 +998,9 @@ function stockin(){
                type : "POST",
                url : "../controller/stock_in.php",
                data : {posted_by:posted_by, store:store, /* supplier:supplier, */ vendor:vendor, invoice_number:invoice_number, item_id:item_id, quantity:quantity, cost_price:cost_price, item_type:item_type/* sales_price:sales_price, pack_price:pack_price, pack_size:pack_size, wholesale_price:wholesale_price, wholesale_pack:wholesale_pack,  expiration_date:expiration_date*/},
+               beforeSend : function(){
+                    $(".stocked_in").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success : function(response){
                $(".stocked_in").html(response);
                }
@@ -1074,6 +1086,9 @@ function deletePurchase(purchase, item){
           $.ajax({
                type : "GET",
                url : "../controller/delete_purchase.php?purchase_id="+purchase+"&item_id="+item,
+               beforeSend : function(){
+                    $(".stocked_in").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success : function(response){
                     $(".stocked_in").html(response);
                }
@@ -1582,6 +1597,9 @@ function getItemStockin(item_name){
                          type : "POST",
                          url :"../controller/get_item_stockin.php",
                          data : {item:item, invoice:invoice, vendor:vendor},
+                         beforeSend : function(){
+                              $("#sales_item").html("<p>Searching....</p>")
+                         },
                          success : function(response){
                               $("#sales_item").html(response);
                          }
@@ -4469,66 +4487,63 @@ function postPayment(){
 
  //post purchases
 function postPurchases(){
-     let confirmPost = confirm("Are you sure you want to post this purchase?", "");
-     if(confirmPost){
-          let total_amount = document.getElementById("total_amount").value;
-          let waybill = document.getElementById("waybill").value;
-          let purchase_invoice = document.getElementById("purchase_invoice").value;
-          let store = document.getElementById("store").value;
-          let vendor = document.getElementById("vendor").value;
-          let payment_type = document.getElementById("payment_type").value;
-          let deposited_amount = document.getElementById("deposited_amount");
-          let cr_ledger = document.getElementById("cr_ledger");
-          let deposit_amount = document.getElementById("deposit_amount").value;
-          let contra = document.getElementById("contra").value;
-          
-          if(deposited_amount.style.display == "block"){
-               if(deposit_amount <= 0){
-                    alert("Deposit Amount is cannot be less than 0 or equal to 0");
-                    $("#deposit_amount").focus();
-                    return;
-               }
-               if(deposit_amount.length == 0 || deposit_amount.replace(/^\s+|\s+$/g, "").length == 0){
-                    alert("Please enter deposit amount!");
-                    $("#deposit_amount").focus();
-                    return;
-               }
-          }
-          
-          if(cr_ledger.style.display == "block"){
-               
-               if(contra.length == 0 || contra.replace(/^\s+|\s+$/g, "").length == 0){
-                    alert("Please select ledger!");
-                    $("#contra").focus();
-                    return;
-               }
-          }
-          
-          if(payment_type.length == 0 || payment_type.replace(/^\s+|\s+$/g, "").length == 0){
-               alert("Please select a payment option!");
-               $("#payment_type").focus();
+     let total_amount = document.getElementById("total_amount").value;
+     let waybill = document.getElementById("waybill").value;
+     let purchase_invoice = document.getElementById("purchase_invoice").value;
+     let store = document.getElementById("store").value;
+     let vendor = document.getElementById("vendor").value;
+     let payment_type = document.getElementById("payment_type").value;
+     let deposited_amount = document.getElementById("deposited_amount");
+     let cr_ledger = document.getElementById("cr_ledger");
+     let deposit_amount = document.getElementById("deposit_amount").value;
+     let contra = document.getElementById("contra").value;
+     
+     if(deposited_amount.style.display == "block"){
+          if(parseFloat(deposit_amount) <= 0){
+               alert("Deposit Amount cannot be less than 0 or equal to 0");
+               $("#deposit_amount").focus();
                return;
-          }else if(waybill.replace(/^\s+|\s+$/g, "").length == 0){
-               alert("Please enter loading/waybill price or enter 0!");
-               $("#waybill").focus();
+          }
+     }
+     
+     if(cr_ledger.style.display == "block"){
+          
+          if(contra.length == 0 || contra.replace(/^\s+|\s+$/g, "").length == 0){
+               alert("Please select ledger!");
+               $("#contra").focus();
                return;
-          }else{
+          }
+     }
+     
+     if(payment_type.length == 0 || payment_type.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select a payment option!");
+          $("#payment_type").focus();
+          return;
+     }else if(parseFloat(waybill) < 0){
+          alert("Please enter logistics/waybill amount or enter 0!");
+          $("#waybill").focus();
+          return;
+     }else{
+          let confirmPost = confirm("Are you sure you want to post this purchase?", "");
+          if(confirmPost){
                $.ajax({
                     type : "POST",
                     url : "../controller/post_purchase.php",
                     data : {purchase_invoice:purchase_invoice, payment_type:payment_type, waybill:waybill, store:store, deposit_amount, vendor:vendor, total_amount:total_amount, contra:contra},
+                    beforeSend :function(){
+                         $("#post_purchase").html("<div class='processing'><div class='loader'></div></div>");
+                    },
                     success : function(response){
                          $("#post_purchase").html(response);
                     }
                })
                setTimeout(function(){
                     $("#post_purchase").load("post_purchase.php #post_purchase");
-               }, 1000);
+               }, 1500);
                return false;
+          }else{
+               return;
           }
-     // }
-     }else{
-          return;
      }
 }
 
@@ -4802,6 +4817,9 @@ function getSupplier(sup){
                          type : "POST",
                          url :"../controller/get_supplier.php",
                          data : {supplier:supplier},
+                         beforeSend : function(){
+                              $("#transfer_item").html("<p>Searching...</p>");
+                         },
                          success : function(response){
                               $("#transfer_item").html(response);
                          }
@@ -4844,12 +4862,16 @@ function postStockin(){
                type : "POST",
                url : "../controller/post_stockin.php",
                data : {sales_invoice:sales_invoice,suppliers:suppliers, waybill:waybill},
+               beforeSend : function(){
+                    $("#stockin").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success : function(response){
                $("#stockin").html(response);
                }
           })
           setTimeout(function(){
-               $('#stockin').load("stockin_purchase.php #stockin");
+               // $('#stockin').load("stockin_purchase.php #stockin");
+               showPage("stockin_purchase.php");
           }, 1500);
           return false;    
      }
@@ -6749,4 +6771,57 @@ function addTask(){
                }
           })
      }
+}
+//get vendor on key press for editing
+function getVendorEdit(input){
+     $("#search_results").show();
+     if(input.length >= 3){
+          $.ajax({
+               type : "POST",
+               url : "../controller/get_vendor_edit.php?input="+input,
+               beforeSend : function(){
+                    $("#search_results").html("<p>Searching...</p>");
+               },
+               success : function(response){
+                    $("#search_results").html(response);
+               }
+          })
+     }
+     
+}
+// update vendor details
+function updateVendor(){
+     let vendor_id = document.getElementById("vendor_id").value;
+     let vendor = document.getElementById("vendor").value;
+     let phone_number = document.getElementById("phone_number").value;
+     let contact = document.getElementById("contact").value;
+     // let email = document.getElementById("email").value;
+     let address = document.getElementById("address").value;
+     if(vendor.length == 0 || vendor.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter vendor name!");
+          $("#vendor").focus();
+          return;
+     }else if(phone_number.length == 0 || phone_number.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter customer phone number").focus();
+          $("#phone_number").focus();
+          return;
+     
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/update_vendor.php",
+               data : {vendor_id:vendor_id, vendor:vendor, phone_number:phone_number, address:address, contact:contact},
+               beforeSend : function(){
+                    $("#edit_customer").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+               $("#edit_customer").html(response);
+               }
+          })
+     }
+     setTimeout(function(){
+          $("#edit_customer").load("edit_supplier_info.php #edit_customer");
+     }, 1000);
+
+     return false;    
 }

@@ -24,13 +24,13 @@
                     <input type="text" name="phone" id="phone" required placeholder="+234702345678">
                 </div>
                 <div class="data" style="width:49%; margin:5px 0">
-                    <label for="email"> Email Address</label>
-                    <input type="text" name="email" id="email" placeholder="mail@example.com">
+                    <label for="address"> Address</label>
+                    <input type="text" name="address" id="address" placeholder="Business Address">
                 </div>
             </div>
             <div class="inputs">
                 <div class="data">
-                    <button type="submit" id="add_supplier" name="add_supplier" onclick="addSupplier()">Save record <i class="fas fa-save"></i></button>
+                    <button type="button" id="add_supplier" name="add_supplier" onclick="addSupplier()">Save record <i class="fas fa-save"></i></button>
                 </div>
             </div>
         </section>    

@@ -113,7 +113,7 @@
                                 <select name="payment_type" id="payment_type" onchange="checkOtherMode(this.value)">
                                     <option value="" selected>Select payment type</option>
                                     <option value="Full payment">Full payment</option>
-                                    <!-- <option value="Deposit">Deposit</option> -->
+                                    <option value="Deposit">Deposit</option>
                                     <!-- <option value="Transfer">TRANSFER</option>-->
                                     <option  value="Credit">Credit</option>
 

@@ -43,6 +43,8 @@
 </div>
 <?php
     }else{
-        header("Location: ../index.php");
+        echo "Your Session has expired. Please Login again to continue";
+        exit();
+        // header("Location: ../index.php");
     }
 ?>

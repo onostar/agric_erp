@@ -26,19 +26,33 @@ date_default_timezone_set("Africa/Lagos");
     include "../classes/update.php";
     include "../classes/select.php";
     //get reordr level
-    $get_reorder = new selects();
-    $row = $get_reorder->fetch_details_group('items', 'reorder_level', 'item_id', $item);
+    $get_details = new selects();
+    $row = $get_details->fetch_details_group('items', 'reorder_level', 'item_id', $item);
     $reorder_level = $row->reorder_level;
     // get item previous quantity in inventory;
-    $get_prev_qty = new selects();
-    $prev_qtys = $get_prev_qty->fetch_details_2cond('inventory', 'item', 'store', $item, $store);
-    if(gettype($prev_qtys) === 'array'){
+    $prev_qtys = $get_details->fetch_details_2cond('inventory', 'item', 'store', $item, $store);
+    if(is_array($prev_qtys)){
         foreach($prev_qtys as $prev_qty){
             $inv_qty = $prev_qty->quantity;
         }
-    }
-    if(gettype($prev_qtys) === 'string'){
+        //update current quantity in inventory
+        $new_qty = $inv_qty + $quantity;
+        $update_inventory = new Update_table();
+        $update_inventory->update_double2Cond('inventory', 'quantity', $new_qty, 'cost_price', $cost_price, 'item', $item, 'store', $store);
+    }else{
         $inv_qty = 0;
+        //data to insert into inventory
+        $inventory_data = array(
+            'item' => $item,
+            'cost_price' => $cost_price,
+            // 'expiration_date' => $expiration,
+            'quantity' => $quantity,
+            'reorder_level' => $reorder_level,
+            'store' => $store,
+            'item_type' => $type
+        );
+        $insert_item = new add_data('inventory', $inventory_data);
+        $insert_item->create_data();
     }
 
     //data to insert into audit trail
@@ -54,29 +68,6 @@ date_default_timezone_set("Africa/Lagos");
     //insert into audit trail
     $inser_trail = new add_data('audit_trail', $audit_data);
     $inser_trail->create_data();
-    //check if item is in store inventory
-    $check_item = new selects();
-    if(gettype($prev_qtys) === 'array'){
-        //update current quantity in inventory
-        $new_qty = $inv_qty + $quantity;
-        $update_inventory = new Update_table();
-        $update_inventory->update_double2Cond('inventory', 'quantity', $new_qty, 'cost_price', $cost_price, 'item', $item, 'store', $store);
-    }
-    //add to inventory if not found
-    if(gettype($prev_qtys) === 'string'){
-        //data to insert into inventory
-        $inventory_data = array(
-            'item' => $item,
-            'cost_price' => $cost_price,
-            // 'expiration_date' => $expiration,
-            'quantity' => $quantity,
-            'reorder_level' => $reorder_level,
-            'store' => $store,
-            'item_type' => $type
-        );
-        $insert_item = new add_data('inventory', $inventory_data);
-        $insert_item->create_data();
-    }
     //stockin item
     //data to stockin into purchases
     $purchase_data = array(
@@ -105,98 +96,9 @@ date_default_timezone_set("Africa/Lagos");
         $update_exp->update('items', 'expiration_date', 'item_id', $expiration, $item); */
 
         
-?>
-    <!-- display stockins for this invoice number -->
-<div class="displays allResults" id="stocked_items" style="width:100%!important; margin:0!important">
-    <h2>Items stocked in with invoice <?php echo $invoice?></h2>
-    <table id="stock_items_table" class="searchTable">
-        <thead>
-            <tr style="background:var(--moreColor)">
-                <td>S/N</td>
-                <td>Item name</td>
-                <td>Quantity</td>
-                <td>Unit cost</td>
-                <!-- <td>Unit sales</td>
-                <td>Expiration</td> -->
-                <td></td>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-                $n = 1;
-                $get_items = new selects();
-                $details = $get_items->fetch_details_2cond('purchases', 'vendor', 'invoice', $supplier, $invoice);
-                if(gettype($details) === 'array'){
-                foreach($details as $detail):
-            ?>
-            <tr>
-                <td style="text-align:center; color:red;"><?php echo $n?></td>
-                <td style="color:var(--moreClor);">
-                    <?php
-                        //get category name
-                        $get_item_name = new selects();
-                        $item_name = $get_item_name->fetch_details_group('items', 'item_name', 'item_id', $detail->item);
-                        echo $item_name->item_name;
-                    ?>
-                </td>
-                <td style="text-align:center"><?php echo $detail->quantity?></td>
-                <td>
-                    <?php 
-                        echo "₦".number_format($detail->cost_price, 2);
-                    ?>
-                </td>
-                <!-- <td>
-                    <?php 
-                        echo "₦".number_format($detail->sales_price, 2);
-                    ?>
-                </td>
-                <td><?php echo $detail->expiration_date?></td> -->
-                <td>
-                    <a style="color:red; font-size:1rem" href="javascript:void(0) "title="delete purchase" onclick="deletePurchase('<?php echo $detail->purchase_id?>', <?php echo $detail->item?>)"><i class="fas fa-trash"></i></a>
-                </td>
-                
-            </tr>
-            
-            <?php $n++; endforeach;}?>
-        </tbody>
-    </table>
 
-    
-    <?php
-        if(gettype($details) == "string"){
-            echo "<p class='no_result'>'$details'</p>";
-        }
-
-        // get sum
-        $get_total = new selects();
-        $amounts = $get_total->fetch_sum_2con('purchases', 'cost_price', 'quantity', 'vendor', 'invoice', $supplier, $invoice);
-        foreach($amounts as $amount){
-            $total_amount = $amount->total;
-        }
-        // $total_worth = $total_amount * $total_qty;
-        echo "<p class='total_amount' style='color:red;float:right'>Total Cost: ₦".number_format($total_amount, 2)."</p>";
-    ?>
-    <!-- <div class="close_stockin">
-        <button onclick="showPage('stockin_purchase.php')" style="background:red; padding:8px; border-radius:5px;">Close stockin <i class="fas fa-power-off"></i></button>
-    </div> -->
-    <div class="close_stockin add_user_form" style="width:50%; margin:0;">
-        <section class="addUserForm">
-            <div class="inputs" style="display:flex;flex-wrap:wrap">
-                <input type="hidden" name="suppliers" id="suppliers" value="<?php echo $supplier?>">
-                <input type="hidden" name="sales_invoice" id="sales_invoice" value="<?php echo $invoice?>">
-                <div class="data">
-                    <label for="" style="color:var(--tertiaryColor)">Waybill/Frieght</label>
-                    <input type="number" name="waybill" id="waybill">
-                </div>
-                <div class="data">
-                    <button onclick="postStockin()" style="background:green; padding:8px; border-radius:5px;font-size:.9rem;">Post Stockin <i class="fas fa-power-off"></i></button>
-                </div>
-            </div>
-        </section>
-    </div>
-</div>
-<?php
+    //display stockins for this invoice number
+    include "../controller/stockin_details.php";
         }
     }
-
 ?>

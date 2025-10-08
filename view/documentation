@@ -1,0 +1,2 @@
+while selecting an item during receiving purchase, all items should be displayed regardless of the type. no need to seperate it. thisis due to the fact that some users may also want to receive oth products and raw materials alike.
+Tasks : Tasks are divided into general task and cycle task, cycle task are posted during a crop cycle while geenral task are posted using the geenral task module. The difference is that the tasks during a crop cycle contributes to the production cost of that crop, while the general task is just an expense.

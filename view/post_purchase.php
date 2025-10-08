@@ -58,16 +58,14 @@
                 <td><a style="color:green" href="javascript:void(0)" title="View invoice details" onclick="showPage('invoice_details.php?payment_id=<?php echo $detail->payment_id?>')"><?php echo $detail->invoice?></a></td>
                 <td>
                     <?php
-                        $get_guest = new selects();
-                        $rows = $get_guest->fetch_details_group('vendors', 'vendor', 'vendor_id', $detail->vendor);
+                        $rows = $get_users->fetch_details_group('vendors', 'vendor', 'vendor_id', $detail->vendor);
                         echo $rows->vendor;
                     ?>
                 </td>
                 <td style="color:var(--otherColor);text-align:center">
                     <?php 
                         //get items in invoice;
-                        $get_items = new selects();
-                        $items = $get_items->fetch_count_cond('purchases', 'invoice', $detail->invoice);
+                        $items = $get_users->fetch_count_cond('purchases', 'invoice', $detail->invoice);
                         echo $items;
                     ?>
                 </td>
@@ -75,47 +73,53 @@
                 <td style="color:red">
                     <?php 
 
-                        //get sum of invoice discount
-                        $get_sum = new selects();
-                        $sums = $get_sum->fetch_sum_2colCond('purchases', 'cost_price', 'quantity', 'invoice', $detail->invoice);
+                        //get sum of items in invoice
+                        $sums = $get_users->fetch_sum_2colCond('purchases', 'cost_price', 'quantity', 'invoice', $detail->invoice);
                         foreach($sums as $sum){
-                            echo "₦".number_format($sum->total, 2);
+                            $item_cost = $sum->total;
 
                         }
+                        //get total plus waybil
+                        $total_due = $detail->waybill + $item_cost;
+                        echo "₦".number_format($total_due, 2);
                     ?>
                 </td>
                 <td style="color:var(--moreColor)"><?php echo date("H:i:sa", strtotime($detail->post_date));?></td>
                 <td>
                     <?php
                         //get posted by
-                        $get_posted_by = new selects();
-                        $checkedin_by = $get_posted_by->fetch_details_group('users', 'full_name', 'user_id', $detail->posted_by);
+                        $checkedin_by = $get_users->fetch_details_group('users', 'full_name', 'user_id', $detail->posted_by);
                         echo $checkedin_by->full_name;
                     ?>
                 </td>
                 <td>
-                    <a style="color:#fff;background:var(--otherColor); padding:5px; border-radius:10px" href="javascript:void(0)" title="View details" onclick="showPage('purchase_details.php?invoice=<?php echo $detail->invoice?>&vendor=<?php echo $detail->vendor?>')">View <i class="fas fa-eye"></i></a>
+                    <a style="color:#fff;background:var(--otherColor); padding:5px; border-radius:10px; box-shadow:1px 1px 1px #222; border: 1px solid #fff" href="javascript:void(0)" title="View details" onclick="showPage('purchase_details.php?invoice=<?php echo $detail->invoice?>&vendor=<?php echo $detail->vendor?>')">View <i class="fas fa-eye"></i></a>
                 </td>
             </tr>
             <?php $n++; endforeach;}?>
         </tbody>
     </table>
     
+    
     <?php
-        if(gettype($details) == "string"){
+        if(is_array($details)){
+            // get sum
+            $get_total = new selects();
+            $amounts = $get_total->fetch_sum_2colCurDate2Con('purchases', 'cost_price', 'quantity', 'post_date', 'store', $store, 'purchase_status', 0);
+            foreach($amounts as $amount){
+                $invoice_amount = $amount->total;
+                
+            }
+            //get sum of waybill - waybill amount is grouped - so we are picking one per invoice
+            $ways = $get_total->fetch_curdateWaybill($store);
+            foreach($ways as $way){
+                $logistic = $way->total;
+            }
+            $total_due = $invoice_amount + $logistic;
+            echo "<p class='total_amount'; margin-left:100px;color:green;text-decoration:underline'><strong>Total</strong>: ₦".number_format($total_due, 2)."</p>";
+        }else{
             echo "<p class='no_result'>'$details'</p>";
         }
-    ?>
-        <?php
-        // get sum
-        $get_total = new selects();
-        $amounts = $get_total->fetch_sum_2colCurDate1Con('purchases', 'cost_price', 'quantity', 'post_date', 'store', $store);
-        foreach($amounts as $amount){
-            $paid_amount = $amount->total;
-            
-        }
-        
-            echo "<p class='sum_amount'; margin-left:100px;color:green;text-decoration:underline'><strong>Total</strong>: ₦".number_format($paid_amount, 2)."</p>";
     ?>
             <!-- </div> -->
 </div>

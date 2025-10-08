@@ -14,7 +14,6 @@
         include "../classes/inserts.php";
         include "../classes/update.php";
 
-
         //get invoice details
         $get_invoice = new selects();
         $invs = $get_invoice->fetch_sum_2col2cond('purchases', 'cost_price', 'quantity', 'vendor', $supplier, 'invoice', $invoice);

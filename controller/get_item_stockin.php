@@ -11,7 +11,7 @@
     $_SESSION['purchase_invoice'] = $invoice;
     $get_item = new selects();
     // $rows = $get_item->fetch_details_likeNegCond('items', 'item_name', $item, 'item_type', 'Product');
-    $rows = $get_item->fetch_details_likeNegCond('items', 'item_name', $item, 'item_type', 'Product');
+    $rows = $get_item->fetch_details_like('items', 'item_name', $item);
      if(gettype($rows) == 'array'){
         foreach($rows as $row):
         //get item quantity from inventory

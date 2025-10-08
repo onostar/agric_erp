@@ -73,6 +73,8 @@
      }
     }
     }else{
-        header("Location: ../index.php");
+        echo "Your session has expired, please login again to continue";
+        exit();
+        // header("Location: ../index.php");
     } 
 ?>

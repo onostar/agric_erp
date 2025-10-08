@@ -1102,6 +1102,47 @@
                 return $rows;
             }
         }
+        //fetch sum with current date AND 2 condition
+        public function fetch_sum_curdate2ConGroup2($table, $column1, $column2, $condition, $value, $con2, $val2, $group, $group2){
+            $get_user = $this->connectdb()->prepare("SELECT SUM($column1) AS total FROM $table WHERE $condition =:$condition AND $con2 = :$con2 AND date($column2) = CURDATE() GROUP BY $group");
+            $get_user->bindValue("$condition", $value);
+            $get_user->bindValue("$con2", $val2);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        //fetch sum of waybill based on current date grouped by invoice and vendor
+        public function fetch_curdateWaybill($store){
+            $get_user = $this->connectdb()->prepare("SELECT SUM(waybill) AS total FROM (SELECT invoice, MAX(waybill) AS waybill FROM purchases WHERE store = :store_id AND purchase_status = 0 AND DATE(post_date) = CURDATE() GROUP BY invoice) AS unique_invoices");
+            $get_user->bindValue("store_id", $store);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        //fetch sum of waybill based on 2 dates grouped by invoice and vendor
+        public function fetch_curdateWaybillDates($from, $to, $store){
+            $get_user = $this->connectdb()->prepare("SELECT SUM(waybill) AS total FROM (SELECT invoice, MAX(waybill) AS waybill FROM purchases WHERE store = :store_id AND purchase_status = 0 AND DATE(post_date) BETWEEN '$from' AND '$to' GROUP BY invoice) AS unique_invoices");
+            $get_user->bindValue("store_id", $store);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        
         //fetch sum with current date AND condition
         public function fetch_sum_curdateDistinctConGroup($table, $column1, $column2, $condition, $value, $group){
             $get_user = $this->connectdb()->prepare("SELECT SUM(amount) AS total FROM (SELECT MAX($column1) AS amount FROM $table WHERE $condition = :$condition AND DATE($column2) = CURDATE() GROUP BY $group) AS unique_invoices;");
