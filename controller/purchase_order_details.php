@@ -1,5 +1,5 @@
 <div class="displays allResults" id="stocked_items" style="width:100%!important; margin:0!important">
-    <h2>Items on Purchase order => <?php echo $invoice?></h2>
+    <h2 style="font-size:.9rem">Items on Purchase order => <?php echo $invoice?></h2>
     <table id="stock_items_table" class="searchTable">
         <thead>
             <tr style="background:var(--moreColor)">
@@ -58,7 +58,11 @@
             echo "<p class='no_result'>'$details'</p>";
         }
 
-        // get sum
+        
+    ?>
+   <?php
+        if(is_array($details)){
+            // get sum
         $get_total = new selects();
         $amounts = $get_total->fetch_sum_2con('purchase_order', 'cost_price', 'quantity', 'vendor', 'invoice', $supplier, $invoice);
         foreach($amounts as $amount){
@@ -67,7 +71,6 @@
         // $total_worth = $total_amount * $total_qty;
         echo "<p class='total_amount' style='color:red;float:right'>Total Cost: ₦".number_format($total_amount, 2)."</p>";
     ?>
-   
     <div class="close_stockin add_user_form" style="width:50%; margin:0;">
         <section class="addUserForm">
             <div class="inputs" style="display:flex;flex-wrap:wrap">
@@ -75,9 +78,10 @@
                 <input type="hidden" name="sales_invoice" id="sales_invoice" value="<?php echo $invoice?>">
                 
                 <div class="data">
-                    <button onclick="postPO()" style="background:green; padding:8px; border-radius:5px;font-size:.9rem;">Post PO <i class="fas fa-power-off"></i></button>
+                    <button onclick="postPO()" style="background:green; padding:5px; border-radius:5px;font-size:.8rem;">Post Purchase Order <i class="fas fa-power-off"></i></button>
                 </div>
             </div>
         </section>
     </div>
+    <?php }?>
 </div>

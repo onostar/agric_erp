@@ -4,6 +4,7 @@
     include "../classes/select.php";
     if(isset($_SESSION['user_id'])){
         $user_id = $_SESSION['user_id'];
+        $store = $_SESSION['store_id'];
         //generate receipt invoice
         //get current date
         $todays_date = date("dmyhi");

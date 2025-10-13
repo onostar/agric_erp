@@ -20,7 +20,7 @@ date_default_timezone_set("Africa/Lagos");
     
     $get_details = new selects();
     //get item name
-    $results = $get_details->fetch_details_greater('items', 'item_name', 'item_id', $item);
+    $results = $get_details->fetch_details_group('items', 'item_name', 'item_id', $item);
     $item_name = $results->item_name;
     //check if item already exist in purchase order
     $checks = $get_details->fetch_count_3cond('purchase_order', 'item', $item, 'invoice', $invoice, 'vendor', $supplier);
@@ -48,7 +48,8 @@ date_default_timezone_set("Africa/Lagos");
    
 
     //display purchase order for this invoice number
-    include "../controller/purchase_order_details.php";
         }
     }
+    include "../controller/purchase_order_details.php";
+
 ?>

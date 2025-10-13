@@ -25,11 +25,12 @@ date_default_timezone_set("Africa/Lagos");
         foreach($comps as $com){
             $company = $com->company;
             $comp_id = $com->company_id;
+            $logo = $com->logo;
             $date_created = $com->date_created;
         }
         $_SESSION['company_id'] = $comp_id;
         $_SESSION['company'] = $company;
-    
+        $_SESSION['company_logo'] = $logo;
         /* get store */
         $get_store = new selects();
         $strs = $get_store->fetch_details_cond('stores', 'store_id', $store_id);

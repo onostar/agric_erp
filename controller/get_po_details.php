@@ -64,7 +64,7 @@
                     <input type="date" name="expiration_date" id="expiration_date" required>
                 </div> -->
                 <div class="data" style="width:auto; margin:5px;">
-                    <button type="submit" id="stockin" name="stockin" title="stockin item" onclick="raisePO()"><i class="fas fa-check"></i></button>
+                    <button type="submit" id="stockin" name="stockin" title="stockin item" onclick="raisePO()"><i class="fas fa-plus"></i></button>
                 </div>
             </div>
         </section>   

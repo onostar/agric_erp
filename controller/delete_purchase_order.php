@@ -18,7 +18,7 @@
 
         //get item details
         $get_qty = new selects();
-        $rows = $get_qty->fetch_details_cond('purchases', 'purchase_id', $purchase);
+        $rows = $get_qty->fetch_details_cond('purchase_order', 'purchase_id', $purchase);
         foreach($rows as $row){
             $qty = $row->quantity;
             $invoice = $row->invoice;
@@ -30,7 +30,7 @@
         
         //delete purcahse
         $delete = new deletes();
-        $delete->delete_item('purchases', 'purchase_id', $purchase);
+        $delete->delete_item('purchase_order', 'purchase_id', $purchase);
         if($delete){
             echo "<div class='notify'><p>$item_name removed from purchaase order successfully</p></div>";
 

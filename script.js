@@ -7050,3 +7050,10 @@ function raisePO(){
           return false; 
      }
 }
+
+// prinit transfer receipt
+function printPO(invoice){
+     window.open("../controller/print_purchase_order.php?receipt="+invoice);
+     return false;
+ 
+ }

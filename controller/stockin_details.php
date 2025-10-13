@@ -70,6 +70,9 @@
     <!-- <div class="close_stockin">
         <button onclick="showPage('stockin_purchase.php')" style="background:red; padding:8px; border-radius:5px;">Close stockin <i class="fas fa-power-off"></i></button>
     </div> -->
+    <?php
+        if(is_array($details)){
+    ?>
     <div class="close_stockin add_user_form" style="width:50%; margin:0;">
         <section class="addUserForm">
             <div class="inputs" style="display:flex;flex-wrap:wrap">
@@ -85,4 +88,5 @@
             </div>
         </section>
     </div>
+    <?php }?>
 </div>
