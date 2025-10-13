@@ -6374,9 +6374,32 @@ function addCycleTask(){
      let description = document.getElementById("description").value;
      let workers = document.getElementById("workers").value;
      let labour_cost = document.getElementById("labour_cost").value;
+     let start_date = document.getElementById("start_date").value;
+     let end_date = document.getElementById("end_date").value;
+     todayDate = new Date();
      if(task_title.length == 0 || task_title.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input task title!");
           $("#task_title").focus();
+          return;
+     }else if(start_date.length == 0 || start_date.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input date and time task started!");
+          $("#start_date").focus();
+          return;
+     }else if(end_date.length == 0 || end_date.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input date and time task ended!");
+          $("#end_date").focus();
+          return;
+     }else if(new Date(start_date) > new Date(end_date)){
+          alert("Start date can not be greater than end date!");
+          $("#start_date").focus();
+          return;
+     }else if(new Date(start_date) > todayDate){
+          alert("You cannot start a futuristic task!");
+          $("#start_date").focus();
+          return;
+     }else if(new Date(end_date) > todayDate){
+          alert("You can only end a task today or later!");
+          $("#end_date").focus();
           return;
      }else if(description.length == 0 || description.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input task description!");
@@ -6394,7 +6417,7 @@ function addCycleTask(){
           $.ajax({
                type : "POST",
                url : "../controller/complete_cycle_task.php",
-               data : {task_title:task_title, description:description, workers:workers, cycle:cycle, labour_cost:labour_cost},
+               data : {task_title:task_title, description:description, workers:workers, cycle:cycle, labour_cost:labour_cost, start_date:start_date, end_date:end_date},
                beforeSend: function(){
                     $("#all_forms").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -6753,9 +6776,32 @@ function addTask(){
      let description = document.getElementById("description").value;
      let workers = document.getElementById("workers").value;
      let labour_cost = document.getElementById("labour_cost").value;
+     let start_date = document.getElementById("start_date").value;
+     let end_date = document.getElementById("end_date").value;
+     todayDate = new Date();
      if(field.length == 0 || field.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please select field!");
           $("#field").focus();
+          return;
+     }else if(start_date.length == 0 || start_date.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input date and time task started!");
+          $("#start_date").focus();
+          return;
+     }else if(end_date.length == 0 || end_date.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input date and time task ended!");
+          $("#end_date").focus();
+          return;
+     }else if(new Date(start_date) > new Date(end_date)){
+          alert("Start date can not be greater than end date!");
+          $("#start_date").focus();
+          return;
+     }else if(new Date(start_date) > todayDate){
+          alert("You cannot start a futuristic task!");
+          $("#start_date").focus();
+          return;
+     }else if(new Date(end_date) > todayDate){
+          alert("You can only end a task today or later!");
+          $("#end_date").focus();
           return;
      }else if(task_title.length == 0 || task_title.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input task title!");
@@ -6777,7 +6823,7 @@ function addTask(){
           $.ajax({
                type : "POST",
                url : "../controller/add_general_task.php",
-               data : {task_title:task_title, description:description, workers:workers, field:field, labour_cost:labour_cost},
+               data : {task_title:task_title, description:description, workers:workers, field:field, labour_cost:labour_cost, start_date:start_date, end_date:end_date},
                beforeSend: function(){
                     $("#general_tasks").html("<div class='processing'><div class='loader'></div></div>");
                },

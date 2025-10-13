@@ -21,6 +21,14 @@
                     <label for="task_title">Task title</label>
                     <input type="text" name="task_title" id="task_title" placeholder="Input task title" required>
                 </div>
+                <div class="data" style="width:48%">
+                    <label for="start_date">Start date</label>
+                    <input type="datetime-local" name="start_date" id="start_date" required>
+                </div>
+                <div class="data" style="width:48%">
+                    <label for="end_date">End date</label>
+                    <input type="datetime-local" name="end_date" id="end_date" required>
+                </div>
                 <div class="data" style="width:100%">
                     <label for="description">Notes/Observations</label>
                     <textarea name="description" id="description" placeholder="Brief description of task done with observations" required></textarea>

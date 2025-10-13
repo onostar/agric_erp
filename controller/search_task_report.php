@@ -26,6 +26,7 @@
                 <td>Type</td>
                 <td>Field</td>
                 <td>Cost Incurred</td>
+                <td>Started</td>
                 <td>Post Date</td>
                 <td>Posted by</td>
                 <td></td>
@@ -69,7 +70,7 @@
                         echo "₦".number_format($total_cost, 2)
                     ?>
                 </td>
-                
+                <td><?php echo date("d-M-Y, H:ia", strtotime($detail->start_date))?></td>
                 <td style="color:var(--moreColor)"><?php echo date("H:i:sa", strtotime($detail->post_date))?></td>
                 <td>
                     <?php

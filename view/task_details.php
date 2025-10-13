@@ -31,6 +31,8 @@
                 $labour = $adm->labour_cost;
                 $status = $adm->payment_status;
                 $date = $adm->post_date;
+                $start_date = $adm->start_date;
+                $end_date = $adm->end_date;
                 $posted = $adm->done_by;
             }
             //get field details
@@ -61,7 +63,8 @@
                         <p>Date: <span style="color:brown; text-transform:uppercase"><?php echo date("d M, Y, H:ia", strtotime($date))?></span></p>
                         <p>Posted By: <span style="color:brown; text-transform:uppercase"><?php echo $done_by?></span></p>
                         <p>Type: <span style="color:brown; text-transform:uppercase"><?php echo $type?></span></p>
-                        
+                        <p>Started on: <span style="color:brown; text-transform:uppercase"><?php echo date("d-M-Y, H:ia", strtotime($start_date))?></span></p>
+                        <p>Ended: <span style="color:brown; text-transform:uppercase"><?php echo date("d-M-Y, H:ia", strtotime($end_date))?></span></p>
                     </div>
                     <form>
                         <div class="inputs">

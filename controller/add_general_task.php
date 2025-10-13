@@ -8,6 +8,8 @@
     $workers = strtoupper(htmlspecialchars(stripslashes($_POST['workers'])));
     $description = ucwords(htmlspecialchars(stripslashes($_POST['description'])));
     $labour_cost = htmlspecialchars(stripslashes($_POST['labour_cost']));
+    $start = htmlspecialchars(stripslashes($_POST['start_date']));
+    $end = htmlspecialchars(stripslashes($_POST['end_date']));
     $farm = $_SESSION['store_id'];
     
     include "../classes/dbh.php";
@@ -42,6 +44,8 @@
         "workers" => $workers,
         "labour_cost" => $labour_cost,
         "payment_status" => $status,
+        "start_date" => $start,
+        "end_date" => $end,
         "done_by" => $user,
         "post_date" => $date
     );

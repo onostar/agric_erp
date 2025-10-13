@@ -290,7 +290,8 @@
                         ?>
                         <p>Date: <span style="color:brown; text-transform:uppercase"><?php echo date("d M, Y, H:ia", strtotime($tsk->post_date))?></span></p>
                         <p>Posted By: <span style="color:brown; text-transform:uppercase"><?php echo $done_by?></span></p>
-                        
+                        <p>Started on: <span style="color:brown; text-transform:uppercase"><?php echo date("d-M-Y, H:ia", strtotime($tsk->start_date))?></span></p>
+                        <p>Ended: <span style="color:brown; text-transform:uppercase"><?php echo date("d-M-Y, H:ia", strtotime($tsk->end_date))?></span></p>
                     </div>
                     <form>
                         <div class="inputs">

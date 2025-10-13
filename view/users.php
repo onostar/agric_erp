@@ -1,7 +1,7 @@
 <?php
 date_default_timezone_set("Africa/Lagos");
     session_start();
-
+    include "cache_control.php";
     include "../classes/dbh.php";
     include "../classes/select.php";
 
@@ -58,7 +58,7 @@ date_default_timezone_set("Africa/Lagos");
     <link rel="stylesheet" href="../fontawesome-free-6.0.0-web/css/all.css">
     <link rel="stylesheet" href="../fontawesome-free-6.0.0-web/css/all.min.css">
     <link rel="stylesheet" href="../fontawesome-free-5.15.1-web/css/all.min.css">
-    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../style.css?v=<?php echo APP_VERSION?>">
     <link rel="stylesheet" href="../select2.min.css">
 </head>
 <body>
@@ -222,7 +222,7 @@ date_default_timezone_set("Africa/Lagos");
     <script src="../jquery.table2excel.js"></script>
     <script src="../select2.min.js"></script>
     <script src="../Chart.min.js"></script> 
-    <script src="../script.js"></script>
+    <script src="../script.js?v=<?php echo APP_VERSION?>"></script>
     <script>
         
             setTimeout(function(){
