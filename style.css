@@ -14,7 +14,7 @@
     --background:linear-gradient(45deg, hsla(202, 81%, 22%, .9), hsl(189, 54%, 59%), rgb(3, 69, 75));
     --menuColor:#494848;
     --tertiaryColor: rgb(4, 141, 118);
-
+    --labColor :linear-gradient(45deg, #e27f55, #008000);
 }
 body{
     position:relative;

@@ -158,6 +158,20 @@
                 return $rows;
             }
         }
+         //fetch item with quantity
+        public function fetch_items_quantity($store, $item){
+           $get_user = $this->connectdb()->prepare("SELECT  i.item_id, i.item_name, IFNULL(SUM(inv.quantity), 0) AS quantity FROM items i LEFT JOIN inventory inv ON inv.item = i.item_id AND inv.store = :store WHERE i.item_name LIKE :item GROUP BY i.item_id ORDER BY i.item_name ASC LIMIT 30");
+            $get_user->bindValue("store", $store);
+            $get_user->bindValue("item", "%$item%");
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
          // fetch details like 3 option
          public function fetch_details_like3($table, $column1, $column2, $column3, $value){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column1 LIKE '%$value%' OR $column2 LIKE '%$value%' OR $column3 LIKE '%$value%'");

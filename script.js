@@ -765,6 +765,28 @@ function displayStockinForm(item_id){
      // }
      
  }
+//display purchase order form
+function displayPOForm(item_id, vendor, invoice){
+     let item = item_id;
+          $.ajax({
+               type : "GET",
+               url : "../controller/get_po_details.php?item="+item+"&vendor="+vendor+"&invoice="+invoice,
+               beforeSend : function(){
+                    $(".info").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $(".info").html(response);
+                    document.getElementById("info").scrollIntoView();
+               }
+          })
+          $("#sales_item").html("");
+          $("#item").val('');
+          $("#quantity").focus();
+
+          return false;
+     // }
+     
+ }
 //display transfer item form
 function addTransfer(item_id){
      let item = item_id;
@@ -1095,6 +1117,27 @@ function deletePurchase(purchase, item){
           $.ajax({
                type : "GET",
                url : "../controller/delete_purchase.php?purchase_id="+purchase+"&item_id="+item,
+               beforeSend : function(){
+                    $(".stocked_in").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $(".stocked_in").html(response);
+               }
+               
+          })
+          return false;
+     }else{
+          return;
+     }
+}
+//delete individual purchase order
+function deletePO(purchase, item){
+     let confirmDel = confirm("Are you sure you want to remove this item from the purchase order?", "");
+     if(confirmDel){
+          
+          $.ajax({
+               type : "GET",
+               url : "../controller/delete_purchase_order.php?purchase_id="+purchase+"&item_id="+item,
                beforeSend : function(){
                     $(".stocked_in").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -1615,6 +1658,39 @@ function getItemStockin(item_name){
                     })
                     $("#invoice").attr("readonly", true);
                     $("#vendor").attr("readonly", true);
+                    return false;
+               }else{
+                    $("#sales_item").html("<p>Please enter atleast 3 letters</p>");
+               }
+          }
+     }
+     
+}
+//get item for purchase order
+function getItemPO(item_name){
+     let item = item_name;
+     let vendor = document.getElementById("vendor").value;
+     let invoice = document.getElementById("invoice").value;
+     if(vendor.length == 0 || vendor.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select supplier!");
+          $("#vendor").focus();
+          return;
+     }else{
+          if(item.length >= 3){
+               if(item){
+                    $.ajax({
+                         type : "POST",
+                         url :"../controller/get_item_po.php",
+                         data : {item:item, vendor:vendor, invoice:invoice},
+                         beforeSend : function(){
+                              $("#sales_item").html("<p>Searching....</p>")
+                         },
+                         success : function(response){
+                              $("#sales_item").html(response);
+                         }
+                    })
+                    $("#vendor").attr("readonly", true);
+                    $("#supplier").attr("readonly", true);
                     return false;
                }else{
                     $("#sales_item").html("<p>Please enter atleast 3 letters</p>");
@@ -4847,6 +4923,29 @@ function getSupplier(sup){
           }
      }
 }
+ //get supplier for purchase order
+function getPOSupplier(sup){
+     let supplier = sup;
+     if(supplier.length >= 3){
+          if(supplier){
+               $.ajax({
+                    type : "POST",
+                    url :"../controller/get_po_supplier.php",
+                    data : {supplier:supplier},
+                    beforeSend : function(){
+                         $("#transfer_item").html("<p>Searching...</p>");
+                    },
+                    success : function(response){
+                         $("#transfer_item").html(response);
+                    }
+               })
+               return false;
+          }else{
+               $("#transfer_item").html("<p>Please enter atleast 3 letters</p>");
+          }
+     }
+     
+}
 //select vendor during stocking
 function addvendor(id, vendor_name){
      let supplier = document.getElementById("supplier");
@@ -4889,6 +4988,28 @@ function postStockin(){
                showPage("stockin_purchase.php");
           }, 1500);
           return false;    
+     }
+}
+// Post purchase order
+function postPO(){
+     let sales_invoice = document.getElementById("sales_invoice").value;
+     let suppliers = document.getElementById("suppliers").value;
+     let confirm_post = confirm("Are you sure you want to post this purchase Order?", "");
+     if(confirm_post){
+           $.ajax({
+               type : "POST",
+               url : "../controller/post_po.php",
+               data : {sales_invoice:sales_invoice,suppliers:suppliers},
+               beforeSend : function(){
+                    $("#stockin").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+               $("#stockin").html(response);
+               }
+          })
+          
+     }else{
+          return;
      }
 }
 
@@ -6885,4 +7006,47 @@ function updateVendor(){
      }, 1000);
 
      return false;    
+}
+
+//raise po for individual items
+function raisePO(){
+     let posted_by = document.getElementById("posted_by").value;
+     let store = document.getElementById("store").value;
+     let invoice_number = document.getElementById("invoice_number").value;
+     let vendor = document.getElementById("vendor").value;
+     let item_id = document.getElementById("item_id").value;
+     let quantity = document.getElementById("quantity").value;
+     let cost_price = document.getElementById("cost_price").value;
+     let item_type = document.getElementById("item_type").value;
+     if(quantity.length == 0 || quantity.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input quantity purchased!");
+          $("#quantity").focus();
+          return;
+     }else if(parseFloat(quantity) <= 0){
+          alert("Please input quantity requested!");
+          $("#quantity").focus();
+          return;
+     }else if(parseFloat(cost_price) < 0){
+         alert("Cost price cannot be lesser than 0");
+          $("#cost_price").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/raise_po.php",
+               data : {posted_by:posted_by, store:store, /* supplier:supplier, */ vendor:vendor, invoice_number:invoice_number, item_id:item_id, quantity:quantity, cost_price:cost_price, item_type:item_type},
+               beforeSend : function(){
+                    $(".stocked_in").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+               $(".stocked_in").html(response);
+               }
+          })
+          /* $("#quantity").val('');
+          $("#expiration_date").val('');
+          $("#quantity").focus(); */
+          $("#item").focus();
+          $(".info").html('');
+          return false; 
+     }
 }
