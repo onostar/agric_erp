@@ -61,12 +61,12 @@
     color:#fff;
     margin:5px 0 0 0;
     padding:4px;
-    font-size:.9rem;
+    font-size:.8rem;
     text-transform: uppercase;
 }
 .vendor_details p{
     margin:2px;
-    padding:0 5px;
+    padding:0 5px 0 0;
 }
 .sales_receipt .total_amount{
     text-align: right;
@@ -76,8 +76,8 @@
 
 .sales_receipt .sold_by{
     text-align: left;
-    font-size:.8rem;
-
+    font-size:.9rem;
+    padding:4px;
 }
 .sales_receipt table{
     width:100%!important;
@@ -227,11 +227,16 @@ include "../classes/select.php";
         }
         echo "<p class='total_amount' style='color:green'>Total amount: ₦".number_format($total_amount, 2)."</p>";
 
+        echo "<p class='sold_by'><strong>Delivery Date:</strong> Within 7 working days of order confirmation</p>
+        <p class='sold_by'><strong>Mode of Delivery:</strong> Vendor-arranged courier</p>";
         //prepared by
         $row = $get_items->fetch_details_group('users', 'full_name', 'user_id', $user);
         echo ucwords("<p class='sold_by'>Prepared by: <strong>$row->full_name</strong></p>");
+        echo "<p class='sold_by'><strong>Approved By:</strong> ..........................................</p>
+        <p class='sold_by'><strong>Signature:</strong> .........................................</p>
+        <p class='sold_by'><strong>Date:</strong> ..........................................</p>";
     ?>
-    <!-- <p style="margin-top:20px;text-align:center"><strong>Thanks for your patronage!</strong></p> -->
+    <p style="margin-top:20px;text-align:center"><strong>Thank you for your prompt attention to this order.<br>For inquiries, please contact procurement@davidorlah.com!</strong></p>
 </div> 
    
 <?php
