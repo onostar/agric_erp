@@ -327,6 +327,21 @@
                 return $rows;
             }
         }
+        //fetch with three condition
+        public function fetch_details_3cond($table, $condition1, $condition2, $con3, $value1, $value2, $val3){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $condition1 = :$condition1 AND $condition2 = :$condition2 AND $con3 = :$con3");
+            $get_user->bindValue("$condition1", $value1);
+            $get_user->bindValue("$condition2", $value2);
+            $get_user->bindValue("$con3", $val3);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch with two condition group by
         public function fetch_details_2condGroup($table, $condition1, $condition2, $value1, $value2, $group){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $condition1 = :$condition1 AND $condition2 = :$condition2 GROUP BY $group");

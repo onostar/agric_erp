@@ -31,7 +31,7 @@
             <?php
                 $n = 1;
                 $get_users = new selects();
-                $details = $get_users->fetch_details_2condGroup('purchase_order', 'store', 'order_status', $store, 1, 'invoice');
+                $details = $get_users->fetch_details_2condGroup('purchase_order', 'store', 'delivery_status', $store, 0, 'invoice');
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>

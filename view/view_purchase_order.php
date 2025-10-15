@@ -36,6 +36,7 @@
                     <td>Total cost</td>
                     <td>Qty Supplied</td>
                     <td>Status</td>
+                    <td></td>
                 </tr>
             </thead>
             <tbody>
@@ -79,7 +80,7 @@
                             }
                         ?>
                     </td>
-                    
+                    <td><a href="javascript:void(0)" onclick="viewDelivery('<?php echo $detail->purchase_id?>')"title="view delivery details" style="background:var(--otherColor); color:#fff; padding:5px; box-shadow:1px 1px 1px #222; border:1px solid #fff; border-radius:15px;">View <i class="fas fa-eye"></i></a></td>
                 </tr>
                 
                 <?php $n++; endforeach;}?>
@@ -107,6 +108,9 @@
         ?>
        
         <?php }?>
+    </div>
+    <div id="delivery">
+
     </div>
 </div>
 <?php

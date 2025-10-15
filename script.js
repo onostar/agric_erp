@@ -7057,3 +7057,67 @@ function printPO(invoice){
      return false;
  
  }
+
+ //Accept purchase order items
+function acceptOrder(){
+     let item_id = document.getElementById("item_id").value;
+     let item = document.getElementById("item").value;
+     let vendor = document.getElementById("vendor").value;
+     let invoice = document.getElementById("invoice").value;
+     let ordered = document.getElementById("ordered").value;
+     let supplied = document.getElementById("supplied").value;
+     let balance_qty = document.getElementById("balance_qty").value;
+     let cost = document.getElementById("cost").value;
+     let quantity = document.getElementById("quantity").value;
+     if(parseFloat(quantity) <= 0){
+          alert("Please input quantity supplied");
+          $("#quantity").focus();
+          return
+     /* }else if(parseFloat(quantity) > parseFloat(balance_qty)){
+          alert("Quantity supplied cannot be higher than balance quantity ordered");
+          $("#quantity").focus();
+          return; */
+     }else{
+          confirmPost = confirm("Are you sure to accept this quantity?", "");
+          if(confirmPost){
+               $.ajax({
+                    method : "POST",
+                    url : "../controller/accept_po_item.php",
+                    data : {vendor:vendor, item:item, item_id:item_id, invoice:invoice, balance_qty:balance_qty, quantity:quantity, cost:cost, ordered:ordered, supplied:supplied},
+                    beforeSend : function(){
+                         $(".info").html("<div class='processing'><div class='loader'></div></div>");
+                    },
+                    success : function(response){
+                         $("#accept_item").html(response);
+                    }
+               })
+               setTimeout(function(){
+                    $("#accept_item").load("receive_purchase_order.php?invoice="+invoice+" #accept_item");
+               }, 2000);
+               return false
+          }else{
+               return;
+          }
+     }
+     
+}
+//view delivery/acceptance log for purchase order
+function viewDelivery(id){
+          
+          $.ajax({
+               type : "GET",
+               url : "../controller/delivery_log.php?purchase_id="+id,
+               beforeSend : function(){
+                    document.getElementById("delivery").scrollIntoView();
+                    $("#delivery").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#delivery").html(response);
+                    
+               }
+          })
+          // $("#sales_item").html("");
+          return false;
+     // }
+     
+ }
