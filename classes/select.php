@@ -1908,6 +1908,20 @@
                 return $rows;
             }
         }
+        //fetch pending itemson purchaseo rder
+        public function fetch_pending_items($store, $invoice){
+            $get_user = $this->connectdb()->prepare("SELECT SUM(quantity - supplied) AS total FROM purchase_order WHERE order_status = 1 AND invoice = :invoice AND store = :store");
+            $get_user->bindValue("invoice", $invoice);
+            $get_user->bindValue("store", $store);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch between two dates and Condition order
         public function fetch_details_2dateConOrder($table, $column, $condition1, $value1, $value2, $column_value, $order){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column AND $condition1 BETWEEN '$value1' AND '$value2' ORDER BY $order");

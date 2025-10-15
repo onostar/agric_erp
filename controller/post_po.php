@@ -18,7 +18,7 @@
         $update_po->update2cond('purchase_order', 'order_status', 'vendor', 'invoice', 1, $supplier, $invoice);
         
         if($update_po){
-            echo "<div class='notify'><p><i class='fas fa-thumbs-up'></i> </p> Purchase Order posted successfully</p></div>";
+            echo "<div class='notify'><p><i class='fas fa-thumbs-up'></i> Purchase Order posted successfully</p></div>";
 
 ?>
     <button type="button" onclick="printPO('<?php echo $invoice?>')"style="background:green; color:#fff; padding:5px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222; margin:5px 50px; font-size:.8rem;">Print PO <i class="fas fa-print"></i></button>
