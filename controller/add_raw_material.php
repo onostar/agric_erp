@@ -24,13 +24,13 @@ date_default_timezone_set("Africa/Lagos");
     $check = $get_details->fetch_details_2cond('production', 'product_number', 'raw_material', $invoice, $item);
     if(gettype($check) == 'array'){
         echo "<script>
-            alert('Raw material already used for this production');
+            alert('Raw material already inthis production order');
         </script>";
     include "raw_material_details.php";
     }else{
         //check if quantity is greater than quantity in inventory
-        $qtyss = $check_qty->fetch_details_2cond('inventory', 'store', 'item', $store, $item);
-        if(is_array($qtys)){
+        $qtyss = $get_details->fetch_details_2cond('inventory', 'store', 'item', $store, $item);
+        if(is_array($qtyss)){
             foreach($qtyss as $qtys){
                 $prev_qty = $qtys->quantity;
             }

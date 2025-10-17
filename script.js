@@ -4031,7 +4031,7 @@ function getProduct(product){
                     url :"../controller/get_product.php",
                     data : {item:item},
                     beforeSend : function(){
-                         $("#sales_item").hml("<p>Searching....</p>");
+                         $("#sales_item").html("<p>Searching....</p>");
                     },
                     success : function(response){
                          $("#sales_item").html(response);

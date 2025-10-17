@@ -21,14 +21,14 @@
     $rows = $get_item->fetch_details_cond('items', 'item_id', $item);
      if(gettype($rows) == 'array'){
         foreach($rows as $row){
-            $item_name = $rows->item_name;
+            $item_name = $row->item_name;
         }
     }else{
         $item_name = "N/A";
     }
     ?>
     <div class="add_user_form" style="width:50%!important; margin:0!important">
-        <h3 style="background:brown; text-align:left;">Add <?php echo strtoupper($item_name)?> for production. (Qty => <?php echo $qty?>kg)</h3>
+        <h3 style="background:var(--tertiaryColor); text-align:left;">Add <?php echo strtoupper($item_name)?> for production. (Qty => <?php echo $qty?>kg)</h3>
         <section class="addUserForm" style="text-align:left!important;">
             <div class="inputs" style="flex-wrap:wrap;gap:.8rem;justify-content:none">
                 <!-- <div class="data item_head"> -->
