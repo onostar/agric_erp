@@ -148,7 +148,7 @@
         }
         //fetch details with like or close to
         public function fetch_details_like($table, $column, $condition){
-            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column LIKE '%$condition%'");
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column LIKE '%$condition%' LIMIT 30");
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 $rows = $get_user->fetchAll();

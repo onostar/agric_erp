@@ -4030,6 +4030,9 @@ function getProduct(product){
                     type : "POST",
                     url :"../controller/get_product.php",
                     data : {item:item},
+                    beforeSend : function(){
+                         $("#sales_item").hml("<p>Searching....</p>");
+                    },
                     success : function(response){
                          $("#sales_item").html(response);
                     }
@@ -4059,14 +4062,10 @@ function getRawItem(raw_item){
      let product = document.getElementById("product").value;
      let product_qty = document.getElementById("product_qty").value;
      let product_num = document.getElementById("product_num").value;
-     let product_input = document.getElementById("product_qty");
+     // let product_input = document.getElementById("product_qty");
      // return;
      if(product.length == 0 || product.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please select product for production!");
-          $("#item").focus();
-          return;
-     }else if(item.length == 0 || item.replace(/^\s+|\s+$/g, "").length == 0){
-          alert("Please enter product quantity!");
           $("#item").focus();
           return;
      }else if(product_qty.length == 0 || product_qty.replace(/^\s+|\s+$/g, "").length == 0){
@@ -4083,7 +4082,10 @@ function getRawItem(raw_item){
                     $.ajax({
                          type : "POST",
                          url :"../controller/get_raw_material_form.php",
-                         data : {item_raw:item_raw, product:product, product_qty:product_qty, product_num:product_num},
+                         beforeSend : function(){
+                              $("#raw_item").html("<p>Searching...</p>");
+                         },
+                         data : {item_raw:item_raw},
                          success : function(response){
                               $("#raw_item").html(response);
                          }
@@ -4101,12 +4103,24 @@ function getRawItem(raw_item){
      
 }
 //display raw material form
-function displayRawMaterial(item_id){
-     let item = item_id;
-     let prod = document.getElementById("product");
+function displayRawMaterial(item_id, raw_qty){
+     let product = document.getElementById("product").value;
+     let product_qty = document.getElementById("product_qty").value;
+     let product_num = document.getElementById("product_num").value;
+     // let product_input = document.getElementById("product_qty");
+     // let item = item_id;
+     // let prod = document.getElementById("product");
+     if(parseFloat(raw_qty) <= 0){
+          alert("Item has 0 quantity! Cannot proceed");
+          $("#item_raw").focus();
+     }else{
           $.ajax({
-               type : "GET",
-               url : "../controller/get_raw_material_details.php?item="+item,
+               type : "POST",
+               url : "../controller/get_raw_material_details.php",
+               data : {item_id:item_id, product:product, product_qty:product_qty, product_num:product_num, raw_qty:raw_qty},
+               beforeSend : function(){
+                    $(".info").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success : function(response){
                     $(".info").html(response);
                }
@@ -4115,7 +4129,7 @@ function displayRawMaterial(item_id){
           $("#item_raw").val('');
           prod.setAttribute('readonly', true);
           return false;
-     // }
+     }
      
  }
 
@@ -4132,7 +4146,7 @@ function addRawMaterial(){
           alert("Please input quantity used!");
           $("#item_quantity").focus();
           return;
-     }else if(item_quantity <= 0){
+     }else if(parseFloat(item_quantity) <= 0){
           alert("Please input quantity used!");
           $("#item_quantity").focus();
           return;
@@ -4141,6 +4155,9 @@ function addRawMaterial(){
                type : "POST",
                url : "../controller/add_raw_material.php",
                data : {posted_by:posted_by, store:store, product:product, product_number:product_number, product_qty:product_qty, item_id:item_id, item_quantity:item_quantity},
+               beforeSend : function(){
+                    $(".stocked_in").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success : function(response){
                $(".stocked_in").html(response);
                }
