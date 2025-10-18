@@ -27,6 +27,7 @@
             $quantity = $row->raw_quantity;
             $store = $row->store;
             $product = $row->product;
+            $trx_num = $row->trx_number;
         }
        
         //get previous quantity in inventory
@@ -56,7 +57,8 @@
             
             $inser_trail = new add_data('audit_trail', $audit_data);
             $inser_trail->create_data();
-
+            //delete from transactions
+            $delete->delete_item('transactions', 'trx_number', $trx_num);
 ?>
 <!-- display items with same invoice number -->
 <div class="notify"><p><span><?php echo $name?></span> Removed from Production materials</p></div>

@@ -3,3 +3,5 @@ Tasks : Tasks are divided into general task and cycle task, cycle task are poste
 During purchase, waybills can be entered, however, accountants posts waybil/logisitcs seperately under post expense. Also during posting purchases, the waybill/logistics will be displayed so accountant can enter it if there was a mistake or not, however he/she must have to go post it seperately as an expense when it is paid.
 When purchase is saved with payment type = Deposit: Debit Inventory with the total cost (deposit + balance). Credit Vendor with total cost. Debit Vendor again with deposit amount Credit Cash/Bank with deposit amount.
 for tasks, onfield agents/staffs will be the one inputing data for tasks done, like the time and date it started, end date and other paramters, taskt will only be entered after it has been completed.
+during production, the inventory ledger and production inputS ledger are affected.
+PRODUCTION labour ledger is an admin and general expense, while production input are other expenses which affects cost of goods later

@@ -9,8 +9,17 @@ date_default_timezone_set("Africa/Lagos");
     $invoice = htmlspecialchars(stripslashes($_POST['product_number']));
     $item_quantity = htmlspecialchars(stripslashes($_POST['item_quantity']));
     $product_qty = htmlspecialchars(stripslashes($_POST['product_qty']));
-    // $guest_id = str_pad(mt_rand(0, 999999), 6, '0', STR_PAD_LEFT);
     $date = date("Y-m-d H:i:s");
+    $details = "Item used for production";
+    //get current date
+    $todays_date = date("dmyhis");
+    $ran_num ="";
+    for($i = 0; $i < 3; $i++){
+        $random_num = random_int(0, 9);
+        $ran_num .= $random_num;
+    }
+    //generate transaction number
+    $trx_num = "TR".$ran_num.$todays_date;
     //instantiate classes
     include "../classes/dbh.php";
     include "../classes/inserts.php";
@@ -20,6 +29,7 @@ date_default_timezone_set("Africa/Lagos");
     $get_details = new selects();
     $costs = $get_details->fetch_details_group('items', 'cost_price', 'item_id', $item);
     $cost = $costs->cost_price;
+    $total_cost = $cost * $item_quantity;
     //check if raw material already exists in production with same prodct number;
     $check = $get_details->fetch_details_2cond('production', 'product_number', 'raw_material', $invoice, $item);
     if(gettype($check) == 'array'){
@@ -53,6 +63,7 @@ date_default_timezone_set("Africa/Lagos");
                 'product_number' => $invoice,
                 'raw_quantity' => $item_quantity,
                 'unit_cost' => $cost,
+                'trx_number' => $trx_num,
                 'store' => $store,
                 'posted_by' => $posted,
                 'post_date' => $date
@@ -78,6 +89,58 @@ date_default_timezone_set("Africa/Lagos");
             $new_qty = $prev_qty - $item_quantity;
             $update_qty = new Update_table();
             $update_qty->update2cond('inventory', 'quantity', 'item', 'store', $new_qty, $item, $store);
+            //insert into transactions
+            //get production ledger
+            $inps = $get_details->fetch_details_cond('ledgers', 'ledger', 'PRODUCTION INPUTS');
+            foreach($inps as $inp){
+                $contra_ledger = $inp->acn;
+                $contra_type = $inp->account_group;
+                $contra_sub_group = $inp->sub_group;
+                $contra_class = $inp->class;
+
+            }
+            //get inventory legder id
+            $invs = $get_details->fetch_details_cond('ledgers', 'ledger', 'INVENTORIES');
+            foreach($invs as $inv){
+                $inventory_ledger = $inv->acn;
+                $inv_type = $inv->account_group;
+                $inv_sub_group = $inv->sub_group;
+                $inv_class = $inv->class;
+
+            }
+            $credit_data = array(
+                'account' => $inventory_ledger,
+                'account_type' => $inv_type,
+                'sub_group' => $inv_sub_group,
+                'class' => $inv_class,
+                'credit' => $total_cost,
+                'post_date' => $date,
+                'posted_by' => $posted,
+                'trx_number' => $trx_num,
+                'details' => $details,
+                'trans_date' => $date,
+                'store' => $store
+            );
+            $debit_data = array(
+                'account' => $contra_ledger,
+                'account_type' => $contra_type,
+                'sub_group' => $contra_sub_group,
+                'class' => $contra_class,
+                'debit' => $total_cost,
+                'post_date' => $date,
+                'posted_by' => $posted,
+                'trx_number' => $trx_num,
+                'details' => $details,
+                'trans_date' => $date,
+                'store' => $store
+
+            );
+            //add debit
+            $add_debit = new add_data('transactions', $debit_data);
+            $add_debit->create_data();      
+            //add credit
+            $add_credit = new add_data('transactions', $credit_data);
+            $add_credit->create_data();
             //display stockins for this invoice number 
             include "raw_material_details.php";
         }
