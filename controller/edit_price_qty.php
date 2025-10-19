@@ -39,7 +39,7 @@
         <h3 style="background:var(--secondaryColor);">Edit quantity and price for <?php echo strtoupper($name)?></h3>
             <div class="inputs">
                 <div class="data item_head" style="width:auto;background:green">
-                    <h4 title="available quantity"><?php echo $item_qty?></h4>
+                    <h4 title="available quantity">Available Qty: <?php echo $item_qty?></h4>
                     <input type="hidden" name="sales_id" id="sales_id" value="<?php echo $row->sales_id?>" required>
                     <input type="hidden" name="inv_qty" id="inv_qty" value="<?php echo $item_qty?>" required>
                 </div>

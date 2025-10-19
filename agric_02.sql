@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 18, 2025 at 06:16 PM
+-- Generation Time: Oct 19, 2025 at 04:00 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -297,7 +297,19 @@ INSERT INTO `audit_trail` (`audit_id`, `store`, `item`, `transaction`, `previous
 (43, 1, 18, 'production', 23, 5, 1, '2025-10-17 13:14:34'),
 (44, 1, 18, 'production delete', 18, 5, 1, '2025-10-18 06:46:02'),
 (45, 1, 18, 'production', 23, 3, 1, '2025-10-18 06:46:16'),
-(46, 1, 18, 'production delete', 20, 3, 1, '2025-10-18 14:00:56');
+(46, 1, 18, 'production delete', 20, 3, 1, '2025-10-18 14:00:56'),
+(47, 1, 18, 'production', 23, 4, 1, '2025-10-19 10:12:03'),
+(48, 1, 15, 'production', 227, 10, 1, '2025-10-19 10:12:08'),
+(49, 1, 18, 'production', 19, 2, 1, '2025-10-19 10:13:57'),
+(50, 1, 15, 'production', 237, 5, 1, '2025-10-19 10:14:00'),
+(51, 1, 18, 'production', 17, 1, 1, '2025-10-19 10:15:41'),
+(52, 1, 15, 'production', 242, 3, 1, '2025-10-19 10:15:44'),
+(53, 1, 18, 'sales', 16, 1, 1, '2025-10-19 11:26:01'),
+(54, 1, 15, 'sales', 245, 2, 1, '2025-10-19 11:26:01'),
+(55, 1, 18, 'sales', 15, 1, 1, '2025-10-19 14:56:03'),
+(56, 1, 15, 'sales', 243, 1, 1, '2025-10-19 14:56:03'),
+(57, 1, 15, 'sales', 242, 3, 1, '2025-10-19 14:56:39'),
+(58, 1, 15, 'sales', 239, 5, 1, '2025-10-19 14:58:41');
 
 -- --------------------------------------------------------
 
@@ -344,7 +356,9 @@ INSERT INTO `cash_flows` (`fow_id`, `account`, `destination`, `details`, `trx_nu
 (8, 1010228, 1010329, 'inventory purchase', 'TR108081025042317', 24000.00, 'outflow', 'operating', 0, '2025-10-08 16:23:17', 1),
 (9, 1010228, 2030787, 'inventory purchase', 'TR854081025042718', 10000.00, 'outflow', 'operating', 0, '2025-10-08 16:27:18', 1),
 (10, 1010228, 2030787, 'inventory purchase', 'TR622081025053424', 30000.00, 'outflow', 'operating', 1, '2025-10-08 18:34:24', 1),
-(11, 1010228, 0, 'expense', 'TR808081025062534', 6400.00, 'outflow', 'operating', 0, '2025-10-08 18:25:34', 1);
+(11, 1010228, 0, 'expense', 'TR808081025062534', 6400.00, 'outflow', 'operating', 0, '2025-10-08 18:25:34', 1),
+(12, 1010228, 0, 'Net Income', 'TR609191025112601', 15000.00, 'inflow', 'operating', 0, '2025-10-19 11:26:01', 1),
+(13, 1010228, 1010483, 'Net Income', 'TR126191025025603', 10000.00, 'inflow', 'operating', 1, '2025-10-19 14:56:03', 1);
 
 -- --------------------------------------------------------
 
@@ -416,8 +430,9 @@ CREATE TABLE `cost_of_sales` (
 --
 
 INSERT INTO `cost_of_sales` (`cost_of_sales_id`, `amount`, `details`, `trx_number`, `store`, `trans_date`, `post_date`, `posted_by`) VALUES
-(1, 1500.00, 'cost of sales', 'TR676180925093726', 1, '2025-09-18', '2025-09-18 21:37:26', 1),
-(2, 500.00, 'cost of sales', 'TR314190925102623', 1, '2025-09-19', '2025-09-19 10:26:23', 1);
+(4, 4000.00, 'cost of sales', 'TR126191025025603', 1, '2025-10-19', '2025-10-19 14:56:03', 1),
+(5, 3000.00, 'cost of sales', 'TR774191025025639', 1, '2025-10-19', '2025-10-19 14:56:39', 1),
+(6, 5000.00, 'cost of sales', 'TR217191025025841', 1, '2025-10-19', '2025-10-19 14:58:41', 1);
 
 -- --------------------------------------------------------
 
@@ -490,6 +505,7 @@ INSERT INTO `customers` (`customer_id`, `customer`, `ledger_id`, `acn`, `custome
 CREATE TABLE `customer_trail` (
   `id` int(11) NOT NULL,
   `customer` int(11) NOT NULL,
+  `invoice` varchar(50) NOT NULL,
   `description` varchar(1024) NOT NULL,
   `amount` decimal(12,2) NOT NULL,
   `trx_number` varchar(50) NOT NULL,
@@ -502,8 +518,8 @@ CREATE TABLE `customer_trail` (
 -- Dumping data for table `customer_trail`
 --
 
-INSERT INTO `customer_trail` (`id`, `customer`, `description`, `amount`, `trx_number`, `store`, `posted_by`, `post_date`) VALUES
-(1, 1, 'Credit sales', 5000.00, '', 1, 1, '2025-09-19 10:26:23');
+INSERT INTO `customer_trail` (`id`, `customer`, `invoice`, `description`, `amount`, `trx_number`, `store`, `posted_by`, `post_date`) VALUES
+(2, 1, 'TO119102502571521', 'Credit Sales', 17500.00, 'TR217191025025841', 1, 1, '2025-10-19 14:58:41');
 
 -- --------------------------------------------------------
 
@@ -561,6 +577,13 @@ CREATE TABLE `debtors` (
   `posted_by` int(11) NOT NULL,
   `post_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `debtors`
+--
+
+INSERT INTO `debtors` (`debtor_id`, `customer`, `invoice`, `amount`, `store`, `debt_status`, `trx_number`, `posted_by`, `post_date`) VALUES
+(2, 1, 'TO119102502571521', 17500.00, 1, 0, 'TR217191025025841', 1, '2025-10-19 14:58:41');
 
 -- --------------------------------------------------------
 
@@ -828,8 +851,8 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`inventory_id`, `item`, `item_type`, `store`, `cost_price`, `quantity`, `batch_number`, `expiration_date`, `reorder_level`, `post_date`) VALUES
-(1, 18, 'Farm Input', 1, 3000, 23, 0, NULL, 5, NULL),
-(2, 15, 'Crop', 1, 189.655, 227, 0, NULL, 10, NULL),
+(1, 18, 'Farm Input', 1, 3000, 14, 0, NULL, 5, NULL),
+(2, 15, 'Crop', 1, 1000, 234, 0, NULL, 10, NULL),
 (3, 16, 'Crop', 1, 2000, 40, 0, NULL, 10, NULL);
 
 -- --------------------------------------------------------
@@ -879,10 +902,10 @@ CREATE TABLE `items` (
 --
 
 INSERT INTO `items` (`item_id`, `department`, `category`, `item_name`, `item_type`, `cost_price`, `sales_price`, `pack_size`, `pack_price`, `wholesale`, `wholesale_pack`, `reorder_level`, `barcode`, `item_status`, `date_created`) VALUES
-(15, '12', 37, 'MAIZE', 'Crop', 189.655, 5000, 0, 0, 0, 0, 10, '', 0, '2025-09-18 12:23:46'),
+(15, '12', 37, 'MAIZE', 'Crop', 1000, 5000, 0, 0, 0, 0, 10, '', 0, '2025-09-18 12:23:46'),
 (16, '12', 37, 'RICE', 'Crop', 2000, 120000, 0, 0, 0, 0, 10, '', 0, '2025-09-18 12:23:59'),
 (17, '12', 36, 'COW', 'Livestock', 0, 0, 0, 0, 0, 0, 10, '', 0, '2025-09-18 12:24:10'),
-(18, '1', 38, 'NPK FERTILIZER', 'Farm Input', 3000, 0, 0, 0, 0, 0, 5, '', 0, '2025-09-18 15:04:22');
+(18, '1', 38, 'NPK FERTILIZER', 'Farm Input', 3000, 5000, 0, 0, 0, 0, 5, '', 0, '2025-09-18 15:04:22');
 
 -- --------------------------------------------------------
 
@@ -1200,7 +1223,11 @@ CREATE TABLE `payments` (
 
 INSERT INTO `payments` (`payment_id`, `sales_type`, `customer`, `amount_due`, `store`, `amount_paid`, `discount`, `payment_mode`, `bank`, `trx_number`, `post_date`, `posted_by`, `invoice`) VALUES
 (1, 'Wholesale', 1, 15000.00, 1, 15000.00, 0.00, 'Cash', 0, 'TR676180925093726', '2025-09-18 21:37:26', 1, 'TO118092509371987'),
-(2, 'Wholesale', 1, 5000.00, 1, 0.00, 0.00, 'Credit', 0, 'TR314190925102623', '2025-09-19 10:26:23', 1, 'TO119092510251533');
+(2, 'Wholesale', 1, 5000.00, 1, 0.00, 0.00, 'Credit', 0, 'TR314190925102623', '2025-09-19 10:26:23', 1, 'TO119092510251533'),
+(3, 'Wholesale', 1, 15000.00, 1, 15000.00, 0.00, 'Cash', 0, 'TR609191025112601', '2025-10-19 11:26:01', 1, 'TO119102511251411'),
+(4, 'Wholesale', 1, 10000.00, 1, 10000.00, 0.00, 'Cash', 0, 'TR126191025025603', '2025-10-19 14:56:03', 1, 'TO119102502551757'),
+(5, 'Wholesale', 1, 13500.00, 1, 0.00, 0.00, 'Credit', 0, 'TR774191025025639', '2025-10-19 14:56:39', 1, 'TO119102502561030'),
+(6, 'Wholesale', 1, 17500.00, 1, 0.00, 0.00, 'Credit', 0, 'TR217191025025841', '2025-10-19 14:58:41', 1, 'TO119102502571521');
 
 -- --------------------------------------------------------
 
@@ -1222,6 +1249,15 @@ CREATE TABLE `production` (
   `post_date` datetime DEFAULT NULL,
   `product_status` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `production`
+--
+
+INSERT INTO `production` (`product_id`, `product`, `product_number`, `product_qty`, `raw_material`, `raw_quantity`, `unit_cost`, `store`, `trx_number`, `posted_by`, `post_date`, `product_status`) VALUES
+(5, 15, 'PR119102510114951', 10, 18, 4, 3000, 1, 'TR929191025101203', 1, '2025-10-19 10:12:03', 1),
+(6, 15, 'PR119102510137681', 5, 18, 2, 3000, 1, 'TR134191025101357', 1, '2025-10-19 10:13:57', 1),
+(7, 15, 'PR119102510153991', 3, 18, 1, 3000, 1, 'TR465191025101541', 1, '2025-10-19 10:15:41', 1);
 
 -- --------------------------------------------------------
 
@@ -1618,8 +1654,10 @@ CREATE TABLE `sales` (
 --
 
 INSERT INTO `sales` (`sales_id`, `item`, `store`, `sales_type`, `customer`, `invoice`, `quantity`, `price`, `discount`, `total_amount`, `cost`, `trx_number`, `posted_by`, `sales_status`, `post_date`) VALUES
-(1, 15, 1, 'Wholesale', 1, 'TO118092509371987', 3, 5000.00, 0.00, 15000.00, 1500.00, 'TR676180925093726', 1, 2, '2025-09-18 21:37:26'),
-(2, 15, 1, 'Wholesale', 1, 'TO119092510251533', 1, 5000.00, 0.00, 5000.00, 500.00, 'TR314190925102623', 1, 2, '2025-09-19 10:26:23');
+(8, 18, 1, 'Wholesale', 1, 'TO119102502551757', 1, 5000.00, 0.00, 5000.00, 3000.00, 'TR126191025025603', 1, 2, '2025-10-19 14:56:03'),
+(9, 15, 1, 'Wholesale', 1, 'TO119102502551757', 1, 5000.00, 0.00, 5000.00, 1000.00, 'TR126191025025603', 1, 2, '2025-10-19 14:56:03'),
+(10, 15, 1, 'Wholesale', 1, 'TO119102502561030', 3, 4500.00, 500.00, 13500.00, 3000.00, 'TR774191025025639', 1, 2, '2025-10-19 14:56:39'),
+(11, 15, 1, 'Wholesale', 1, 'TO119102502571521', 5, 3500.00, 1500.00, 17500.00, 5000.00, 'TR217191025025841', 1, 2, '2025-10-19 14:58:41');
 
 -- --------------------------------------------------------
 
@@ -2007,7 +2045,35 @@ INSERT INTO `transactions` (`transaction_id`, `account_type`, `sub_group`, `clas
 (61, 2, 3, 7, 2030787, 30000.000, 0.000, 'TR622081025053424', 'Vendor Payment', 0, '2025-10-08', 1, '2025-10-08 18:34:24', 1),
 (62, 1, 1, 2, 1010228, 0.000, 30000.000, 'TR622081025053424', 'Vendor Payment', 0, '2025-10-08', 1, '2025-10-08 18:34:24', 1),
 (63, 4, 6, 12, 40601388, 6400.000, 0.000, 'TR808081025062534', 'Logisitcs Payment', 0, '2025-10-08', 0, '2025-10-08 18:25:34', 1),
-(64, 1, 1, 2, 1010228, 0.000, 6400.000, 'TR808081025062534', 'Logisitcs Payment', 0, '2025-10-08', 0, '2025-10-08 18:25:34', 1);
+(64, 1, 1, 2, 1010228, 0.000, 6400.000, 'TR808081025062534', 'Logisitcs Payment', 0, '2025-10-08', 0, '2025-10-08 18:25:34', 1),
+(65, 4, 6, 13, 40601389, 12000.000, 0.000, 'TR929191025101203', 'Item used for production', 0, '2025-10-19', 1, '2025-10-19 10:12:03', 1),
+(66, 1, 1, 3, 1010329, 0.000, 12000.000, 'TR929191025101203', 'Item used for production', 0, '2025-10-19', 1, '2025-10-19 10:12:03', 1),
+(67, 4, 6, 13, 40601389, 6000.000, 0.000, 'TR134191025101357', 'Item used for production', 0, '2025-10-19', 1, '2025-10-19 10:13:57', 1),
+(68, 1, 1, 3, 1010329, 0.000, 6000.000, 'TR134191025101357', 'Item used for production', 0, '2025-10-19', 1, '2025-10-19 10:13:57', 1),
+(69, 4, 6, 13, 40601389, 3000.000, 0.000, 'TR465191025101541', 'Item used for production', 0, '2025-10-19', 1, '2025-10-19 10:15:41', 1),
+(70, 1, 1, 3, 1010329, 0.000, 3000.000, 'TR465191025101541', 'Item used for production', 0, '2025-10-19', 1, '2025-10-19 10:15:41', 1),
+(71, 1, 1, 3, 1010329, 3000.000, 0.000, 'TR014191025101544', 'New Produce from production', 0, '2025-10-19', 1, '2025-10-19 10:15:44', 1),
+(72, 4, 6, 13, 40601389, 0.000, 3000.000, 'TR014191025101544', 'New Produce from production', 0, '2025-10-19', 1, '2025-10-19 10:15:44', 1),
+(73, 1, 1, 4, 1010483, 15000.000, 0.000, 'TR609191025112601', 'Customer Invoice', 0, '2025-10-19', 0, '2025-10-19 11:26:01', 1),
+(74, 3, 5, 11, 30501130, 0.000, 15000.000, 'TR609191025112601', 'Customer Invoice', 0, '2025-10-19', 0, '2025-10-19 11:26:01', 1),
+(75, 1, 1, 2, 1010228, 15000.000, 0.000, 'TR609191025112601', 'Payment for goods sold', 0, '2025-10-19', 0, '2025-10-19 11:26:01', 1),
+(76, 1, 1, 4, 1010483, 0.000, 15000.000, 'TR609191025112601', 'Payment for goods sold', 0, '2025-10-19', 0, '2025-10-19 11:26:01', 1),
+(77, 4, 7, 14, 40701463, 5000.000, 0.000, 'TR609191025112601', 'Cost of sales', 0, '2025-10-19', 0, '2025-10-19 11:26:01', 1),
+(78, 1, 1, 3, 1010329, 0.000, 5000.000, 'TR609191025112601', 'Cost of sales', 0, '2025-10-19', 0, '2025-10-19 11:26:01', 1),
+(79, 3, 5, 11, 30501130, 0.000, 10000.000, 'TR126191025025603', 'Sales of product', 0, '2025-10-19', 1, '2025-10-19 14:56:03', 1),
+(80, 4, 7, 14, 40701463, 4000.000, 0.000, 'TR126191025025603', 'Cost of sales', 0, '2025-10-19', 1, '2025-10-19 14:56:03', 1),
+(81, 1, 1, 3, 1010329, 0.000, 4000.000, 'TR126191025025603', 'Cost of sales', 0, '2025-10-19', 1, '2025-10-19 14:56:03', 1),
+(82, 1, 1, 4, 1010483, 10000.000, 0.000, 'TR126191025025603', 'Goods purchased', 0, '2025-10-19', 1, '2025-10-19 14:56:03', 1),
+(83, 1, 1, 2, 1010228, 10000.000, 0.000, 'TR126191025025603', 'Payment for goods sold', 0, '2025-10-19', 1, '2025-10-19 14:56:03', 1),
+(84, 1, 1, 4, 1010483, 0.000, 10000.000, 'TR126191025025603', 'Goods purchased', 0, '2025-10-19', 1, '2025-10-19 14:56:03', 1),
+(85, 3, 5, 11, 30501130, 0.000, 13500.000, 'TR774191025025639', 'Sales of product', 0, '2025-10-19', 1, '2025-10-19 14:56:39', 1),
+(86, 4, 7, 14, 40701463, 3000.000, 0.000, 'TR774191025025639', 'Cost of sales', 0, '2025-10-19', 1, '2025-10-19 14:56:39', 1),
+(87, 1, 1, 3, 1010329, 0.000, 3000.000, 'TR774191025025639', 'Cost of sales', 0, '2025-10-19', 1, '2025-10-19 14:56:39', 1),
+(88, 1, 1, 4, 1010483, 13500.000, 0.000, 'TR774191025025639', 'Goods purchased', 0, '2025-10-19', 1, '2025-10-19 14:56:39', 1),
+(89, 3, 5, 11, 30501130, 0.000, 17500.000, 'TR217191025025841', 'Sales of product', 0, '2025-10-19', 1, '2025-10-19 14:58:41', 1),
+(90, 4, 7, 14, 40701463, 5000.000, 0.000, 'TR217191025025841', 'Cost of sales', 0, '2025-10-19', 1, '2025-10-19 14:58:41', 1),
+(91, 1, 1, 3, 1010329, 0.000, 5000.000, 'TR217191025025841', 'Cost of sales', 0, '2025-10-19', 1, '2025-10-19 14:58:41', 1),
+(92, 1, 1, 4, 1010483, 17500.000, 0.000, 'TR217191025025841', 'Goods purchased', 0, '2025-10-19', 1, '2025-10-19 14:58:41', 1);
 
 -- --------------------------------------------------------
 
@@ -2604,7 +2670,7 @@ ALTER TABLE `assigned_fields`
 -- AUTO_INCREMENT for table `audit_trail`
 --
 ALTER TABLE `audit_trail`
-  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
+  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `banks`
@@ -2616,7 +2682,7 @@ ALTER TABLE `banks`
 -- AUTO_INCREMENT for table `cash_flows`
 --
 ALTER TABLE `cash_flows`
-  MODIFY `fow_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `fow_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -2634,7 +2700,7 @@ ALTER TABLE `companies`
 -- AUTO_INCREMENT for table `cost_of_sales`
 --
 ALTER TABLE `cost_of_sales`
-  MODIFY `cost_of_sales_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `cost_of_sales_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `crop_cycles`
@@ -2652,7 +2718,7 @@ ALTER TABLE `customers`
 -- AUTO_INCREMENT for table `customer_trail`
 --
 ALTER TABLE `customer_trail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `cycle_changes`
@@ -2664,7 +2730,7 @@ ALTER TABLE `cycle_changes`
 -- AUTO_INCREMENT for table `debtors`
 --
 ALTER TABLE `debtors`
-  MODIFY `debtor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `debtor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `departments`
@@ -2820,13 +2886,13 @@ ALTER TABLE `outstanding`
 -- AUTO_INCREMENT for table `payments`
 --
 ALTER TABLE `payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `production`
 --
 ALTER TABLE `production`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `purchases`
@@ -2874,7 +2940,7 @@ ALTER TABLE `rights`
 -- AUTO_INCREMENT for table `sales`
 --
 ALTER TABLE `sales`
-  MODIFY `sales_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `sales_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `sales_returns`
@@ -2916,7 +2982,7 @@ ALTER TABLE `task_items`
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
 
 --
 -- AUTO_INCREMENT for table `transfers`

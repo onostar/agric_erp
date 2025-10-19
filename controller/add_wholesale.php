@@ -18,59 +18,72 @@ date_default_timezone_set("Africa/Lagos");
             $customer = $_GET['customer'];
             
         }
-    $_SESSION['customer'] = $customer;
-    //get customer type to determine price
-    $get_customer = new selects();
-    $rows = $get_customer->fetch_details_group('customers', 'customer_type', 'customer_id', $customer);
-    $type = $rows->customer_type;
-
-    $date = date("Y-m-d H:i:s");
+    // $_SESSION['customer'] = $customer;
     $quantity = 1;
-    
+    $date = date("Y-m-d H:i:s");
+    //first check if item is in sales order
+    $get_sales = new selects();
+    $sales = $get_sales->fetch_count_2cond('sales', 'item', $item, 'invoice', $invoice);
+    if($sales > 0){
+        echo "<script>
+        alert('Item is already on sales order');
+        </script>";
+        include "wholesale_details.php";
+    }else{
     //get selling price
-    
     $get_item = new selects();
     $rows = $get_item->fetch_details_cond('items', 'item_id', $item);
      if(gettype($rows) == 'array'){
         foreach($rows as $row){
-            /* if($type == "Dealer"){
-                $price = $row->wholesale;
-            }else{ */
-                $price = $row->sales_price;
-
-            // }
+            $price = $row->sales_price;
             $name = $row->item_name;
             $cost = $row->cost_price;
+            // $markup = $row->markup;
             // $department = $row->department;
         }
         //get quantity from inventory
         $get_qty = new selects();
         $qtyss = $get_qty->fetch_details_2cond('inventory', 'store', 'item', $store, $item);
         if(gettype($qtyss) == 'array'){
-            foreach($qtyss as $qtys){
-                $qty = $qtys->quantity;
+            $get_qtys = new selects();
+            $sums = $get_qtys->fetch_sum_double('inventory', 'quantity', 'store', $store, 'item', $row->item_id);
+            foreach($sums as $sum){
+                $qty = $sum->total;
             }
         }
+        
         if(gettype($qtyss) == 'string'){
             $qty = 0;
         }
         $sales_cost = $quantity * $cost;
             if($qty == 0){
-                /* echo "<div class='notify'><p><span>$name</span> has zero quantity! Cannot proceed</p>"; */
                 echo "<script>
                     alert('$name has zero quantity! Cannot proceed');
-                </script>";
-    include "wholesale_details.php";
+                    </script>";
+                    include "../controller/wholesale_details.php";
             }else if($price == 0){
-                /* echo "<div class='notify'><p><span>$name</span> does not have selling price! Cannot proceed</p></div>"; */
-                echo "<script>
-                    alert('$name does not have selling price! Cannot proceed');
-                </script>";
-    include "wholesale_details.php";
+                echo "<div class='notify'><p><span>$name</span> does not have selling price! Cannot proceed</p></div>";
+                include "../controller/wholesale_details.php";
             }else{
                 //insert into sales order
-                $sell_item = new post_sales($item, $invoice, $quantity, $price, $price, $user_id, $sales_cost, $store, $sales_type, $customer, $date);
-                $sell_item->add_sales();
+                $data = array(
+                    'item' => $item,
+                    'invoice' => $invoice,
+                    'quantity' => $quantity,
+                    'price' => $price,
+                    'total_amount' => $price,
+                    'posted_by' => $user_id,
+                    'cost' => $sales_cost,
+                    'store' => $store,
+                    'sales_type' => $sales_type,
+                    'customer' => $customer,
+                    'post_date' => $date,
+                    // 'markup' => $markup
+                );
+                $sell_item = new add_data('sales', $data);
+                $sell_item->create_data();
+                /* $sell_item = new post_sales($item, $invoice, $quantity, $price, $price, $user_id, $sales_cost, $store, $sales_type, $customer, $date, $markup);
+                $sell_item->add_sales(); */
                 if($sell_item){
 
         ?>
@@ -84,6 +97,7 @@ date_default_timezone_set("Africa/Lagos");
    
     
 <?php
+     }
          }
     }else{
         header("Location: ../index.php");

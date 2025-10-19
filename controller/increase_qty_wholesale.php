@@ -9,18 +9,20 @@
         include "../classes/update.php";
         // check item current quantity in inventory
         $check_qty = new selects();
-        $qtys = $check_qty->fetch_details_2cond('inventory', 'store', 'item', $store, $item);
+        $qtys = $check_qty->fetch_sum_double('inventory', 'quantity', 'store', $store,'item', $item);
         foreach($qtys as $qty){
-            $current_qty = $qty->quantity;
+            $current_qty = $qty->total;
 
         }
         // check item current quantity in sales order
-        $check_salesqty = new selects();
-        $qtys = $check_salesqty->fetch_details_group('sales', 'quantity', 'sales_id', $sales);
-        $sales_qty = $qtys->quantity;
+        $invs = $check_qty->fetch_details_cond('sales', 'sales_id', $sales);
+        foreach($invs as $inv){
+            $invoice = $inv->invoice;
+            $customer = $inv->customer;
+            $sales_qty = $inv->quantity;
+        }
         //get invoice
-        $get_invoice = new selects();
-        $rows = $get_invoice->fetch_details_group('sales', 'invoice', 'sales_id', $sales);
+        $rows = $check_qty->fetch_details_group('sales', 'invoice', 'sales_id', $sales);
         $invoice = $rows->invoice;
         // echo $sales_qty;
         if($sales_qty == $current_qty){

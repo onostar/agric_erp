@@ -1,6 +1,6 @@
 <?php
     // $store = $_SESSION['store_id'];
-    $customer = $_SESSION['customer'];
+    // $customer = $_SESSION['customer'];
 ?>
 <div class="displays allResults" id="stocked_items">
     <!-- <h2>Items in sales order</h2> -->
@@ -28,8 +28,7 @@
                 <td style="color:var(--moreClor);">
                     <?php
                         //get category name
-                        $get_item_name = new selects();
-                        $item_name = $get_item_name->fetch_details_group('items', 'item_name', 'item_id', $detail->item);
+                        $item_name = $get_items->fetch_details_group('items', 'item_name', 'item_id', $detail->item);
                         echo $item_name->item_name;
                     ?>
                 </td>
@@ -67,8 +66,7 @@
         }
 
         // get sum
-        $get_total = new selects();
-        $amounts = $get_total->fetch_sum_con('sales', 'price', 'quantity', 'invoice', $invoice);
+        $amounts = $get_items->fetch_sum_con('sales', 'price', 'quantity', 'invoice', $invoice);
         foreach($amounts as $amount){
             $total_amount = $amount->total;
         }
@@ -100,7 +98,7 @@
                         <option value="Transfer">TRANSFER</option>
                         <option value="Credit">CREDIT</option>
                         <option value="Multiple">MULTIPLE PAYMENT</option>
-                        <!-- <option value="Wallet">WALLET</option> -->
+                        <option value="Wallet">WALLET</option>
                         <option value="Deposit">DEPOSIT</option>
                     </select>
                 </div>
@@ -122,8 +120,7 @@
                     <select name="bank" id="bank">
                         <option value=""selected>Select Bank</option>
                         <?php
-                            $get_bank = new selects();
-                            $rows = $get_bank->fetch_details('banks', 10, 10);
+                            $rows = $get_items->fetch_details('banks', 10, 10);
                             foreach($rows as $row):
                         ?>
                         <option value="<?php echo $row->bank_id?>"><?php echo $row->bank?>(<?php echo $row->account_number?>)</option>
@@ -133,11 +130,9 @@
                 <div class="data" id="account_balance">
                     <?php
                         //get customer account 
-                        $get_cust = new selects();
-                        $acns = $get_cust->fetch_details_group('customers', 'acn', 'customer_id', $customer);
+                        $acns = $get_items->fetch_details_group('customers', 'acn', 'customer_id', $customer);
                         //get wallet balance
-                        $get_bal = new selects();
-                        $bal = $get_bal->fetch_account_balance($acns->acn);
+                        $bal = $get_items->fetch_account_balance($acns->acn);
                         if(gettype($bal) == 'array'){
                             foreach($bal as $ba){
                                 $wallet = $ba->balance;
@@ -163,8 +158,7 @@
                         <option value="" selected>Select Mode of payment</option>
                         <option value="Cash">CASH</option>
                         <?php
-                            $get_bank = new selects();
-                            $rows = $get_bank->fetch_details('banks', 10, 10);
+                            $rows = $get_items->fetch_details('banks', 10, 10);
                             foreach($rows as $row):
                         ?>
                         <option value="<?php echo $row->bank_id?>"><?php echo $row->bank?>(<?php echo $row->account_number?>)</option>

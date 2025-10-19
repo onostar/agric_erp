@@ -8,30 +8,19 @@
     include "../classes/dbh.php";
     include "../classes/select.php";
     //get customer type to determine price
-    $get_customer = new selects();
+    /* $get_customer = new selects();
     $rows = $get_customer->fetch_details_group('customers', 'customer_type', 'customer_id', $customer);
-    $type = $rows->customer_type;
+    $type = $rows->customer_type; */
     $get_item = new selects();
-    $rows = $get_item->fetch_details_likeCond('items', 'item_name', $item);
-     if(gettype($rows) == 'array'){
+    $rows = $get_item->fetch_items_quantity($store, $item);
+     if(is_array($rows)){
         foreach($rows as $row):
-            //get item quantity from inventory
-            $get_qty = new selects();
-            $qtys = $get_qty->fetch_details_2cond('inventory', 'store', 'item', $store, $row->item_id);
-            if(gettype($qtys) == 'array'){
-                foreach($qtys as $qty){
-                    $quantity = $qty->quantity;
-                }
-            }
-            if(gettype($qtys) == 'string'){
-                $quantity = 0;
-            }
         
         // if($type == "Dealer"){
     ?>
     
     <div class="results">
-            <a href="javascript:void(0)" onclick="addWholeSales('<?php echo $row->item_id?>')"><?php echo $row->item_name." (Price => ₦".$row->sales_price.", Quantity => ".$quantity."kg)"?></a>
+            <a href="javascript:void(0)" onclick="addWholeSales('<?php echo $row->item_id?>')"><?php echo $row->item_name." (Price => ₦".$row->sales_price.", Quantity => ".$row->quantity."kg)"?></a>
         </div>
 <?php
     // }

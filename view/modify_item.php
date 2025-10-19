@@ -21,7 +21,7 @@
             <thead>
                 <tr style="background:var(--otherColor)">
                     <td>S/N</td>
-                    <td>Department</td>
+                    <!-- <td>Department</td> -->
                     <td>Category</td>
                     <td>item</td>
                     <td></td>
@@ -40,14 +40,14 @@
                 <tr>
                     <td style="text-align:center;"><?php echo $n?></td>
                     
-                    <td>
+                   <!-- <td>
                         <?php 
                             //get department
-                            $get_dep = new selects();
+                           /*  $get_dep = new selects();
                             $detail = $get_dep->fetch_details_group('departments', 'department', 'department_id', $row->department);
-                            echo $detail->department;
+                            echo $detail->department; */
                         ?>
-                    </td>
+                    </td>-->
                     <td>
                         <?php
                             //get category
