@@ -58,7 +58,16 @@
                             }else{
                                 $inputs_total = 0;
                             }
-                            $total_production = $labour_total + $inputs_total;
+                            $farm_production = $labour_total + $inputs_total;
+                            $prds = $get_prds->fetch_sum_2colCurDate1Con('production', 'raw_quantity', 'unit_cost', 'date(post_date)', 'store', $store_id);
+                            if(is_array($prds)){
+                                foreach($prds as $prd){
+                                    $production = $prd->total;
+                                }
+                            }else{
+                                $production = 0;
+                            }
+                            $total_production = $farm_production + $production;
                             echo "₦".number_format($total_production, 2);
                            
                         }else{

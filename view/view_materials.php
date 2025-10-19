@@ -31,9 +31,9 @@
 
         }
     ?>
-    <button class="page_navs" id="back" style="background:brown; padding:5px" onclick="showPage('production_report.php')">close <i class="fas fa-close"></i></button>
+    <button class="page_navs" id="back" style="background:brown; padding:5px" onclick="showPage('production_report.php')">Close <i class="fas fa-close"></i></button>
     <div class="add_user_form" style="width:50%; margin:0;box-shadow:none;">
-        <h3 style="background:var(--otherColor); text-align:left!important;" >Raw Materials used for '<?php echo strtoupper($product_name)?>' production</h3>
+        <h3 style="background:var(--otherColor); border-radius: 10px 10px 0 0; text-align:left!important;" >Raw Materials used for '<?php echo strtoupper($product_name)?>' production</h3>
     </div>
     <div class="displays allResults" id="stocked_items" style="width:50%!important;margin:0!important;">
         <table id="stock_items_table" class="searchTable">

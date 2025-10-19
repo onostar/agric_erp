@@ -86,7 +86,7 @@ date_default_timezone_set("Africa/Lagos");
         $update->update('production', 'product_status', 'product_number', 1, $invoice);
         //enter transactions
         //get production ledger
-        $inps = $get_details->fetch_details_cond('ledgers', 'ledger', 'PRODUCTION INPUTS');
+        $inps = $get_product->fetch_details_cond('ledgers', 'ledger', 'PRODUCTION INPUTS');
         foreach($inps as $inp){
             $contra_ledger = $inp->acn;
             $contra_type = $inp->account_group;
@@ -95,7 +95,7 @@ date_default_timezone_set("Africa/Lagos");
 
         }
         //get inventory legder id
-        $invs = $get_details->fetch_details_cond('ledgers', 'ledger', 'INVENTORIES');
+        $invs = $get_product->fetch_details_cond('ledgers', 'ledger', 'INVENTORIES');
         foreach($invs as $inv){
             $inventory_ledger = $inv->acn;
             $inv_type = $inv->account_group;
@@ -124,11 +124,11 @@ date_default_timezone_set("Africa/Lagos");
             'class' => $inv_class,
             'debit' => $total_cost,
             'post_date' => $date,
-            'posted_by' => $user,
+            'posted_by' => $posted_by,
             'trx_number' => $trx_num,
             'details' => $details,
             'trans_date' => $date,
-            'store' => $farm
+            'store' => $store
         );
         //add debit
         $add_debit = new add_data('transactions', $debit_data);
