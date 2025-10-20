@@ -19,8 +19,8 @@
         $address = $row->customer_address;
         $email = $row->customer_email;
         $joined = $row->reg_date;
-        $wallet = $row->wallet_balance;
-        $debt = $row->amount_due;
+        /* $wallet = $row->wallet_balance;
+        $debt = $row->amount_due; */
         $account = $row->acn;
     }
     //get customer accouunt balance from transactions
@@ -31,6 +31,7 @@
             $balance = $bal->balance;
         }
     }
+    $wallet = $balance;
 ?>
 <!-- customer info -->
 <div class="close_btn">
@@ -59,19 +60,20 @@
             <h4><i class="fas fa-calendar"></i> Registered:</h4>
             <p><?php echo date("jS M, Y", strtotime($joined))?></p>
         </div>
-        <?php /* if($wallet >= 0){ */?>
-        <!-- <div class="demo_block" style="color:green">
-            <h4 style="color:green"><i class="fas fa-piggy-bank"></i> Account balance:</h4>
-            <p><?php echo "₦".number_format($wallet, 2)?></p>
-        </div>
-        <?php /* }else{ */?> -->
+        <?php if($wallet > 0){?>
         <div class="demo_block" style="color:red">
-        <h4><i class="fas fa-piggy-bank"></i> Account balance:</h4>
-        <p><?php echo "₦".number_format($balance, 2)?></p>
+            <h4 style="color:green"><i class="fas fa-piggy-bank"></i> Account balance:</h4>
+            <p><?php echo "-₦".number_format($wallet, 2)?></p>
         </div>
+        <?php }else{?>
+        <div class="demo_block" style="color:green">
+        <h4><i class="fas fa-piggy-bank"></i> Account balance:</h4>
+        <p><?php echo "₦".number_format(-$balance, 2)?></p>
+        </div>
+        <?php }?>
        
     </div>
-    <h3 style="background:red; text-align:center; color:#fff; padding:10px;margin:0;">Transactions</h3>
+    <!-- <h3 style="background:red; text-align:center; color:#fff; padding:10px;margin:0;">Transactions</h3> -->
     <div class="transactions">
         <div class="all_credit allResults">
             <h3 style="background:var(--otherColor); color:#fff">All sales transaction</h3>
@@ -109,23 +111,14 @@
                         </td>   
                         <td>
                             <?php 
-                                if($detail->payment_mode == "Credit"){
-                                    //get sum of invoice
-                                    $get_sum = new selects();
-                                    $sums = $get_sum->fetch_sum_single('payments', 'amount_due', 'invoice', $detail->invoice);
-                                    foreach($sums as $sum){
-                                        echo "₦".number_format($sum->total, 2);
+                                //get sum of invoice
+                                $get_sum = new selects();
+                                $sums = $get_sum->fetch_sum_single('sales', 'total_amount', 'invoice', $detail->invoice);
+                                foreach($sums as $sum){
+                                    echo "₦".number_format($sum->total, 2);
 
-                                    }
-                                }else{
-                                    //get sum of invoice
-                                    $get_sum = new selects();
-                                    $sums = $get_sum->fetch_sum_single('payments', 'amount_paid', 'invoice', $detail->invoice);
-                                    foreach($sums as $sum){
-                                        echo "₦".number_format($sum->total, 2);
-
-                                    }
                                 }
+                                
                                 
                             ?>
                         </td>
@@ -140,32 +133,17 @@
                 }
                 // get sum
                 $get_total = new selects();
-                $amounts = $get_total->fetch_sum_2dateCond('payments', 'amount_paid', 'customer', 'date(post_date)', $from, $to, $customer);
+                $amounts = $get_total->fetch_sum_2date2Cond('sales', 'total_amount', 'date(post_date)', 'sales_status', 'customer', $from, $to, 2, $customer);
                 foreach($amounts as $amount){
                     $paid_amount = $amount->total;
                 }
-                // if credit was sold
-                $get_credit = new selects();
-                $credits = $get_credit->fetch_sum_2date2Cond('payments', 'amount_due', 'date(post_date)', 'payment_mode', 'customer', $from, $to, 'Credit', $customer);
-                if(gettype($credits) === "array"){
-                    foreach($credits as $credit){
-                        $owed_amount = $credit->total;
-                    }
-                    $total_revenue = $owed_amount + $paid_amount;
-                    echo "<p class='total_amount' style='color:green'>Total: ₦".number_format($total_revenue, 2)."</p>";
-
-                }
-                //if no credit sales
-                if(gettype($credits) == "string"){
-                    echo "<p class='total_amount' style='color:green'>Total: ₦".number_format($paid_amount, 2)."</p>";
-                    
-                }
+                echo "<p class='total_amount' style='color:green'>Total: ₦".number_format($paid_amount, 2)."</p>";
             ?>
         </div>
-        <div class="all_credit allResults">
-            <div class="deposit_log">
-                <h3>Deposits transactions</h3>
-                <a href="javascript:void" title="post customer payments" onclick="showPage('../controller/fund_account.php?customer=<?php echo $customer?>')"><i class="fas fa-cash-register"></i> Deposit <i class="fas fa-plus"></i></a>
+        <div class="all_credit allResults" style="border-left:1px solid #cdcdcd">
+            <div class="deposit_log" style="background:var(--otherColor); display:flex;justify-content:space-between">
+                <h3 style="background:var(--otherColor); color:#fff">Deposits transactions</h3>
+                <a href="javascript:void" style="background:var(--moreColor); box-shadow:1px 1px 1px #fff; border:1px 1px 1px #222; margin:5px" title="post customer payments" onclick="showPage('../controller/fund_account.php?customer=<?php echo $customer?>')"><i class="fas fa-cash-register"></i> Deposit <i class="fas fa-plus"></i></a>
             </div>
             <table id="data_table" class="searchTable">
                 <thead>
@@ -220,7 +198,7 @@
                     if($total_due > 0){ */
                         echo "<p class='total_amount' style='color:green;font-size:.9rem;'>Total Deposits: ₦".number_format($deposits, 2)."</p>";    
                     // }else{
-                        if($wallet < 0){
+                        if($wallet > 0){
                         echo "<p class='total_amount' style='color:red;font-size:1rem;'>Amount due: ₦".number_format($wallet, 2)."</p>";
                         }
                     // }

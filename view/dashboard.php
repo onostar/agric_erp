@@ -8,7 +8,7 @@
     
     <div id="dashboard">
         <div class="cards" id="card4">
-            <a href="javascript:void(0)" onclick="showPage('revenue_report.php')">
+            <a href="javascript:void(0)" onclick="showPage('sales_report.php')">
                 <div class="infos">
                     <p><i class="fas fa-coins"></i> Monthly Sales</p>
                     <p>
