@@ -7564,3 +7564,23 @@ function recallStaff(staff_id){
           return false;
      }
 }
+// resign staff
+function resignStaff(staff_id){
+     let activate = confirm("Are you sure you want to retire this employee?", "");
+     if(activate){
+          $.ajax({
+               type : "GET",
+               url : "../controller/resign_staff.php?id="+staff_id,
+               beforeSend : function(){
+                    $("#disable_user").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#disable_user").html(response);
+               }
+          })
+          setTimeout(function(){
+               $("#disable_user").load("resign_employee.php #disable_user");
+          }, 3000);
+          return false;
+     }
+}
