@@ -1,5 +1,6 @@
 <?php
-
+    session_start();
+    date_default_timezone_set("Africa/Lagos");
     $user = htmlspecialchars(stripslashes($_POST['posted']));
     $receipt = htmlspecialchars(stripslashes($_POST['invoice']));
     $customer = htmlspecialchars(stripslashes($_POST['customer']));
@@ -93,8 +94,8 @@
             'post_date' => $date,
             'posted_by' => $user,
             'trx_number' => $trx_num,
-            'trans_date' => $trans_date
-
+            'trans_date' => $trans_date,
+            'store' => $store
         );
         $credit_data = array(
             'account' => $ledger,
@@ -106,8 +107,8 @@
             'post_date' => $date,
             'posted_by' => $user,
             'trx_number' => $trx_num,
-            'trans_date' => $trans_date
-
+            'trans_date' => $trans_date,
+            'store' => $store
         );
         //add debit
         $add_debit = new add_data('transactions', $debit_data);
@@ -119,13 +120,15 @@
         //cash flow date
         $flow_data = array(
             'account' => $dr_ledger,
+            'destination' => $ledger,
             'details' => 'Net Income',
             'trx_number' => $trx_num,
             'amount' => $amount,
             'trans_type' => 'inflow',
             'activity' => 'operating',
             'post_date' => $date,
-            'posted_by' => $user
+            'posted_by' => $user,
+            'store' => $store
         );
         $add_flow = new add_data('cash_flows', $flow_data);
         $add_flow->create_data();

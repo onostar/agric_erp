@@ -8,8 +8,8 @@
 ?>
 <div id="debtorsList" class="displays management" >
     
-<div class="displays allResults new_data" id="revenue_report" style="width:60%!important; margin:0 20px!important;">
-    <h2>Debtors List</h2>
+<div class="displays allResults new_data" id="revenue_report" style="width:80%!important; margin:0 20px!important;">
+    <h2>Debtors List (Unpaid Invoices)</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchDebtors" placeholder="Enter keyword" onkeyup="searchData(this.value)">

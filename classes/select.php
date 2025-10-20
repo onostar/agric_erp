@@ -1966,7 +1966,7 @@
         }
         //fetch payables
         public function fetch_payables(){
-            $get_user = $this->connectdb()->prepare("SELECT SUM(credit - debit) AS total_due, account FROM transactions WHERE class = 7 GROUP BY account HAVING SUM(credit) - SUM(debit) > 0");
+            $get_user = $this->connectdb()->prepare("SELECT COALESCE(SUM(debit), 0) - COALESCE(SUM(credit), 0) AS total_due account FROM transactions WHERE class = 7 GROUP BY account HAVING total_due > 0");
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 $rows = $get_user->fetchAll();
@@ -1976,9 +1976,22 @@
                 return $rows;
             }
         }
-        //fetch account balance
+        //fetch receivables
+        public function fetch_receivables($store){
+            $get_user = $this->connectdb()->prepare("SELECT COALESCE(SUM(debit), 0) - COALESCE(SUM(credit), 0) AS total_due FROM transactions WHERE class = '4' AND store = :store");
+            $get_user->bindValue("store", $store);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        //fetch negative account balance
         public function fetch_account_balance($account){
-            $get_user = $this->connectdb()->prepare("SELECT SUM(debit - credit) AS balance, account FROM transactions WHERE account = :account");
+            $get_user = $this->connectdb()->prepare("SELECT COALESCE(SUM(debit), 0) - COALESCE(SUM(credit), 0) AS balance, account FROM transactions WHERE account = :account");
             $get_user->bindValue('account', $account);
             $get_user->execute();
             if($get_user->rowCount() > 0){
@@ -1989,6 +2002,19 @@
                 return $rows;
             }
         }
+       /*  //fetch positive account balance
+        public function fetch_positive_balance($account){
+            $get_user = $this->connectdb()->prepare("SELECT SUM(credit - debit) AS balance, account FROM transactions WHERE account = :account");
+            $get_user->bindValue('account', $account);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        } */
         // fetch daily credit sales
         public function fetch_daily_credit($store){
             $get_daily = $this->connectdb()->prepare("SELECT COUNT(distinct invoice) AS customers, SUM(amount_paid) AS revenue, post_date FROM payments WHERE store = :store GROUP BY date(post_date) ORDER BY date(post_date) DESC");

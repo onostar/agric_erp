@@ -6,10 +6,8 @@
 
 
 ?>
-<div id="pay_debt" class="displays management">
-    
-<div class="displays allResults new_data" id="revenue_report" style="width:80%!important; margin:0 20px!important;">
-    <h2>Debtors List</h2>
+<div id="pay_debt" class="displays allResults new_data" id="revenue_report" style="width:80%!important; margin:0 50px!important;">
+    <h2>Unpaid Invoices</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchDebtors" placeholder="Enter keyword" onkeyup="searchData(this.value)">

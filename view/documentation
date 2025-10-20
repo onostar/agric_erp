@@ -5,3 +5,4 @@ When purchase is saved with payment type = Deposit: Debit Inventory with the tot
 for tasks, onfield agents/staffs will be the one inputing data for tasks done, like the time and date it started, end date and other paramters, taskt will only be entered after it has been completed.
 during production, the inventory ledger and production inputS ledger are affected.
 PRODUCTION labour ledger is an admin and general expense, while production input are other expenses which affects cost of goods later
+fetch_account_balance method fetches customers debt balance while fetch_positive_balance method fetches positive balance

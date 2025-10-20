@@ -36,8 +36,17 @@ date_default_timezone_set("Africa/Lagos");
         $add_data->create_data();
         if($add_data){
             //insert into customer trails
-            $insert_trail = new customer_trail($customer, $store, $detail, $amount, $posted_by);
-            $insert_trail->add_trail();
+            $cus_data = array(
+                'customer' => $customer,
+                'store' => $store,
+                'description' => $detail,
+                'invoice' => $invoice,
+                'amount' => $amount,
+                // 'trx_number' => $trx_num,
+                'posted_by' => $posted_by,
+                'post_date' => $date
+            );
+            $insert_credit = new add_data('customer_trail', $cus_data);
             //update debtor
             $update_debt = new Update_table();
             $update_debt->update('debtors', 'debt_status', 'invoice', 1, $invoice);
@@ -47,7 +56,7 @@ date_default_timezone_set("Africa/Lagos");
                 $update_wallet = new Update_table();
                 $update_wallet->update('customers', 'wallet_balance', 'customer_id', $new_balance, $customer); */
 
-                echo "<div class='success'><p>Debt has been cleared successfully! <i class='fas fa-thumbs-up'></i></p></div>";
+                echo "<div class='success'><p>Debt has been cleared successfully for invoice => $invoice! <i class='fas fa-thumbs-up'></i></p></div>";
             }
             
         }

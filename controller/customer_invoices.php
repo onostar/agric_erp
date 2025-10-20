@@ -87,7 +87,7 @@
                         if(gettype($status) == 'string'){
                             $debt = 1;
                         }
-                        if($debt = 1){
+                        if($debt == 1){
                             echo "<p style='text-align:center!important; width:auto; color:#fff; padding:10px; background:var(--tertiaryColor);font-size:1rem;'>PAID</p>";
                         }else{
                             echo "<p style='text-align:center!important; width:auto; color:#fff; padding:10px; font-size:1rem;background:red'>UNPAID</p>";

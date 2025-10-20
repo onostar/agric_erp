@@ -905,6 +905,9 @@ function viewCustomerInvoice(invoice_id){
           $.ajax({
                type : "GET",
                url : "../controller/customer_invoices.php?invoice="+invoice,
+                beforeSend : function(){
+                    $("#customer_invoices").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success : function(response){
                     $("#customer_invoices").html(response);
                     // window.scrollTo(0, 0);
@@ -3828,13 +3831,16 @@ function updateCustomer(){
                $.ajax({
                     type : "GET",
                     url : "../controller/pay_debt.php?receipt="+invoice+"&customer="+customer+"&amount_owed="+amount_owed,
+                    beforeSend :function(){
+                          $("#pay_debts").html("<div class='processing'><div class='loader'></div</div>");
+                    },
                     success : function(response){
                          $("#pay_debts").html(response);
                     }
                })
                setTimeout(() => {
                     $("#pay_debts").load("debt_payment.php?customer="+customer + "#pay_debts");
-               }, 1500);
+               }, 2000);
                return false;
           }else{
                return;

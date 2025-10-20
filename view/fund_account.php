@@ -37,12 +37,18 @@
                 $balance = $bal->balance;
             }
         }
+        
 
 ?>
 <div class="back_invoice">
     <button class="page_navs" id="back" onclick="showPage('fund_wallet.php')"><i class="fas fa-angle-double-left"></i> Back</button>
-
-    <a href="javascript:void(0)" onclick="showPage('debt_payment.php?customer=<?php echo $customer_id?>') "title="view customer invoices" style="background:green; color:#fff; padding:10px; border-radius:10px; box-shadow:1px 1px 1px #222">View Invoices <i class="fas fa-receipt"></i></a>
+    <?php
+        //check if customer is in debtors
+        /* $debts = $get_balance->fetch_count_2cond('debtors', 'customer', $customer, 'debt_status', 0);
+        if($debts < 0){ */
+    ?>
+    <a href="javascript:void(0)" onclick="showPage('debt_payment.php?customer=<?php echo $customer_id?>') "title="view customer invoices" style="background:green; color:#fff; padding:10px; border-radius:10px; box-shadow:1px 1px 1px #222">View Unpaid Invoices <i class="fas fa-receipt"></i></a>
+    <?php /* } */?>
 </div>
 <div id="deposit" class="displays">
     <div class="info" style="width:70%; margin:5px 0;"></div>

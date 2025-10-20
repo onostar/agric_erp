@@ -23,16 +23,14 @@
     <div class="top_view">
         <button class="page_navs" id="back" onclick="showPage('pay_debt.php')"><i class="fas fa-angle-double-left"></i> Back</button>
         <!-- <button class="page_navs" id="back" onclick="showPage('fund_account.php?customer=<?php echo $customer?>')"><i class="fas fa-angle-double-left"></i> Back</button> -->
-        <button class="page_navs" id="back" style="background:green"onclick="showPage('fund_account.php?customer=<?php echo $customer?>')"><i class="fas fa-piggy-bank"></i> Fund Account</button>
         <?php
             $get_wallet = new selects();
             $bals = $get_wallet->fetch_account_balance($acn);
-            if(gettype($bals) == 'array'){
+            if(is_array($bals)){
                 foreach($bals as $bal){
                     $balance = $bal->balance;
                 }
-            }
-            if(gettype($bals) == 'string'){
+            }else{
                 $balance = 0;
             }
             if($balance > 0){
@@ -41,9 +39,11 @@
                 $wallet = 0;
             }
             //wallet balance
-            // echo "<p style='color:#fff;background:#000; padding:8px; border-radius:15px; box-shadow:1px 1px 1px #222; border:1px solid #fff;font-size:.9rem;'>Account Balance: ₦".number_format($balance, 2)."</p>";
+            // echo "<p style='color:#fff;background:#000; padding:8px; border-radius:15px; box-shadow:1px 1px 1px #222; border:1px solid #fff;font-size:.9rem;'>Account Balance: -₦".number_format($balance, 2)."</p>";
             
         ?>
+        <button class="page_navs" id="back" style="background:green"onclick="showPage('fund_account.php?customer=<?php echo $customer?>')"><i class="fas fa-piggy-bank"></i> Fund Account</button>
+
     </div>
 
     <div id="debt_payment" class="all_details">
@@ -51,7 +51,7 @@
             <div class="displays allResults" id="payment_det">
             
                 <div class="payment_details">
-                    <h3 style="width:100%; background:var(--otherColor); color:#fff;padding:5px;font-size:1rem">Showing all  invoices for <?php echo $client?></h3>
+                    <h3 style="width:100%; background:var(--otherColor); color:#fff;padding:5px;font-size:1rem">Showing all  unpaid invoices for <?php echo $client?></h3>
                     <table id="data_table" class="searchTable">
                     <thead>
                     <tr style="background:var(--primaryColor)">
@@ -95,7 +95,7 @@
                             </td>
                             <td style="color:var(--moreColor)"><?php echo date("d-m-Y", strtotime($detail->post_date));?></td>
                             <td>
-                                <a style="color:#fff;background:var(--primaryColor); padding:5px; border-radius:5px" href="javascript:void(0)" title="View invoice details" onclick="payDebt('<?php echo $detail->invoice?>', '<?php echo $customer?>', '<?php echo $wallet?>', '<?php echo $invoice_total?>')">Pay <i class="fas fa-hand-holding-usd"></i></a>
+                                <a style="color:#fff;background:var(--primaryColor); padding:5px; border-radius:5px" href="javascript:void(0)" title="Clear invoice debt" onclick="payDebt('<?php echo $detail->invoice?>', '<?php echo $customer?>', '<?php echo $wallet?>', '<?php echo $invoice_total?>')">Pay <i class="fas fa-hand-holding-usd"></i></a>
                                 
                             </td>
                         </tr>

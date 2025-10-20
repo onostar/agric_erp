@@ -15,12 +15,12 @@
 ?>
 
 <button class="page_navs" id="back" onclick="showPage('debtors_list.php')"><i class="fas fa-angle-double-left"></i> Back</button>
-<div class="displays all_details" style="width:60%!important;margin:0 20px!important">
+<div class="displays all_details" style="width:70%!important;margin:0 20px!important">
     <!-- <div class="info"></div> -->
         <div class="displays allResults" id="payment_det">
         
             <div class="payment_details">
-                <h3 style="width:100%; background:var(--otherColor); color:#fff;padding:5px;font-size:1rem">Showing all <?php echo $client?> invoices </h3>
+                <h3 style="width:100%; background:var(--otherColor); color:#fff;padding:5px;font-size:1rem">Showing all unpaid invoices for <?php echo $client?></h3>
                 <table id="data_table" class="searchTable">
                 <thead>
                 <tr style="background:var(--primaryColor)">
@@ -28,7 +28,8 @@
                         <td>Invoice</td>
                         <td>Items</td>
                         <td>Invoice Amount</td>
-                        <td>AMount Due</td>
+                        <td>Amount Paid</td>
+                        <td>Amount Owed</td>
                         <td>Date</td>
                     </tr>
                 </thead>
@@ -55,17 +56,28 @@
                         </td>   
                         <td>
                             <?php 
-                                //get sum of invoice
+                                //get sum of invoice due
                                 $get_sum = new selects();
-                                $sums = $get_sum->fetch_sum_con('sales', 'quantity', 'price', 'invoice', $detail->invoice);
-                                foreach($sums as $sum){
-                                    $invoice_total = $sum->total;
+                                $tots = $get_sum->fetch_sum_single('sales', 'total_amount', 'invoice', $detail->invoice);
+                                foreach($tots as $tot){
+                                    $invoice_sum = $tot->total;
                                 }
-                                   
-                                echo "₦".number_format($invoice_total, 2);
+                                echo "₦".number_format($invoice_sum, 2);
                             ?>
                         </td>
-                        <td style="color:red"><?php echo "₦".number_format($detail->amount, 2);?></td>
+                        <td style="color:green">
+                            <?php
+                                //ttotal paid
+                                echo "₦".number_format($invoice_sum - $detail->amount, 2);
+                            ?>
+                        </td>
+                        <td style="color:red">
+                            <?php 
+                                
+                            echo "₦".number_format($detail->amount, 2);
+                            ?>
+                        </td>
+                        
                         <td style="color:var(--moreColor)"><?php echo date("d-m-Y", strtotime($detail->post_date));?></td>
                         
                     </tr>
@@ -77,13 +89,8 @@
                     echo "<p class='no_result'>'$details'</p>";
                 }
                 // get sum
-                /* $get_total = new selects();
-                $amounts = $get_total->fetch_sum_single('customers', 'wallet_balance', 'customer_id', $customer);
-                foreach($amounts as $amount){
-                    echo "<p class='total_amount' style='color:red; font-size:1rem;'>Total Due: ₦".number_format($amount->total * -1, 2)."</p>";
-                } */
                 $get_total = new selects();
-                $amounts = $get_total->fetch_sum_double('debtors', 'amount','customer', $customer, 'debt_status', 0);
+                $amounts = $get_total->fetch_sum_double('debtors', 'amount', 'customer', $customer, 'debt_status', 0);
                 foreach($amounts as $amount){
                     echo "<p class='total_amount' style='color:red; font-size:1rem;'>Total Due: ₦".number_format($amount->total, 2)."</p>";
                 }

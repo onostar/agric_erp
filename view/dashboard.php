@@ -111,7 +111,7 @@
                     <p>
                     <?php
                         //get total sales
-                        $get_sales = new selects();
+                        /* $get_sales = new selects();
                         $rows = $get_sales->fetch_sum_singleless('customers', 'wallet_balance', 'wallet_balance', 0);
                         if(gettype($rows) == "array"){
                             foreach($rows as $row){
@@ -122,7 +122,7 @@
                             $debt = 0;
                         }
                         
-                        echo "₦".number_format($debt * -1, 2);
+                        echo "₦".number_format($debt * -1, 2); */
                        /*  //get total sales
                         $get_sales = new selects();
                         $rows = $get_sales->fetch_sum_curdateCon('payments', 'amount_due', 'post_date', 'store', $store_id);
@@ -148,16 +148,19 @@
                     </p>
                 </div>
             </a> -->
-            <a href="javascript:void(0)" class="page_navs" onclick="showPage('pay_debt.php')">
+            <a href="javascript:void(0)" class="page_navs">
                 <div class="infos">
                     <p><i class="fas fa-calendar"></i> Receivables</p>
                     <p>
                     <?php
                         $receivables = new selects();
-                        $dues = $receivables->fetch_sum_double('debtors', 'amount', 'debt_status', 0, 'store', $store_id);
+                        /* $dues = $receivables->fetch_sum_double('debtors', 'amount', 'debt_status', 0, 'store', $store_id); */
+                        $dues = $receivables->fetch_receivables($store_id);
                         foreach($dues as $due){
-                            echo "₦".number_format($due->total, 2);
+                            $total_due = $due->total_due;
                         }
+                        echo "₦".number_format($total_due, 2);
+                        
                     ?>
                     </p>
                 </div>
