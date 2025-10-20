@@ -159,7 +159,12 @@
                         foreach($dues as $due){
                             $total_due = $due->total_due;
                         }
-                        echo "₦".number_format($total_due, 2);
+                        if($total_due < 0){
+                            echo "₦0.00";
+                        }else{
+                            echo "₦".number_format($total_due, 2);
+                        }
+                        
                         
                     ?>
                     </p>

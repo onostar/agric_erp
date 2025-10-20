@@ -96,10 +96,10 @@ include "../classes/select.php";
         // get sum
          //balances
         //  echo "<p class='total_amount' style='color:green'>Account balance: ₦".number_format($wallet, 2)."</p>";
-        if($balance > 0){
-            echo "<p class='total_amount' style='color:green'>Account balance: -₦".number_format($balance, 2)."</p>";
-        }else{
+        if($balance >= 0){
             echo "<p class='total_amount' style='color:green'>Account balance: ₦".number_format($balance, 2)."</p>";
+        }else{
+            echo "<p class='total_amount' style='color:green'>Account balance: ₦".number_format(-$balance, 2)."</p>";
         }
         /*  //balances
          echo "<p class='total_amount' style='color:green'>Account balance: ₦".number_format($wallet, 2)."</p>"; */

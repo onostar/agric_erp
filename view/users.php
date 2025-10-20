@@ -226,52 +226,69 @@ date_default_timezone_set("Africa/Lagos");
     <script src="../script.js?v=<?php echo APP_VERSION?>"></script>
     <script>
         
-            setTimeout(function(){
+           setTimeout(function(){
                 $(".success").hide();
             }, 4000);
             setTimeout(function(){
                 $(".error").hide();
             }, 4000);
 
-            /* let today = new Date();
-            alert(today.toLocaleDateString()); */
-            //toggle mobile menu
-
-            //search item with select drop down
-            /* $("#customer").select2( {
-                placeholder: "Select customer",
-                allowClear: true
-            } ); */
             var ctx = document.getElementById("chartjs_bar2").getContext('2d');
-                var myChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels:<?php echo json_encode($month); ?>,
-                        datasets: [{
-                            backgroundColor: [
-                               "#0f8ca1",
-                               "rgb(3, 69, 75)",
-                               "#ffffff",
-                               "red",
-                            ],
-                            data:<?php echo json_encode($revenue); ?>,
-                        }]
-                    },
-                    options: {
-                           legend: {
-                        display: true,
-                        position: 'bottom',
- 
-                        labels: {
-                            fontColor: 'white',
-                            fontFamily: 'Circular Std Book',
-                            fontSize: 14,
+            // Function to generate random colors
+            function generateColors(numColors) {
+                var colors = [];
+                for (var i = 0; i < numColors; i++) {
+                    // Generate a random color in RGB format
+                    var randomColor = 'rgb(' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ',' + Math.floor(Math.random() * 256) + ')';
+                    colors.push(randomColor);
+                }
+                return colors;
+            }
+
+            // Get the number of months (or data points)
+            var numMonths = <?php echo count($month); ?>; // Assuming $month is an array of months
+
+            // Generate an array of colors based on the number of months
+            var backgroundColors = generateColors(numMonths);
+
+            var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: <?php echo json_encode($month); ?>,
+                    datasets: [{
+                        label: 'Revenue',
+                        backgroundColor: backgroundColors, // Use the dynamic color array
+                        data: <?php echo json_encode($revenue); ?>,
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                            labels: {
+                                color: 'white', // Font color
+                                font: {
+                                    family: 'Circular Std Book',
+                                    size: 14,
+                                }
+                            }
                         }
                     },
- 
- 
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: 'white' // X-axis label color
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: 'white' // Y-axis label color
+                            }
+                        }
+                    }
                 }
-            });
+            }); 
     </script>
 </body>
 </html>
