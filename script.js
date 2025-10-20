@@ -7584,3 +7584,39 @@ function resignStaff(staff_id){
           return false;
      }
 }
+
+// create a leave type
+function addLeave(){
+     let title = document.getElementById("title").value;
+     let max_days = document.getElementById("max_days").value;
+     let description = document.getElementById("description").value;
+     if(title.length == 0 || title.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input leave title!");
+          $("#title").focus();
+          return;
+     }else if(max_days.length == 0 || max_days.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input leave maximum days!");
+          $("#max_days").focus();
+          return;
+     }else if(description.length == 0 || description.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter description of leave");
+          $("#description").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/add_leave_type.php",
+               data : {title:title, max_days:max_days, description:description},
+               beforeSend: function(){
+                    $("#crop_cycle").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+               $("#crop_cycle").html(response);
+               }
+          })
+          setTimeout(function(){
+               $("#crop_cycle").load("add_leave_type.php #crop_cycle");
+          }, 2000)
+          return false;    
+     }
+}

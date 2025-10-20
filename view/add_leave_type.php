@@ -24,7 +24,7 @@
                 </div>
                 <div class="data" style="width:100%;">
                    <label for="description">Description</label>
-                   <input type="text" name="description" id="description"  placeholder="Enter Leave description">
+                   <textarea type="text" rows="5" name="description" id="description" placeholder="Enter Leave description"></textarea>
                 </div>
                 <div class="data">
                     <button type="button" id="add_item" name="add_item" onclick="addLeave()">Save record <i class="fas fa-save"></i></button>

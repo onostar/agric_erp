@@ -39,9 +39,9 @@
                         echo $detail->leave_title;
                     ?>
                 </td>
-                <td>
+                <td style="text-align:center; color: green">
                     <?php 
-                        $detail->max_days
+                        echo $detail->max_days
                     ?>
                 </td>
                 <td><?php echo $detail->description?></td>
