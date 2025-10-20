@@ -12,6 +12,7 @@
     // $store = htmlspecialchars(stripslashes(($_POST['customer_store'])));
     $dob = htmlspecialchars(stripslashes($_POST['dob']));
     $staff_id = htmlspecialchars(stripslashes(($_POST['staff_id'])));
+    $staff_num = htmlspecialchars(stripslashes(($_POST['staff_num'])));
     $title = htmlspecialchars(stripslashes($_POST['title']));
     $gender = htmlspecialchars(stripslashes($_POST['gender']));
     $marital_status = htmlspecialchars(stripslashes($_POST['marital_status']));
@@ -31,11 +32,11 @@
     $employed = htmlspecialchars(stripslashes($_POST['employed']));
     $date = date("Y-m-d H:i:s");
     $todays_date = date("dmyh");
-    /* if($service != ""){
-        $service = $service;
-    }else{
-        $service = "Registration";
-    } */
+    
+    // instantiate class
+    include "../classes/dbh.php";
+    include "../classes/update.php";
+
     $data = array(
         'last_name' => $last_name,
         'other_names' => $other_names,
@@ -45,7 +46,7 @@
         'gender' => $gender,
         'dob' => $dob,
         'employed' => $employed,
-        'staff_number' => $staff_id,
+        'staff_number' => $staff_num,
         'title' => $title,
         'discipline' => $discipline,
         'religion' => $religion,
@@ -61,33 +62,16 @@
         'account_num' => $account,
         'pension_num' => $pension_num,
         'pension' => $pension,
-        'photo' => 'user.png',
-        'reg_date' => $date,
-        'posted_by' => $user
     );
-    // instantiate class
-    include "../classes/dbh.php";
-    include "../classes/select.php";
-    include "../classes/inserts.php";
-    include "../classes/update.php";
-
-   //check if staff exists
-   $check = new selects();
-   $results = $check->fetch_count_2cond('staffs', 'last_name', $last_name, 'other_names', $other_names);
-   $results2 = $check->fetch_count_cond('staffs', 'staff_number',  $staff_id);
-
-   if($results > 0 || $results2 > 0){
-       echo "<p class='exist' style='background:red;color#fff;'><span>$last_name $other_names</span> already exists!</p>";
-   }else{
-       //create patient
-       $add_data = new add_data('staffs', $data);
-       $add_data->create_data();
-       if($add_data){
-        echo "<div class='success'><p><span>$last_name $other_names</span> added successfully!</p></div>";
-                
-
+    // $where = "staff_id = $staff_id";
+       $update = new Update_table();
+       $update->updateAny('staffs', $data, 'staff_id', $staff_id);
+       if($update){
+        echo "<div class='success'><p><span>$last_name $other_names</span> updated successfully!</p></div>";
+       }else{
+        echo "<div class='error'><p>Update Failed!</p></div>";
        }
        
-   }
+   
 
    ?>

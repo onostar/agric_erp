@@ -633,6 +633,10 @@ main hr{
         left:-200%;
     }
 }
+.important{
+    color:red!important;
+    
+}
 .banners .slide .images{
     float:left;
     position:relative;

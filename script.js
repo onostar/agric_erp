@@ -7154,3 +7154,413 @@ function viewDelivery(id){
      // }
      
  }
+ //add staff designation
+function addDesignation(){
+     let designation = document.getElementById("designation").value;
+     if(designation.length == 0 || designation.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input designation!");
+          $("#designation").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/add_designation.php",
+               data : {designation:designation},
+               beforeSend : function(){
+                    $(".info").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $(".info").html(response);
+               }
+          })
+     }
+     $("#designation").val('');
+     $("#designation").focus();
+     return false;
+}
+//add staff discipline
+function addDiscipline(){
+     let discipline = document.getElementById("discipline").value;
+     if(discipline.length == 0 || discipline.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input discipline!");
+          $("#discipline").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/add_discipline.php",
+               data : {discipline:discipline},
+               beforeSend : function(){
+                    $(".info").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+               $(".info").html(response);
+               }
+          })
+     }
+     $("#discipline").val('');
+     $("#discipline").focus();
+     return false;
+}
+//add staff departments
+function addStaffDepartment(){
+     let department = document.getElementById("department").value;
+     if(department.length == 0 || department.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input department!");
+          $("#department").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/add_staff_department.php",
+               data : {department:department},
+               beforeSend : function(){
+                    $(".info").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+               $(".info").html(response);
+               }
+          })
+     }
+     $("#department").val('');
+     $("#department").focus();
+     return false;
+}
+
+// Add new staff
+function addStaff(){
+     let last_name = document.getElementById("last_name").value;
+     let other_names = document.getElementById("other_names").value;
+     let phone_number = document.getElementById("phone_number").value;
+     let dob = document.getElementById("dob").value;
+     let staff_id = document.getElementById("staff_id").value;
+     let title = document.getElementById("title").value;
+     let gender = document.getElementById("gender").value;
+     let marital_status = document.getElementById("marital_status").value;
+     let religion = document.getElementById("religion").value;
+     let employed = document.getElementById("employed").value;
+     let address = document.getElementById("address").value;
+     let email = document.getElementById("email").value;
+     let nok = document.getElementById("nok").value;
+     let nok_relation = document.getElementById("nok_relation").value;
+     let nok_phone = document.getElementById("nok_phone").value;
+     let staff_category = document.getElementById("staff_category").value;
+     let staff_group = document.getElementById("staff_group").value;
+     let department = document.getElementById("department").value;
+     let designation = document.getElementById("designation").value;
+     let discipline = document.getElementById("discipline").value;
+     let bank = document.getElementById("bank").value;
+     let account_num = document.getElementById("account_num").value;
+     let pension = document.getElementById("pension").value;
+     let pension_num = document.getElementById("pension_num").value;
+     let todayDate = new Date();
+     if(last_name.length == 0 || last_name.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter last name!");
+          $("#last_name").focus();
+          return;
+     }else if(other_names.length == 0 || other_names.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter other names!");
+          $("#other_names").focus();
+          return;
+     }else if(department.length == 0 || department.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select department!");
+          $("#department").focus();
+          return;
+     }else if(gender.length == 0 || gender.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select Gender!");
+          $("#gender").focus();
+          return;
+     }else if(title.length == 0 || title.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select title!");
+          $("#title").focus();
+          return;
+     }else if(email.length == 0 || email.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input staff's email address");
+          $("#email").focus();
+          return;
+     }else if(phone_number.length == 0 || phone_number.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter staff's phone number");
+          $("#phone_number").focus();
+          return;
+     }else if(phone_number.length != 11){
+          alert("Phone number is not correct");
+          $("#phone_number").focus();
+          return;
+    
+     }else if(dob.length == 0 || dob.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter date of birth");
+          $("#dob").focus();
+          return;
+     }else if(address.length == 0 || address.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input staff's residential address");
+          $("#address").focus();
+          return;
+     }else if(employed.length == 0 || employed.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input employment date");
+          $("#employed").focus();
+          return;
+     }else if(marital_status.length == 0 || marital_status.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input staff's marital status");
+          $("#marital_status").focus();
+          return;
+     }else if(religion.length == 0 || religion.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select staff's Religion");
+          $("#religion").focus();
+          return;
+     }else if(discipline.length == 0 || discipline.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please seelct staff's discipline");
+          $("#discipline").focus();
+          return;
+     }else if(staff_category.length == 0 || staff_category.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please seelct staff's category");
+          $("#staff_category").focus();
+          return;
+     }else if(staff_group.length == 0 || staff_group.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please seelct staff group");
+          $("#staff_group").focus();
+          return;
+     }else if(nok.length == 0 || nok.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input staff's Next of Kin");
+          $("#nok").focus();
+          return;
+     }else if(nok_phone.length == 0 || nok_phone.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input staff's Next of Kin phone number");
+          $("#nok_phone").focus();
+          return;
+     }else if(nok_phone.length != 11){
+          alert("Phone number is not correct");
+          $("#nok_phone").focus();
+          return;
+     }else if(nok_relation.length == 0 || nok_relation.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input Next of Kin relationship");
+          $("#nok_relation").focus();
+          return;
+     }else if(designation.length == 0 || designation.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select staff designation");
+          $("#designtation").focus();
+          return;
+     }else if(todayDate <= new Date(dob)){
+          alert("You can not enter a futuristic date !");
+          $("#dob").focus();
+          return;
+     }else if(todayDate < new Date(employed)){
+          alert("You can not enter a futuristic date !");
+          $("#employed").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/add_staff.php",
+               data : {other_names:other_names, last_name:last_name, phone_number:phone_number, email:email, address:address, dob:dob, staff_id:staff_id, title:title, gender:gender, marital_status:marital_status, religion:religion, nok:nok, staff_group:staff_group,nok_phone:nok_phone, nok_relation:nok_relation, staff_category:staff_category, discipline:discipline, designation:designation, bank:bank, account_num:account_num, pension:pension, pension_num:pension_num, employed:employed, department:department},
+               beforeSend : function(){
+                    $("#add_staff").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#add_staff").html(response);
+               }
+          })
+          /* $("#last_name").val('');
+          $("#other_names").val('');
+          $("#email").val('');
+          $("#address").val('');
+          $("#dob").val('');
+          $("#phone_number").val('');
+          $("#last_name").focus(); */
+          setTimeout(function(){
+               $("#add_staff").load("add_staff.php");
+          }, 1500);
+          return false;   
+     }
+      
+}
+
+//update staff details
+function updateStaff(){
+     let last_name = document.getElementById("last_name").value;
+     let other_names = document.getElementById("other_names").value;
+     let phone_number = document.getElementById("phone_number").value;
+     let dob = document.getElementById("dob").value;
+     let staff_id = document.getElementById("staff_id").value;
+     let staff_num = document.getElementById("staff_num").value;
+     let title = document.getElementById("title").value;
+     let gender = document.getElementById("gender").value;
+     let marital_status = document.getElementById("marital_status").value;
+     let religion = document.getElementById("religion").value;
+     let employed = document.getElementById("employed").value;
+     let address = document.getElementById("address").value;
+     let email = document.getElementById("email").value;
+     let nok = document.getElementById("nok").value;
+     let nok_relation = document.getElementById("nok_relation").value;
+     let nok_phone = document.getElementById("nok_phone").value;
+     let staff_category = document.getElementById("staff_category").value;
+     let staff_group = document.getElementById("staff_group").value;
+     let department = document.getElementById("department").value;
+     let designation = document.getElementById("designation").value;
+     let discipline = document.getElementById("discipline").value;
+     let bank = document.getElementById("bank").value;
+     let account_num = document.getElementById("account_num").value;
+     let pension = document.getElementById("pension").value;
+     let pension_num = document.getElementById("pension_num").value;
+     let todayDate = new Date();
+     if(last_name.length == 0 || last_name.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter last name!");
+          $("#last_name").focus();
+          return;
+     }else if(other_names.length == 0 || other_names.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter other names!");
+          $("#other_names").focus();
+          return;
+     }else if(department.length == 0 || department.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select department!");
+          $("#department").focus();
+          return;
+     }else if(gender.length == 0 || gender.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select Gender!");
+          $("#gender").focus();
+          return;
+     }else if(title.length == 0 || title.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select title!");
+          $("#title").focus();
+          return;
+     }else if(email.length == 0 || email.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input staff's email address");
+          $("#email").focus();
+          return;
+     }else if(phone_number.length == 0 || phone_number.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter staff's phone number");
+          $("#phone_number").focus();
+          return;
+     }else if(phone_number.length != 11){
+          alert("Phone number is not correct");
+          $("#phone_number").focus();
+          return;
+    
+     }else if(dob.length == 0 || dob.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter date of birth");
+          $("#dob").focus();
+          return;
+     }else if(address.length == 0 || address.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input staff's residential address");
+          $("#address").focus();
+          return;
+     }else if(employed.length == 0 || employed.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input employment date");
+          $("#employed").focus();
+          return;
+     }else if(marital_status.length == 0 || marital_status.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input staff's marital status");
+          $("#marital_status").focus();
+          return;
+     }else if(religion.length == 0 || religion.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select staff's Religion");
+          $("#religion").focus();
+          return;
+     }else if(discipline.length == 0 || discipline.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please seelct staff's discipline");
+          $("#discipline").focus();
+          return;
+     }else if(staff_category.length == 0 || staff_category.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please seelct staff's category");
+          $("#staff_category").focus();
+          return;
+     }else if(staff_group.length == 0 || staff_group.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please seelct staff group");
+          $("#staff_group").focus();
+          return;
+     }else if(nok.length == 0 || nok.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input staff's Next of Kin");
+          $("#nok").focus();
+          return;
+     }else if(nok_phone.length == 0 || nok_phone.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input staff's Next of Kin phone number");
+          $("#nok_phone").focus();
+          return;
+     }else if(nok_phone.length != 11){
+          alert("Phone number is not correct");
+          $("#nok_phone").focus();
+          return;
+     }else if(nok_relation.length == 0 || nok_relation.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input Next of Kin relationship");
+          $("#nok_relation").focus();
+          return;
+     }else if(designation.length == 0 || designation.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select staff designation");
+          $("#designtation").focus();
+          return;
+     }else if(todayDate <= new Date(dob)){
+          alert("You can not enter a futuristic date !");
+          $("#dob").focus();
+          return;
+     }else if(todayDate < new Date(employed)){
+          alert("You can not enter a futuristic date !");
+          $("#employed").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/update_staff.php",
+               data : {other_names:other_names, last_name:last_name, phone_number:phone_number, email:email, address:address, dob:dob, staff_id:staff_id, staff_num:staff_num, title:title, gender:gender, marital_status:marital_status, religion:religion, nok:nok, staff_group:staff_group,nok_phone:nok_phone, nok_relation:nok_relation, staff_category:staff_category, discipline:discipline, designation:designation, bank:bank, account_num:account_num, pension:pension, pension_num:pension_num, employed:employed, department:department},
+               beforeSend : function(){
+                    $("#edit_customer").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#edit_customer").html(response);
+               }
+          })
+          /* $("#last_name").val('');
+          $("#other_names").val('');
+          $("#email").val('');
+          $("#address").val('');
+          $("#dob").val('');
+          $("#phone_number").val('');
+          $("#last_name").focus(); */
+          setTimeout(function(){
+               $("#edit_customer").load("edit_staff_details.php?customer="+staff_id);
+          }, 1500);
+          return false;   
+     }
+      
+}
+
+// suspend active staff
+function suspendStaff(staff_id){
+     let disable = confirm("Are you sure you want to suspend this staff?", "");
+     if(disable){
+          // alert(user_id);
+          $.ajax({
+               type: "GET",
+               url : "../controller/suspend_staff.php?id="+staff_id,
+               beforeSend : function(){
+                    $("#disable_user").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#disable_user").html(response);
+               }
+          })
+          setTimeout(function(){
+               $('#disable_user').load("suspend_staff.php #disable_user");
+          }, 3000);
+          return false;
+     }
+}
+
+// recall staff
+function recallStaff(staff_id){
+     let activate = confirm("Are you sure you want to recall/reactivate this staff?", "");
+     if(activate){
+          $.ajax({
+               type : "GET",
+               url : "../controller/recall_staff.php?id="+staff_id,
+               beforeSend : function(){
+                    $("#activate_user").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#activate_user").html(response);
+               }
+          })
+          setTimeout(function(){
+               $("#activate_user").load("recall_staff.php #activate_user");
+          }, 3000);
+          return false;
+     }
+}
