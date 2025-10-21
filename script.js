@@ -7740,45 +7740,153 @@ function selectEmployee(id, staff_name){
 //get leave details
 function getLeave(item_name){
      let leave_name = item_name;
-     if(leave_name.length >= 3){
-          if(leave_name){
-               $.ajax({
-                    type : "POST",
-                    url :"../controller/get_leave_type.php",
-                    data : {leave_name:leave_name},
-                    beforeSend : function(){
-                         $("#transfer_item").html("<p>Searching...</p>");
-                    },
-                    success : function(response){
-                         $("#transfer_item").html(response);
-                    }
-               })
-               return false;
-          }else{
-               $("#transfer_item").html("<p>Please enter atleast 3 letters</p>");
+     let staff = document.getElementById("staff").value;
+     if(staff.length == 0 || staff.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select staff!");
+          $("#employee").focus();
+          return;
+     }else{
+          if(leave_name.length >= 3){
+               if(leave_name){
+                    $.ajax({
+                         type : "POST",
+                         url :"../controller/get_leave_type.php",
+                         data : {leave_name:leave_name},
+                         beforeSend : function(){
+                              $("#transfer_item").html("<p>Searching...</p>");
+                         },
+                         success : function(response){
+                              $("#transfer_item").html(response);
+                         }
+                    })
+                    return false;
+               }else{
+                    $("#transfer_item").html("<p>Please enter atleast 3 letters</p>");
+               }
           }
      }
-     
 }
 
 //select leave during leave application
 function selectLeave(id, leave_name){
      let leave_type = document.getElementById("leave_type");
-     let leave = document.getElementById("leave");
+     // let leave = document.getElementById("leave");
      leave_type.value = leave_name;
-     leave.value = id;
+     // leave.value = id;
      // alert(vendor.value)
      /* $("#vendor").attr("readonly", true);
      $("#supplier").attr("readonly", true); */
      $("#transfer_item").html('');
      $.ajax({
           type : "GET",
-          url : "../controller/get_leave_details.php?leave_id="+leave,
+          url : "../controller/get_leave_details.php?leave_id="+id,
           beforeSend : function(){
                $("#leave_details").html("<div class='processing'><div class='loader'></div></div>");
           },
           success : function(response){
                $("#leave_details").html(response);
+               $("#start_date").val("");
+               $("#end_date").val("");
+               $("#total_days").val("");
           }
      })
+}
+
+// Check maximum days while applying for leave
+function checkMaxDays() {
+     let max_days = parseInt(document.getElementById("max_days")?.value || 0);
+     let start_date = document.getElementById("start_date").value;
+     let end_date = document.getElementById("end_date").value;
+
+     // Convert to Date objects
+     let todayDate = new Date();
+     let startDate = new Date(start_date);
+     let endDate = new Date(end_date);
+
+     // Normalize to midnight (avoid timezone/time issues)
+     todayDate.setHours(0, 0, 0, 0);
+     startDate.setHours(0, 0, 0, 0);
+     endDate.setHours(0, 0, 0, 0);
+
+     // Validations
+     if(!max_days){
+          alert("Please select leave type to get maximum days!");
+          $("#end_date").val("");
+          $("#leave_type").focus();
+          return;
+     }else if(!start_date) {
+          alert("Please input leave start date!");
+          $("#end_date").val('');
+          $("#start_date").focus();
+          return;
+     }else if(startDate < todayDate) {
+          alert("Start date cannot be less than current day!");
+          $("#end_date").val("");
+          $("#start_date").focus();
+          return;
+     }else if(!end_date) {
+          alert("Please select leave end date!");
+          return;
+     }
+
+     // Calculate difference (include both start and end dates)
+     const diffTime = endDate - startDate;
+     const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+
+     if(diffDays > max_days) {
+          alert("You are not allowed more than " + max_days + " day(s) for the selected leave type");
+          $("#end_date").val("");
+          $("#end_date").focus();
+     }else if(diffDays < 1) {
+          alert("End date must be greater than or equal to start date!");
+          $("#end_date").val("");
+          $("#end_date").focus();
+     }else{
+          document.getElementById("total_days").value = diffDays;
+     }
+}
+//apply for leave
+function applyLeave(){
+     let staff = document.getElementById("staff").value;
+     let leave = document.getElementById("leave").value;
+     let max_days = document.getElementById("max_days").value;
+     let start_date = document.getElementById("start_date").value;
+     let end_date = document.getElementById("end_date").value;
+     let total_days = document.getElementById("total_days").value;
+     let reason = document.getElementById("reason").value;
+
+     if(!staff){
+          alert("Please select employee");
+          $("#employee").focus();
+          return;
+     }else if(!leave){
+          alert("Please select leave type");
+          $("#leave_type").focus();
+          return;
+     }else if(!start_date){
+          alert("Please select start date");
+          $("#start_date").focus();
+          return;
+     }else if(!end_date){
+          alert("Please select end date");
+          $("#start_date").focus();
+          return;
+     }else if(!reason){
+          alert("Please input reason for leave");
+          $("#reason").focus();
+          return;
+     }else{
+          $.ajax({
+               type: "POST",
+               url : "../controller/apply_for_leave.php",
+               data : {staff:staff, leave:leave, start_date:start_date, end_date:end_date, max_days:max_days, total_days:total_days, reason:reason},
+               beforeSend : function(){
+                    $("#add_staff").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#add_staff").html(response);
+               }
+          })
+          return false;
+     }
 }

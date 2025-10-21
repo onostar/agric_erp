@@ -222,7 +222,7 @@
         }
         // fetch details like 3 column and 1 condition
         public function fetch_details_like3Col1Con($table, $column1, $column2, $column3, $value, $con, $conVal){
-            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column1 LIKE '%$value%' OR $column2 LIKE '%$value%' OR $column3 LIKE '%$value%' AND $con = :$con");
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column1 LIKE '%$value%' OR $column2 LIKE '%$value%' OR $column3 LIKE '%$value%' AND $con = :$con LIMIT 20");
             $get_user->bindValue("$con", "$conVal");
             $get_user->execute();
             if($get_user->rowCount() > 0){

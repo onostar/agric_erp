@@ -7,7 +7,7 @@
     include "../classes/select.php";
 
     $get_employee = new selects();
-    $rows = $get_employee->fetch_details_like1Cond('leave_types', 'leave_id', $leave_name, 'leave_status', 0);
+    $rows = $get_employee->fetch_details_like1Cond('leave_types', 'leave_title', $leave_name, 'leave_status', 0);
     if(gettype($rows) == 'array'){
         foreach ($rows as $row) {
             

@@ -12,17 +12,20 @@
             $description = $row->description;
         }
     ?>
+    <div class="inputs" style="margin:0!important">
+        <input type="hidden" id="leave" name="leave" value="<?php echo $leave?>">
         <div class="data" style="width:27%">
             <label for="title">Leave title</label>
-            <input type="text" value="<?php echo $title?>" readonly style="background:#cdcdcd">
+            <input type="text" value="<?php echo $title?>" readonly style="background:#dadada">
         </div>
         <div class="data" style="width:18%">
-            <label for="max_days">Max Days</label>
-            <input type="number" value="<?php echo $max_days?>" readonly style="background:#cdcdcd">
+            <label for="max_days">Max. Days</label>
+            <input type="number" id="max_days" name="max_days" value="<?php echo $max_days?>" readonly style="background:#dadada; color:red">
         </div>
         <div class="data" style="width:50%">
             <label for="details">Description</label>
-            <input type="text" value="<?php echo $description?>" readonly style="background:#cdcdcd">
+            <input type="text" value="<?php echo $description?>" readonly style="background:#dadada">
         </div>
+    </div>
     <?php
     }
