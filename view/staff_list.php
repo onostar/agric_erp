@@ -3,6 +3,7 @@ session_start();
     include "../classes/dbh.php";
     include "../classes/select.php";
     //pagination
+    $store = $_SESSION['store_id'];
     if(!isset($_GET['page'])){
         $page_number = 1;
     }else{
@@ -35,7 +36,7 @@ session_start();
     
     <div class="info"></div>
 <div class="displays allResults" id="bar_items">
-    
+    <!-- showing staffs that are not resigned in selected store -->
     <h2>List of Staffs</h2>
     <hr>
     <div class="search">
@@ -61,7 +62,7 @@ session_start();
         <?php
                 $n = 1;
                 $get_items = new selects();
-                $details = $get_items->fetch_details_negCond1('staffs', 'last_name', 'Administrator');
+                $details = $get_items->fetch_details_negCond('staffs', 'staff_status', 2,  'store', $store,);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>

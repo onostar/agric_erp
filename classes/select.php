@@ -702,7 +702,7 @@
         }
         //fetch with current date and condition
         public function fetch_details_curdateCon($table, $column, $condition, $value){
-            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $condition =:$condition AND date($column) = CURDATE()");
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $condition =:$condition AND date($column) = CURDATE() ORDER BY $column");
             $get_user->bindValue("$condition", $value);
             $get_user->execute();
             if($get_user->rowCount() > 0){

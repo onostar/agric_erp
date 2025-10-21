@@ -5,6 +5,7 @@
         $staff = $_GET['id'];
         $suspened_by = $_SESSION['user_id'];
         $date = date("Y-m-d H:i:s");
+        $store = $_SESSION['store_id'];
         // instantiate classes
         include "../classes/dbh.php";
         include "../classes/update.php";
@@ -20,7 +21,8 @@
         $data = array(
             'staff' => $staff,
             'suspension_date' => $date,
-            'suspended_by' => $suspened_by
+            'suspended_by' => $suspened_by,
+            'store' => $store
         );
         $suspend = new add_data('suspensions', $data);
         $suspend->create_data();

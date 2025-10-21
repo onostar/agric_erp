@@ -1,7 +1,8 @@
 
 <div class="displays allResults" id="activate_user">
 <?php
-
+    session_start();
+    $store = $_SESSION['store_id'];
     include "../classes/dbh.php";
     include "../classes/select.php";
 
@@ -29,7 +30,7 @@
             <?php
                 $n = 1;
                 $get_users = new selects();
-                $details = $get_users->fetch_details_cond('staffs', 'staff_status', 1);
+                $details = $get_users->fetch_details_2cond('staffs', 'staff_status', 'store', 1, $store);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>

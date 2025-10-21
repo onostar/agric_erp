@@ -5,6 +5,7 @@
         $staff = $_GET['id'];
         $recalled_by = $_SESSION['user_id'];
         $date = date("Y-m-d H:i:s");
+        $store = $_SESSION['store_id'];
         // instantiate classes
         include "../classes/dbh.php";
         include "../classes/update.php";

@@ -33,7 +33,7 @@
             ?>
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
-                <td style="color:var(--primaryColor)">
+                <td>
                     <?php 
                         
                         echo $detail->leave_title;
@@ -55,11 +55,11 @@
                     ?>
                 </td>
                 <td>
-                    <a href="javascript:void(0)" title="edit leave details" style="color:#fff; background:var(--otherColor); padding:5px; font-size:.8rem; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222" onclick="showPage('edit_leave_type.php?cycle=<?php echo $detail->leave_id?>')"><i class="fas fa-edit"></i></a>
+                    <a href="javascript:void(0)" title="edit leave details" style="color:var(--otherColor); padding:4px; font-size:1rem;;margin:0 5px;" onclick="showPage('edit_leave_type.php?leave=<?php echo $detail->leave_id?>')"><i class="fas fa-edit"></i></a>
                     <?php if($detail->leave_status == 0){?>
-                    <a href="javascript:void(0)" title="Disable Leave" style="color:silver; font-size:1rem;" onclick="disableLeave('<?php echo $detail->leave_id?>')"><i class="fas fa-toggle-off"></i></a>
+                    <a href="javascript:void(0)" title="Disable Leave" style="color:green;" onclick="disableLeave('<?php echo $detail->leave_id?>')"><i class="fas fa-toggle-off" style=" font-size:1rem;"></i></a>
                     <?php }else{?>
-                    <a href="javascript:void(0)" title="Activate Leave" style="color:green; font-size:1rem;" onclick="activateLeave('<?php echo $detail->leave_id?>')"><i class="fas fa-toggle-on"></i></a>
+                    <a href="javascript:void(0)" title="Activate Leave" style="color:grey;" onclick="activateLeave('<?php echo $detail->leave_id?>')"><i class="fas fa-toggle-on" style=" font-size:1rem;"></i></a>
                     <?php }?>
                 </td>
                 

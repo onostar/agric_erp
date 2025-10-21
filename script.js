@@ -7620,3 +7620,80 @@ function addLeave(){
           return false;    
      }
 }
+
+// edit a leave type
+function editLeaveType(){
+     let leave = document.getElementById("leave").value;
+     let title = document.getElementById("title").value;
+     let max_days = document.getElementById("max_days").value;
+     let description = document.getElementById("description").value;
+     if(title.length == 0 || title.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input leave title!");
+          $("#title").focus();
+          return;
+     }else if(max_days.length == 0 || max_days.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input maximum leave days!");
+          $("#max_days").focus();
+          return;
+     }else if(description.length == 0 || description.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input details of leave");
+          $("#description").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/edit_leave_type.php",
+               data : {leave:leave, title:title, max_days:max_days, description:description},
+               beforeSend: function(){
+                    $("#crop_cycle").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+               $("#crop_cycle").html(response);
+               }
+          })
+          setTimeout(function(){
+               $("#crop_cycle").load("leave_types.php #crop_cycle");
+          }, 2000)
+          return false;    
+     }
+}
+// disable leave
+function disableLeave(leave){
+     let disable = confirm("Are you sure you want to disable this leave type?", "");
+     if(disable){
+          $.ajax({
+               type : "GET",
+               url : "../controller/disable_leave.php?id="+leave,
+               beforeSend : function(){
+                    $("#cycles").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#cycles").html(response);
+               }
+          })
+          setTimeout(function(){
+               $("#cycles").load("leave_types.php #cycles");
+          }, 2000);
+          return false;
+     }
+}
+// activate leave
+function activateLeave(leave){
+     let activate = confirm("Are you sure you want to activate this leave type?", "");
+     if(activate){
+          $.ajax({
+               type : "GET",
+               url : "../controller/activate_leave.php?id="+leave,
+               beforeSend : function(){
+                    $("#cycles").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#cycles").html(response);
+               }
+          })
+          setTimeout(function(){
+               $("#cycles").load("leave_types.php #cycles");
+          }, 2000);
+          return false;
+     }
+}

@@ -63,7 +63,8 @@
         'pension' => $pension,
         'photo' => 'user.png',
         'reg_date' => $date,
-        'posted_by' => $user
+        'posted_by' => $user,
+        'store' => $store
     );
     // instantiate class
     include "../classes/dbh.php";

@@ -1,7 +1,8 @@
 
 <div class="displays allResults" id="disable_user">
 <?php
-
+    session_start();
+    $store = $_SESSION['store_id'];
     include "../classes/dbh.php";
     include "../classes/select.php";
 
@@ -29,7 +30,7 @@
             <?php
                 $n = 1;
                 $get_users = new selects();
-                $details = $get_users->fetch_details_negCond1('staffs', 'staff_status', 2);
+                $details = $get_users->fetch_details_negCond('staffs', 'staff_status', 2, 'store', $store);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
@@ -65,7 +66,7 @@
                 </td>
                
                 <td>
-                    <a style="padding:5px; border-radius:15px;background:var(--secondaryColor);color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="resignStaff('<?php echo $detail->staff_id?>')" title="Suspend Staff">Resign <i class="fas fa-user-slash"></i></a>
+                    <a style="padding:5px; border-radius:15px;background:brown; color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="resignStaff('<?php echo $detail->staff_id?>')" title="Suspend Staff">Resign <i class="fas fa-user-slash"></i></a>
                 </td>
                 
             </tr>
