@@ -1601,6 +1601,9 @@ function getWholesaleItems(item_name){
                $.ajax({
                     type : "POST",
                     url :"../controller/get_wholesale_items.php",
+                    beforeSend : function(){
+                         $("#sales_item").html("<p>Searching...</p>");
+                    },
                     data : {item:item, customer:customer},
                     success : function(response){
                          $("#sales_item").html(response);
@@ -7696,4 +7699,86 @@ function activateLeave(leave){
           }, 2000);
           return false;
      }
+}
+
+//get employee details
+function getEmployee(item_name, link){
+     let employee_name = item_name;
+     if(employee_name.length >= 3){
+          if(employee_name){
+               $.ajax({
+                    type : "POST",
+                    url :"../controller/"+link,
+                    data : {employee_name:employee_name},
+                    beforeSend : function(){
+                         $("#sales_item").html("<p>Searching...</p>");
+                    },
+                    success : function(response){
+                         $("#sales_item").html(response);
+                    }
+               })
+               return false;
+          }else{
+               $("#sales_item").html("<p>Please enter atleast 3 letters</p>");
+          }
+     }
+     
+}
+
+//select employee during leave application
+function selectEmployee(id, staff_name){
+     let employee = document.getElementById("employee");
+     let staff = document.getElementById("staff");
+     employee.value = staff_name;
+     staff.value = id;
+     // alert(vendor.value)
+     /* $("#vendor").attr("readonly", true);
+     $("#supplier").attr("readonly", true); */
+     $("#sales_item").html('');
+}
+
+//get leave details
+function getLeave(item_name){
+     let leave_name = item_name;
+     if(leave_name.length >= 3){
+          if(leave_name){
+               $.ajax({
+                    type : "POST",
+                    url :"../controller/get_leave_type.php",
+                    data : {leave_name:leave_name},
+                    beforeSend : function(){
+                         $("#transfer_item").html("<p>Searching...</p>");
+                    },
+                    success : function(response){
+                         $("#transfer_item").html(response);
+                    }
+               })
+               return false;
+          }else{
+               $("#transfer_item").html("<p>Please enter atleast 3 letters</p>");
+          }
+     }
+     
+}
+
+//select leave during leave application
+function selectLeave(id, leave_name){
+     let leave_type = document.getElementById("leave_type");
+     let leave = document.getElementById("leave");
+     leave_type.value = leave_name;
+     leave.value = id;
+     // alert(vendor.value)
+     /* $("#vendor").attr("readonly", true);
+     $("#supplier").attr("readonly", true); */
+     $("#transfer_item").html('');
+     $.ajax({
+          type : "GET",
+          url : "../controller/get_leave_details.php?leave_id="+leave,
+          beforeSend : function(){
+               $("#leave_details").html("<div class='processing'><div class='loader'></div></div>");
+          },
+          success : function(response){
+               $("#leave_details").html(response);
+          }
+     })
 }

@@ -21,7 +21,7 @@
     <table id="data_table" class="searchTable">
         <thead>
             <tr style="background:var(--moreColor)">
-		         <td>S/N</td>
+		        <td>S/N</td>
                 <td>Date</td>
                 <td>Full Name</td>
                 <td>Staff ID</td>

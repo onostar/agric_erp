@@ -6,3 +6,4 @@ for tasks, onfield agents/staffs will be the one inputing data for tasks done, l
 during production, the inventory ledger and production inputS ledger are affected.
 PRODUCTION labour ledger is an admin and general expense, while production input are other expenses which affects cost of goods later
 fetch_account_balance method fetches customers debt balance while fetch_positive_balance method fetches positive balance
+for leaves under hr module - only active staffs can apply for leaves

@@ -208,6 +208,31 @@
                 return $rows;
             }
         }
+        // fetch details like 3 conditions
+        public function fetch_details_like3Cond($table, $column1, $column2, $column3, $value){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column1 LIKE '%$value%' OR $column2 LIKE '%$value%' OR $column3 LIKE '%$value%'");
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        // fetch details like 3 column and 1 condition
+        public function fetch_details_like3Col1Con($table, $column1, $column2, $column3, $value, $con, $conVal){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column1 LIKE '%$value%' OR $column2 LIKE '%$value%' OR $column3 LIKE '%$value%' AND $con = :$con");
+            $get_user->bindValue("$con", "$conVal");
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         // fetch details like 2 conditions and 1 condition met
         public function fetch_details_like1Cond($table, $column1, $value, $condition, $cond_value){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column1 LIKE '%$value%' AND $condition = :$condition");
