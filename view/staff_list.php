@@ -62,7 +62,7 @@ session_start();
         <?php
                 $n = 1;
                 $get_items = new selects();
-                $details = $get_items->fetch_details_negCond('staffs', 'staff_status', 2,  'store', $store,);
+                $details = $get_items->fetch_details_negCond('staffs', 'staff_status', 2,  'store', $store);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>

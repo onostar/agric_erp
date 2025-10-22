@@ -58,8 +58,8 @@
                         ?>
                     </td>
                     <td><?php echo $row->item_name?></td>
-                    <td class="prices">
-                        <a style="background:var(--moreColor)!important; color:#fff!important; padding:6px; border-radius:5px;" href="javascript:void(0)" data-form="check<?php echo $row->item_id?>" class="each_prices" onclick="getForm('<?php echo $row->item_id?>', 'get_item_name.php');"><i class="fas fa-pen"></i></a>
+                    <td>
+                        <a style="background:var(--moreColor)!important; color:#fff!important; padding:6px; border-radius:5px;" href="javascript:void(0)" onclick="getForm('<?php echo $row->item_id?>', 'get_item_name.php');"><i class="fas fa-pen"></i></a>
                     </td>
                 </tr>
             <?php $n++; endforeach; }?>

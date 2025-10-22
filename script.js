@@ -7965,3 +7965,53 @@ function endLeave(leave_id){
           return false;
      }
 }
+
+//mark staff present
+function markPresent(){
+     let staff = document.getElementById("staff").value;
+     let attendance_time = document.getElementById("attendance_time").value;
+     let remark = document.getElementById("remark").value;
+     if(!attendance_time){
+          alert("Please input attendance time");
+          $("#attendance_time").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/mark_present.php",
+               data : {staff:staff, attendance_time:attendance_time, remark:remark},
+               beforeSend : function(){
+                    $("#attendance").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#attendance").html(response);
+               }
+          })
+          setTimeout(function(){
+               showPage("attendance.php");
+          }, 2000);
+     }
+}
+//mark staff present
+function markAbsent(staff){
+     let confirmAb = confirm("Are you sure you want to mark this staff absent?", "");
+     if(confirmAb){
+          $.ajax({
+               type : "GET",
+               url : "../controller/mark_absent.php?staff="+staff,
+               
+               beforeSend : function(){
+                    $("#attendance").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#attendance").html(response);
+               }
+          })
+          setTimeout(function(){
+               showPage("attendance.php");
+          }, 2000);
+     }else{
+          return;
+     }
+
+}

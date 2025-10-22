@@ -246,6 +246,40 @@
                 return $rows;
             }
         }
+        //fetch active staff for attendance
+        public function fetch_staff_attendance($store){
+            $get_user = $this->connectdb()->prepare("SELECT 
+                s.staff_id,
+                s.last_name, 
+                s.other_names, 
+                s.staff_number, 
+                s.department, 
+                s.designation, 
+                s.gender
+            FROM staffs s
+            LEFT JOIN leaves l 
+                ON s.staff_id = l.employee 
+                AND l.leave_status = 1 
+                AND CURDATE() BETWEEN l.start_date AND l.end_date
+            LEFT JOIN attendance a
+                ON s.staff_id = a.staff 
+                AND DATE(a.attendance_date) = CURDATE()
+            WHERE 
+                s.store = :store  
+                AND s.staff_status = 0
+                AND l.employee IS NULL
+                AND a.staff IS NULL
+            ORDER BY s.last_name ASC");
+            $get_user->bindValue("store", $store);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         // fetch details like 2 conditions and 1 condition met
         public function fetch_details_like1Cond($table, $column1, $value, $condition, $cond_value){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column1 LIKE '%$value%' AND $condition = :$condition");
