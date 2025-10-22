@@ -15,24 +15,25 @@
 </style>
 
 <div class="displays allResults new_data" id="revenue_report" style="margin:0 50px!important;width:90%!important">
-    <h2>Leave Requests</h2>
+    <h2>Staffs On Leave</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchRoom" placeholder="Enter keyword" onkeyup="searchData(this.value)">
-        <a class="download_excel" href="javascript:void(0)" onclick="convertToExcel('data_table', 'Leave requests')"title="Download to excel"><i class="fas fa-file-excel"></i></a>
+        <a class="download_excel" href="javascript:void(0)" onclick="convertToExcel('data_table', 'Current Leave')"title="Download to excel"><i class="fas fa-file-excel"></i></a>
     </div>
     <table id="data_table" class="searchTable">
         <thead>
-            <tr style="background:var(--moreColor)">
+            <tr style="background:var(--tertiaryColor)">
                 <td>S/N</td>
                 <td>Full Name</td>
                 <td>Staff ID</td>
                 <td>Department</td>
                 <td>Designation</td>
                 <td>Leave Type</td>
-                <td>Days</td>
-                <td>Requested by</td>
-                <td>Date</td>
+                <td>Started</td>
+                <td>Expected return</td>
+                <td>Days used</td>
+                <td>Approved By</td>
                 <td></td>
             </tr>
         </thead>
@@ -40,7 +41,7 @@
             <?php
                 $n = 1;
                 $get_users = new selects();
-                $details = $get_users->fetch_details_2cond('leaves', 'leave_status', 'store', 0, $store);
+                $details = $get_users->fetch_current_leave($store);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
                     //get staff detail
@@ -92,17 +93,30 @@
                         
                     ?>
                 </td>
-                <td style="color:green; text-align:center"><?php echo $detail->total_days?> days</td>
+                <td>
+                    <?php echo date("d-M-Y",strtotime($detail->start_date))?>
+                </td>
+                <td style="color:var(--secondaryColor)">
+                    <?php echo date("d-M-Y",strtotime($detail->end_date ." + 1 day"))?>
+                </td>
+                <td style="color:green; text-align:center">
+                    <?php
+                    $start = new DateTime($detail->start_date);
+                    $now = new DateTime();
+                    $interval = $now->diff($start);
+                    $days_used = $interval->days;
+                    echo $days_used . " day" . ($days_used != 1 ? "s" : "");
+                    ?>
+                </td>
                 <td>
                     <?php
                         //get done by
-                        $checkedin_by = $get_users->fetch_details_group('users', 'full_name', 'user_id', $detail->posted_by);
+                        $checkedin_by = $get_users->fetch_details_group('users', 'full_name', 'user_id', $detail->approved_by);
                         echo $checkedin_by->full_name;
                     ?>
                 </td>
-                <td style="color:var(--moreColor)"><?php echo date("d-M-Y, h:ia", strtotime($detail->applied))?></td>
                 <td>
-                    <a style="padding:5px; border-radius:15px;background:var(--otherColor);color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="showPage('view_applications.php?id=<?php echo $detail->leaves_id?>&staff=<?php echo $detail->employee?>')" title="View Application Details">View <i class="fas fa-eye"></i></a>
+                    <a style="padding:5px; border-radius:15px;background:var(--tertiaryColor);color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="endLeave('<?php echo $detail->leaves_id?>')" title="End Leave">End Leave <i class="fas fa-ban"></i></a>
                 </td>
 
             </tr>

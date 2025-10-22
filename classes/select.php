@@ -233,6 +233,19 @@
                 return $rows;
             }
         }
+        //fetch staffs currently on leave
+        public function fetch_current_leave($store){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM leaves WHERE store = :store AND leave_status = 1 AND start_date <= CURDATE()");
+            $get_user->bindValue("store", $store);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         // fetch details like 2 conditions and 1 condition met
         public function fetch_details_like1Cond($table, $column1, $value, $condition, $cond_value){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column1 LIKE '%$value%' AND $condition = :$condition");

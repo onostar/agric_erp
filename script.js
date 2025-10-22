@@ -7518,7 +7518,9 @@ function updateStaff(){
           $("#phone_number").val('');
           $("#last_name").focus(); */
           setTimeout(function(){
-               $("#edit_customer").load("edit_staff_details.php?customer="+staff_id);
+               // $("#edit_customer").load("edit_staff_details.php?customer="+staff_id);
+               showPage("edit_staff_details.php?customer="+staff_id);
+
           }, 1500);
           return false;   
      }
@@ -7541,7 +7543,8 @@ function suspendStaff(staff_id){
                }
           })
           setTimeout(function(){
-               $('#disable_user').load("suspend_staff.php #disable_user");
+               // $('#disable_user').load("suspend_staff.php #disable_user");
+               showPage("suspend_staff.php")
           }, 3000);
           return false;
      }
@@ -7562,7 +7565,9 @@ function recallStaff(staff_id){
                }
           })
           setTimeout(function(){
-               $("#activate_user").load("recall_staff.php #activate_user");
+               // $("#activate_user").load("recall_staff.php #activate_user");
+               showPage("recall_staff.php")
+
           }, 3000);
           return false;
      }
@@ -7582,7 +7587,8 @@ function resignStaff(staff_id){
                }
           })
           setTimeout(function(){
-               $("#disable_user").load("resign_employee.php #disable_user");
+               // $("#disable_user").load("resign_employee.php #disable_user");
+               showPage("resign_employee.php");
           }, 3000);
           return false;
      }
@@ -7618,7 +7624,9 @@ function addLeave(){
                }
           })
           setTimeout(function(){
-               $("#crop_cycle").load("add_leave_type.php #crop_cycle");
+               // $("#crop_cycle").load("add_leave_type.php #crop_cycle");
+               showPage("add_leave_type.php");
+
           }, 2000)
           return false;    
      }
@@ -7655,7 +7663,9 @@ function editLeaveType(){
                }
           })
           setTimeout(function(){
-               $("#crop_cycle").load("leave_types.php #crop_cycle");
+               // $("#crop_cycle").load("leave_types.php #crop_cycle");
+               showPage("leave_types.php");
+
           }, 2000)
           return false;    
      }
@@ -7675,7 +7685,8 @@ function disableLeave(leave){
                }
           })
           setTimeout(function(){
-               $("#cycles").load("leave_types.php #cycles");
+               // $("#cycles").load("leave_types.php #cycles");
+               showPage("leave_types.php");
           }, 2000);
           return false;
      }
@@ -7695,7 +7706,9 @@ function activateLeave(leave){
                }
           })
           setTimeout(function(){
-               $("#cycles").load("leave_types.php #cycles");
+               // $("#cycles").load("leave_types.php #cycles");
+               showPage("leave_types.php");
+
           }, 2000);
           return false;
      }
@@ -7887,6 +7900,68 @@ function applyLeave(){
                     $("#add_staff").html(response);
                }
           })
+          return false;
+     }
+}
+
+// approve leave
+function approveLeave(leave_id){
+     let approve = confirm("Are you sure you want to approve this leave request?", "");
+     if(approve){
+          $.ajax({
+               type : "GET",
+               url : "../controller/approve_leave.php?id="+leave_id,
+               beforeSend : function(){
+                    $("#leave_details").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#leave_details").html(response);
+               }
+          })
+          setTimeout(function(){
+               showPage("approve_leave.php");
+          }, 2000);
+          return false;
+     }
+}
+// decline leave
+function declineLeave(leave_id){
+     let decline = confirm("Are you sure you want to reject this leave request?", "");
+     if(decline){
+          $.ajax({
+               type : "GET",
+               url : "../controller/decline_leave.php?id="+leave_id,
+               beforeSend : function(){
+                    $("#leave_details").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#leave_details").html(response);
+               }
+          })
+          setTimeout(function(){
+               showPage("approve_leave.php");
+
+          }, 2000);
+          return false;
+     }
+}
+// retur from leave
+function endLeave(leave_id){
+     let approve = confirm("Are you sure you want to end staff leave?", "");
+     if(approve){
+          $.ajax({
+               type : "GET",
+               url : "../controller/end_leave.php?id="+leave_id,
+               beforeSend : function(){
+                    $("#leave_details").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#leave_details").html(response);
+               }
+          })
+          setTimeout(function(){
+               $("#leave_details").load("approve_leave.php #leave_details");
+          }, 2000);
           return false;
      }
 }

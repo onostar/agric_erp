@@ -34,7 +34,6 @@
                 </div>
                 <div class="data" style="width:48%">
                     <label for="leave">Leave Type</label>
-                    <input type="hidden" id="leave" name="leave">
                     <input type="search" id="leave_type" name="leave_type" placeholder="search leave type" onkeyup="getLeave(this.value)">
                     <div id="transfer_item">
 
