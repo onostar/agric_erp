@@ -46,8 +46,8 @@
                 <td>Leave Type</td>
                 <td>Applied</td>
                 <td>Status</td>
-                <td>Approved By</td>
-                <td>Returned</td>
+                <td>Applied By</td>
+                <td></td>
                 
             </tr>
         </thead>
@@ -55,11 +55,11 @@
             <?php
                 $n = 1;
                 $get_users = new selects();
-                $details = $get_users->fetch_details_curdateCon('suspensions', 'suspension_date', 'store', $store);
+                $details = $get_users->fetch_details_curdateCon('leaves', 'applied', 'store', $store);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
                     //get staff detail
-                    $rows = $get_users->fetch_details_cond('staffs', 'staff_id', $detail->staff);
+                    $rows = $get_users->fetch_details_cond('staffs', 'staff_id', $detail->employee);
                     foreach($rows as $row){
                         $full_name = $row->last_name." ".$row->other_names;
                         $department = $row->department;
@@ -108,27 +108,33 @@
                     ?>
                 </td>
                 <td>
-                    <?php echo date("d-M-Y",strtotime($detail->start_date))?>
+                    <?php echo date("h:i:sa",strtotime($detail->applied))?>
                 </td>
-                <td style="color:var(--secondaryColor)">
-                    <?php echo date("d-M-Y",strtotime($detail->end_date ." + 1 day"))?>
-                </td>
-                <td style="color:green; text-align:center">
+                <td>
                     <?php
-                    $start = new DateTime($detail->start_date);
-                    $now = new DateTime();
-                    $interval = $now->diff($start);
-                    $days_used = $interval->days;
-                    echo $days_used . " day" . ($days_used != 1 ? "s" : "");
+                        if($detail->leave_status == 0){
+                            echo "<span style='color:var(--moreColor)'>Pending</span>";
+                        }elseif($detail->leave_status == 1){
+                            echo "<span style='color:var(--tertiaryColor)'>Approved</span>";
+                        }elseif($detail->leave_status == -1){
+                            echo "<span style='color:var(--secondaryColor)'>Declined</span>";
+                        }else{
+                            echo "<span style='color:var(--otherColor)'>Returned</span>";
+                        }
                     ?>
                 </td>
                 <td>
                     <?php
                         //get done by
-                        $checkedin_by = $get_users->fetch_details_group('users', 'full_name', 'user_id', $detail->approved_by);
+                        $checkedin_by = $get_users->fetch_details_group('users', 'full_name', 'user_id', $detail->posted_by);
                         echo $checkedin_by->full_name;
                     ?>
                 </td>
+                <td>
+                    <a style="padding:5px; border-radius:15px;background:var(--tertiaryColor);color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="showPage('leave_details.php?id=<?php echo $detail->leaves_id?>&staff=<?php echo $detail->employee?>')" title="View leave Details">View <i class="fas fa-eye"></i></a>
+                    
+                </td>
+                
 
             </tr>
             <?php $n++; endforeach;}?>
