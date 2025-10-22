@@ -27,7 +27,7 @@
     color:#222;
  }
 </style>
-<a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222"href="javascript:void(0)" onclick="showPage('staff_list.php')"><i class="fas fa-close"></i> Close</a>
+<a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222; position:fixed"href="javascript:void(0)" onclick="showPage('staff_list.php')"><i class="fas fa-close"></i> Close</a>
     <div id="patient_details">
         <h3 style="background:var(--tertiaryColor); color:#fff"><?php echo ucwords($row->title)." ".strtoupper($row->last_name." ".$row->other_names)?></h3>
         <!-- <form method="POST" id="addUserForm"> -->
@@ -198,11 +198,89 @@
                         <input type="text"  value="<?php echo $row->pension_num?>" readonly>
                     
                     </div>
-                    <div class="data" style="border:none">
-                        <a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222"href="javascript:void(0)" onclick="showPage('staff_list.php')"><i class="fas fa-close"></i> Close</a>
-                    </div>
+                    
                 </div>
                 
+            </div>
+        </section>
+        <section id="last_consult">
+            <h3>Previous Leave Requests</h3>
+            <div class="displays allResults new_data" style="width:100%!important;margin:0!important">
+                <table id="data_table" class="searchTable">
+                    <thead>
+                        <tr style="background:var(--moreColor)">
+                            <td>S/N</td>
+                            <td>Date</td>
+                            <td>Leave Type</td>
+                            <td>Started</td>
+                            <td>End Date</td>
+                            <td>Status</td>
+                            <td>Approved By</td>
+                            <td>Returned</td>
+                            <td></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            $n = 1;
+                            $get_users = new selects();
+                            $results = $get_users->fetch_details_Cond('leaves', 'employee',  $customer);
+                            if(gettype($results) === 'array'){
+                            foreach($results as $result):
+                        ?>
+                        <tr>
+                            <td style="text-align:center; color:red;"><?php echo $n?></td>
+                            <td style="color:var(--moreColor)"><?php echo date("d-m-Y h:ia", strtotime($result->applied));?></td>
+                            <td>
+                                <?php
+                                    $lvs = $get_users->fetch_details_group('leave_types', 'leave_title', 'leave_id', $result->leave_type) ;
+                                    echo $lvs->leave_title 
+                                ?>
+                                </td>
+                            <td><?php echo date("d-M-Y", strtotime($result->start_date));?></td>
+                            <td><?php echo date("d-M-Y", strtotime($result->end_date));?></td>
+                            <td>
+                                <?php
+                                    if($result->leave_status == -1){
+                                        echo "<span style='color:red'>Rejected</span>";
+                                    }else{
+                                        echo "<span style='color:green'>Approved</span>";
+                                    }
+                                ?>
+                            </td>
+                             <td>
+                                <?php
+                                    //get posted by
+                                    $checks = $get_customer->fetch_details_cond('users',  'user_id', $result->approved_by);
+                                    foreach($checks as $check){
+                                        $full_name = $check->full_name;
+                                    }
+                                    echo $full_name;
+                                ?>
+                            </td>
+                            <td>
+                                <?php
+                                    if($result->leave_status == 2){
+                                        echo date("d-M-Y", strtotime($result->returned));
+                                    }else{
+                                        "";
+                                    }
+                                ?>
+                            </td>
+                           <td>
+                                <a style="padding:5px; border-radius:15px;background:var(--tertiaryColor);color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="showPage('leave_details.php?id=<?php echo $result->leaves_id?>&staff=<?php echo $result->employee?>')" title="View leave Details">View <i class="fas fa-eye"></i></a>
+                                
+                           </td>
+                            
+                        </tr>
+                        <?php $n++; endforeach;}?>
+                    </tbody>
+                </table>
+                <?php
+                    if(gettype($results) == 'string'){
+                        echo "<p class='not_result'; style='text-align:center;font-size:.9rem;'>$results</p>";
+                    }
+                ?>
             </div>
         </section>
     </div>

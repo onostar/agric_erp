@@ -29,11 +29,23 @@
                 $ended_by = $detail->ended_by;
             }
             //get approved by details
-            $aps = $get_customer->fetch_details_group('users', 'full_name', 'user_id', $approved_by);
-            $approval = $aps->full_name;
+            $aps = $get_customer->fetch_details_cond('users', 'user_id', $approved_by);
+            if(is_array($aps)){
+                foreach($aps as $ap){
+                    $approval = $ap->full_name;
+                }
+            }else{
+                $approval = "N/A";
+            }
             //get returned  by details
-            $aps = $get_customer->fetch_details_group('users', 'full_name', 'user_id', $ended_by);
-            $ender = $aps->full_name;
+            $ends = $get_customer->fetch_details_cond('users', 'user_id', $ended_by);
+            if(is_array($ends)){
+                foreach($ends as $ens){
+                    $ender = $ens->full_name;
+                }
+            }else{
+                $ender = "N/A";
+            }
             //get leave title
             $ttls = $get_customer->fetch_details_group('leave_types', 'leave_title', 'leave_id', $leave_type);
             $title = $ttls->leave_title;
@@ -58,14 +70,14 @@
     padding:5px;
  }
  #main_consult label{
-    background:var(--otherColor)!important;
+    background:var(--tertiaryColor)!important;
     text-align:left!important;
     /* color:#222!important; */
  }
 </style>
 <a style="border-radius:15px; background:brown;color:#fff;padding:6px; box-shadow:1px 1px 1px #222; position:fixed; border:1px solid #fff; "href="javascript:void(0)" onclick="showPage('leave_report.php')"><i class="fas fa-close"></i> Close</a>
     <div id="patient_details">
-        <h3 style="background:var(--otherColor); color:#fff"><?php echo $title?> Details for "<?php echo $row->last_name." ".$row->other_names?>"</h3>
+        <h3 style="background:var(--labColor); color:#fff"><?php echo $title?> Details for "<?php echo $row->last_name." ".$row->other_names?>"</h3>
         <!-- <form method="POST" id="addUserForm"> -->
         <section class="nomenclature">
             <!-- <div class="profile_foto">
@@ -176,16 +188,18 @@
                         <label for="notes">Approved By:</label>
                         <input type="text" readonly value="<?php echo $approval?>">
                     </div>
+                    <div class="data" style="width:30%!important">
+                        <label for="notes">Approved On</label>
+                        <input type="text" readonly value="<?php echo date("d-M-Y, h:ia", strtotime($approved))?>">
+                    </div>
                     <?php }?>
                     <?php if($status == -1){?>
                     <div class="data" style="width:30%!important">
                         <label for="notes">Declined By:</label>
                         <input type="text" readonly value="<?php echo $approval?>">
                     </div>
-                    <?php }?>
-                    <?php if($status == -1 || $status == 1){?>
                     <div class="data" style="width:30%!important">
-                        <label for="notes">Date Done:</label>
+                        <label for="notes">Declined on:</label>
                         <input type="text" readonly value="<?php echo date("d-M-Y, h:ia", strtotime($approved))?>">
                     </div>
                     <?php }?>
@@ -199,13 +213,26 @@
                         <input type="text" readonly value="<?php echo $ender?>">
                     </div>
                     <div class="data" style="width:30%!important">
-                        <label for="notes">Total Days:</label>
+                        <label for="notes">Total Days on Leave:</label>
                         <?php
                             $started = new DateTime($start);
                             $ended = new DateTime($returned);
                             $interval = $returned->diff($started);
                             $days_used = $interval->days;
-                            echo $days_used . " day" . ($days_used != 1 ? "s" : "");
+                            
+                            ?>
+                        <input type="text" readonly value="<?php echo $days_used . " day" . ($days_used != 1 ? "s" : "")?>">
+                    </div>
+                    <?php }?>
+                    <?php if($status == 1 && date("Y-m-d", strtotime($start)) <= date("Y-m-d")){?>
+                    <div class="data" style="width:30%!important">
+                        <label for="notes">Total Days Spent:</label>
+                        <?php
+                            $started = new DateTime($start);
+                            $now = new DateTime();
+                            $interval = $now->diff($started);
+                            $days_used = $interval->days;
+                          
                             ?>
                         <input type="text" readonly value="<?php echo $days_used . " day" . ($days_used != 1 ? "s" : "")?>">
                     </div>
