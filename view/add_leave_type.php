@@ -2,11 +2,11 @@
     include "../classes/dbh.php";
     include "../classes/select.php";
     session_start();
-    $farm = $_SESSION['store_id'];
+    $store = $_SESSION['store_id'];
 ?>
 
 <div id="crop_cycle" class="displays">
-        <a style="background:brown; color:#fff; padding:5px 8px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222;" href="javascript:void(0)" onclick="showPage('leave_types.php')" title="Return fot farm fields">Return <i class="fas fa-angle-double-left"></i></a>
+        <a style="background:brown; color:#fff; padding:5px 8px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222;" href="javascript:void(0)" onclick="showPage('leave_types.php')" title="Return toleave types">Return <i class="fas fa-angle-double-left"></i></a>
 
     <div class="info" style="width:40%; margin:20px"></div>
     <div class="add_user_form" style="width:40%; margin:0px">

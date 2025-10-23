@@ -309,6 +309,33 @@
                 return $rows;
             }
         }
+        //fetch salary structure
+        public function fetch_salary_structure($store){
+            $get_user = $this->connectdb()->prepare("SELECT 
+                s.staff_id,
+                s.last_name, 
+                s.other_names, 
+                s.staff_number, 
+                s.department, 
+                s.designation, 
+                s.gender, sa.basic_salary, sa.utility_allowance, sa.housing_allowance, sa.medical_allowance, sa.transport_allowance, sa.other_allowance, sa.total_earnings
+            FROM staffs s
+            LEFT JOIN salary_structure sa
+                ON s.staff_id = sa.staff 
+            WHERE 
+                s.store = :store  
+                AND s.staff_status = 0
+            ORDER BY s.last_name ASC");
+            $get_user->bindValue("store", $store);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch staff for attendance check out for the day
         public function fetch_staff_checkout($store){
             $get_user = $this->connectdb()->prepare("SELECT s.staff_id, s.last_name, s.other_names, s.staff_number, s.department, s.designation, s.gender, a.time_in, a.attendance_id FROM staffs s INNER JOIN attendance a ON s.staff_id = a.staff AND DATE(a.attendance_date) = CURDATE()WHERE a.store = :store AND a.attendance_status = 0 AND a.time_out IS NULL ORDER BY a.marked_date ASC;");

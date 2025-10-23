@@ -8041,3 +8041,38 @@ function checkOut(){
           
      }
 }
+
+//add salary structure for staff
+function addSalary(){
+     let staff = document.getElementById("staff").value;
+     let basic_salary = document.getElementById("basic_salary").value;
+     let housing = document.getElementById("housing").value;
+     let medical = document.getElementById("medical").value;
+     let transport = document.getElementById("transport").value;
+     let utility = document.getElementById("utility").value;
+     let others = document.getElementById("others").value;
+     if(!basic_salary){
+          alert("Please input basic salary");
+          $("#basic_salary").focus();
+          return;
+     }else if(parseFloat(basic_salary) < 0 || parseFloat(housing) < 0 || parseFloat(medical) < 0 || parseFloat(transport) < 0 || parseFloat(utility) < 0 || parseFloat(others) < 0){
+          alert("Values cannot be less than 0");
+          $("#basic_salary").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/add_salary_structure.php",
+               data : {staff:staff, basic_salary:basic_salary, housing:housing, medical:medical, transport:transport, utility:utility, others:others},
+               beforeSend : function(){
+                    $("#salary_structure").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#salary_structure").html(response);
+                    setTimeout(function(){
+                         showPage("salary_structure.php");
+                    }, 2000);
+               }
+          })
+     }
+}
