@@ -318,7 +318,7 @@
                 s.staff_number, 
                 s.department, 
                 s.designation, 
-                s.gender, sa.basic_salary, sa.utility_allowance, sa.housing_allowance, sa.medical_allowance, sa.transport_allowance, sa.other_allowance, sa.total_earnings
+                s.gender, sa.basic_salary, sa.utility_allowance, sa.housing_allowance, sa.medical_allowance, sa.transport_allowance, sa.other_allowance, sa.total_earnings, sa.salary_id
             FROM staffs s
             LEFT JOIN salary_structure sa
                 ON s.staff_id = sa.staff 
@@ -326,6 +326,43 @@
                 s.store = :store  
                 AND s.staff_status = 0
             ORDER BY s.last_name ASC");
+            $get_user->bindValue("store", $store);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        //fetch staffs to generate pay roll
+        public function fetch_generate_payroll($store){
+            $get_user = $this->connectdb()->prepare("SELECT 
+    s.staff_id,
+    s.last_name,
+    s.other_names,
+    s.staff_number,
+    s.department,
+    s.designation, s.gender,
+    ss.basic_salary,
+    ss.housing_allowance,
+    ss.transport_allowance,
+    ss.utility_allowance,
+    ss.medical_allowance,
+    ss.other_allowance,
+    ss.total_earnings,
+    IF(p.staff IS NULL, 'Pending', 'Generated') AS payroll_status
+FROM staffs s
+LEFT JOIN salary_structure ss 
+    ON s.staff_id = ss.staff
+LEFT JOIN payroll p 
+    ON s.staff_id = p.staff 
+    AND MONTH(p.payroll_date) = MONTH(CURDATE())
+    AND YEAR(p.payroll_date) = YEAR(CURDATE())
+WHERE s.store = :store AND s.staff_status = 0
+ORDER BY s.last_name ASC;
+");
             $get_user->bindValue("store", $store);
             $get_user->execute();
             if($get_user->rowCount() > 0){

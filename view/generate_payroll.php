@@ -1,6 +1,7 @@
 <div class="displays allResults" id="attendance" style="margin:10px 50px!important; width:90%!important">
 <?php
 session_start();
+date_default_timezone_set("Africa/Lagos");
     include "../classes/dbh.php";
     include "../classes/select.php";
     
@@ -12,6 +13,8 @@ session_start();
         $roles = $get_role->fetch_details_group('users', 'user_role', 'username', $username);
         $role = $roles->user_role;
         $store = $_SESSION['store_id'];
+        
+
 ?>
    <style>
     table td{
@@ -23,7 +26,7 @@ session_start();
     
     <div class="info" style="margin: 10px!important"></div>
     <!-- showing staffs that are not resigned in selected store -->
-    <h2>Staff Salary Structure</h2>
+    <h2>Generate Staff Payroll for <?php echo date("F, Y")?></h2>
     <hr>
     <div class="search">
         <input type="search" id="searchRoom" placeholder="Enter keyword" onkeyup="searchData(this.value)">
@@ -31,20 +34,16 @@ session_start();
     </div>
     <table id="item_list_table" class="searchTable">
         <thead>
-            <tr style="background:var(--moreColor)">
+            <tr style="background:var(--tertiaryColor)">
                 <td>S/N</td>
                 <td>Staff</td>
                 <td>Staff ID</td>
-                <!-- <td>Gender</td> -->
+                <td>Gender</td>
                 <!-- <td>Department</td> -->
                 <td>Designation</td>
                 <td>Basic Salary</td>
-                <td>Housing</td>
-                <td>Transport</td>
-                <td>Medical</td>
-                <td>Utility</td>
-                <td>Others</td>
-                <!-- <td>Total Earning</td> -->
+                <td>Total</td>
+                <td>Status</td>
                 <td></td>
             </tr>
         </thead>
@@ -52,7 +51,7 @@ session_start();
         <?php
                 $n = 1;
                 $get_items = new selects();
-                $details = $get_items->fetch_salary_structure($store);
+                $details = $get_items->fetch_generate_payroll($store);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
@@ -61,7 +60,7 @@ session_start();
                 <td><?php echo $detail->last_name ." ". $detail->other_names?></td>
                 <td><?php echo $detail->staff_number?></td>
                 
-                <!-- <td><?php echo $detail->gender?></td> -->
+                <td><?php echo $detail->gender?></td>
                 <!--<td>
                     <?php
                         //get sponsor
@@ -88,14 +87,11 @@ session_start();
                         
                     ?>
                 </td>
-                <td style="color:green"><?php echo "₦".number_format($detail->basic_salary, 2)?></td>
-                <td><?php echo "₦".number_format($detail->housing_allowance, 2)?></td>
-                <td><?php echo "₦".number_format($detail->transport_allowance, 2)?></td>
-                <td><?php echo "₦".number_format($detail->medical_allowance, 2)?></td>
-                <td><?php echo "₦".number_format($detail->utility_allowance, 2)?></td>
-                <td><?php echo "₦".number_format($detail->other_allowance, 2)?></td>
+                <td style="color:var(--otherColor)"><?php echo "₦".number_format($detail->basic_salary, 2)?></td>
+                <td style="color:green"><?php echo "₦".number_format($detail->total_earnings, 2)?></td>
+                <td><?php echo $detail->payroll_status?></td>
                 <td>
-                    <?php if(empty($detail->basic_salary)){?>
+                    <?php if($detail->payroll_status == 'Pending'){?>
                     <a style="padding:5px 8px; border-radius:5px;background:var(--tertiaryColor);color:#fff;" href="javascript:void(0)" onclick="showPage('add_salary_structure.php?staff=<?php echo $detail->staff_id?>')" title="Add Salary Structure"><i class="fas fa-plus-square"></i></a>
                     <?php }else{?>
                     <a style="padding:5px 8px; border-radius:5px;background:var(--otherColor);color:#fff;" href="javascript:void(0)" onclick="showPage('edit_salary_structure.php?staff=<?php echo $detail->staff_id?>&salary_id=<?php echo $detail->salary_id?>')" title="Update salary structure"><i class="fas fa-edit"></i></a>
