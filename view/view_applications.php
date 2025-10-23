@@ -225,8 +225,9 @@
                             </td>
                              <td>
                                 <?php
+                                    
                                     //get posted by
-                                    $checks = $get_posted_by->fetch_details_cond('users',  'user_id', $result->approved_by);
+                                    $checks = $get_customer->fetch_details_cond('users',  'user_id', $result->approved_by);
                                     foreach($checks as $check){
                                         $full_name = $check->full_name;
                                     }

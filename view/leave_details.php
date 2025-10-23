@@ -217,7 +217,7 @@
                         <?php
                             $started = new DateTime($start);
                             $ended = new DateTime($returned);
-                            $interval = $returned->diff($started);
+                            $interval = $ended->diff($started);
                             $days_used = $interval->days;
                             
                             ?>

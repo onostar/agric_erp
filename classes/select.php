@@ -246,6 +246,35 @@
                 return $rows;
             }
         }
+        //fetch attendance report for current day
+        public function fetch_attendance($store){
+            $get_user = $this->connectdb()->prepare("SELECT s.staff_id, s.last_name, s.other_names, s.staff_number, s.department, s.designation, a.time_in, a.time_out, a.marked_by, a.checked_out_by, a.marked_date, a.checked_out, a.attendance_status, CASE WHEN a.time_in IS NOT NULL AND a.time_out IS NULL THEN 'Still Present' WHEN a.time_in IS NOT NULL AND a.time_out IS NOT NULL THEN 'Present' WHEN l.leave_status = 1 THEN 'On Leave' ELSE 'Absent' END AS status FROM staffs s LEFT JOIN attendance a  ON s.staff_id = a.staff AND DATE(a.attendance_date) = CURDATE()LEFT JOIN leaves l ON s.staff_id = l.employee AND l.leave_status = 1 AND CURDATE() BETWEEN l.start_date AND l.end_date WHERE s.store = :store ORDER BY s.last_name ASC;");
+            $get_user->bindValue("store", $store);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        //fetch attendance report by date
+        public function fetch_attendance_date($from, $to, $store){
+            $sql = "SELECT s.staff_id, s.last_name, s.other_names, s.staff_number, s.department, s.designation, a.time_in, a.time_out, a.marked_by, a.checked_out_by, a.marked_date, a.checked_out, a.attendance_status, a.attendance_date, CASE WHEN a.time_in IS NOT NULL AND a.time_out IS NULL THEN 'Still Present' WHEN a.time_in IS NOT NULL AND a.time_out IS NOT NULL THEN 'Present' WHEN l.leave_status = 1 THEN 'On Leave' ELSE 'Absent' END AS status FROM staffs s LEFT JOIN attendance a  ON s.staff_id = a.staff AND DATE(a.attendance_date) BETWEEN :from AND :to LEFT JOIN leaves l ON s.staff_id = l.employee AND l.leave_status = 1 AND (l.start_date BETWEEN :from AND :to OR l.end_date BETWEEN :from AND :to OR (:from BETWEEN l.start_date AND l.end_date)) WHERE s.store = :store ORDER BY s.last_name ASC";
+            $stmt = $this->connectdb()->prepare($sql);
+            $stmt->bindValue(":store", $store);
+            $stmt->bindValue(":from", $from);
+            $stmt->bindValue(":to", $to);
+            $stmt->execute();
+
+            if($stmt->rowCount() > 0){
+                return $stmt->fetchAll();
+            } else {
+                return "No records found";
+            }
+        }
+
         //fetch active staff for attendance
         public function fetch_staff_attendance($store){
             $get_user = $this->connectdb()->prepare("SELECT 
@@ -270,6 +299,19 @@
                 AND l.employee IS NULL
                 AND a.staff IS NULL
             ORDER BY s.last_name ASC");
+            $get_user->bindValue("store", $store);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        //fetch staff for attendance check out for the day
+        public function fetch_staff_checkout($store){
+            $get_user = $this->connectdb()->prepare("SELECT s.staff_id, s.last_name, s.other_names, s.staff_number, s.department, s.designation, s.gender, a.time_in, a.attendance_id FROM staffs s INNER JOIN attendance a ON s.staff_id = a.staff AND DATE(a.attendance_date) = CURDATE()WHERE a.store = :store AND a.attendance_status = 0 AND a.time_out IS NULL ORDER BY a.marked_date ASC;");
             $get_user->bindValue("store", $store);
             $get_user->execute();
             if($get_user->rowCount() > 0){
@@ -377,6 +419,17 @@
         // select count with date and negative condition
         public function fetch_count_curDateCon($table, $column, $condition, $value){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE date($column) = CURDATE() AND $condition != :$condition");
+            $get_user->bindValue("$condition", $value);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                return $get_user->rowCount();
+            }else{
+                return "0";
+            }
+        }
+        // select count with date and positive condition
+        public function fetch_count_curDatePosCon($table, $column, $condition, $value){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE date($column) = CURDATE() AND $condition = :$condition");
             $get_user->bindValue("$condition", $value);
             $get_user->execute();
             if($get_user->rowCount() > 0){

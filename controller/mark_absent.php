@@ -19,7 +19,7 @@
         }
         
         //check if staff already marked absent
-        $check = $get_details->fetch_count_2cond('attendance', 'staff', $staff, 'attendance_date', $currentDay); 
+        $check = $get_details->fetch_count_curDatePosCon('attendance', 'attendance_date', 'staff', $staff); 
         if($check > 0){
             echo "<script>alert('$full_name! already marked absent today')</script>";
             echo "<div class='success'><p style='background:brown'>$full_name! already marked absent today. <i class='fas fa-thumb-tack'></i></p></div>";

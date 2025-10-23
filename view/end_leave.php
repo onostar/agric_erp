@@ -14,7 +14,7 @@
     
 </style>
 
-<div class="displays allResults new_data" id="revenue_report" style="margin:0 50px!important;width:90%!important">
+<div class="displays allResults new_data" id="leave_details" style="margin:0 50px!important;width:90%!important">
     <h2>Staffs On Leave</h2>
     <hr>
     <div class="search">

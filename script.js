@@ -702,27 +702,6 @@ function postOtherTransfer(){
 
 }
 
-//check out guest
-function checkOut(){
-     let checkout = confirm("Do you want to check out this guest?", "");
-     if(checkout){
-          // alert(user_id);
-          let user_id = document.getElementById("user_id").value;
-          let guest_id = document.getElementById("guest_id").value;
-          $.ajax({
-               type : "POST",
-               url : "../controller/check_out.php",
-               data : {user_id:user_id, guest_id:guest_id},
-               success : function(response){
-                    $("#guest_details").html(response);
-               }
-          })
-          setTimeout(function(){
-               $("#guest_details").load("guest_details.php?guest_id="+guest_id+ "#guest_details");
-          }, 3000);
-     }
-     return false;
-}
 
 //display any item form
 function getForm(item, link){
@@ -7960,7 +7939,7 @@ function endLeave(leave_id){
                }
           })
           setTimeout(function(){
-               $("#leave_details").load("approve_leave.php #leave_details");
+               showPage("end_leave.php");
           }, 2000);
           return false;
      }
@@ -7971,8 +7950,16 @@ function markPresent(){
      let staff = document.getElementById("staff").value;
      let attendance_time = document.getElementById("attendance_time").value;
      let remark = document.getElementById("remark").value;
+     let today = new Date();
+     let [hours, minutes] = attendance_time.split(":");
+     let selectedTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hours, minutes);
+     let currentTime = new Date();
      if(!attendance_time){
           alert("Please input attendance time");
+          $("#attendance_time").focus();
+          return;
+     }else if(selectedTime > currentTime){
+          alert("Attendance time cannot be greater than current time");
           $("#attendance_time").focus();
           return;
      }else{
@@ -7985,11 +7972,12 @@ function markPresent(){
                },
                success : function(response){
                     $("#attendance").html(response);
+                    setTimeout(function(){
+                         showPage("attendance.php");
+                    }, 2000);
                }
           })
-          setTimeout(function(){
-               showPage("attendance.php");
-          }, 2000);
+          
      }
 }
 //mark staff present
@@ -8005,13 +7993,51 @@ function markAbsent(staff){
                },
                success : function(response){
                     $("#attendance").html(response);
+                    setTimeout(function(){
+                         showPage("attendance.php");
+                    }, 2000);
                }
           })
-          setTimeout(function(){
-               showPage("attendance.php");
-          }, 2000);
+          
      }else{
           return;
      }
 
+}
+
+//checkout staffs for the day
+function checkOut(){
+     let staff = document.getElementById("staff").value;
+     let attendance_id = document.getElementById("attendance_id").value;
+     let attendance_time = document.getElementById("attendance_time").value;
+     // let remark = document.getElementById("remark").value;
+     let today = new Date();
+     let [hours, minutes] = attendance_time.split(":");
+     let selectedTime = new Date(today.getFullYear(), today.getMonth(), today.getDate(), hours, minutes);
+     let currentTime = new Date();
+     if(!attendance_time){
+          alert("Please input attendance time");
+          $("#attendance_time").focus();
+          return;
+     }else if(selectedTime > currentTime){
+          alert("Check out time time cannot be greater than current time");
+          $("#attendance_time").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/check_out_staff.php",
+               data : {attendance_id:attendance_id,staff:staff, attendance_time:attendance_time},
+               beforeSend : function(){
+                    $("#attendance").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#attendance").html(response);
+                    setTimeout(function(){
+                         showPage("check_out.php");
+                    }, 2000);
+               }
+          })
+          
+     }
 }
