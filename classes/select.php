@@ -441,8 +441,32 @@ ORDER BY s.last_name ASC;
                 return "0";
             }
         }
-        //fetch details count with 2 condition
-        public function fetch_count_2cond($table, $column1, $condition1, $column2, $condition2){
+        //fetch details count with condition
+        public function fetch_count_cond1neg($table, $column, $condition, $negCol, $negVal){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column AND $negCol != :negValue");
+            $get_user->bindValue("$column", $condition);
+            $get_user->bindValue("negValue", $negVal);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                return $get_user->rowCount();
+            }else{
+                return "0";
+            }
+        }
+        //fetch details count with condition
+        public function fetch_count_cond1neg($table, $column, $condition, $negCol, $negVal){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column AND $negCol != :negValue");
+            $get_user->bindValue("$column", $condition);
+            $get_user->bindValue("negValue", $negVal);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                return $get_user->rowCount();
+            }else{
+                return "0";
+            }
+        }
+        //fetch tax rate based on income
+        public function fetch_tax_rate($income){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column1 = :$column1 AND $column2 = :$column2");
             $get_user->bindValue("$column1", $condition1);
             $get_user->bindValue("$column2", $condition2);

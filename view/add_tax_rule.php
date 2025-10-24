@@ -32,7 +32,7 @@
                     <input type="number" id="tax_rate" name="tax_rate" required>
                 </div>
                 
-                <div class="data">
+                <div class="data" style="width:auto">
                     <button type="button" id="add_item" name="add_item" onclick="addTaxRule()">Save record <i class="fas fa-save"></i></button>
                 </div>
             </div>

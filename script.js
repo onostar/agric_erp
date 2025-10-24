@@ -8208,11 +8208,11 @@ function addTaxRule(){
           alert("Please input Tax rate value");
           $("#tax_rate").focus();
           return;
-     }else if(min_income > max_income){
+     }else if(parseFloat(min_income) > parseFloat(max_income)){
           alert("Maximum income must be greater than minimum income");
           $("#max_income").focus();
           return;
-     }else if(min_income <= 0 || max_income <= 0 || tax_rate <= 0){
+     }else if(parseFloat(min_income) <= 0 || parseFloat(max_income) <= 0 || parseFloat(tax_rate) <= 0){
           alert("Values cannot be less than or equal to zero");
           $("#max_income").focus();
           return;
@@ -8221,6 +8221,54 @@ function addTaxRule(){
                type : "POST",
                url : "../controller/add_tax_rule.php",
                data : {title:title, min_income:min_income, max_income:max_income, tax_rate:tax_rate},
+               beforeSend : function(){
+                    $("#tax_rules").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#tax_rules").html(response);
+                    setTimeout(function(){
+                         showPage("tax_rules.php");
+                    }, 2000);
+               }
+          })
+     }
+}
+//edit tax rules
+function editTaxRule(){
+     let tax = document.getElementById("tax").value;
+     let title = document.getElementById("title").value;
+     let min_income = document.getElementById("min_income").value;
+     let max_income = document.getElementById("max_income").value;
+     let tax_rate = document.getElementById("tax_rate").value;
+     if(!title){
+          alert("Please input title");
+          $("#title").focus();
+          return;
+     }else if(!min_income){
+          alert("Please input Minimum Income value");
+          $("#min_income").focus();
+          return;
+     }else if(!max_income){
+          alert("Please input maximum Income value");
+          $("#max_income").focus();
+          return;
+     }else if(!tax_rate){
+          alert("Please input Tax rate value");
+          $("#tax_rate").focus();
+          return;
+     }else if(parseFloat(min_income) > parseFloat(max_income)){
+          alert("Maximum income must be greater than minimum income");
+          $("#max_income").focus();
+          return;
+     }else if(parseFloat(min_income) <= 0 || parseFloat(max_income) <= 0 || parseFloat(tax_rate) <= 0){
+          alert("Values cannot be less than or equal to zero");
+          $("#max_income").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/update_tax_rule.php",
+               data : {tax:tax, title:title, min_income:min_income, max_income:max_income, tax_rate:tax_rate},
                beforeSend : function(){
                     $("#tax_rules").html("<div class='processing'><div class='loader'></div></div>");
                },
