@@ -467,8 +467,31 @@ ORDER BY s.last_name ASC;
             }
         }
         //fetch late days
-        public function fetch_late_days($staff, $date){
-            $get_user = $this->connectdb()->prepare("SELECT COUNT(*) AS total_late_days FROM attendance WHERE staff = :staff_id AND TIME(time_in) > '08:05:00' AND MONTH($date) = MONTH(CURDATE()) AND YEAR(date) = YEAR(CURDATE();");
+        public function fetch_late_days($staff){
+            $query = "SELECT COUNT(*) AS total_late_days 
+                FROM attendance 
+                WHERE staff = :staff_id 
+                AND TIME(time_in) > '08:05:00' 
+                AND MONTH(attendance_date) = MONTH(CURDATE()) 
+                AND YEAR(attendance_date) = YEAR(CURDATE())
+            ";
+            
+            $stmt = $this->connectdb()->prepare($query);
+            $stmt->bindValue(":staff_id", $staff);
+            $stmt->execute();
+
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if($result && $result['total_late_days'] > 0){
+                return $result['total_late_days'];
+            } else {
+                return 0;
+            }
+        }
+
+        //fetch employee attendance 
+        public function fetch_staff_work_days($staff){
+            $get_user = $this->connectdb()->prepare("SELECT COUNT(DISTINCT DATE(time_in)) AS attendance_days FROM attendance WHERE staff = :staff_id AND MONTH(attendance_date) = MONTH(CURDATE()) AND YEAR(attendance_date) = YEAR(CURDATE());");
             $get_user->bindValue("staff_id", $staff);
             $get_user->execute();
             if($get_user->rowCount() > 0){
@@ -477,6 +500,46 @@ ORDER BY s.last_name ASC;
                 return 0;
             }
         }
+        //fetch employee leave days
+        public function fetch_leave_days($staff){
+            $query = "SELECT SUM(DATEDIFF(LEAST(COALESCE(l.returned, l.end_date, CURDATE()), LAST_DAY(CURDATE())), GREATEST(l.start_date, DATE_FORMAT(CURDATE(), '%Y-%m-01'))) + 1) AS leave_days FROM leaves l
+                WHERE 
+                    l.employee = :staff_id
+                    AND (l.leave_status = 1 OR l.leave_status = 2)
+                    AND (
+                        MONTH(l.start_date) = MONTH(CURDATE())
+                        OR MONTH(COALESCE(l.returned, l.end_date)) = MONTH(CURDATE())
+                    )
+            ";
+            $stmt = $this->connectdb()->prepare($query);
+            $stmt->bindValue(":staff_id", $staff);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            return $row && $row['leave_days'] ? $row['leave_days'] : 0;
+        }
+        //fetch employee suspension days
+        public function fetch_suspension_days($staff){
+            $query = "SELECT SUM(DATEDIFF(LEAST(COALESCE(s.recall_date, CURDATE()), LAST_DAY(CURDATE())), GREATEST(s.suspension_date, DATE_FORMAT(CURDATE(), '%Y-%m-01'))) + 1) AS suspension_days FROM suspensions s WHERE s.staff = :staff_id AND (MONTH(s.suspension_date) = MONTH(CURDATE()) OR MONTH(COALESCE(s.recall_date, s.suspension_date)) = MONTH(CURDATE()))";
+            $stmt = $this->connectdb()->prepare($query);
+            $stmt->bindValue(":staff_id", $staff);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $row && $row['suspension_days'] ? $row['suspension_days'] : 0;
+        }
+
+        // fetch total working days (all calendar days)
+        public function fetch_total_working_days(){
+            $query = "SELECT DAY(LAST_DAY(CURDATE())) AS working_days
+            ";
+            $stmt = $this->connectdb()->prepare($query);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            return $row ? $row['working_days'] : 0;
+        }
+
         
         //fetch tax rate based on income
         public function fetch_count_2cond($table, $column1, $condition1, $column2, $condition2){

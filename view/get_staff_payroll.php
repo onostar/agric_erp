@@ -46,17 +46,40 @@
             $employer_contribution = round((10/100) * $pension_income, 2);
 
             //fetch absent fee
-            $abs = $get_details->fetch_details_group('penalty_fees', 'amount', 'penalty', 'penalty', 'ABSENT');
+            $abs = $get_details->fetch_details_group('penalty_fees', 'amount', 'penalty', 'ABSENT');
             $absent_penalty = $abs->amount;
             //fetch lateness fee
-            $lts = $get_details->fetch_details_group('penalty_fees', 'amount', 'penalty', 'penalty', 'LATENESS');
+            $lts = $get_details->fetch_details_group('penalty_fees', 'amount', 'penalty', 'LATENESS');
             $lateness_penaltly = $abs->amount;
 
             //fetch late days
-            $late_days = $get_details->fetch_late_days($staff, $month);
+            $late_days = $get_details->fetch_late_days($staff);
             $lateness_fee = $late_days * $lateness_penaltly;
 
-            //fetch absent days
+            //fetch days present at work
+            $days_at_work = $get_details->fetch_staff_work_days($staff);
+            /* echo "Days at work: $days_at_work";
+            echo "late days: $late_days"; */
+
+            //fetch leave days
+            $leave_days = $get_details->fetch_leave_days($staff);
+           
+            //fetch suspension days
+            $suspension_days = $get_details->fetch_suspension_days($staff);
+            
+
+            //total working days
+            $total_working_days = $get_details->fetch_total_working_days();
+
+            //claulate absent days
+            $absent_days = $total_working_days - ($days_at_work + $leave_days);
+            $total_absent_days = $absent_days + $suspension_days;
+
+            //get absent penalty fee
+            $absent_fee = $absent_penalty * $total_absent_days;
+
+            //calculate defaultnet pay
+            $net_pay = $total - ($tax + $pension + $lateness_fee + $absent_fee)
 ?>
 
 <div id="salary_structure" class="displays">
@@ -67,9 +90,36 @@
         <h3 style="background:var(--tertiaryColor)">Generate Payroll for <?php echo $full_name?></h3>
         <!-- <form method="POST" id="addUserForm"> -->
         <section>
+            <div class="inputs" style="gap:.8rem; align-items:flex_end; justify-content:left; background:#cdcdcd; padding:5px;">
+                <div class="data" style="width:23%">
+                    <label for="basic_salary">Total Working Days</label>
+                    <input type="text" value="<?php echo $total_working_days?> days" readonly>
+                    <input type="hidden" id="working_days" name="working_days" value="<?php echo $total_working_days?>" readonly>
+                </div>
+                <div class="data" style="width:23%">
+                    <label for="basic_salary">Days at work</label>
+                    <input type="text" value="<?php echo $days_at_work?> days" readonly>
+                    <input type="hidden" id="days_at_work" name="days_at_work" value="<?php echo $days_at_work?>" readonly>
+                </div>
+                <div class="data" style="width:23%">
+                    <label for="basic_salary">Days on Leave</label>
+                    <input type="text" value="<?php echo $leave_days?> days" readonly>
+                    <input type="hidden" id="leave_days" name="leave_days" value="<?php echo $leave_days?>" readonly>
+                </div>
+                <div class="data" style="width:23%">
+                    <label for="basic_salary">Days on Suspension</label>
+                    <input type="text" value="<?php echo $suspension_days?> days" readonly>
+                    <input type="hidden" id="suspension_days" name="suspension_days" value="<?php echo $suspension_days?>" readonly>
+                </div>
+                <div class="data" style="width:23%">
+                    <label for="basic_salary">Total Absent Days</label>
+                    <input type="text" value="<?php echo $absent_days?> days" readonly>
+                    <input type="hidden" id="absent_days" name="absent_days" value="<?php echo $absent_days?>" readonly>
+                </div>
+            </div>
+            <hr>
             <div class="inputs" style="gap:.8rem; align-items:flex_end; justify-content:left;">
                 <input type="hidden" name="staff" id="staff" value="<?php echo $staff?>">
-                <!-- <input type="hidden" name="salary_id" id="salary_id" value="<?php echo $salary_id?>"> -->
                 <div class="data" style="width:23%">
                     <label for="basic_salary">Basic Salary (NGN)</label>
                     <input type="text" id="basic_salary" name="basic_salary" value="<?php echo number_format($basic, 2)?>" readonly>
@@ -114,17 +164,17 @@
                 </div>
                 <div class="data" style="width:23%;">
                     <label for="pension">Pension (NGN) - <span style='color:red'>8% Applied</span></label>
-                    <input type="number" name="pension" id="pension" required value=<?php echo $pension?> oninput="getNetPay()">
-                    <input type="hidden" name="emplouer_contribution" id="employer_controbution" value="<?php echo $employer_contribution?>">
+                    <input type="number" name="pension" id="pension" required value=<?php echo $pension?> oninput="getNetPay()" readonly>
+                    <input type="hidden" name="employer_contribution" id="employer_contribution" value="<?php echo $employer_contribution?>">
                     <input type="hidden" name="pension_income" id="pension_income" value="<?php echo $pension_income?>">
                 </div>
                 <div class="data" style="width:23%;">
                     <label for="absence">Absence Penalty (NGN)</label>
-                    <input type="number" name="absence" id="absence" required value=0 oninput="getNetPay()">
+                    <input type="number" name="absence" id="absence" required value=<?php echo $absent_fee?> oninput="getNetPay()" readonly>
                 </div>
                 <div class="data" style="width:23%;">
                     <label for="lateness">Lateness Penalty (NGN)</label>
-                    <input type="number" name="lateness" id="lateness" required value=0 oninput="getNetPay()">
+                    <input type="number" name="lateness" id="lateness" required value=<?php echo $lateness_fee?> oninput="getNetPay()" readonly>
                 </div>
                 <div class="data" style="width:23%;">
                     <label for="lateness">Loan Repayment (NGN)</label>
@@ -136,8 +186,8 @@
                 </div>
                 <div class="data" style="width:23%;">
                     <label for="total">Net Pay (NGN)</label>
-                    <input type="hidden" name="net_pay" id="net_pay" required value="<?php echo $total?>">
-                    <input type="text" name="net_salary" id="net_salary" value="<?php echo number_format($total, 2)?>" required style="background:#cdcdcd" readonly>
+                    <input type="hidden" name="net_pay" id="net_pay" required value="<?php echo $net_pay?>">
+                    <input type="text" name="net_salary" id="net_salary" value="<?php echo number_format($net_pay, 2)?>" required style="background:#cdcdcd" readonly>
                 </div>
                 <div class="data" style="width:auto">
                     <button type="button" id="add_item" name="add_item" onclick="generatePayroll()">Save record <i class="fas fa-save"></i></button>

@@ -13,3 +13,7 @@ for attendance 0 means present 1 means absent
 while geenrating payroll, tax s calculated only from basic salary + allowances- medical allowance. medical allowance is not taxable.
 tax rate is fetced based on taxable income
 tax and pension are non editable
+
+does ur working days include weekends?
+
+total days absent is calcualted from subtracting the sum of days on leave and days at work and then subtracting it from the total working days of the month whose resut is then added to the days on suspension

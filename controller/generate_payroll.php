@@ -31,7 +31,7 @@
         }
         
         //check if staff already has payroll for this month
-        $check = $get_details->fetch_count_curMonth('salary_structure', 'payroll_date', 'staff', $staff);
+        $check = $get_details->fetch_count_curMonth('payroll', 'payroll_date', 'staff', $staff);
         if($check > 0){
             echo "<script>alert('Payroll already generated for $full_name this month')</script>";
             echo "<div class='success'><p style='background:brown'>Payroll already generated for $full_name this month. <i class='fas fa-thumb-tack'></i></p></div>";
@@ -44,7 +44,7 @@
                 'tax' => $tax,
                 'pension' => $pension,
                 'absence_penalty' => $absence,
-                'lateness_ppenalty' => $lateness,
+                'lateness_penalty' => $lateness,
                 'loan_repayment' => $loans,
                 'other_deductions' => $others,
                 'net_pay' => $net_pay,

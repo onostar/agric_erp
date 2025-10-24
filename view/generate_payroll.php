@@ -42,7 +42,7 @@ date_default_timezone_set("Africa/Lagos");
                 <!-- <td>Department</td> -->
                 <td>Designation</td>
                 <td>Basic Salary</td>
-                <td>Total</td>
+                <td>Gross Pay</td>
                 <td>Status</td>
                 <td></td>
             </tr>
