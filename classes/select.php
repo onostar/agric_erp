@@ -344,7 +344,8 @@
     s.other_names,
     s.staff_number,
     s.department,
-    s.designation, s.gender,
+    s.designation,
+    s.gender,
     ss.basic_salary,
     ss.housing_allowance,
     ss.transport_allowance,
@@ -352,7 +353,12 @@
     ss.medical_allowance,
     ss.other_allowance,
     ss.total_earnings,
-    IF(p.staff IS NULL, 'Pending', 'Generated') AS payroll_status
+    ss.salary_id,
+    CASE 
+        WHEN ss.staff IS NULL THEN 'No Salary Structure'
+        WHEN p.staff IS NULL THEN 'Pending'
+        ELSE 'Generated'
+    END AS payroll_status
 FROM staffs s
 LEFT JOIN salary_structure ss 
     ON s.staff_id = ss.staff
@@ -360,7 +366,8 @@ LEFT JOIN payroll p
     ON s.staff_id = p.staff 
     AND MONTH(p.payroll_date) = MONTH(CURDATE())
     AND YEAR(p.payroll_date) = YEAR(CURDATE())
-WHERE s.store = :store AND s.staff_status = 0
+WHERE s.store = :store 
+  AND s.staff_status = 0
 ORDER BY s.last_name ASC;
 ");
             $get_user->bindValue("store", $store);
@@ -495,6 +502,30 @@ ORDER BY s.last_name ASC;
         public function fetch_count_curDatePosCon($table, $column, $condition, $value){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE date($column) = CURDATE() AND $condition = :$condition");
             $get_user->bindValue("$condition", $value);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                return $get_user->rowCount();
+            }else{
+                return "0";
+            }
+        }
+        // select count with month, year and positive condition
+        public function fetch_count_curMonth($table, $column, $condition, $value){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE MONTH($column) = MONTH(CURDATE()) AND YEAR($column) = YEAR(CURDATE()) AND $condition = :$condition");
+            $get_user->bindValue("$condition", $value);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                return $get_user->rowCount();
+            }else{
+                return "0";
+            }
+        }
+        // select count with month, year and positive condition and 2 of either condition
+        public function fetch_count_curMonth2con($table, $column, $condition, $value, $con2, $val2, $val3){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE MONTH($column) = MONTH(CURDATE()) AND YEAR($column) = YEAR(CURDATE()) AND $condition = :$condition $con2 = :val2 OR $con2 = :val3");
+            $get_user->bindValue("$condition", $value);
+            $get_user->bindValue("val2", $val2);
+            $get_user->bindValue("val3", $val3);
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 return $get_user->rowCount();

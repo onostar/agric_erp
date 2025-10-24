@@ -63,7 +63,9 @@
                 </div>
                 <div class="data" style="width:23%;">
                     <label for="total">Total Earnings (NGN)</label>
-                    <input type="number" name="total" id="total" required value="<?php echo $total?>" style="background:#bdbdbd" readonly>
+                    <input type="hidden" name="total" id="total" required value="<?php echo $total?>" readonly>
+                    <input type="text" name="total_pay" id="total_pay" required value="<?php echo number_format($total, 2)?>" style="background:#cdcdcd" readonly>
+                    
                 </div>
                 <div class="data">
                     <button type="button" id="add_item" name="add_item" onclick="updateSalary()">Save record <i class="fas fa-save"></i></button>

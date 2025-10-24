@@ -8051,8 +8051,10 @@ function getTotalEarnings(){
      let utility = document.getElementById("utility")?.value || 0;
      let others = document.getElementById("others")?.value || 0;
      let total = document.getElementById("total");
+     let total_pay = document.getElementById("total_pay");
      let totalEarning = parseFloat(basic_salary) + parseFloat(medical) + parseFloat(housing) + parseFloat(transport) + parseFloat(utility) + parseFloat(others);
      total.value = totalEarning;
+     total_pay.value = totalEarning.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });;
 }
 //add salary structure for staff
 function addSalary(){
@@ -8120,6 +8122,112 @@ function updateSalary(){
                     $("#salary_structure").html(response);
                     setTimeout(function(){
                          showPage("salary_structure.php");
+                    }, 2000);
+               }
+          })
+     }
+}
+// Calculate net pay after deductions
+function getNetPay() {
+    const gross = parseFloat(document.getElementById("gross")?.value) || 0;
+    const tax = parseFloat(document.getElementById("tax")?.value) || 0;
+    const pension = parseFloat(document.getElementById("pension")?.value) || 0;
+    const absence = parseFloat(document.getElementById("absence")?.value) || 0;
+    const lateness = parseFloat(document.getElementById("lateness")?.value) || 0;
+    const others = parseFloat(document.getElementById("others")?.value) || 0;
+    const loans = parseFloat(document.getElementById("loans")?.value) || 0;
+
+    const totalDeductions = tax + pension + absence + lateness + others + loans;
+    const netEarning = gross - totalDeductions;
+
+    const net_pay = document.getElementById("net_pay");
+    const net_salary = document.getElementById("net_salary");
+     // Format net pay with commas and 2 decimal places
+
+    net_salary.value = netEarning.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    net_pay.value = netEarning.toFixed(2);
+}
+
+//generate pay roll for staff
+function generatePayroll(){
+     let staff = document.getElementById("staff").value;
+     let gross = document.getElementById("gross").value;
+     let pension = document.getElementById("pension").value;
+     let tax = document.getElementById("tax").value;
+     let absence = document.getElementById("absence").value;
+     let lateness = document.getElementById("lateness").value;
+     let loans = document.getElementById("loans").value;
+     let others = document.getElementById("others").value;
+     let net_pay = document.getElementById("net_pay").value;
+     if(parseFloat(gross) < 0 || parseFloat(tax) < 0 || parseFloat(pension) < 0 || parseFloat(lateness) < 0 || parseFloat(absence) < 0 || parseFloat(loans) < 0 || parseFloat(others) < 0){
+          alert("Values cannot be less than 0");
+          $("#tax").focus();
+          return;
+     }else{
+          let confirm_pay = confirm("Are you sure you want to generate this payroll?", "");
+          if(confirm_pay){
+               $.ajax({
+                    type : "POST",
+                    url : "../controller/generate_payroll.php",
+                    data : {staff:staff, gross:gross, tax:tax, pension:pension, absence:absence, lateness:lateness, others:others, loans:loans, net_pay:net_pay},
+                    beforeSend : function(){
+                         $("#salary_structure").html("<div class='processing'><div class='loader'></div></div>");
+                    },
+                    success : function(response){
+                         $("#salary_structure").html(response);
+                         setTimeout(function(){
+                              showPage("generate_payroll.php");
+                         }, 2000);
+                    }
+               })
+          }else{
+               return;
+          }
+     }
+}
+
+//add tax rules
+function addTaxRule(){
+     let title = document.getElementById("title").value;
+     let min_income = document.getElementById("min_income").value;
+     let max_income = document.getElementById("max_income").value;
+     let tax_rate = document.getElementById("tax_rate").value;
+     if(!title){
+          alert("Please input title");
+          $("#title").focus();
+          return;
+     }else if(!min_income){
+          alert("Please input Minimum Income value");
+          $("#min_income").focus();
+          return;
+     }else if(!max_income){
+          alert("Please input maximum Income value");
+          $("#max_income").focus();
+          return;
+     }else if(!tax_rate){
+          alert("Please input Tax rate value");
+          $("#tax_rate").focus();
+          return;
+     }else if(min_income > max_income){
+          alert("Maximum income must be greater than minimum income");
+          $("#max_income").focus();
+          return;
+     }else if(min_income <= 0 || max_income <= 0 || tax_rate <= 0){
+          alert("Values cannot be less than or equal to zero");
+          $("#max_income").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/add_tax_rule.php",
+               data : {title:title, min_income:min_income, max_income:max_income, tax_rate:tax_rate},
+               beforeSend : function(){
+                    $("#tax_rules").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#tax_rules").html(response);
+                    setTimeout(function(){
+                         showPage("tax_rules.php");
                     }, 2000);
                }
           })

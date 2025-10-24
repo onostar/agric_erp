@@ -92,9 +92,11 @@ date_default_timezone_set("Africa/Lagos");
                 <td><?php echo $detail->payroll_status?></td>
                 <td>
                     <?php if($detail->payroll_status == 'Pending'){?>
-                    <a style="padding:5px 8px; border-radius:5px;background:var(--tertiaryColor);color:#fff;" href="javascript:void(0)" onclick="showPage('add_salary_structure.php?staff=<?php echo $detail->staff_id?>')" title="Add Salary Structure"><i class="fas fa-plus-square"></i></a>
+                    <a style="padding:5px 8px; border-radius:15px;background:var(--tertiaryColor);color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="showPage('get_staff_payroll.php?staff=<?php echo $detail->staff_id?>&salary_id=<?php echo $detail->salary_id?>')" title="generate staff payroll">Generate <i class="fas fa-hand-holding-dollar"></i></a>
+                    <?php }elseif($detail->payroll_status == 'Generated'){?>
+                    <a style="padding:5px 8px; border-radius:15px;background:var(--otherColor);color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff;" href="javascript:void(0)" onclick="showPage('view_staff_payroll.php?staff=<?php echo $detail->staff_id?>')" title="View Payroll">View <i class="fas fa-eye"></i></a>
                     <?php }else{?>
-                    <a style="padding:5px 8px; border-radius:5px;background:var(--otherColor);color:#fff;" href="javascript:void(0)" onclick="showPage('edit_salary_structure.php?staff=<?php echo $detail->staff_id?>&salary_id=<?php echo $detail->salary_id?>')" title="Update salary structure"><i class="fas fa-edit"></i></a>
+                    <a style="padding:5px 8px; border-radius:15px;background:brown;color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff;" href="javascript:void(0)" onclick="showPage('add_salary_structure.php?staff=<?php echo $detail->staff_id?>')" title="View Payroll">Create <i class="fas fa-user-plus"></i></a>
                     <?php }?>
                     
                 </td>

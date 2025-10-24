@@ -6,7 +6,7 @@
 ?>
 
 <div id="crop_cycle" class="displays">
-        <a style="background:brown; color:#fff; padding:5px 8px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222;" href="javascript:void(0)" onclick="showPage('crop_cycle.php')" title="Return fot farm fields">Return <i class="fas fa-angle-double-left"></i></a>
+        <a style="background:brown; color:#fff; padding:5px 8px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222;" href="javascript:void(0)" onclick="showPage('crop_cycle.php')" title="Return to crop cycles">Return <i class="fas fa-angle-double-left"></i></a>
 
     <div class="info" style="width:60%; margin:20px"></div>
     <div class="add_user_form" style="width:70%; margin:20px">
