@@ -8153,12 +8153,15 @@ function generatePayroll(){
      let staff = document.getElementById("staff").value;
      let gross = document.getElementById("gross").value;
      let pension = document.getElementById("pension").value;
+     let pension_income = document.getElementById("pension_income").value;
      let tax = document.getElementById("tax").value;
      let absence = document.getElementById("absence").value;
      let lateness = document.getElementById("lateness").value;
      let loans = document.getElementById("loans").value;
      let others = document.getElementById("others").value;
      let net_pay = document.getElementById("net_pay").value;
+     let employer_contribution = document.getElementById("employer_contribution").value;
+     let taxable_income = document.getElementById("taxable_income").value;
      if(parseFloat(gross) < 0 || parseFloat(tax) < 0 || parseFloat(pension) < 0 || parseFloat(lateness) < 0 || parseFloat(absence) < 0 || parseFloat(loans) < 0 || parseFloat(others) < 0){
           alert("Values cannot be less than 0");
           $("#tax").focus();
@@ -8169,7 +8172,7 @@ function generatePayroll(){
                $.ajax({
                     type : "POST",
                     url : "../controller/generate_payroll.php",
-                    data : {staff:staff, gross:gross, tax:tax, pension:pension, absence:absence, lateness:lateness, others:others, loans:loans, net_pay:net_pay},
+                    data : {staff:staff, gross:gross, tax:tax, pension:pension, absence:absence, lateness:lateness, others:others, loans:loans, net_pay:net_pay, employer_contribution:employer_contribution, taxable_income:taxable_income, pension_income:pension_income},
                     beforeSend : function(){
                          $("#salary_structure").html("<div class='processing'><div class='loader'></div></div>");
                     },
@@ -8276,6 +8279,77 @@ function editTaxRule(){
                     $("#tax_rules").html(response);
                     setTimeout(function(){
                          showPage("tax_rules.php");
+                    }, 2000);
+               }
+          })
+     }
+}
+//add penalty fees
+function addPenalty(){
+     let penalty = document.getElementById("penalty").value;
+     let amount = document.getElementById("amount").value;
+     
+     if(!penalty){
+          alert("Please input penalty title");
+          $("#penalty").focus();
+          return;
+     }else if(!amount){
+          alert("Please input penalty amount");
+          $("#amount").focus();
+          return;
+    
+     }else if(parseFloat(amount) <= 0){
+          alert("Values cannot be less than or equal to zero");
+          $("#amount").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/add_penalty.php",
+               data : {penalty:penalty, amount:amount},
+               beforeSend : function(){
+                    $("#penalties").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#penalties").html(response);
+                    setTimeout(function(){
+                         showPage("penalty_fees.php");
+                    }, 2000);
+               }
+          })
+     }
+}
+//update penalty fees
+function editPenalty(){
+     let penalty_id = document.getElementById("penalty_id").value;
+     let penalty = document.getElementById("penalty").value;
+     let amount = document.getElementById("amount").value;
+     
+     if(!penalty){
+          alert("Please input penalty title");
+          $("#penalty").focus();
+          return;
+     }else if(!amount){
+          alert("Please input penalty amount");
+          $("#amount").focus();
+          return;
+    
+     }else if(parseFloat(amount) <= 0){
+          alert("Values cannot be less than or equal to zero");
+          $("#amount").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/update_penalty.php",
+               data : {penalty_id:penalty_id, penalty:penalty, amount:amount},
+               beforeSend : function(){
+                    $("#penalties").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#penalties").html(response);
+                    setTimeout(function(){
+                         showPage("penalty_fees.php");
                     }, 2000);
                }
           })

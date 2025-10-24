@@ -453,20 +453,33 @@ ORDER BY s.last_name ASC;
                 return "0";
             }
         }
-        //fetch details count with condition
-        public function fetch_count_cond1neg($table, $column, $condition, $negCol, $negVal){
-            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column AND $negCol != :negValue");
-            $get_user->bindValue("$column", $condition);
-            $get_user->bindValue("negValue", $negVal);
+        //fetch tax rate perincome
+        public function fetch_tax_rate($income){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM tax_rules WHERE :income BETWEEN min_income AND max_income");
+            $get_user->bindValue("income", $income);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows =  $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows =  "No record found";
+                return $rows;
+            }
+        }
+        //fetch late days
+        public function fetch_late_days($staff, $date){
+            $get_user = $this->connectdb()->prepare("SELECT COUNT(*) AS total_late_days FROM attendance WHERE staff = :staff_id AND TIME(time_in) > '08:05:00' AND MONTH($date) = MONTH(CURDATE()) AND YEAR(date) = YEAR(CURDATE();");
+            $get_user->bindValue("staff_id", $staff);
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 return $get_user->rowCount();
             }else{
-                return "0";
+                return 0;
             }
         }
+        
         //fetch tax rate based on income
-        public function fetch_tax_rate($income){
+        public function fetch_count_2cond($table, $column1, $condition1, $column2, $condition2){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column1 = :$column1 AND $column2 = :$column2");
             $get_user->bindValue("$column1", $condition1);
             $get_user->bindValue("$column2", $condition2);

@@ -13,8 +13,13 @@
         $absence = htmlspecialchars(stripslashes($_POST['absence']));
         $lateness = htmlspecialchars(stripslashes($_POST['lateness']));
         $loans = htmlspecialchars(stripslashes($_POST['loans']));
+        $taxable_income = htmlspecialchars(stripslashes($_POST['taxable_income']));
+        $employer_contribution = htmlspecialchars(stripslashes($_POST['employer_contribution']));
         $others = htmlspecialchars(stripslashes($_POST['others']));
         $net_pay = htmlspecialchars(stripslashes($_POST['net_pay']));
+        $pension_income = htmlspecialchars(stripslashes($_POST['pension_income']));
+        $total_contribution = $pension + $employer_contribution;
+
         include "../classes/dbh.php";
         include "../classes/select.php";
         include "../classes/inserts.php";
@@ -50,6 +55,26 @@
             $add_payroll = new add_data('payroll', $data);
             $add_payroll->create_data();
             if($add_payroll){
+                //get payroll id
+                $ids = $get_details->fetch_lastInserted('payroll', 'payroll_id');
+                $id = $ids->payroll_id;
+                //check if pension was recorded
+                if(floatval($pension) > 0){
+                    //insert into pension contribution table
+                    $pension_data = array(
+                        'payroll_id' => $id,
+                        'staff' => $staff,
+                        'store' => $store,
+                        'pensionable_income' => $pension_income,
+                        'employee_contribution' => $pension,
+                        'employer_contribution' => $employer_contribution,
+                        'total_contribution' => $total_contribution,
+                        'payroll_date' => date("Y-m-d"),
+                        'posted_by' => $user,
+                        'post_date' => $date
+                    );
+                }
+                   
                 echo "<div class='success'><p>Payroll generated successfully for  $full_name. <i class='fas fa-thumbs-up'></i></p></div>";
             }
         }

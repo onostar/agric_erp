@@ -13,6 +13,7 @@
             foreach($rows as $row){
                 $full_name = $row->last_name." ".$row->other_names;
             }
+            $month = date("Y-m-d");
             //get salary details
             $details = $get_details->fetch_details_cond('salary_structure', 'salary_id', $salary_id);
             foreach($details as $detail){
@@ -24,13 +25,45 @@
                 $others = $detail->other_allowance;
                 $total = $detail->total_earnings;
             }
+            //get taxale income
+            $taxable_income = $basic + $utility + $transport + $housing + $others;
+            //get tax
+            $rates = $get_details->fetch_tax_rate($taxable_income);
+            if(is_array($rates)){
+                foreach($rates as $tx){
+                    $rate = $tx->tax_rate;
+                    $title = $tx->title;
+                }
+            }else{
+                $rate = 0;
+                $title = "No tax";
+            }
+            $tax = round(($rate/100) * $taxable_income, 2);
+            //get employee pension
+            $pension_income = $basic + $transport + $housing;
+            $pension = round((8/100) * $pension_income, 2);
+            //get employercontribution
+            $employer_contribution = round((10/100) * $pension_income, 2);
+
+            //fetch absent fee
+            $abs = $get_details->fetch_details_group('penalty_fees', 'amount', 'penalty', 'penalty', 'ABSENT');
+            $absent_penalty = $abs->amount;
+            //fetch lateness fee
+            $lts = $get_details->fetch_details_group('penalty_fees', 'amount', 'penalty', 'penalty', 'LATENESS');
+            $lateness_penaltly = $abs->amount;
+
+            //fetch late days
+            $late_days = $get_details->fetch_late_days($staff, $month);
+            $lateness_fee = $late_days * $lateness_penaltly;
+
+            //fetch absent days
 ?>
 
 <div id="salary_structure" class="displays">
         <a style="background:brown; color:#fff; padding:5px 8px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222;" href="javascript:void(0)" onclick="showPage('generate_payroll.php')" title="Return to salary structure">Return <i class="fas fa-angle-double-left"></i></a>
 
     <div class="info" style="width:40%; margin:20px"></div>
-    <div class="add_user_form" style="width:80%; margin:0px">
+    <div class="add_user_form" style="width:90%; margin:0px">
         <h3 style="background:var(--tertiaryColor)">Generate Payroll for <?php echo $full_name?></h3>
         <!-- <form method="POST" id="addUserForm"> -->
         <section>
@@ -66,17 +99,24 @@
                     <input type="text" required value="<?php echo number_format($total, 2)?>" style="background:#cdcdcd" readonly>
                     <input type="hidden" name="gross" id="gross" required value="<?php echo $total?>" readonly>
                 </div>
+                <div class="data" style="width:23%;">
+                    <label for="total">Taxable Income (NGN)</label>
+                    <input type="text" required value="<?php echo number_format($taxable_income, 2)?>" style="background:#cdcdcd" readonly>
+                    <input type="hidden" name="taxable_income" id="taxable_income" required value="<?php echo $taxable_income?>" readonly>
+                </div>
             </div>
             <h4 style="margin:5px 0 0 0; font-size:.9rem;">Deductions</h4>
             <hr>
             <div class="inputs" style="gap:.8rem; align-items:flex_end; justify-content:left;">
                 <div class="data" style="width:23%;">
-                    <label for="tax">Tax (NGN)</label>
-                    <input type="number" name="tax" id="tax" required value=0 oninput="getNetPay()">
+                    <label for="tax">Tax (NGN) - <span style='color:red'><?php echo number_format($rate, 1)?>% Applied</span></label>
+                    <input type="number" name="tax" id="tax" required value=<?php echo $tax?> oninput="getNetPay()" readonly>
                 </div>
                 <div class="data" style="width:23%;">
-                    <label for="pension">Pension (NGN)</label>
-                    <input type="number" name="pension" id="pension" required value=0 oninput="getNetPay()">
+                    <label for="pension">Pension (NGN) - <span style='color:red'>8% Applied</span></label>
+                    <input type="number" name="pension" id="pension" required value=<?php echo $pension?> oninput="getNetPay()">
+                    <input type="hidden" name="emplouer_contribution" id="employer_controbution" value="<?php echo $employer_contribution?>">
+                    <input type="hidden" name="pension_income" id="pension_income" value="<?php echo $pension_income?>">
                 </div>
                 <div class="data" style="width:23%;">
                     <label for="absence">Absence Penalty (NGN)</label>

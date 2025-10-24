@@ -10,3 +10,6 @@ for staffs list, 0 means active, 1 means suspended, 2 means resigned/retired
 for leaves under hr module - only active staffs can apply for leaves
 for leave status - 0 means applied, 1 means approved, -1 means rejected and 2 means he has returned
 for attendance 0 means present 1 means absent
+while geenrating payroll, tax s calculated only from basic salary + allowances- medical allowance. medical allowance is not taxable.
+tax rate is fetced based on taxable income
+tax and pension are non editable
