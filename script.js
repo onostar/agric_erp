@@ -8150,6 +8150,7 @@ function getNetPay() {
 
 //generate pay roll for staff
 function generatePayroll(){
+     let payroll_date = document.getElementById("payroll_date").value;
      let staff = document.getElementById("staff").value;
      let working_days = document.getElementById("working_days").value;
      let days_at_work = document.getElementById("days_at_work").value;
@@ -8184,7 +8185,7 @@ function generatePayroll(){
                $.ajax({
                     type : "POST",
                     url : "../controller/generate_payroll.php",
-                    data : {staff:staff, absent_days:absent_days, suspension_days:suspension_days, leave_days:leave_days, days_at_work:days_at_work, working_days:working_days,basic_salary:basic_salary, housing:housing, medical:medical, transport:transport, utility:utility, other_allow:other_allow, gross:gross, tax:tax, pension:pension, absence:absence, lateness:lateness, others:others, loans:loans, net_pay:net_pay, employer_contribution:employer_contribution, taxable_income:taxable_income, tax_rate:tax_rate, pension_income:pension_income},
+                    data : {staff:staff, payroll_date:payroll_date, absent_days:absent_days, suspension_days:suspension_days, leave_days:leave_days, days_at_work:days_at_work, working_days:working_days,basic_salary:basic_salary, housing:housing, medical:medical, transport:transport, utility:utility, other_allow:other_allow, gross:gross, tax:tax, pension:pension, absence:absence, lateness:lateness, others:others, loans:loans, net_pay:net_pay, employer_contribution:employer_contribution, taxable_income:taxable_income, tax_rate:tax_rate, pension_income:pension_income},
                     beforeSend : function(){
                          $("#salary_structure").html("<div class='processing'><div class='loader'></div></div>");
                     },

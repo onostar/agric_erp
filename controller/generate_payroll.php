@@ -3,7 +3,7 @@
     session_start();
     if(isset($_SESSION['user_id'])){
         $date = date("Y-m-d H:i:s");
-        $payroll_date = date("Y-m-d");
+        $payroll_date =  htmlspecialchars(stripslashes($_POST['payroll_date']));
         $user = $_SESSION['user_id'];
         $store = $_SESSION['store_id'];
         $staff = htmlspecialchars(stripslashes($_POST['staff']));

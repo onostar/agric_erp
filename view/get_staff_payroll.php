@@ -13,7 +13,7 @@
             foreach($rows as $row){
                 $full_name = $row->last_name." ".$row->other_names;
             }
-            $month = date("Y-m-d");
+            $payroll_date = date("Y-m-d");
             //get salary details
             $details = $get_details->fetch_details_cond('salary_structure', 'salary_id', $salary_id);
             foreach($details as $detail){
@@ -87,10 +87,11 @@
 
     <div class="info" style="width:40%; margin:20px"></div>
     <div class="add_user_form" style="width:90%; margin:0px">
-        <h3 style="background:var(--tertiaryColor)">Generate <?php echo date("F, Y")?>Payslip for <?php echo $full_name?></h3>
+        <h3 style="background:var(--tertiaryColor)">Generate <?php echo date("F, Y")?> Payslip for <?php echo $full_name?></h3>
         <!-- <form method="POST" id="addUserForm"> -->
         <section>
             <div class="inputs" style="gap:.8rem; align-items:flex_end; justify-content:left; background:#cdcdcd; padding:5px;">
+                <input type="hidden" id="payroll_date"id="payroll_date" value="<?php echo $payroll_date?>">
                 <div class="data" style="width:23%">
                     <label for="basic_salary">Total Working Days</label>
                     <input type="text" value="<?php echo $total_working_days?> days" readonly>

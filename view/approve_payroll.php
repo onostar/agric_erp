@@ -26,7 +26,7 @@ date_default_timezone_set("Africa/Lagos");
     
     <div class="info" style="margin: 10px!important"></div>
     <!-- showing staffs that are not resigned in selected store -->
-    <h2>Approve Staff Payroll for <?php echo date("F, Y")?></h2>
+    <h2>Approve Staff Payslip </h2>
     <hr>
     <div class="search">
         <input type="search" id="searchRoom" placeholder="Enter keyword" onkeyup="searchData(this.value)">
@@ -36,6 +36,7 @@ date_default_timezone_set("Africa/Lagos");
         <thead>
             <tr style="background:var(--moreColor)">
                 <td>S/N</td>
+                <td>Month</td>
                 <td>Staff</td>
                 <td>Staff ID</td>
                 <td>Gender</td>
@@ -43,7 +44,7 @@ date_default_timezone_set("Africa/Lagos");
                 <td>Designation</td>
                 <td>Net Pay</td>
                 <td>Prepared By</td>
-                <td>Date</td>
+                <td>Date Prep.</td>
                 <td></td>
             </tr>
         </thead>
@@ -51,7 +52,7 @@ date_default_timezone_set("Africa/Lagos");
         <?php
                 $n = 1;
                 $get_items = new selects();
-                $details = $get_items->fetch_details_curmonth2Con('payroll', 'payroll_date', 'store', $store, 'payroll_status', 0);
+                $details = $get_items->fetch_details_2cond('payroll', 'store', 'payroll_status', $store, 0);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
                     //get staff name
@@ -65,6 +66,7 @@ date_default_timezone_set("Africa/Lagos");
             ?>
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
+                <td style="color:var(--otherColor)"><?php echo date("M, Y", strtotime($detail->payroll_date))?></td>
                 <td>
                     <?php 
                         

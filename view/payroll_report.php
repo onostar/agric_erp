@@ -30,7 +30,7 @@ date_default_timezone_set("Africa/Lagos");
         <section style="margin:0!important; padding:0!important">    
             <div class="from_to_date" style="width:auto; margin:0!important; padding:0">
                 <label>Search By Month</label><br>
-                <select name="payroll_month" id="payroll_month" onchange="getMonthlyPayrolll(this.value)">
+                <select name="payroll_month" id="payroll_month" onchange="getMonthlyPayroll(this.value)">
                     <option value="<?php echo date("Y-m-d")?>" selected disabled><?php echo date("F, Y")?></option>
                     <?php
                         //get all payrolls groupd by month

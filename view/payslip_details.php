@@ -38,6 +38,7 @@
                 $status = $result->payroll_status;
                 $approved = $result->approved;
                 $approved_by = $result->approved_by;
+                $payroll_date = $result->payroll_date;
             }
             
             //get staff details
@@ -53,7 +54,7 @@
 
     <div class="info" style="width:40%; margin:20px"></div>
     <div class="add_user_form" style="width:90%; margin:0px">
-        <h3 style="background:var(--otherColor)">Pay slip Details for <?php echo $full_name?></h3>
+        <h3 style="background:var(--otherColor)"><?php echo date("F Y", strtotime($payroll_date))?> Pay slip Details for <?php echo $full_name?></h3>
         <!-- <form method="POST" id="addUserForm"> -->
         <section>
             <div class="inputs" style="gap:.8rem; align-items:flex_end; justify-content:left; background:#cdcdcd; padding:5px;">

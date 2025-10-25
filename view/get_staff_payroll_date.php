@@ -7,14 +7,14 @@
         if(isset($_GET['staff']) && isset($_GET['salary_id']) && isset($_GET['payroll_date'])){
             $staff = htmlspecialchars(stripslashes($_GET['staff']));
             $salary_id = htmlspecialchars(stripslashes($_GET['salary_id']));
-            $payroll_date = htmlspecialchars(stripslashes($_GET['payroll_date']));
+            $search_date = htmlspecialchars(stripslashes($_GET['payroll_date']));
+            $payroll_date = date("Y-m-d", strtotime($search_date));
             //get staff details
             $get_details = new selects();
             $rows = $get_details->fetch_details_cond('staffs', 'staff_id', $staff);
             foreach($rows as $row){
                 $full_name = $row->last_name." ".$row->other_names;
             }
-            $month = date("Y-m-d");
             //get salary details
             $details = $get_details->fetch_details_cond('salary_structure', 'salary_id', $salary_id);
             foreach($details as $detail){
@@ -92,6 +92,7 @@
         <!-- <form method="POST" id="addUserForm"> -->
         <section>
             <div class="inputs" style="gap:.8rem; align-items:flex_end; justify-content:left; background:#cdcdcd; padding:5px;">
+                <input type="hidden" id="payroll_date"id="payroll_date" value="<?php echo $payroll_date?>">
                 <div class="data" style="width:23%">
                     <label for="basic_salary">Total Working Days</label>
                     <input type="text" value="<?php echo $total_working_days?> days" readonly>
