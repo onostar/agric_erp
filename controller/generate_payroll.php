@@ -7,6 +7,17 @@
         $user = $_SESSION['user_id'];
         $store = $_SESSION['store_id'];
         $staff = htmlspecialchars(stripslashes($_POST['staff']));
+        $working_days = htmlspecialchars(stripslashes($_POST['working_days']));
+        $days_at_work = htmlspecialchars(stripslashes($_POST['days_at_work']));
+        $leave_days = htmlspecialchars(stripslashes($_POST['leave_days']));
+        $absent_days = htmlspecialchars(stripslashes($_POST['absent_days']));
+        $suspension_days = htmlspecialchars(stripslashes($_POST['suspension_days']));
+        $basic_salary = htmlspecialchars(stripslashes($_POST['basic_salary']));
+        $housing = htmlspecialchars(stripslashes($_POST['housing']));
+        $medical = htmlspecialchars(stripslashes($_POST['medical']));
+        $transport = htmlspecialchars(stripslashes($_POST['transport']));
+        $utility = htmlspecialchars(stripslashes($_POST['utility']));
+        $other_allow = htmlspecialchars(stripslashes($_POST['other_allow']));
         $gross = htmlspecialchars(stripslashes($_POST['gross']));
         $tax = htmlspecialchars(stripslashes($_POST['tax']));
         $pension = htmlspecialchars(stripslashes($_POST['pension']));
@@ -14,6 +25,7 @@
         $lateness = htmlspecialchars(stripslashes($_POST['lateness']));
         $loans = htmlspecialchars(stripslashes($_POST['loans']));
         $taxable_income = htmlspecialchars(stripslashes($_POST['taxable_income']));
+        $tax_rate = htmlspecialchars(stripslashes($_POST['tax_rate']));
         $employer_contribution = htmlspecialchars(stripslashes($_POST['employer_contribution']));
         $others = htmlspecialchars(stripslashes($_POST['others']));
         $net_pay = htmlspecialchars(stripslashes($_POST['net_pay']));
@@ -40,8 +52,21 @@
             $data = array(
                 'payroll_date' => $payroll_date,
                 'staff' => $staff,
+                'working_days' => $working_days,
+                'days_at_work' => $days_at_work,
+                'leave_days' => $leave_days,
+                'suspension_days' => $suspension_days,
+                'absent_days' => $absent_days,
+                'basic_salary' => $basic_salary,
+                'housing' => $housing,
+                'medical' => $medical,
+                'transport' => $transport,
+                'utility' => $utility,
+                'other_allowance' => $other_allow,
                 'gross_pay' => $gross,
                 'tax' => $tax,
+                'tax_rate' => $tax_rate,
+                'taxable_income' => $taxable_income,
                 'pension' => $pension,
                 'absence_penalty' => $absence,
                 'lateness_penalty' => $lateness,
@@ -73,6 +98,8 @@
                         'posted_by' => $user,
                         'post_date' => $date
                     );
+                    $add_pension = new add_data('pensions', $pension_data);
+                    $add_pension->create_data();
                 }
                    
                 echo "<div class='success'><p>Payroll generated successfully for  $full_name. <i class='fas fa-thumbs-up'></i></p></div>";

@@ -94,11 +94,14 @@ date_default_timezone_set("Africa/Lagos");
                     <?php if($detail->payroll_status == 'Pending'){?>
                     <a style="padding:5px 8px; border-radius:15px;background:var(--tertiaryColor);color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="showPage('get_staff_payroll.php?staff=<?php echo $detail->staff_id?>&salary_id=<?php echo $detail->salary_id?>')" title="generate staff payroll">Generate <i class="fas fa-hand-holding-dollar"></i></a>
                     <?php }elseif($detail->payroll_status == 'Generated'){?>
-                    <a style="padding:5px 8px; border-radius:15px;background:var(--otherColor);color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff;" href="javascript:void(0)" onclick="showPage('view_staff_payroll.php?staff=<?php echo $detail->staff_id?>')" title="View Payroll">View <i class="fas fa-eye"></i></a>
+                    <a style="padding:5px 8px; border-radius:15px;background:var(--otherColor);color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff;" href="javascript:void(0)" onclick="showPage('view_staff_payroll.php?payroll=<?php echo $detail->payroll_id?>')" title="View Payroll">View <i class="fas fa-eye"></i></a>
                     <?php }else{?>
-                    <a style="padding:5px 8px; border-radius:15px;background:brown;color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff;" href="javascript:void(0)" onclick="showPage('add_salary_structure.php?staff=<?php echo $detail->staff_id?>')" title="View Payroll">Create <i class="fas fa-user-plus"></i></a>
+                    <a style="padding:5px 8px; border-radius:15px;background:brown;color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff;" href="javascript:void(0)" onclick="showPage('add_salary_structure.php?staff=<?php echo $detail->staff_id?>')" title="Create salary structure">Create <i class="fas fa-user-plus"></i></a>
+                    <?php }
+                        if($detail->payroll_stat == 1){
+                    ?>
+                    <a style="padding:5px 8px; border-radius:15px;background:green;color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff;" href="javascript:void(0)" onclick="printPaySlip('<?php echo $detail->payroll_id?>')" title="Print Pay Slip">Print pay slip <i class="fas fa-print"></i></a>
                     <?php }?>
-                    
                 </td>
             </tr>
             

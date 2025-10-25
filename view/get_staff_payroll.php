@@ -73,10 +73,10 @@
 
             //claulate absent days
             $absent_days = $total_working_days - ($days_at_work + $leave_days);
-            $total_absent_days = $absent_days + $suspension_days;
+            
 
             //get absent penalty fee
-            $absent_fee = $absent_penalty * $total_absent_days;
+            $absent_fee = $absent_penalty * $absent_days;
 
             //calculate defaultnet pay
             $net_pay = $total - ($tax + $pension + $lateness_fee + $absent_fee)
@@ -122,27 +122,33 @@
                 <input type="hidden" name="staff" id="staff" value="<?php echo $staff?>">
                 <div class="data" style="width:23%">
                     <label for="basic_salary">Basic Salary (NGN)</label>
-                    <input type="text" id="basic_salary" name="basic_salary" value="<?php echo number_format($basic, 2)?>" readonly>
+                    <input type="text" value="<?php echo number_format($basic, 2)?>" readonly>
+                    <input type="hidden" id="basic_salary" name="basic_salary" value="<?php echo $basic?>" readonly>
                 </div>
                 <div class="data" style="width:23%;">
                    <label for="housing"> Housing Allow. (NGN)</label>
-                   <input type="text" name="housing" id="housing" required value="<?php echo number_format($housing, 2)?>" readonly>
+                   <input type="text" value="<?php echo number_format($housing, 2)?>" readonly>
+                   <input type="hidden" name="housing" id="housing" value="<?php echo $housing?>" readonly>
                 </div>
                 <div class="data" style="width:23%;">
                     <label for="medical">Medical Allow. (NGN)</label>
-                    <input type="text" name="medical" id="medical" required value="<?php echo number_format($medical, 2)?>" readonly>
+                    <input type="text" value="<?php echo number_format($medical, 2)?>" readonly>
+                    <input type="hidden" name="medical" id="medical" value="<?php echo $medical?>" readonly>
                 </div>
                 <div class="data" style="width:23%;">
                     <label for="transport">Transport Allow. (NGN)</label>
-                    <input type="text" name="transport" id="transport" required value="<?php echo number_format($transport, 2)?>" readonly>
+                    <input type="text" value="<?php echo number_format($transport, 2)?>" readonly>
+                    <input type="hidden" name="transport" id="transport" value="<?php echo $transport?>" readonly>
                 </div>
                 <div class="data" style="width:23%;">
                     <label for="utility">Utility Allowance (NGN)</label>
-                    <input type="text" name="utility" id="utility" required value="<?php echo number_format($utility, 2)?>" readonly>
+                    <input type="text" value="<?php echo number_format($utility, 2)?>" readonly>
+                    <input type="hidden" name="utility" id="utility" value="<?php echo $utility?>" readonly>
                 </div>
                 <div class="data" style="width:23%;">
                     <label for="others">Other Allowance (NGN)</label>
-                    <input type="text" name="other_allow" id="other_allow" required value="<?php echo number_format($others, 2)?>" readonly>
+                    <input type="text" value="<?php echo number_format($others, 2)?>" readonly>
+                    <input type="hidden" name="other_allow" id="other_allow" value="<?php echo $others?>" readonly>
                 </div>
                 <div class="data" style="width:23%;">
                     <label for="total">Gross Pay (NGN)</label>
@@ -153,6 +159,7 @@
                     <label for="total">Taxable Income (NGN)</label>
                     <input type="text" required value="<?php echo number_format($taxable_income, 2)?>" style="background:#cdcdcd" readonly>
                     <input type="hidden" name="taxable_income" id="taxable_income" required value="<?php echo $taxable_income?>" readonly>
+                    <input type="hidden" name="tax_rate" id="tax_rate" required value="<?php echo $rate?>" readonly>
                 </div>
             </div>
             <h4 style="margin:5px 0 0 0; font-size:.9rem;">Deductions</h4>

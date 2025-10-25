@@ -16,4 +16,5 @@ tax and pension are non editable
 
 does ur working days include weekends?
 
-total days absent is calcualted from subtracting the sum of days on leave and days at work and then subtracting it from the total working days of the month whose resut is then added to the days on suspension
+total days absent is calcualted from subtracting the sum of days on leave and days at work from the total working days of the month.
+$absent_days  = $total_working_days - ($days_at_work + $days_on_leave)

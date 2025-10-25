@@ -8151,6 +8151,17 @@ function getNetPay() {
 //generate pay roll for staff
 function generatePayroll(){
      let staff = document.getElementById("staff").value;
+     let working_days = document.getElementById("working_days").value;
+     let days_at_work = document.getElementById("days_at_work").value;
+     let leave_days = document.getElementById("leave_days").value;
+     let suspension_days = document.getElementById("suspension_days").value;
+     let absent_days = document.getElementById("absent_days").value;
+     let basic_salary = document.getElementById("basic_salary").value;
+     let housing = document.getElementById("housing").value;
+     let medical = document.getElementById("medical").value;
+     let transport = document.getElementById("transport").value;
+     let utility = document.getElementById("utility").value;
+     let other_allow = document.getElementById("other_allow").value;
      let gross = document.getElementById("gross").value;
      let pension = document.getElementById("pension").value;
      let pension_income = document.getElementById("pension_income").value;
@@ -8162,6 +8173,7 @@ function generatePayroll(){
      let net_pay = document.getElementById("net_pay").value;
      let employer_contribution = document.getElementById("employer_contribution").value;
      let taxable_income = document.getElementById("taxable_income").value;
+     let tax_rate = document.getElementById("tax_rate").value;
      if(parseFloat(gross) < 0 || parseFloat(tax) < 0 || parseFloat(pension) < 0 || parseFloat(lateness) < 0 || parseFloat(absence) < 0 || parseFloat(loans) < 0 || parseFloat(others) < 0){
           alert("Values cannot be less than 0");
           $("#tax").focus();
@@ -8172,7 +8184,7 @@ function generatePayroll(){
                $.ajax({
                     type : "POST",
                     url : "../controller/generate_payroll.php",
-                    data : {staff:staff, gross:gross, tax:tax, pension:pension, absence:absence, lateness:lateness, others:others, loans:loans, net_pay:net_pay, employer_contribution:employer_contribution, taxable_income:taxable_income, pension_income:pension_income},
+                    data : {staff:staff, absent_days:absent_days, suspension_days:suspension_days, leave_days:leave_days, days_at_work:days_at_work, working_days:working_days,basic_salary:basic_salary, housing:housing, medical:medical, transport:transport, utility:utility, other_allow:other_allow, gross:gross, tax:tax, pension:pension, absence:absence, lateness:lateness, others:others, loans:loans, net_pay:net_pay, employer_contribution:employer_contribution, taxable_income:taxable_income, tax_rate:tax_rate, pension_income:pension_income},
                     beforeSend : function(){
                          $("#salary_structure").html("<div class='processing'><div class='loader'></div></div>");
                     },
@@ -8354,4 +8366,60 @@ function editPenalty(){
                }
           })
      }
+}
+//approve payroll
+function approvePayroll(payroll){
+     let confirm_pay = confirm("Are you sure you want to approve this payroll?","");
+     if(confirm_pay){
+          $.ajax({
+               type : "GET",
+               url : "../controller/approve_payroll.php?payroll="+payroll,
+               beforeSend : function(){
+                    $("#payrolls").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#payrolls").html(response);
+                    setTimeout(function(){
+                         showPage("approve_payroll.php");
+                    }, 2000)
+               }
+          })
+     }else{
+          return;
+     }
+}
+//decline payroll
+function declinePayroll(payroll){
+     let confirm_pay = confirm("Are you sure you want to decline this payroll?","");
+     if(confirm_pay){
+          $.ajax({
+               type : "GET",
+               url : "../controller/decline_payroll.php?payroll="+payroll,
+               beforeSend : function(){
+                    $("#payrolls").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#payrolls").html(response);
+                    setTimeout(function(){
+                         showPage("approve_payroll.php");
+                    }, 2000)
+               }
+          })
+     }else{
+          return;
+     }
+}
+//get onthly payroll
+function getMonthlyPayroll(payroll_date){
+     $.ajax({
+          type : "GET",
+          url : "../controller/monthly_payroll_report.php?month="+payroll_date,
+          beforeSend : function(){
+               $(".new_data").html("<div class='processing'><div class='loader'></div></div>");
+          },
+          success : function(response){
+               $(".new_data").html(response);
+               
+          }
+     })
 }

@@ -353,7 +353,7 @@
     ss.medical_allowance,
     ss.other_allowance,
     ss.total_earnings,
-    ss.salary_id,
+    ss.salary_id, p.payroll_id, p.payroll_status AS payroll_stat,
     CASE 
         WHEN ss.staff IS NULL THEN 'No Salary Structure'
         WHEN p.staff IS NULL THEN 'Pending'
@@ -852,6 +852,23 @@ ORDER BY s.last_name ASC;
                 return $rows;
             }
         }
+        //fetch between two dates and grouped
+        public function fetch_payroll_months($store){
+            $get_user = $this->connectdb()->prepare("SELECT MIN(payroll_date) AS payroll_date 
+    FROM payroll 
+    WHERE store = :store 
+    GROUP BY YEAR(payroll_date), MONTH(payroll_date)
+    ORDER BY YEAR(payroll_date) DESC, MONTH(payroll_date) DESC");
+            $get_user->bindvalue("store", $store);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch between two dates and grouped order by
         public function fetch_details_dateGroOrder($table, $condition1, $value1, $value2, $group, $order){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $condition1 BETWEEN '$value1' AND '$value2' GROUP BY $group ORDER BY $order");
@@ -1052,6 +1069,47 @@ ORDER BY s.last_name ASC;
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $condition =:$condition AND $con2 = :$con2 AND date($column) = CURDATE()");
             $get_user->bindValue("$condition", $value);
             $get_user->bindValue("$con2", $value2);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        //fetch with current month and two condition
+        public function fetch_details_curmonth2Con($table, $column, $condition, $value, $con2, $value2){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $condition =:$condition AND $con2 = :$con2 AND MONTH($column) = MONTH(CURDATE()) AND YEAR($column) = YEAR(CURDATE())");
+            $get_user->bindValue("$condition", $value);
+            $get_user->bindValue("$con2", $value2);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        //fetch with current month and one condition
+        public function fetch_details_curmonthCon($table, $column, $condition, $value){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $condition =:$condition AND MONTH($column) = MONTH(CURDATE()) AND YEAR($column) = YEAR(CURDATE())");
+            $get_user->bindValue("$condition", $value);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        //fetch monthly payroll
+        public function fetch_monthly_payroll($store, $month){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM payroll WHERE store = :store AND MONTH(payroll_date) = MONTH(:month) AND YEAR(payroll_date) = YEAR(:month) ORDER BY payroll_date DESC");
+            $get_user->bindValue(':store', $store);
+            $get_user->bindValue(':month', $month);
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 $rows = $get_user->fetchAll();
