@@ -4,9 +4,10 @@
     session_start();
     $store = $_SESSION['store_id'];
     if(isset($_SESSION['user_id'])){
-        if(isset($_GET['staff']) && isset($_GET['salary_id'])){
+        if(isset($_GET['staff']) && isset($_GET['salary_id']) && isset($_GET['payroll_date'])){
             $staff = htmlspecialchars(stripslashes($_GET['staff']));
             $salary_id = htmlspecialchars(stripslashes($_GET['salary_id']));
+            $payroll_date = htmlspecialchars(stripslashes($_GET['payroll_date']));
             //get staff details
             $get_details = new selects();
             $rows = $get_details->fetch_details_cond('staffs', 'staff_id', $staff);
@@ -53,23 +54,23 @@
             $lateness_penaltly = $abs->amount;
 
             //fetch late days
-            $late_days = $get_details->fetch_late_days($staff);
+            $late_days = $get_details->fetch_late_days_month($staff, $payroll_date);
             $lateness_fee = $late_days * $lateness_penaltly;
 
             //fetch days present at work
-            $days_at_work = $get_details->fetch_staff_work_days($staff);
+            $days_at_work = $get_details->fetch_staff_work_days_month($staff, $payroll_date);
             /* echo "Days at work: $days_at_work";
             echo "late days: $late_days"; */
 
             //fetch leave days
-            $leave_days = $get_details->fetch_leave_days($staff);
+            $leave_days = $get_details->fetch_leave_days_month($staff, $payroll_date);
            
             //fetch suspension days
-            $suspension_days = $get_details->fetch_suspension_days($staff);
+            $suspension_days = $get_details->fetch_suspension_days_month($staff, $payroll_date);
             
 
             //total working days
-            $total_working_days = $get_details->fetch_total_working_days();
+            $total_working_days = $get_details->fetch_total_working_days_month($payroll_date);
 
             //claulate absent days
             $absent_days = $total_working_days - ($days_at_work + $leave_days);
@@ -83,11 +84,11 @@
 ?>
 
 <div id="salary_structure" class="displays">
-        <a style="background:brown; color:#fff; padding:5px 8px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222;" href="javascript:void(0)" onclick="showPage('generate_payroll.php')" title="Return to salary structure">Return <i class="fas fa-angle-double-left"></i></a>
+        <a style="background:brown; color:#fff; padding:5px 8px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222;" href="javascript:void(0)" onclick="showPage('generate_monthly_payroll.php?payroll_date=<?php echo $payroll_date?>')" title="Return to salary structure">Return <i class="fas fa-angle-double-left"></i></a>
 
     <div class="info" style="width:40%; margin:20px"></div>
     <div class="add_user_form" style="width:90%; margin:0px">
-        <h3 style="background:var(--tertiaryColor)">Generate <?php echo date("F, Y")?>Payslip for <?php echo $full_name?></h3>
+        <h3 style="background:var(--tertiaryColor)">Generate <?php echo date("F, Y", strtotime($payroll_date))?> Payslip for <?php echo $full_name?></h3>
         <!-- <form method="POST" id="addUserForm"> -->
         <section>
             <div class="inputs" style="gap:.8rem; align-items:flex_end; justify-content:left; background:#cdcdcd; padding:5px;">

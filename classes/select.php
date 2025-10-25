@@ -338,38 +338,7 @@
         }
         //fetch staffs to generate pay roll
         public function fetch_generate_payroll($store){
-            $get_user = $this->connectdb()->prepare("SELECT 
-    s.staff_id,
-    s.last_name,
-    s.other_names,
-    s.staff_number,
-    s.department,
-    s.designation,
-    s.gender,
-    ss.basic_salary,
-    ss.housing_allowance,
-    ss.transport_allowance,
-    ss.utility_allowance,
-    ss.medical_allowance,
-    ss.other_allowance,
-    ss.total_earnings,
-    ss.salary_id, p.payroll_id, p.payroll_status AS payroll_stat,
-    CASE 
-        WHEN ss.staff IS NULL THEN 'No Salary Structure'
-        WHEN p.staff IS NULL THEN 'Pending'
-        ELSE 'Generated'
-    END AS payroll_status
-FROM staffs s
-LEFT JOIN salary_structure ss 
-    ON s.staff_id = ss.staff
-LEFT JOIN payroll p 
-    ON s.staff_id = p.staff 
-    AND MONTH(p.payroll_date) = MONTH(CURDATE())
-    AND YEAR(p.payroll_date) = YEAR(CURDATE())
-WHERE s.store = :store 
-  AND s.staff_status = 0
-ORDER BY s.last_name ASC;
-");
+            $get_user = $this->connectdb()->prepare("SELECT s.staff_id, s.last_name, s.other_names, s.staff_number, s.department, s.designation, s.gender, ss.basic_salary, ss.housing_allowance, ss.transport_allowance, ss.utility_allowance, ss.medical_allowance, ss.other_allowance, ss.total_earnings, ss.salary_id, p.payroll_id, p.payroll_status AS payroll_stat, CASE WHEN ss.staff IS NULL THEN 'No Salary Structure' WHEN p.staff IS NULL THEN 'Pending' ELSE 'Generated' END AS payroll_status FROM staffs s LEFT JOIN salary_structure ss ON s.staff_id = ss.staff LEFT JOIN payroll p ON s.staff_id = p.staff AND MONTH(p.payroll_date) = MONTH(CURDATE()) AND YEAR(p.payroll_date) = YEAR(CURDATE()) WHERE s.store = :store AND s.staff_status != 2 ORDER BY s.last_name ASC;");
             $get_user->bindValue("store", $store);
             $get_user->execute();
             if($get_user->rowCount() > 0){
@@ -380,6 +349,55 @@ ORDER BY s.last_name ASC;
                 return $rows;
             }
         }
+        //fetch staffs to generate payroll for selected month
+        //fetch staffs to generate payroll for selected month
+public function fetch_generate_payrollpermonth($store, $payroll_date){
+    $sql = "SELECT 
+                s.staff_id, 
+                s.last_name, 
+                s.other_names, 
+                s.staff_number, 
+                s.department, 
+                s.designation, 
+                s.gender, 
+                ss.basic_salary, 
+                ss.housing_allowance, 
+                ss.transport_allowance, 
+                ss.utility_allowance, 
+                ss.medical_allowance, 
+                ss.other_allowance, 
+                ss.total_earnings, 
+                ss.salary_id, 
+                p.payroll_id, 
+                p.payroll_status AS payroll_stat,
+                CASE 
+                    WHEN ss.staff IS NULL THEN 'No Salary Structure'
+                    WHEN p.staff IS NULL THEN 'Pending'
+                    ELSE 'Generated'
+                END AS payroll_status
+            FROM staffs s
+            LEFT JOIN salary_structure ss 
+                ON s.staff_id = ss.staff
+            LEFT JOIN payroll p 
+                ON s.staff_id = p.staff 
+                AND MONTH(p.payroll_date) = MONTH(:payroll_date)
+                AND YEAR(p.payroll_date) = YEAR(:payroll_date)
+            WHERE s.store = :store
+                AND s.staff_status != 2
+            ORDER BY s.last_name ASC";
+
+    $stmt = $this->connectdb()->prepare($sql);
+    $stmt->bindValue(":store", $store);
+    $stmt->bindValue(":payroll_date", $payroll_date);
+    $stmt->execute();
+
+    if($stmt->rowCount() > 0){
+        return $stmt->fetchAll();
+    } else {
+        return [];
+    }
+}
+
         //fetch staff for attendance check out for the day
         public function fetch_staff_checkout($store){
             $get_user = $this->connectdb()->prepare("SELECT s.staff_id, s.last_name, s.other_names, s.staff_number, s.department, s.designation, s.gender, a.time_in, a.attendance_id FROM staffs s INNER JOIN attendance a ON s.staff_id = a.staff AND DATE(a.attendance_date) = CURDATE()WHERE a.store = :store AND a.attendance_status = 0 AND a.time_out IS NULL ORDER BY a.marked_date ASC;");
@@ -471,7 +489,7 @@ ORDER BY s.last_name ASC;
             $query = "SELECT COUNT(*) AS total_late_days 
                 FROM attendance 
                 WHERE staff = :staff_id 
-                AND TIME(time_in) > '08:05:00' 
+                AND TIME(time_in) > '08:05:00' AND time_in IS NOT NULL
                 AND MONTH(attendance_date) = MONTH(CURDATE()) 
                 AND YEAR(attendance_date) = YEAR(CURDATE())
             ";
@@ -488,19 +506,55 @@ ORDER BY s.last_name ASC;
                 return 0;
             }
         }
+        //fetch late days for specific month
+        public function fetch_late_days_month($staff, $date){
+            $query = "SELECT COUNT(*) AS total_late_days 
+                FROM attendance 
+                WHERE staff = :staff_id 
+                AND TIME(time_in) > '08:05:00' AND time_in IS NOT NULL
+                AND MONTH(attendance_date) = MONTH(:attend_date) 
+                AND YEAR(attendance_date) = YEAR(:attend_date)
+            ";
+            
+            $stmt = $this->connectdb()->prepare($query);
+            $stmt->bindValue(":staff_id", $staff);
+            $stmt->bindValue(":attend_date", $date);
+            $stmt->execute();
 
-        //fetch employee attendance 
-        public function fetch_staff_work_days($staff){
-            $get_user = $this->connectdb()->prepare("SELECT COUNT(DISTINCT DATE(time_in)) AS attendance_days FROM attendance WHERE staff = :staff_id AND MONTH(attendance_date) = MONTH(CURDATE()) AND YEAR(attendance_date) = YEAR(CURDATE());");
-            $get_user->bindValue("staff_id", $staff);
-            $get_user->execute();
-            if($get_user->rowCount() > 0){
-                return $get_user->rowCount();
-            }else{
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if($result && $result['total_late_days'] > 0){
+                return $result['total_late_days'];
+            } else {
                 return 0;
             }
         }
-        //fetch employee leave days
+
+        //fetch employee attendance for the current month
+        public function fetch_staff_work_days($staff){
+            $query = "SELECT COUNT(DISTINCT DATE(time_in)) AS attendance_days FROM attendance WHERE staff = :staff_id AND MONTH(attendance_date) = MONTH(CURDATE()) AND YEAR(attendance_date) = YEAR(CURDATE())";
+            $stmt = $this->connectdb()->prepare($query);
+            $stmt->bindValue(":staff_id", $staff);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            return $row && $row['attendance_days'] ? (int)$row['attendance_days'] : 0;
+        }
+
+        //fetch employee attendance for a specific month
+        public function fetch_staff_work_days_month($staff, $date){
+            $query = "SELECT COUNT(DISTINCT DATE(time_in)) AS attendance_days FROM attendance WHERE staff = :staff_id AND MONTH(attendance_date) = MONTH(:attend_date) AND YEAR(attendance_date) = YEAR(:attend_date)";
+            $stmt = $this->connectdb()->prepare($query);
+            $stmt->bindValue(":staff_id", $staff);
+            $stmt->bindValue(":attend_date", $date);
+            $stmt->execute();
+
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            return $row && $row['attendance_days'] ? (int)$row['attendance_days'] : 0;
+        }
+
+        //fetch employee leave days for current month
         public function fetch_leave_days($staff){
             $query = "SELECT SUM(DATEDIFF(LEAST(COALESCE(l.returned, l.end_date, CURDATE()), LAST_DAY(CURDATE())), GREATEST(l.start_date, DATE_FORMAT(CURDATE(), '%Y-%m-01'))) + 1) AS leave_days FROM leaves l
                 WHERE 
@@ -518,22 +572,83 @@ ORDER BY s.last_name ASC;
             
             return $row && $row['leave_days'] ? $row['leave_days'] : 0;
         }
-        //fetch employee suspension days
-        public function fetch_suspension_days($staff){
-            $query = "SELECT SUM(DATEDIFF(LEAST(COALESCE(s.recall_date, CURDATE()), LAST_DAY(CURDATE())), GREATEST(s.suspension_date, DATE_FORMAT(CURDATE(), '%Y-%m-01'))) + 1) AS suspension_days FROM suspensions s WHERE s.staff = :staff_id AND (MONTH(s.suspension_date) = MONTH(CURDATE()) OR MONTH(COALESCE(s.recall_date, s.suspension_date)) = MONTH(CURDATE()))";
+        //fetch employee leave days for specific month
+        public function fetch_leave_days_month($staff, $date){
+            $query = "SELECT SUM(DATEDIFF(LEAST(COALESCE(l.returned, l.end_date, LAST_DAY(:leave_date)), LAST_DAY(:leave_date)), GREATEST(l.start_date, DATE_FORMAT(:leave_date, '%Y-%m-01'))) + 1) AS leave_days FROM leaves l WHERE l.employee = :staff_id AND (l.leave_status = 1 OR l.leave_status = 2) AND (MONTH(l.start_date) = MONTH(:leave_date) OR MONTH(COALESCE(l.returned, l.end_date)) = MONTH(:leave_date))";
             $stmt = $this->connectdb()->prepare($query);
             $stmt->bindValue(":staff_id", $staff);
+            $stmt->bindValue(":leave_date", $date);
             $stmt->execute();
+
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            return $row && $row['leave_days'] ? (int)$row['leave_days'] : 0;
+        }
+
+        // Fetch employee suspension days for current month
+public function fetch_suspension_days($staff){
+    $query = "SELECT 
+            SUM(
+                DATEDIFF(
+                    LEAST(
+                        COALESCE(s.recall_date, LAST_DAY(CURDATE())),
+                        LAST_DAY(CURDATE())
+                    ),
+                    GREATEST(
+                        s.suspension_date,
+                        DATE_FORMAT(CURDATE(), '%Y-%m-01')
+                    )
+                ) + 1
+            ) AS suspension_days
+        FROM suspensions s
+        WHERE 
+            s.staff = :staff_id
+            AND (
+                (MONTH(s.suspension_date) = MONTH(CURDATE()) AND YEAR(s.suspension_date) = YEAR(CURDATE()))
+                OR (MONTH(COALESCE(s.recall_date, s.suspension_date)) = MONTH(CURDATE()) AND YEAR(COALESCE(s.recall_date, s.suspension_date)) = YEAR(CURDATE()))
+            )
+    ";
+
+    $stmt = $this->connectdb()->prepare($query);
+    $stmt->bindValue(":staff_id", $staff);
+    $stmt->execute();
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    return $row && $row['suspension_days'] ? $row['suspension_days'] : 0;
+}
+
+        // Fetch employee suspension days for specific month
+        public function fetch_suspension_days_month($staff, $date){
+            $query = "SELECT SUM(DATEDIFF(LEAST(COALESCE(s.recall_date, LAST_DAY(:search_date)),  LAST_DAY(:search_date)), GREATEST(s.suspension_date, DATE_FORMAT(:search_date, '%Y-%m-01'))) + 1) AS suspension_days FROM suspensions s WHERE s.staff = :staff_id AND ((MONTH(s.suspension_date) = MONTH(:search_date) AND YEAR(s.suspension_date) = YEAR(:search_date))OR (MONTH(COALESCE(s.recall_date, s.suspension_date)) = MONTH(:search_date) AND YEAR(COALESCE(s.recall_date, s.suspension_date)) = YEAR(:search_date)))";
+
+            $stmt = $this->connectdb()->prepare($query);
+            $stmt->bindValue(":staff_id", $staff);
+            $stmt->bindValue(":search_date", $date);
+            $stmt->execute();
+
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
             return $row && $row['suspension_days'] ? $row['suspension_days'] : 0;
         }
 
-        // fetch total working days (all calendar days)
+
+        // fetch total working days (all calendar days) for current month
         public function fetch_total_working_days(){
             $query = "SELECT DAY(LAST_DAY(CURDATE())) AS working_days
             ";
             $stmt = $this->connectdb()->prepare($query);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            return $row ? $row['working_days'] : 0;
+        }
+        // fetch total working days (all calendar days) for selected month
+        public function fetch_total_working_days_month($date){
+            $query = "SELECT DAY(LAST_DAY(:search_date)) AS working_days
+            ";
+            $stmt = $this->connectdb()->prepare($query);
+            $stmt->bindValue(":search_date", $date);
             $stmt->execute();
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             

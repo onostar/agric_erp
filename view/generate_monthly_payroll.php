@@ -1,4 +1,4 @@
-<div class="displays allResults" id="attendance" style="margin:10px 50px!important; width:90%!important">
+<div class="displays allResults" id="payrolls" style="margin:10px 50px!important; width:90%!important">
 <?php
 session_start();
 date_default_timezone_set("Africa/Lagos");
@@ -13,8 +13,20 @@ date_default_timezone_set("Africa/Lagos");
         $roles = $get_role->fetch_details_group('users', 'user_role', 'username', $username);
         $role = $roles->user_role;
         $store = $_SESSION['store_id'];
-        
+        if(isset($_GET['payroll_date'])){
+            $pay_date = htmlspecialchars(stripslashes($_GET['payroll_date']));
+            $payroll_date = date("Y-m-d", strtotime($pay_date));
+            $currentDate = date("Y-m-d");
+            if($payroll_date > $currentDate){
+                ?>
+                <div style='background:#fff;padding:10px; font-size:.8rem; text-align:center; width:30%; margin:auto; border:1px solid #222'>
+                    <p style="margin:20px 0">You cannot generate payroll for a future date. Please select a past or current date.</p>
+                    <a style="background:brown; color:#fff; padding:5px 8px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222;" href="javascript:void(0)" onclick="showPage('generate_payroll.php')" title="Return to payroll">Return <i class="fas fa-angle-double-left"></i></a>
 
+                </div>
+                <?php
+                exit;
+            }else{
 ?>
    <style>
     table td{
@@ -29,13 +41,13 @@ date_default_timezone_set("Africa/Lagos");
         <section style="margin:0!important; padding:0!important">    
             <div class="from_to_date" style="width:auto; margin:0!important; padding:0">
                 <label>Select Date</label><br>
-                <input type="date"name="payroll_month" id="payroll_month" onchange="showPage('generate_monthly_payroll.php?payroll_date='+this.value)">
+                <input type="date"name="payroll_month" id="payroll_month" value="<?php echo date("Y-m-d", strtotime($payroll_date))?>"onchange="showPage('generate_monthly_payroll.php?payroll_date='+this.value)">
             </div>
            
         </section>
     </div>
     <!-- showing staffs that are not resigned in selected store -->
-    <h2>Generate Staff Payroll for <?php echo date("F, Y")?></h2>
+    <h2>Generate Staff Payroll for <?php echo date("F, Y", strtotime($payroll_date))?></h2>
     <hr>
     <div class="search">
         <input type="search" id="searchRoom" placeholder="Enter keyword" onkeyup="searchData(this.value)">
@@ -60,7 +72,7 @@ date_default_timezone_set("Africa/Lagos");
         <?php
                 $n = 1;
                 $get_items = new selects();
-                $details = $get_items->fetch_generate_payroll($store);
+                $details = $get_items->fetch_generate_payrollpermonth($store, $payroll_date);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
@@ -101,7 +113,7 @@ date_default_timezone_set("Africa/Lagos");
                 <td><?php echo $detail->payroll_status?></td>
                 <td>
                     <?php if($detail->payroll_status == 'Pending'){?>
-                    <a style="padding:5px 8px; border-radius:15px;background:var(--tertiaryColor);color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="showPage('get_staff_payroll.php?staff=<?php echo $detail->staff_id?>&salary_id=<?php echo $detail->salary_id?>')" title="generate staff payroll">Generate <i class="fas fa-hand-holding-dollar"></i></a>
+                    <a style="padding:5px 8px; border-radius:15px;background:var(--tertiaryColor);color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="showPage('get_staff_payroll_date.php?staff=<?php echo $detail->staff_id?>&salary_id=<?php echo $detail->salary_id?>&payroll_date=<?php echo $payroll_date?>')" title="generate staff payroll">Generate <i class="fas fa-hand-holding-dollar"></i></a>
                     <?php }elseif($detail->payroll_status == 'Generated'){?>
                     <a style="padding:5px 8px; border-radius:15px;background:var(--otherColor);color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff;" href="javascript:void(0)" onclick="showPage('view_staff_payroll.php?payroll=<?php echo $detail->payroll_id?>')" title="View Payroll">View <i class="fas fa-eye"></i></a>
                     <?php }else{?>
@@ -126,6 +138,10 @@ date_default_timezone_set("Africa/Lagos");
     
     ?>
 <?php 
+            }
+        }else{
+            echo "Please Select a date to continue";
+        }
     }else{
         echo "Your session has expired! Please login again to continue";
     }    
