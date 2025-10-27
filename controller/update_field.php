@@ -10,14 +10,22 @@
     $soil_type = htmlspecialchars(stripslashes($_POST['soil_type']));
     $ph = htmlspecialchars(stripslashes($_POST['soil_ph']));
     $topography = ucwords(htmlspecialchars(stripslashes($_POST['topography'])));
-    $customer = htmlspecialchars(stripslashes($_POST['customer']));
+    // $customer = htmlspecialchars(stripslashes($_POST['customer']));
+     $amount = htmlspecialchars(stripslashes($_POST['rent']));
+    $latitude = htmlspecialchars(stripslashes($_POST['latitude']));
+    $longitude = htmlspecialchars(stripslashes($_POST['longitude']));
+    
     $data = array(
         'field_name' => $field,
         'field_size' => $size,
         'soil_type' => $soil_type,
         'soil_ph' => $ph,
+        'latitude' => $latitude,
+        'longitude' => $longitude,
+        'rent' => $amount,
         'topography' => $topography,
-        'customer' => $customer
+        'updated_by' => $user,
+        'updated_at' => $date
     );
     // instantiate class
     include "../classes/dbh.php";
@@ -28,15 +36,6 @@
     $update = new Update_table;
     $update->updateAny('fields', $data, 'field_id', $id);
     if($update){
-        //inset into field assignment table
-        $assign_data = array(
-            'field' => $id,
-            'customer' => $customer,
-            'assigned_by' => $user,
-            'assigned_date' => $date
-        );
-        $add_data = new add_data('assigned_fields', $assign_data);
-        $add_data->create_data();
         echo "<div class='success'><p>Field Details updated for $field successfully! <i class='fas fa-thumbs-up'></i></p></div>";
     }
     

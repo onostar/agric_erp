@@ -36,6 +36,7 @@
     // instantiate class
     include "../classes/dbh.php";
     include "../classes/update.php";
+    include "../classes/select.php";
 
     $data = array(
         'last_name' => $last_name,
@@ -67,6 +68,16 @@
        $update = new Update_table();
        $update->updateAny('staffs', $data, 'staff_id', $staff_id);
        if($update){
+        //checkif staff have user account and update name
+        $get_details = new selects();
+        $checks = $get_details->fetch_details_negCond('staffs', 'user_id', 0, 'staff_id', $staff_id);
+        if(!empty($checks)){
+            foreach($checks as $check){
+                $user_id = $check->user_id;
+            }
+            $full_name = $last_name." ".$other_names;
+            $update->update('users', 'full_name', 'user_id', $full_name, $user_id);
+        }
         echo "<div class='success'><p><span>$last_name $other_names</span> updated successfully!</p></div>";
        }else{
         echo "<div class='error'><p>Update Failed!</p></div>";

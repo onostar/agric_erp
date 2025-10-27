@@ -177,7 +177,7 @@ date_default_timezone_set("Africa/Lagos");
                         <!-- check other stores dashboard -->
                         <!-- <form method="POST"> -->
                         <section>
-                            <label>Change farm</label><br>
+                            <label>Change Location</label><br>
                             <select name="store" id="store" required onchange="changeStore(this.value, <?php echo $user_id?>)">
                                 <option value="<?php echo $store_id?>"><?php echo $store?></option>
                                 <!-- get stores -->

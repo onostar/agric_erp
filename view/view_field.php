@@ -1,4 +1,9 @@
-<div id="farm_fields">
+<div id="farm_fields" class="displays">
+    <style>
+        label{
+            font-size:.8rem!important;
+        }
+    </style>
 <?php
 
     if (isset($_GET['field'])){
@@ -31,15 +36,11 @@
                 <!-- <div class="data item_head"> -->
                     <input type="hidden" name="field_id" id="field_id" value="<?php echo $id?>" required>
                 <div class="data" style="width:31%">
-                    <label for="customer">Owned By</label>
-                    <input type="text" name="item" id="item" value="<?php echo $customer?>" oninput="getFieldOwners(this.value)">
-                    <div class="search_results" id="search_results" style="position:relative;">
-
-                    </div>
-                    <input type="hidden" id="customer" name="customer" value="<?php echo$row->customer?>">
+                    <label for="customer">Client</label>
+                    <input type="text" name="item" id="item" value="<?php echo $customer?>" readonly>
                 </div>
                 <div class="data" style="width:31%">
-                    <label for="field">FIeld Name</label>
+                    <label for="field">Field Name</label>
                     <input type="text" name="field" id="field" value="<?php echo $row->field_name?>">
                 </div>
                 <div class="data" style="width:31%">
@@ -58,7 +59,19 @@
                     <label for="topography">Topography</label>
                     <input type="text" name="topography" id="topography" value="<?php echo $row->topography?>">
                 </div>
-               
+                <div class="data" style="width:31%">
+                    <label for="latitude">Latitude</label>
+                    <input type="number" name="latitude" id="latitude" value="<?php echo $row->latitude?>">
+                </div>
+                <div class="data" style="width:31%">
+                    <label for="longitude">Longitude</label>
+                    <input type="number" name="longitude" id="longitude" value="<?php echo $row->longitude?>">
+                </div>
+                
+               <div class="data" style="width:31%">
+                    <label for="rent">Amount (NGN)</label>
+                    <input type="number" name="rent" id="rent" value="<?php echo $row->rent?>">
+                </div>
                 <div class="data" style="width:auto">
                     <button type="button" id="change_price" name="change_price" onclick="updateField()">Update <i class="fas fa-save"></i></button>
                     <a href="javascript:void(0)" title="close form" style='background:red; padding:10px; border-radius:15px; border:1px solid #fff;box-shadow:1px 1px 1px #222; color:#fff' onclick="showPage('farm_fields.php')">Return <i class='fas fa-angle-double-left'></i></a>

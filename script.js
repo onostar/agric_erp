@@ -138,6 +138,7 @@ function showPage(page){
 function addUser(){
      let username = document.getElementById("username").value;
      let full_name = document.getElementById("full_name").value;
+     let staff_id = document.getElementById("staff_id").value;
      let user_role = document.getElementById("user_role").value;
      let store_id = document.getElementById("store_id").value;
      // alert(store);
@@ -161,16 +162,18 @@ function addUser(){
           $.ajax({
                type : "POST",
                url : "../controller/add_users.php",
-               data : {username:username, full_name:full_name, user_role:user_role, store_id:store_id},
+               data : {username:username, staff_id:staff_id,full_name:full_name, user_role:user_role, store_id:store_id},
                success : function(response){
                $(".info").html(response);
                }
           })
      }
      $("#username").val('');
+     $("#item").val('');
+     $("#staff_id").val('');
      $("#full_name").val('');
      $("#user_role").val('');
-     $("#store").val('');
+     $("#store_id").val('');
      $("#full_name").focus();
      return false;
 }
@@ -6347,6 +6350,9 @@ function addField(){
      let soil_type = document.getElementById("soil_type").value;
      let soil_ph = document.getElementById("soil_ph").value;
      let topography = document.getElementById("topography").value;
+     let latitude = document.getElementById("latitude").value;
+     let longitude = document.getElementById("longitude").value;
+     let rent = document.getElementById("rent").value;
      if(field.length == 0 || field.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input field name!");
           $("#field").focus();
@@ -6363,11 +6369,31 @@ function addField(){
           alert("Please input soil ph!");
           $("#soil_ph").focus();
           return;
+     }else if(!latitude){
+          alert("Please input field latitude!");
+          $("#latitude").focus();
+          return;
+     }else if(!longitude){
+          alert("Please input field longitude!");
+          $("#longitude").focus();
+          return;
+     }else if(!rent){
+          alert("Please input field lease amount!");
+          $("#rent").focus();
+          return;
+     }else if(parseFloat(latitude) <= 0 || parseFloat(longitude) <= 0){
+          alert("Latitude or longitude values cannot be less than or equals to zero!");
+          $("#latitude").focus();
+          return;
+     }else if(parseFloat(rent) < 0){
+          alert("Field lease amount cannot be less than zero!");
+          $("#rent").focus();
+          return;
      }else{
           $.ajax({
                type : "POST",
                url : "../controller/add_field.php",
-               data : {field:field, field_size:field_size, soil_type:soil_type, soil_ph:soil_ph, topography:topography},
+               data : {field:field, field_size:field_size, soil_type:soil_type, soil_ph:soil_ph, topography:topography, rent:rent, latitude:latitude, longitude:longitude},
                beforeSend: function(){
                     $(".info").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -6376,12 +6402,14 @@ function addField(){
                }
           })
      }
-     // $("#room_category").val('');
      $("#field").val('');
      $("#field_size").val('');
      $("#soil_type").val('');
      $("#soil_ph").val('');
      $("#topography").val('');
+     $("#rent").val('0');
+     $("#latitude").val('0');
+     $("#longitude").val('0');
      $("#field").focus();
      return false;    
 }
@@ -6647,7 +6675,9 @@ function updateField(){
      let soil_type = document.getElementById("soil_type").value;
      let soil_ph = document.getElementById("soil_ph").value;
      let topography = document.getElementById("topography").value;
-     let customer = document.getElementById("customer").value;
+     let latitude = document.getElementById("latitude").value;
+     let longitude = document.getElementById("longitude").value;
+     let rent = document.getElementById("rent").value;
      if(field.length == 0 || field.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input field name!");
           $("#field").focus();
@@ -6664,21 +6694,69 @@ function updateField(){
           alert("Please input soil ph!");
           $("#soil_ph").focus();
           return;
+          }else if(!latitude){
+          alert("Please input field latitude!");
+          $("#latitude").focus();
+          return;
+     }else if(!longitude){
+          alert("Please input field longitude!");
+          $("#longitude").focus();
+          return;
+     }else if(!rent){
+          alert("Please input field lease amount!");
+          $("#rent").focus();
+          return;
+     }else if(parseFloat(latitude) <= 0 || parseFloat(longitude) <= 0){
+          alert("Latitude or longitude values cannot be less than or equals to zero!");
+          $("#latitude").focus();
+          return;
+     }else if(parseFloat(rent) < 0){
+          alert("Field lease amount cannot be less than zero!");
+          $("#rent").focus();
+          return;
      }else{
           $.ajax({
                type : "POST",
                url : "../controller/update_field.php",
-               data : {field:field, field_id:field_id,field_size:field_size, soil_type:soil_type, soil_ph:soil_ph, topography:topography, customer:customer},
+               data : {field:field, field_id:field_id,field_size:field_size, soil_type:soil_type, soil_ph:soil_ph, topography:topography, rent:rent, latitude:latitude, longitude:longitude},
                beforeSend: function(){
                     $("#farm_fields").html("<div class='processing'><div class='loader'></div></div>");
                },
                success : function(response){
-               $("#farm_fields").html(response);
+                    $("#farm_fields").html(response);
+                    setTimeout(function(){
+                         showPage("farm_fields.php");
+                    }, 2000);
                }
           })
-          setTimeout(function(){
-               $("#farm_fields").load("farm_fields.php #farm_fields");
-          }, 2000);
+          return false; 
+     }
+}
+ // assign farm field to client
+function assignField(){
+     let field_id = document.getElementById("field_id").value;
+     let customer = document.getElementById("customer").value;
+     if(customer.length == 0 || customer.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select client!");
+          $("#item").focus();
+          return;
+    
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/assign_field.php",
+               data : {field_id:field_id, customer:customer},
+               beforeSend: function(){
+                    $("#farm_fields").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#farm_fields").html(response);
+                    setTimeout(function(){
+                         showPage("assign_field.php");
+                    }, 2000);
+               }
+          })
+          
           return false; 
      }
 }
@@ -6695,11 +6773,11 @@ function closeCycle(cycle_id){
                },
                success : function(response){
                     $("#cycles").html(response);
+                    setTimeout(function(){
+                         showPage("crop_cycle.php");
+                    }, 2000);
                }
           })
-          setTimeout(function(){
-               $("#cycles").load("crop_cycle.php #cycles");
-          }, 2000);
           return false;
      }else{
           return;
@@ -8423,4 +8501,15 @@ function getMonthlyPayroll(payroll_date){
                
           }
      })
+}
+//selec staff during creating user
+function takeStaff(id, name){
+     let staff_id = document.getElementById("staff_id");
+     let full_name = document.getElementById("full_name");
+     let item = document.getElementById("item");
+
+     staff_id.value = id;
+     full_name.value = name;
+     item.value = name;
+     $("#sales_item").html('');
 }

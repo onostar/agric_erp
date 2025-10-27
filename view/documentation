@@ -18,3 +18,5 @@ does ur working days include weekends?
 
 total days absent is calcualted from subtracting the sum of days on leave and days at work from the total working days of the month.
 $absent_days  = $total_working_days - ($days_at_work + $days_on_leave)
+
+once field isued for crop cycle, it becomes unavailable. when cro cycle ends it becomes available

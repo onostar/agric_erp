@@ -18,7 +18,7 @@
                 <td>S/N</td>
                 <td>Full Name</td>
                 <td>Username</td>
-                <td>Store</td>
+                <td>Location</td>
                 <td>Date reg</td>
             </tr>
         </thead>

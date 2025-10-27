@@ -8,6 +8,9 @@
     $size = htmlspecialchars(stripslashes($_POST['field_size']));
     $soil_type = htmlspecialchars(stripslashes($_POST['soil_type']));
     $ph = htmlspecialchars(stripslashes($_POST['soil_ph']));
+    $amount = htmlspecialchars(stripslashes($_POST['rent']));
+    $latitude = htmlspecialchars(stripslashes($_POST['latitude']));
+    $longitude = htmlspecialchars(stripslashes($_POST['longitude']));
     $topography = ucwords(htmlspecialchars(stripslashes($_POST['topography'])));
     $data = array(
         'field_name' => $field,
@@ -15,6 +18,9 @@
         'field_size' => $size,
         'soil_type' => $soil_type,
         'soil_ph' => $ph,
+        'latitude' => $latitude,
+        'longitude' => $longitude,
+        'rent' => $amount,
         'topography' => $topography,
         'created_by' => $user,
         'created_at' => $date

@@ -9,7 +9,15 @@
         <!-- <form method="POST" id="addUserForm"> -->
         <section class="addUserForm">
             <div class="inputs">
-                <input type="text" name="full_name" id="full_name" placeholder="Enter full name" required>
+                <div>
+                    <input type="text" name="item" id="item" required placeholder="Search item" onkeyup="getItemDetails(this.value, 'get_staff_name.php')">
+                    <div id="sales_item" style="position:absolute">
+                        
+                    </div>
+                    <input type="hidden" name="full_name" id="full_name">
+                    <input type="hidden" name="staff_id" id="staff_id">
+                </div>
+                
                 <input type="text" name="username" id="username" placeholder="Enter username" required>
                 <select name="user_role" id="user_role" required style="padding:10px;border-radius:10px">
                     <option value="" selected>Select role</option>
@@ -23,13 +31,13 @@
                     <option value=""selected required>select location</option>
                     <?php
                         $get_str = new selects();
-                        $rows = $get_str->fetch_details('stores');
+                        $rows = $get_str->fetch_details_order('stores', 'store');
                         foreach($rows as $row){
                     ?>
                     <option value="<?php echo $row->store_id?>"><?php echo $row->store?></option>
                     <?php } ?>
                 </select>
-                <button type="submit" id="add_user" name="add_user" title="add user" onclick="addUser()"><i class="fas fa-plus"></i></button>
+                <button type="button" id="add_user" name="add_user" title="add user" onclick="addUser()"><i class="fas fa-plus"></i></button>
             </div>
         </section>    
         <!-- </form> -->
