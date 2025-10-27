@@ -73,7 +73,7 @@
                 </td>
                 <!-- <td><?php echo date("d-m-Y", strtotime($detail->created_at))?></td> -->
                 <td>
-                    <a href="javascript:void(0)" onclick="showPage('view_field_details.php?field=<?php echo $detail->field_id?>')" style="color:#fff; background:var(--otherColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;">View <i class="fas fa-eye"></i></a>
+                    <a href="javascript:void(0)" onclick="window.open('view_field_details.php?field=<?php echo $detail->field_id?>')" style="color:#fff; background:var(--otherColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;">View <i class="fas fa-eye"></i></a>
                     <a href="javascript:void(0)" onclick="showPage('view_field.php?field=<?php echo $detail->field_id?>')" style="color:#fff; background:var(--tertiaryColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;">Update <i class="fas fa-edit"></i></a>
                 </td>
                 
