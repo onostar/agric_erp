@@ -1432,7 +1432,7 @@ function roomPriceForm(item_id){
 
 
 // update password
-function updatePassword(){
+function updatePassword(url){
      let username = document.getElementById('username').value;
      let current_password = document.getElementById('current_password').value;
      let new_password = document.getElementById('new_password').value;
@@ -1461,7 +1461,7 @@ function updatePassword(){
      }else{
           $.ajax({
                type: "POST",
-               url: "../controller/update_password.php",
+               url: "../controller/"+url,
                data: {username:username, current_password:current_password, new_password:new_password, retype_password:retype_password},
                success: function(response){
                $(".info").html(response);
@@ -3538,37 +3538,52 @@ function filterStockBalance(dep){
      return false
      
 }
-
+function isValidEmail(email) {
+    // Basic regex pattern for most email formats
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
 // Add new customer
 function addCustomer(){
      let customer = document.getElementById("customer").value;
      let phone_number = document.getElementById("phone_number").value;
      let address = document.getElementById("address").value;
      let email = document.getElementById("email").value;
-     // let customer_type = document.getElementById("customer_type").value;
+     let customer_type = document.getElementById("customer_type").value;
      if(customer.length == 0 || customer.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please enter customer name!");
           $("#customer").focus();
           return;
      }else if(phone_number.length == 0 || phone_number.replace(/^\s+|\s+$/g, "").length == 0){
-          alert("Please enter customer phone number");
+          alert("Please input customer phone number");
           $("#phone_number").focus();
           return;
      }else if(address.length == 0 || address.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input customer address");
           $("#address").focus();
           return;
-     /* }else if(customer_type.length == 0 || customer_type.replace(/^\s+|\s+$/g, "").length == 0){
-          alert("Please eselect customer type");
+     }else if(customer_type.length == 0 || customer_type.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select customer type");
           $("#customer_type").focus();
-          return; */
+          return;
+     }else if(email.length == 0 || email.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input customer email address");
+          $("#email").focus();
+          return;
+     }else if(!isValidEmail(email)){
+          alert("Please input a valid email address");
+          $("#email").focus();
+          return;
      }else{
           $.ajax({
                type : "POST",
                url : "../controller/add_customer.php",
-               data : {customer:customer, phone_number:phone_number, email:email, address:address /* customer_type:customer_type */},
+               data : {customer:customer, phone_number:phone_number, email:email, address:address, customer_type:customer_type},
+               beforeSend : function(){
+                    $(".info").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success : function(response){
-               $(".info").html(response);
+                    $(".info").html(response);
                }
           })
      }
@@ -3774,6 +3789,7 @@ function updateCustomer(){
      let phone_number = document.getElementById("phone_number").value;
      let address = document.getElementById("address").value;
      let email = document.getElementById("email").value;
+     let customer_type = document.getElementById("customer_type").value;
      if(customer.length == 0 || customer.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please enter customer name!");
           $("#customer").focus();
@@ -3790,13 +3806,28 @@ function updateCustomer(){
           alert("Please enter customer email address");
           $("#email").focus();
           return;
+     }else if(customer_type.length == 0 || customer_type.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select customer type");
+          $("#customer_type").focus();
+          return;
+                return;
+     }else if(!isValidEmail(email)){
+          alert("Please input a valid email address");
+          $("#email").focus();
+          return;
      }else{
           $.ajax({
                type : "POST",
                url : "../controller/update_customer.php",
-               data : {customer_id:customer_id, customer:customer, phone_number:phone_number, email:email, address:address},
+               data : {customer_id:customer_id, customer:customer, phone_number:phone_number, email:email, address:address, customer_type:customer_type},
+                beforeSend : function(){
+                    $("#update_customer").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success : function(response){
-               $("#update_customer").html(response);
+                    $("#update_customer").html(response);
+                    setTimeout(function(){
+                         showPage("edit_customer_info.php");
+                    },2000)
                }
           })
      }
@@ -6279,11 +6310,7 @@ function generateString(length) {
 
     return result;
 }
-function isValidEmail(email) {
-    // Basic regex pattern for most email formats
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
+
  //online payment for renewal of package with vpay
 function renewPackage(){
      // event.preventDefault();

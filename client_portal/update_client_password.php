@@ -19,7 +19,7 @@
             <input type="password" name="new_password" id="new_password" required><br>
             <label for="rePwd">Retype Password</label><br>
             <input type="password" name="retype_password" id="retype_password" required><br>
-            <button type="submit" name="change_passwords" id="change_passwords" onclick="updatePassword('update_password.php')">Update</button>
+            <button type="submit" name="change_passwords" id="change_passwords" onclick="updatePassword('update_client_password.php')">Update</button>
 </section>
     </div>
 </div>

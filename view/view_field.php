@@ -69,7 +69,7 @@
                 </div>
                 
                <div class="data" style="width:31%">
-                    <label for="rent">Amount (NGN)</label>
+                    <label for="rent">Rent Amount (NGN)</label>
                     <input type="number" name="rent" id="rent" value="<?php echo $row->rent?>">
                 </div>
                 <div class="data" style="width:auto">

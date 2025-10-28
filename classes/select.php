@@ -2459,7 +2459,7 @@ public function fetch_suspension_days($staff){
         }
         //fetch payables
         public function fetch_payables(){
-            $get_user = $this->connectdb()->prepare("SELECT COALESCE(SUM(debit), 0) - COALESCE(SUM(credit), 0) AS total_due account FROM transactions WHERE class = 7 GROUP BY account HAVING total_due > 0");
+            $get_user = $this->connectdb()->prepare("SELECT COALESCE(SUM(debit), 0) - COALESCE(SUM(credit), 0) AS total_due, account FROM transactions WHERE class = 7 GROUP BY account HAVING total_due > 0");
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 $rows = $get_user->fetchAll();

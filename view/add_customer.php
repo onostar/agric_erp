@@ -1,9 +1,9 @@
 <div id="add_bank" class="displays">
     <div class="info"  style="width:30%; margin:20px"></div>
     <div class="add_user_form" style="width:30%; margin:20px">
-        <h3>Add customers</h3>
+        <h3>Add Customers/Client</h3>
         <!-- <form method="POST" id="addUserForm"> -->
-        <section class="addUserForm">
+        <form class="addUserForm">
             <div class="inputs" style="gap:.5rem;">
                 <div class="data" style="width:100%">
                     <label for="customer">Customer Name</label>
@@ -19,20 +19,20 @@
                 </div>
                 <div class="data" style="width:100%">
                     <label for="email">Email address</label>
-                    <input type="text" name="email" id="email">
+                    <input type="text" name="email" id="email" required>
                 </div>
-                <div class="data"style="width:100%; display:none" >
+                <div class="data"style="width:100%;">
                     <label for="customer_type">Customer type</label>
                     <select name="customer_type" id="customer_type">
                         <option value="" selected>Select type</option>
-                        <option value="Sales Rep">Distributors</option>
-                        <option value="Dealer">Customers</option>
+                        <option value="Landowner">LANDOWNER</option>
+                        <option value="Non-Landowner">NON-LANDOWNER</option>
                     </select>
                 </div>
             </div>
             <div class="inputs">
-                <button type="submit" id="add_customer" name="add_customer" onclick="addCustomer()">Add Customer <i class="fas fa-plus"></i></button>
+                <button type="button" id="add_customer" name="add_customer" onclick="addCustomer()">Add Customer <i class="fas fa-plus"></i></button>
             </div>
-</section>    
+</form>    
     </div>
 </div>

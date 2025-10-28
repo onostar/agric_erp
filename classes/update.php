@@ -222,6 +222,39 @@ date_default_timezone_set("Africa/Lagos");
                 echo "<p class='exist'>Password doesn't match</p>";
             }
         } 
+        //update client password
+        public function updateClientPassword($username, $current_password, $new_password){
+            $get_pwd = $this->connectdb()->prepare("SELECT user_password FROM customers WHERE customer_email = :customer_email");
+            $get_pwd->bindValue("customer_email",$username);
+            $get_pwd->execute();
+            if($get_pwd->rowCount() > 0){
+                //verify password
+                $user_password = $get_pwd->fetch();
+                $confirm_password = password_verify($current_password, $user_password->user_password);
+                if($confirm_password == false){
+                    echo "<p class='exist'>Current password is wrong!</p>";
+                }else{
+                    $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+                    $update_password = $this->connectdb()->prepare("UPDATE users SET user_password = :user_password WHERE customer_email = :customer_email");
+                    $update_password->bindValue("user_password", $hashed_password);
+                    $update_password->bindValue("customer_email", $username);
+                    $update_password->execute();
+
+                    if($update_password){
+                        echo "<p>Password updated Successfuly</p>";
+                        session_start();
+                        session_unset();
+                        session_destroy();
+                        
+                    }else{
+                        echo "<p class'exist'>Failed to update password</p>";
+                    }
+                }
+                
+            }else{
+                echo "<p class='exist'>Password doesn't match</p>";
+            }
+        } 
         //merge customer
         public function mergeCustomer($table, $correct, $wrong){
             $merge = $this->connectdb()->prepare("UPDATE $table SET customer = $correct WHERE customer = $wrong");

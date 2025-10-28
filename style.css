@@ -758,7 +758,7 @@ main hr{
 .login_page form{
     padding:10px;
     width:90%;
-    height:55%;
+    height:50%;
     display:flex;
     justify-content: center;
     align-items: center;

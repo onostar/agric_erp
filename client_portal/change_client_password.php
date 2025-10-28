@@ -12,11 +12,11 @@
 <head>
 <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="keywords" content="Inventory system, point of sales, inventory and sales management, retail, supermarket software, sales application">
-    <meta name="description" content="An online/offline inventory and sales management software for retail and wholesale stores and pharmacies, stock register, etc">
+    <meta name="keywords" content="agric erp login, client portal, farm management system, agriculture software, farmland owners dashboard, crop monitoring, farm data portal, agricultural erp nigeria, onostar media, dorthpro agric erp, field management login, agtech software, farm record system, landowner portal, agriculture business software">
+    <meta name="description" content="Access your Onostar Agric ERP Client Portal to manage your farmland, monitor crop activities, view reports, and stay updated on your agricultural investments. Log in securely to track yields, payments, and field performance in real time.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales & Inventory Management | Change password</title>
-    <link rel="icon" type="image/png" size="32x32" href="../images/logo.png">
+    <title>Client Portal |Change Password</title>
+    <link rel="icon" type="image/png" size="32x32" href="../images/icon.png">
     <link rel="stylesheet" href="../fontawesome-free-6.0.0-web/css/all.css">
     <link rel="stylesheet" href="../fontawesome-free-6.0.0-web/css/all.min.css">
     <link rel="stylesheet" href="../style.css">
@@ -37,14 +37,11 @@
             
             <div class="login_page">
                 
-                <!-- <h1>
-                    <a href="../index.php">
-                        <img src="../images/logo.png" alt="logo">
-                    </a>
-                </h1> -->
-                <h3 class="mobile_company"><?php echo $row->company?></h3>
-                <h2>Change your password</h2>
-                <p></p>
+                <div class="company_logo">
+                    <img src="<?php echo '../images/'.$row->logo?>" alt="<?php echo $row->company?>">
+                </div>
+                <p style="#222"><?php echo $row->company?></p>
+                <h2 style="font-size:1rem;">Change your password</h2>
                 <?php
                     if(isset($_SESSION['success'])){
                         echo "<p class='success succeed'>" . $_SESSION['success']. "</p>
@@ -75,7 +72,7 @@
                     if(isset($_SESSION['user'])){
                         $username = $_SESSION['user'];
                 ?>
-                <form action="../controller/reset_password.php" method="POST">
+                <form action="../controller/reset_client_password.php" method="POST">
                     <div class="data">
                         <label for="username">Username</label>
                         <input type="text" name="username" id="username" required value="<?php echo $username?>" readonly>
