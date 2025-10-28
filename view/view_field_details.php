@@ -7,16 +7,6 @@ if(isset($_SESSION['user'])){
 
     // Fetch user
     $fetch_user = new selects();
-    $users = $fetch_user->fetch_details_cond('users', 'username', $username);
-    foreach($users as $user){
-        $fullname = $user->full_name;
-        $role = $user->user_role;
-        $user_id = $user->user_id;
-        $store_id = $user->store;
-    }
-
-    $_SESSION['user_id'] = $user_id;
-    $_SESSION['role'] = $role;
 
     // Company
     $fetch_comp = new selects();
@@ -31,19 +21,6 @@ if(isset($_SESSION['user'])){
     $_SESSION['company'] = $company;
     $_SESSION['company_logo'] = $logo;
 
-    // Store
-    $get_store = new selects();
-    $strs = $get_store->fetch_details_cond('stores', 'store_id', $store_id);
-    foreach($strs as $str){
-        $store = $str->store;
-        $store_address = $str->store_address;
-        $phone = $str->phone_number;
-    }
-
-    $_SESSION['store_id'] = $store_id;
-    $_SESSION['store'] = $store;
-    $_SESSION['address'] = $store_address;
-    $_SESSION['phone'] = $phone;
 ?>
 <!DOCTYPE html>
 <html lang="en">

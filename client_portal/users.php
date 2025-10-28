@@ -107,7 +107,7 @@ date_default_timezone_set("Africa/Lagos");
                 <div class="login_option">
                     <div>
                         <a class="password_link page_navs" href="javascript:void(0)" data-page="update_password" onclick="showPage('update_client_password.php')">Change password <i class="fas fa-key"></i></a>
-                        <button id="loginBtn"><a href="../controller/logout.php">Log out <i class="fas fa-power-off"></i></a></button>
+                        <button id="loginBtn"><a href="../controller/client_logout.php">Log out <i class="fas fa-power-off"></i></a></button>
                     </div>
                 </div>
             </div>
@@ -125,74 +125,14 @@ date_default_timezone_set("Africa/Lagos");
                 <div id="quickLinks">
                     <div class="quick_links">
                         
-                        <div class="links page_navs" onclick="showPage('wholesale.php')" title="Make a sales order">
-                            <i class="fas fa-pen-alt"></i>
+                        <div class="links page_navs" onclick="showPage('notifications.php')" title="Make a sales order">
+                            <i class="fas fa-bell"></i>
                             <!-- <p>Direct sales</p> -->
                         </div>
                         
-                        <div class="links page_navs" onclick="showPage('expire_soon.php')" title="Soon to expire">
-                            <i class="fas fa-chart-line" style="color:green"></i>
-                            <p>
-                                <?php
-                                    $get_soon_expired = new selects();
-                                    $soon_expired = $get_soon_expired->fetch_expire_soon('inventory', 'expiration_date', 'quantity', 'store', $store_id);
-                                    echo $soon_expired;
-                                ?>
-                            </p>
-                        </div>
-                        <div class="links page_navs" onclick="showPage('expired_items.php')" title="Expired items">
-                            <i class="fas fa-calendar-times" style="color:red"></i>
-                            <p style="color:red">
-                                <?php
-                                    $get_expired = new selects();
-                                    $expired = $get_expired->fetch_expired('inventory', 'expiration_date', 'quantity', 'store', $store_id);
-                                    echo $expired;
-                                ?>
-                            </p>
-                        </div>
-                        <div class="links page_navs" onclick="showPage('reached_reorder.php')" title="Reached reorder level">
-                            <i class="fas fa-sort-amount-down"></i>
-                            <p>
-                                <?php
-                                    $get_level = new selects();
-                                    $levels = $get_level->fetch_lesser_cond('inventory',  'quantity', 'reorder_level', 'store', $store_id);
-                                    echo $levels;
-                                ?>
-                            </p>
-                        </div>
-                        <div class="links page_navs" onclick="showPage('out_of_stock.php')" title="Out of stock">
-                            <i class="fas fa-drum" style="color:red"></i>
-                            <p style="color:red">
-                                <?php
-                                    $out_stock = new selects();
-                                    $stock = $out_stock->fetch_count_2cond('inventory', 'quantity', 0, 'store', $store_id);
-                                    echo $stock;
-                                ?>
-                            </p>
-                        </div>
+                        
                     </div>
-                    <?php
-                        if($role == "Admin" || $role == "Inventory Officer" || $role == "Accountant"){
-                    ?>
-                    <div class="change_dashboard">
-                        <!-- check other stores dashboard -->
-                        <!-- <form method="POST"> -->
-                        <section>
-                            <label>Change Location</label><br>
-                            <select name="store" id="store" required onchange="changeStore(this.value, <?php echo $user_id?>)">
-                                <option value="<?php echo $store_id?>"><?php echo $store?></option>
-                                <!-- get stores -->
-                                <?php
-                                    $get_store = new selects();
-                                    $strs = $get_store->fetch_details_negCond1('stores', 'store_id', $store_id);
-                                    foreach($strs as $str){
-                                ?>
-                                <option value="<?php echo $str->store_id?>"><?php echo $str->store?></option>
-                                <?php }?>
-                            </select>
-                        </section>
-                    </div>
-                    <?php }?>
+                   
                 </div>
 
                 <div class="contents">
@@ -214,7 +154,7 @@ date_default_timezone_set("Africa/Lagos");
                         }
                     ?>
                     <!-- dashboard -->
-                    <?php include "dashboard.php"?>
+                    <?php include "client_dashboard.php"?>
                 </div>
             </section>
         </div>

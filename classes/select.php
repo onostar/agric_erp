@@ -967,6 +967,19 @@ public function fetch_suspension_days($staff){
                 return $rows;
             }
         }
+        //fetch active crop cycle for client portal
+        public function fetch_active_cycles($customer){
+            $get_user = $this->connectdb()->prepare("SELECT fields.field_name, fields.field_status, crop_cycles.cycle_id, crop_cycles.crop, crop_cycles.variety, area_used, crop_cycles.start_date, crop_cycles.expected_harvest, crop_cycles.expected_yield, crop_cycles.created_at FROM fields, crop_cycles WHERE crop_cycles.cycle_status = 0 AND crop_cycles.field = fields.field_id AND fields.customer = :customer ORDER BY created_at");
+            $get_user->bindvalue("customer", $customer);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch between two dates and grouped
         public function fetch_payroll_months($store){
             $get_user = $this->connectdb()->prepare("SELECT MIN(payroll_date) AS payroll_date 
