@@ -14,6 +14,7 @@
      $amount = htmlspecialchars(stripslashes($_POST['rent']));
     $latitude = htmlspecialchars(stripslashes($_POST['latitude']));
     $longitude = htmlspecialchars(stripslashes($_POST['longitude']));
+    $location = htmlspecialchars(stripslashes($_POST['location']));
     
     $data = array(
         'field_name' => $field,
@@ -24,6 +25,7 @@
         'longitude' => $longitude,
         'rent' => $amount,
         'topography' => $topography,
+        'location' => $location,
         'updated_by' => $user,
         'updated_at' => $date
     );

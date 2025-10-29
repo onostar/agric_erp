@@ -20,10 +20,10 @@
     </div>
     <table id="room_list_table" class="searchTable">
         <thead>
-            <tr style="background:var(--primaryColor)">
+            <tr style="background:var(--moreColor)">
                 <td>S/N</td>
                 <td>Field</td>
-                <td>Owned By</td>
+                <td>Location</td>
                 <td>Field Size (Hec)</td>
                 <td>Soil Type</td>
                 <td>Soil PH</td>
@@ -36,17 +36,18 @@
             <?php
                 $n = 1;
                 $get_details = new selects();
-                $details = $get_details->fetch_details_order('fields', 'field_name');
+                $details = $get_details->fetch_details_condorder('fields', 'customer', 0,'field_name');
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
                 <td><?php echo $detail->field_name?></td>
-                <td style="color:var(--primaryColor)">
+                <td><?php echo $detail->location?></td>
+               <!--  <td style="color:var(--primaryColor)">
                     <?php 
                         //get customer
-                        $strs = $get_details->fetch_details_cond('customers', 'customer_id', $detail->customer);
+                        /* $strs = $get_details->fetch_details_cond('customers', 'customer_id', $detail->customer);
                         if(is_array($strs)){
                             foreach($strs as $str){
                                 $customer = $str->customer;
@@ -54,9 +55,9 @@
                         }else{
                             $customer = "Not Assigned";
                         }
-                        echo $customer;
+                        echo $customer; */
                     ?>
-                </td>
+                </td> -->
                 <td><?php echo $detail->field_size?></td>
                 <td><?php echo $detail->soil_type?></td>
                 <td><?php echo $detail->soil_ph?></td>
@@ -71,7 +72,7 @@
                     ?>
                 </td> -->
                 <td>
-                    <a href="javascript:void(0)" onclick="showPage('assign_farm_field.php?field=<?php echo $detail->field_id?>')" style="color:#fff; background:var(--otherColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;">Assign <i class="fas fa-user-tag"></i></a>
+                    <a href="javascript:void(0)" onclick="showPage('assign_farm_field.php?field=<?php echo $detail->field_id?>')" style="color:#fff; background:var(--tertiaryColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;">Assign <i class="fas fa-user-tag"></i></a>
                     
                 </td>
                 

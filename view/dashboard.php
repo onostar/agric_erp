@@ -104,50 +104,43 @@
                 </div>
             </a>
         </div> 
-        <div class="cards" id="card0">
-            <!-- <a href="javascript:void(0)" onclick="showPage('debtors_list.php')"class="page_navs">
+        <?php if($store_id == 1){?>
+            <div class="cards" id="card0">
+            <a href="javascript:void(0)" onclick="showPage('active_loans.php')"class="page_navs">
                 <div class="infos">
-                    <p><i class="fas fa-money-check"></i> Receiveables</p>
+                    <p><i class="fas fa-hand-holding-dollar"></i> Rent Receivables</p>
                     <p>
                     <?php
-                        //get total sales
-                        /* $get_sales = new selects();
-                        $rows = $get_sales->fetch_sum_singleless('customers', 'wallet_balance', 'wallet_balance', 0);
-                        if(gettype($rows) == "array"){
-                            foreach($rows as $row){
-                                $debt = $row->total;
+                        //get total due amount
+                        $dues = $get_prds->fetch_sum_single('rent_schedule', 'amount_due', 'payment_status', 0);
+                        if(is_array($dues)){
+                            foreach($dues as $due){
+                                $amount_due = $due->total;
                             }
+                        }else{
+                            $amount_due = 0;
                         }
-                        if(gettype($rows) == "string"){
-                            $debt = 0;
+                        //get total paid amount
+                        $paid = $get_prds->fetch_sum_single('rent_schedule', 'amount_paid', 'payment_status', 0);
+                        if(is_array($paid)){
+                            foreach($paid as $pay){
+                                $amount_paid = $pay->total;
+                            }
+                        }else{
+                            $amount_paid = 0;
                         }
+                        $debt = $amount_due - $amount_paid;
+                        echo "₦".number_format($debt, 2);
                         
-                        echo "₦".number_format($debt * -1, 2); */
-                       /*  //get total sales
-                        $get_sales = new selects();
-                        $rows = $get_sales->fetch_sum_curdateCon('payments', 'amount_due', 'post_date', 'store', $store_id);
-                        foreach($rows as $row){
-                            $sales = $row->total;
-                        }
-                        //get cost of sales
-                        $get_cost = new selects();
-                        $costs = $get_cost->fetch_sum_curdate2Con('sales', 'cost', 'date(post_date)', 'sales_status', 2, 'store', $store_id);
-                        foreach($costs as $cost){   $sales_cost = $cost->total;
-                        }
-                        //get expenses
-                        $get_exp = new selects();
-                        $exps = $get_exp->fetch_sum_curdateCon('expenses', 'amount', 'date(expense_date)', 'store', $store_id);
-                        foreach($exps as $exp){
-                            $expense = $exp->total;
-                        }
-
-                        //profit
-                        $profit = $sales - ($sales_cost + $expense);
-                        echo "₦".number_format($profit, 2); */
                     ?>
                     </p>
                 </div>
-            </a> -->
+            </a>
+            
+        </div> 
+        <?php }else{?>
+        <div class="cards" id="card0">
+           
             <a href="javascript:void(0)" class="page_navs">
                 <div class="infos">
                     <p><i class="fas fa-calendar"></i> Receivables</p>
@@ -171,7 +164,7 @@
                 </div>
             </a>
         </div> 
-        
+        <?php }?>
         
     </div>
     <?php

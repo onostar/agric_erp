@@ -21,3 +21,5 @@ $absent_days  = $total_working_days - ($days_at_work + $days_on_leave)
 
 once field isued for crop cycle, it becomes unavailable. when cro cycle ends it becomes available
 for customers - we have tow types, landowners and non-landowners. should they be tied to locations?
+
+currently rents isper year, so installment is calculated agsinst total rent from duration * annual rent.

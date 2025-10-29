@@ -2163,7 +2163,7 @@ table tr:nth-child(even){
 .daily_report, .monthly_encounter{
     border-radius:20px;
     background:#fff;
-    box-shadow: 1px 1px 2px 1px #505050;
+    /* box-shadow: 1px 1px 2px 1px #505050; */
 }
 .monthly_encounter{
     margin:20px 0;

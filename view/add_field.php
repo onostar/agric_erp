@@ -12,7 +12,6 @@
         <!-- <form method="POST" id="addUserForm"> -->
         <section class="addUserForm">
             <div class="inputs" style="gap:.5rem;">
-                
                 <div class="data" style="width:48%;">
                     <label for="field"> Field Name</label>
                     <input type="text" name="field" id="field" required placeholder="Input item name">
@@ -30,6 +29,14 @@
                    <input type="number" name="soil_ph" id="soil_ph" required>
                 </div>
                 <div class="data" style="width:48%;">
+                   <label for="location"> Location</label>
+                   <input type="text" name="location" id="location" required>
+                </div>
+                 <div class="data" style="width:48%;">
+                   <label for="topography"> Topography</label>
+                   <input type="text" name="topography" id="topography">
+                </div>
+                <div class="data" style="width:48%;">
                    <label for="latitude"> Latitude</label>
                    <input type="number" name="latitude" id="latitude" value=0>
                 </div>
@@ -37,16 +44,11 @@
                    <label for="longitude"> Longitude</label>
                    <input type="number" name="longitude" id="longitude" value=0>
                 </div>
+               
                 <div class="data" style="width:48%;">
-                   <label for="topography"> Topography</label>
-                   <input type="text" name="topography" id="topography">
-                </div>
-                <div class="data" style="width:48%;">
-                   <label for="rent"> Amount (NGN)</label>
+                   <label for="rent"> Annual Rent Amount (NGN)</label>
                    <input type="number" name="rent" id="rent" value=0>
                 </div>
-            </div>
-            <div class="inputs">
                 <div class="data">
                     <button type="button" id="add_item" name="add_item" onclick="addField()">Save record <i class="fas fa-save"></i></button>
                 </div>

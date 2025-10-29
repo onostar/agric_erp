@@ -11,6 +11,7 @@
     $amount = htmlspecialchars(stripslashes($_POST['rent']));
     $latitude = htmlspecialchars(stripslashes($_POST['latitude']));
     $longitude = htmlspecialchars(stripslashes($_POST['longitude']));
+    $location = htmlspecialchars(stripslashes($_POST['location']));
     $topography = ucwords(htmlspecialchars(stripslashes($_POST['topography'])));
     $data = array(
         'field_name' => $field,
@@ -20,6 +21,7 @@
         'soil_ph' => $ph,
         'latitude' => $latitude,
         'longitude' => $longitude,
+        'location' => $location,
         'rent' => $amount,
         'topography' => $topography,
         'created_by' => $user,

@@ -55,6 +55,87 @@
                 $rows = "<p class='no_result'>No records found</p>";
             }
         }
+        //fetch last inserted from any table with a condition
+        public function fetch_lastInsertedCon($table, $column, $column2, $value){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column2 = :$column2 ORDER BY $column DESC LIMIT 1");
+            $get_user->bindValue("$column2", $value);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "<p class='no_result'>No records found</p>";
+            }
+        }
+        //fetch details from any table with condition
+        public function fetch_details_pageCondOrder($table, $column, $value, $limit, $offset, $order){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column ORDER BY $order DESC LIMIT $offset, $limit");
+            $get_user->bindValue("$column", $value);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+
+            }else{
+                $rows = "<p class='no_result'>No records found</p>";
+            }
+        }
+
+        //fetch with current date less than condition and 2 condition 
+        public function fetch_details_curdategreater2con($table, $column, $condition, $value, $condition2, $value2){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE date($column) <= CURDATE() AND $condition = :$condition AND $condition2 = :$condition2");
+            $get_user->bindValue("$condition", $value);
+            $get_user->bindValue("$condition2", $value2);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        //fetch sum of 2 columns with current date AND 2 condition
+        public function fetch_sum_curdategreater2Con($table, $column1, $column2, $condition1, $value1, $condition2, $value2){
+            $get_user = $this->connectdb()->prepare("SELECT SUM($column1) AS total FROM $table WHERE $condition1 =:$condition1 AND $condition2 =:$condition2 AND date($column2) <= CURDATE()");
+            $get_user->bindValue("$condition1", $value1);
+            $get_user->bindValue("$condition2", $value2);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        //fetch details with condition and a limit descending order
+        public function fetch_details_condLimitDesc($table, $column, $condition, $limit, $order){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column ORDER BY $order DESC LIMIT $limit");
+            $get_user->bindValue("$column", $condition);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+         //fetch details with 2 condition order by
+        public function fetch_details_2condOrder($table, $con1, $con2, $value1, $value2, $order){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $con1 = :$con1 AND $con2 = :$con2 ORDER BY $order");
+            $get_user->bindValue("$con1", $value1);
+            $get_user->bindValue("$con2", $value2);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch details with condition
         public function fetch_details_cond($table, $column, $condition){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column");
@@ -218,6 +299,18 @@
             }else{
                 $rows = "No records found";
                 return $rows;
+            }
+        }
+        //fetch last inserted from any table with a condition ascending order
+        public function fetch_lastInsertedConAsc($table, $column, $column2, $value){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column2 = :$column2 ORDER BY $column ASC LIMIT 1");
+            $get_user->bindValue("$column2", $value);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "<p class='no_result'>No records found</p>";
             }
         }
         // fetch details like 3 column and 1 condition

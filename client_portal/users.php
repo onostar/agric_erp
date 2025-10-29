@@ -45,7 +45,16 @@ date_default_timezone_set("Africa/Lagos");
         $_SESSION['address'] = $store_address;
         $_SESSION['phone'] = $phone; */
         
-    
+    function greeting($staff_name){
+            $hour = date('H'); // Get the current hour in 24-hour format (00 to 23)
+            if ($hour >= 0 && $hour < 12) {
+                return "Good morning! <span style='font-weight:bold'>$staff_name</span>";
+            } elseif ($hour >= 12 && $hour < 18) {
+                return "Good afternoon! <span style='font-weight:bold'>$staff_name</span>";
+            } else {
+                return "Good evening! <span style='font-weight:bold'>$staff_name</span>";
+            }
+        }
         
 ?>
 <!DOCTYPE html>
@@ -125,9 +134,22 @@ date_default_timezone_set("Africa/Lagos");
                 <div id="quickLinks">
                     <div class="quick_links">
                         
-                        <div class="links page_navs" onclick="showPage('notifications.php')" title="Make a sales order">
-                            <i class="fas fa-bell"></i>
-                            <!-- <p>Direct sales</p> -->
+                        <div class="links page_navs" id="notifs" onclick="showPage('notifications.php')" title="Notifications">
+                            <i class="fas fa-bell" style="color:var(--tertiaryColor)"></i>
+                            <p style="color:red">
+                                <?php
+                                    $get_nots = new selects();
+                                    $nots = $get_nots->fetch_count_2cond('notifications', 'not_status', 0, 'client', $user_id);
+                                    echo $nots;
+                                ?>
+                            </p>
+                        </div>
+                        <div class="greetings">
+                            <p>
+                                <?php
+                                    echo greeting($fullname);
+                                ?>
+                            </p>
                         </div>
                         
                         

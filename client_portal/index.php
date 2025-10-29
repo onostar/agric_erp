@@ -74,7 +74,7 @@ date_default_timezone_set("Africa/Lagos");
                 <div class="company_logo">
                     <img src="<?php echo '../images/'.$row->logo?>" alt="<?php echo $row->company?>">
                 </div>
-                <p style="#222"><?php echo $row->company?></p>
+                <!-- <p style="#222"><?php echo $row->company?></p> -->
                 <h2>Client Portal</h2>
                 <?php
                     if(isset($_SESSION['success'])){

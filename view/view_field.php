@@ -35,10 +35,12 @@
             <div class="inputs" style="flex-wrap:wrap; gap:1rem; justify-content:left">
                 <!-- <div class="data item_head"> -->
                     <input type="hidden" name="field_id" id="field_id" value="<?php echo $id?>" required>
+                <?php if($row->customer != 0){?>
                 <div class="data" style="width:31%">
                     <label for="customer">Client</label>
                     <input type="text" name="item" id="item" value="<?php echo $customer?>" readonly>
                 </div>
+                <?php }?>
                 <div class="data" style="width:31%">
                     <label for="field">Field Name</label>
                     <input type="text" name="field" id="field" value="<?php echo $row->field_name?>">
@@ -58,6 +60,10 @@
                 <div class="data" style="width:31%">
                     <label for="topography">Topography</label>
                     <input type="text" name="topography" id="topography" value="<?php echo $row->topography?>">
+                </div>
+                 <div class="data" style="width:31%;">
+                   <label for="location"> Location</label>
+                   <input type="text" name="location" id="location" value="<?php echo $row->location?>">
                 </div>
                 <div class="data" style="width:31%">
                     <label for="latitude">Latitude</label>
