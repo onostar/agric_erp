@@ -16,8 +16,9 @@
         <thead>
             <tr style="background:var(--moreColor)">
                 <td>S/N</td>
+                <td>Cycle ID</td>
                 <td>Field</td>
-                <td>Crop</td>
+                <!-- <td>Crop</td> -->
                 <td>Area Used (Hec)</td>
                 <td>Start Date</td>
                 <td>Expected Harvest</td>
@@ -36,18 +37,19 @@
             ?>
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
+                <td>CY0<?php echo $detail->cycle_id?></td>
                 <td style="color:var(--primaryColor)">
                     <?php 
                         $str = $get_details->fetch_details_group('fields', 'field_name', 'field_id', $detail->field);
                         echo $str->field_name;
                     ?>
                 </td>
-                <td>
+                <!-- <td>
                     <?php 
-                        $str = $get_details->fetch_details_group('items', 'item_name', 'item_id', $detail->crop);
-                        echo $str->item_name;
+                       /*  $str = $get_details->fetch_details_group('items', 'item_name', 'item_id', $detail->crop);
+                        echo $str->item_name; */
                     ?>
-                </td>
+                </td> -->
                 <!-- <td><?php echo $detail->variety?></td> -->
                 <td style="color:red"><?php echo $detail->area_used?></td>
                 <td><?php echo date("d-M-Y", strtotime($detail->start_date))?></td>

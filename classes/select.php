@@ -241,7 +241,7 @@
         }
          //fetch item with quantity
         public function fetch_items_quantity($store, $item){
-           $get_user = $this->connectdb()->prepare("SELECT  i.item_id, i.item_name, i.sales_price, IFNULL(SUM(inv.quantity), 0) AS quantity FROM items i LEFT JOIN inventory inv ON inv.item = i.item_id AND inv.store = :store WHERE i.item_name LIKE :item GROUP BY i.item_id ORDER BY i.item_name ASC LIMIT 30");
+           $get_user = $this->connectdb()->prepare("SELECT i.item_id, i.item_name, i.sales_price, IF NULL(SUM(inv.quantity), 0) AS quantity FROM items i LEFT JOIN inventory inv ON inv.item = i.item_id AND inv.store = :store WHERE i.item_name LIKE :item GROUP BY i.item_id ORDER BY i.item_name ASC LIMIT 30");
             $get_user->bindValue("store", $store);
             $get_user->bindValue("item", "%$item%");
             $get_user->execute();
@@ -1789,6 +1789,21 @@ public function fetch_suspension_days($staff){
             $get_user = $this->connectdb()->prepare("SELECT SUM($column1) AS total FROM $table WHERE $condition = :$condition AND $condition2 != :$condition2");
             $get_user->bindValue("$condition", $value);
             $get_user->bindValue("$condition2", $value2);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        //fetch sum with 3 condition with 1 negative
+        public function fetch_sum_tripple1Neg($table, $column1, $condition, $value, $condition2, $value2, $condition3, $value3){
+            $get_user = $this->connectdb()->prepare("SELECT SUM($column1) AS total FROM $table WHERE $condition = :$condition AND $condition2 = :$condition2 AND $condition3 != :$condition3");
+            $get_user->bindValue("$condition", $value);
+            $get_user->bindValue("$condition2", $value2);
+            $get_user->bindValue("$condition3", $value3);
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 $rows = $get_user->fetchAll();

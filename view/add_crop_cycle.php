@@ -31,7 +31,7 @@
                    <label for="area_used"> Field Area Used (Hec)</label>
                    <input type="number" name="area_used" id="area_used" required>
                 </div>
-                <div class="data" style="width:30%">
+                <!-- <div class="data" style="width:30%">
                     <label for="crop">Crop</label>
                     <input type="text" name="item" id="item" oninput="getCrops(this.value)" placeholder="Enter crop name" required>
                     <div id="search_results" style="position:relative;">
@@ -43,7 +43,7 @@
                 <div class="data" style="width:30%;">
                    <label for="variety">Crop Variety</label>
                    <input type="text" name="variety" id="variety" required>
-                </div>
+                </div> -->
                 <div class="data" style="width:30%;">
                    <label for="start_date">Start Date</label>
                    <input type="date" name="start_date" id="start_date" required>
@@ -52,10 +52,10 @@
                    <label for="harvest">Expected Harvest Date</label>
                    <input type="date" name="harvest" id="harvest" required>
                 </div>
-                <div class="data" style="width:30%;">
+                <!-- <div class="data" style="width:30%;">
                    <label for="harvest">Expected Yield</label>
                    <input type="number" name="yield" id="yield" required>
-                </div>
+                </div> -->
                 <div class="data" style="width:60%;">
                    <label for="harvest">Other Notes</label>
                    <input type="text" name="notes" id="notes">

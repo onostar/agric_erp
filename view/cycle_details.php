@@ -68,15 +68,15 @@
 
             
             //get item name
-            $rows = $get_visits->fetch_details_cond('items', 'item_id', $crop);
+            /* $rows = $get_visits->fetch_details_cond('items', 'item_id', $crop);
             foreach($rows as $row){
                 $crop_name = $row->item_name;
-            }
+            } */
 ?>
         <a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222; position:fixed;"href="javascript:void(0)" onclick="showPage('crop_cycle.php')"><i class="fas fa-close"></i> Close</a>
 
     <div id="patient_details">
-        <h3 style="background:var(--tertiaryColor); color:#fff">Crop Cycle for <?php echo $crop_name?></h3>
+        <h3 style="background:var(--tertiaryColor); color:#fff">Crop Cycle CY0<?php echo $cycle?></h3>
         <!-- <form method="POST" id="addUserForm"> -->
         <section class="nomenclature">
             <!-- <div class="profile_foto" style="width:22%; margin:0 10px 0 0">
@@ -93,10 +93,10 @@
                     <label for="phone_number">Area used:</label>
                     <input type="text" required value="<?php echo $area?>Hec" readonly>
                 </div>
-                <div class="data">
+                <!-- <div class="data">
                     <label for="phone_number">Crop Variety:</label>
                     <input type="text" required value="<?php echo $variety?>" readonly>
-                </div>
+                </div> -->
                 
                 <div class="data">
                     <label for="customer_store">Start Date:</label>

@@ -9,6 +9,7 @@
             $get_cycle = new selects();
             $details = $get_cycle->fetch_details_cond('crop_cycles', 'cycle_id', $cycle);
             foreach($details as $detail){
+                $cycle_id = $detail->cycle_id;
                 $field = $detail->field;
                 $area_used = $detail->area_used;
                 $crop = $detail->crop;
@@ -25,10 +26,10 @@
                 $field_name = $fid->field_name;
             }
             //get crop name
-            $crps = $get_cycle->fetch_details_cond('items', 'item_id', $crop);
+            /* $crps = $get_cycle->fetch_details_cond('items', 'item_id', $crop);
             foreach($crps as $crp){
                 $crop_name = $crp->item_name;
-            }
+            } */
             //check if there is any harvest for the cycle
             $harvs = $get_cycle->fetch_count_cond('harvests', 'cycle', $cycle);
             //check if there is any task for the cycle
@@ -40,7 +41,7 @@
 
     <div class="info" style="width:60%; margin:20px"></div>
     <div class="add_user_form" style="width:70%; margin:20px">
-        <h3 style="background:var(--moreColor)">Update <?php echo $crop_name?> Cycle Details</h3>
+        <h3 style="background:var(--moreColor)">Update Cycle Details for <?php echo $field_name?> (CY0<?php echo $cycle_id?>)</h3>
         <!-- <form method="POST" id="addUserForm"> -->
         <section>
             <div class="inputs" style="gap:.8rem; align-items:flex_end; justify-content:left;">
@@ -71,8 +72,8 @@
                    <label for="area_used"> Field Area Used (Hec)</label>
                    <input type="number" name="area_used" id="area_used" value="<?php echo $area_used?>"required>
                 </div>
-                <?php if($tasks > 0 || $harvs > 0){?>
-                <div class="data" style="width:30%">
+                <?php /* if($tasks > 0 || $harvs > 0 ){*/?>
+                <!-- <div class="data" style="width:30%">
                     <label for="crop">Crop</label>
                     <input type="text" name="item" id="item" value="<?php echo $crop_name?>"readonly>
                     <input type="hidden" name="crop" id="crop" value="<?php echo $crop?>" readonly>
@@ -80,9 +81,9 @@
                 <div class="data" style="width:30%;">
                    <label for="variety">Crop Variety</label>
                    <input type="text" name="variety" id="variety" required value="<?php echo $variety?>" readonly>
-                </div>
-                <?php }else{?>
-                <div class="data" style="width:30%">
+                </div> -->
+                <?php /* }else{ */?>
+                <!-- <div class="data" style="width:30%">
                     <label for="crop">Crop</label>
                     <input type="text" name="item" id="item" value="<?php echo $crop_name?>" oninput="getCrops(this.value)" required>
                     <div id="search_results" style="position:relative;">
@@ -93,8 +94,8 @@
                 <div class="data" style="width:30%;">
                    <label for="variety">Crop Variety</label>
                    <input type="text" name="variety" id="variety" value="<?php echo $variety?>" required>
-                </div>
-                <?php }?>
+                </div> -->
+                <?php /* } */?>
                 
                 <div class="data" style="width:30%;">
                    <label for="start_date">Start Date</label>
