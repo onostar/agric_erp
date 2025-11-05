@@ -35,6 +35,7 @@
  </style>
 <?php
     session_start();
+    
     $store = $_SESSION['store_id'];
     $role = $_SESSION['role'];
     include "../classes/dbh.php";
@@ -171,74 +172,105 @@
             </div>
         </section>
         <section id="allergy" style="width:auto; background:transparent; box-shadow:none; margin:10px 0">
+            <?php
+                //check if land preparation has been done
+                $ldps = $get_visits->fetch_details_2cond('tasks', 'cycle', 'title', $cycle, 'LAND PREPARATION');
+                if(is_array($ldps)){
+                    foreach($ldps as $ldp){
+                        $task_status = $ldp->task_status;
+                    }
+                }else{
+                    $task_status = -1;
+                }
+                //check for planting task
+                $pts = $get_visits->fetch_details_2cond('tasks', 'cycle', 'title', $cycle, 'PLANTING');
+                if(is_array($pts)){
+                    foreach($pts as $pt){
+                        $plant_status = $pt->task_status;
+                    }
+                }else{
+                    $plant_status = -1;
+                }
+                //meaning no land preparation started yet
+                if($task_status == -1){
+            ?>
+            <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('land_preparation.php?cycle=<?php echo $cycle?>')">Start Land Preparation <i class="fas fa-landmark"></i></button>
+            <?php }
+            //if land preparation has been completed, allow adding of other tasks
+            if($task_status == 1){?>
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('add_cycle_task.php?cycle=<?php echo $cycle?>&crop=<?php echo $crop?>')">Add Task <i class="fas fa-tasks"></i></button>
+            <?php }?>
+            
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('add_observation.php?cycle=<?php echo $cycle?>&crop=<?php echo $crop?>')">Add Observations <i class="fas fa-pen-clip"></i></button>
+            <?php
+            //if planting has been completed, allow harvest
+            if($plant_status == 1){?>
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('start_harvest_crop.php?cycle=<?php echo $cycle?>&crop=<?php echo $crop?>')">Harvest Crop <i class="fas fa-seedling"></i></button>
-            <button style="background:green;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#fff; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="closeCycle('<?php echo $cycle?>')" title="complete crop cycle">Close Cycle <i class="fas fa-check-double"></i></button>
-            <button style="background:brown; border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#fff; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="abandonCycle('<?php echo $cycle?>')" title="Abandon crop cycle">Abandon Cycle <i class="fas fa-close"></i></button>
+            <?php }?>
+            <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="closeCycle('<?php echo $cycle?>')" title="complete crop cycle">Close Cycle <i class="fas fa-check-double"></i></button>
+            <button style="background:#dfdfdf; border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="abandonCycle('<?php echo $cycle?>')" title="Abandon crop cycle">Abandon Cycle <i class="fas fa-close"></i></button>
 
         </section>
         <section id="all_forms">
 
         </section>
-        <section id="last_consult">
-            <h3>Harvests</h3>
-            <div class="displays allResults new_data" style="width:100%!important;margin:0!important">
-                <table id="data_table" class="searchTable">
-                    <thead>
-                        <tr style="background:var(--primaryColor)">
-                            <td>S/N</td>
-                            <td>Date</td>
-                            <td>Quantity</td>
-                            <td>Unit Cost</td>
-                            <td>Total Cost</td>
-                            <td>Posted by</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                            $n = 1;
-                            $get_users = new selects();
-                            $details = $get_users->fetch_details_cond('harvests', 'cycle', $cycle);
-                            if(gettype($details) === 'array'){
-                            foreach($details as $detail):
-                        ?>
-                        <tr>
-                            <td style="text-align:center; color:red;"><?php echo $n?></td>
-                            <td style="color:var(--moreColor)"><?php echo date("d-m-Y h:ia", strtotime($detail->post_date));?></td>
-                            <td><?php echo $detail->quantity ?></td>
-                            <td><?php echo "₦".number_format($detail->unit_cost, 2);?></td>
-                            <td style="color:red">
-                                <?php
-                                    //get total cost
-                                    $costs = $get_users->fetch_sum_2colCond('harvests', 'quantity', 'unit_cost', 'harvest_id', $detail->harvest_id);
-                                    if(is_array($costs)){
-                                        foreach($costs as $cost){
-                                            echo "₦".number_format($cost->total, 2);
-                                        }
-                                    }else{
-                                        echo "₦0.00";
-                                    }
-                                ?>
-                            </td>
-                            <td>
-                                <?php
-                                    //get posted by
-                                    $get_posted_by = new selects();
-                                    $checks = $get_posted_by->fetch_details_cond('users',  'user_id', $detail->posted_by);
-                                    foreach($checks as $check){
-                                        $full_name = $check->full_name;
-                                    }
-                                    echo $full_name;
-                                ?>
-                            </td>
-                            
-                        </tr>
-                        <?php $n++; endforeach;}?>
-                    </tbody>
-                </table>
+        <!-- check for on going tasks -->
+        <?php
+            $tasks = $get_visits->fetch_details_2cond('tasks', 'cycle', 'task_status', $cycle, 0);
+            if(is_array($tasks)){
+                foreach($tasks as $task){
+                    $task_id = $task->task_id;
+                    $title = $task->title;
+                    $notes = $task->description;
+                    $start_date = $task->start_date;
+                    $workers = $task->workers;
+                    $labour_cost = $task->labour_cost;
+                    $posted_by = $task->done_by;
+                    $date_posted = $task->post_date;
+                }
+        ?>
+        <section id="main_consult">
+            <div class="add_user_form" style="width:60%; margin:10px">
+                <h3 style="padding:8px; font-size:.8rem;text-align:left;background:var(--tertiaryColor)"><?php echo $title?> currently on going</h3>
+                <!-- <form method="POST" id="addUserForm"> -->
+                <div class="consultant" style="display:flex; gap:1rem; flex-wrap:wrap; padding:10px; margin-bottom:0">
+                    <?php
+                        //get consultant name
+                        $cons = $get_visits->fetch_details_cond('users', 'user_id', $posted_by);
+                        foreach($cons as $con){
+                            $posted = $con->full_name;
+                        };
+                        
+                    ?>
+                    <p>Date: <span style="color:brown; text-transform:uppercase"><?php echo date("d M, Y, H:ia", strtotime($date_posted))?></span></p>
+                    <p>Posted By: <span style="color:brown; text-transform:uppercase"><?php echo $posted?></span></p>
+                    <p>Started on: <span style="color:brown; text-transform:uppercase"><?php echo date("d-M-Y, H:ia", strtotime($start_date))?></span></p>
+                </div>
+                <section class="addUserForm" style="padding:10px!important; margin:0!important">
+                    <div class="inputs" style="gap:.5rem">
+                        <input type="hidden" name="task_id" id="task_id" value="<?php echo $task_id?>">
+                        <div class="data" style="width:49%!important">
+                            <label for="description">Notes/Observations</label>
+                            <textarea name="description" id="description" placeholder="Brief description of task done with observations" ><?php echo $notes?></textarea>
+                        </div>
+                        <div class="data" style="width:49%!important">
+                            <label for="description">Assigned Workers</label>
+                            <textarea name="workers" id="workers" placeholder="Input Names of Workers involved in this task (seperate by a comma)" ><?php echo $workers?></textarea>
+                        </div>
+                        
+                        <div class="data" style="width:auto!important">
+                            <button type="button" id="add_cat" name="add_cat" style="font-size:.8rem; padding:7px" onclick="updateCycleTask()">Update <i class="fas fa-layer-group"></i></button>
+                            <a style="border-radius:15px; background:#dfdfdf;color:#222; padding:6px; box-shadow:1px 1px 1px #222; border:1px solid #fff" title="add items used for task" href="javascript:void(0)" onclick="endTask('<?php echo $task_id?>')">Add Items <i class="fas fa-plus-square"></i></a>
+                            <a style="border-radius:15px; background:#dfdfdf;color:#222;padding:6px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="endTask('<?php echo $task_id?>')">End Task <i class="fas fa-close"></i></a>
+                        </div>
+                    </div>
+                    
+                </section>    
             </div>
         </section>
+        <?php }?>
+        
+        
         <div class="tasks_notes">
             <section id="main_consult" class="tasks notes">
                 <h3 style="background:var(--primaryColor)">Tasks Done</h3>
@@ -415,7 +447,64 @@
 
         </div>
         
-       
+       <section id="last_consult">
+            <h3>Harvests</h3>
+            <div class="displays allResults new_data" style="width:100%!important;margin:0!important">
+                <table id="data_table" class="searchTable">
+                    <thead>
+                        <tr style="background:var(--primaryColor)">
+                            <td>S/N</td>
+                            <td>Date</td>
+                            <td>Quantity</td>
+                            <td>Unit Cost</td>
+                            <td>Total Cost</td>
+                            <td>Posted by</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            $n = 1;
+                            $get_users = new selects();
+                            $details = $get_users->fetch_details_cond('harvests', 'cycle', $cycle);
+                            if(gettype($details) === 'array'){
+                            foreach($details as $detail):
+                        ?>
+                        <tr>
+                            <td style="text-align:center; color:red;"><?php echo $n?></td>
+                            <td style="color:var(--moreColor)"><?php echo date("d-m-Y h:ia", strtotime($detail->post_date));?></td>
+                            <td><?php echo $detail->quantity ?></td>
+                            <td><?php echo "₦".number_format($detail->unit_cost, 2);?></td>
+                            <td style="color:red">
+                                <?php
+                                    //get total cost
+                                    $costs = $get_users->fetch_sum_2colCond('harvests', 'quantity', 'unit_cost', 'harvest_id', $detail->harvest_id);
+                                    if(is_array($costs)){
+                                        foreach($costs as $cost){
+                                            echo "₦".number_format($cost->total, 2);
+                                        }
+                                    }else{
+                                        echo "₦0.00";
+                                    }
+                                ?>
+                            </td>
+                            <td>
+                                <?php
+                                    //get posted by
+                                    $get_posted_by = new selects();
+                                    $checks = $get_posted_by->fetch_details_cond('users',  'user_id', $detail->posted_by);
+                                    foreach($checks as $check){
+                                        $full_name = $check->full_name;
+                                    }
+                                    echo $full_name;
+                                ?>
+                            </td>
+                            
+                        </tr>
+                        <?php $n++; endforeach;}?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </div>
         
 <?php

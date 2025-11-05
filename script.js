@@ -6569,11 +6569,11 @@ function selectCycleItem(id, name, quantity){
 function addCycleTask(){
      let cycle = document.getElementById("cycle").value;
      let task_title = document.getElementById("task_title").value;
-     let description = document.getElementById("description").value;
+     // let description = document.getElementById("description").value;
      let workers = document.getElementById("workers").value;
-     let labour_cost = document.getElementById("labour_cost").value;
+     // let labour_cost = document.getElementById("labour_cost").value;
      let start_date = document.getElementById("start_date").value;
-     let end_date = document.getElementById("end_date").value;
+     // let end_date = document.getElementById("end_date").value;
      todayDate = new Date();
      if(task_title.length == 0 || task_title.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input task title!");
@@ -6583,45 +6583,48 @@ function addCycleTask(){
           alert("Please input date and time task started!");
           $("#start_date").focus();
           return;
-     }else if(end_date.length == 0 || end_date.replace(/^\s+|\s+$/g, "").length == 0){
+     /* }else if(end_date.length == 0 || end_date.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input date and time task ended!");
           $("#end_date").focus();
           return;
      }else if(new Date(start_date) > new Date(end_date)){
           alert("Start date can not be greater than end date!");
           $("#start_date").focus();
-          return;
+          return; */
      }else if(new Date(start_date) > todayDate){
           alert("You cannot start a futuristic task!");
           $("#start_date").focus();
           return;
-     }else if(new Date(end_date) > todayDate){
+    /*  }else if(new Date(end_date) > todayDate){
           alert("You can only end a task today or later!");
           $("#end_date").focus();
           return;
      }else if(description.length == 0 || description.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input task description!");
           $("#description").focus();
-          return;
+          return; */
      }else if(workers.length == 0 || workers.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input assigned workers!");
           $("#workers").focus();
           return;
-     }else if(parseFloat(labour_cost) < 0){
+    /*  }else if(parseFloat(labour_cost) < 0){
           alert("Labour Cost must be a number!");
           $("#labour_cost").focus();
-          return;
+          return; */
      }else{
           $.ajax({
                type : "POST",
-               url : "../controller/complete_cycle_task.php",
-               data : {task_title:task_title, description:description, workers:workers, cycle:cycle, labour_cost:labour_cost, start_date:start_date, end_date:end_date},
+               url : "../controller/start_cycle_task.php",
+               data : {task_title:task_title, /* description:description, */ workers:workers, cycle:cycle, /* labour_cost:labour_cost, */ start_date:start_date /* end_date:end_date */},
                beforeSend: function(){
                     $("#all_forms").html("<div class='processing'><div class='loader'></div></div>");
                },
                success : function(response){
-                    $("#all_forms").html("");
-                    $(".tasks").html(response);
+                    $("#cycles").html(response);
+                    // $(".tasks").html(response);
+                    setTimeout(function(){
+                         showPage("cycle_details.php?cycle="+cycle);
+                    }, 3000);
                }
           })
      }
