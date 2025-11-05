@@ -24,7 +24,7 @@
  }
  #main_consult textarea{
     width:100%;
-    height:50px;
+    min-height:70px;
     padding:5px;
  }
  .tasks_done{
@@ -249,6 +249,7 @@
                 <section class="addUserForm" style="padding:10px!important; margin:0!important">
                     <div class="inputs" style="gap:.5rem">
                         <input type="hidden" name="task_id" id="task_id" value="<?php echo $task_id?>">
+                        <input type="hidden" name="cycle" id="cycle" value="<?php echo $cycle?>">
                         <div class="data" style="width:49%!important">
                             <label for="description">Notes/Observations</label>
                             <textarea name="description" id="description" placeholder="Brief description of task done with observations" ><?php echo $notes?></textarea>
@@ -294,7 +295,33 @@
                         <p>Date: <span style="color:brown; text-transform:uppercase"><?php echo date("d M, Y, H:ia", strtotime($tsk->post_date))?></span></p>
                         <p>Posted By: <span style="color:brown; text-transform:uppercase"><?php echo $done_by?></span></p>
                         <p>Started on: <span style="color:brown; text-transform:uppercase"><?php echo date("d-M-Y, H:ia", strtotime($tsk->start_date))?></span></p>
+                        <?php if($tsk->task_status == 1){?>
                         <p>Ended: <span style="color:brown; text-transform:uppercase"><?php echo date("d-M-Y, H:ia", strtotime($tsk->end_date))?></span></p>
+                        <?php
+                        //get days used for the task
+                            $ended = new DateTime($tsk->end_date);
+                            $started = new DateTime($tsk->start_date);
+                            $interval = $ended->diff($started);
+                            $days_used = $interval->days;
+                            if($days_used < 1){
+                                $days_used = 1;
+                            }
+                        ?>
+                        <p>Days used: <span style="color:brown; text-transform:uppercase"><?php echo $days_used.' days'; ?></span></p>
+                        <?php }else{?>
+                        <p>Status: <span style="color:brown;">Ongoing <i class="fas fa-spinner"></i></span></p>
+                        <?php
+                        //get days used for the task so far
+                            $started = new DateTime($tsk->start_date);
+                            $now = new DateTime();
+                            $interval = $now->diff($started);
+                            $days_gone = $interval->days;
+                            if($days_gone < 1){
+                                $days_gone = 1;
+                            }
+                        ?>
+                        <p>Days ongoing: <span style="color:brown; "><?php echo $days_gone.' day(s)'; ?></span></p>
+                        <?php }?>
                     </div>
                     <form>
                         <div class="inputs">
@@ -333,7 +360,7 @@
                             <tbody>
                                 <?php
                                     $m = 1;
-                                    $items = $get_users->fetch_details_cond('task_items', 'task_id', $tsk->task_id);
+                                    $items = $get_visits->fetch_details_cond('task_items', 'task_id', $tsk->task_id);
                                     if(gettype($items) === 'array'){
                                     foreach($items as $item):
                                 ?>
@@ -341,7 +368,7 @@
                                     <td style="text-align:center; color:red;"><?php echo $m?></td>
                                     <td style="color:var(--moreColor)">
                                         <?php 
-                                            $str = $get_users->fetch_details_group('items', 'item_name', 'item_id', $item->item);
+                                            $str = $get_visits->fetch_details_group('items', 'item_name', 'item_id', $item->item);
                                             echo $str->item_name;
                                         ?>
                                     </td>
@@ -354,8 +381,7 @@
                                     <td>
                                         <?php
                                             //get posted by
-                                            $get_posted_by = new selects();
-                                            $checks = $get_posted_by->fetch_details_cond('users',  'user_id', $item->posted_by);
+                                            $checks = $get_visits->fetch_details_cond('users',  'user_id', $item->posted_by);
                                             foreach($checks as $check){
                                                 $full_name = $check->full_name;
                                             }

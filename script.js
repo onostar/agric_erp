@@ -6624,7 +6624,35 @@ function addCycleTask(){
                     // $(".tasks").html(response);
                     setTimeout(function(){
                          showPage("cycle_details.php?cycle="+cycle);
-                    }, 3000);
+                    }, 2000);
+               }
+          })
+     }
+}
+//update task for a crop cycle
+function updateCycleTask(){
+     let cycle = document.getElementById("cycle").value;
+     let task_id = document.getElementById("task_id").value;
+     let description = document.getElementById("description").value;
+     let workers = document.getElementById("workers").value;
+     if(workers.length == 0 || workers.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input assigned workers!");
+          $("#workers").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/update_cycle_task.php",
+               data : {task_id:task_id, description:description, workers:workers},
+               beforeSend: function(){
+                    $("#all_forms").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#cycles").html(response);
+                    // $(".tasks").html(response);
+                    setTimeout(function(){
+                         showPage("cycle_details.php?cycle="+cycle);
+                    }, 2000);
                }
           })
      }
