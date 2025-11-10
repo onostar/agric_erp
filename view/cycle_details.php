@@ -32,6 +32,33 @@
     /* border-bottom:1px solid #b3b3b3ff!important; */
     padding:0 20px 0!important;
  }
+ .ongoing{
+    display: flex;
+    flex-wrap: wrap;
+    gap: .2rem;
+ }
+ .ongoing .allResults{
+    width: 43%!important;
+    margin:0!important;
+ }
+ .ongoing .addUserForm{
+    width: 53%!important;
+    margin:0!important;
+    border-right: 1px solid #ccc;
+
+ }
+ .ongoing .allResults table#data_table td{
+    padding:5px;
+    font-size: .75rem;
+ }
+ @media screen and (max-width: 768px){
+    .ongoing{
+        flex-direction: column;
+    }
+    .ongoing .allResults, .ongoing .addUserForm{
+        width: 100%!important;
+    }
+ }
  </style>
 <?php
     session_start();
@@ -198,7 +225,7 @@
             <?php }
             //if land preparation has been completed, allow adding of other tasks
             if($task_status == 1){?>
-            <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('add_cycle_task.php?cycle=<?php echo $cycle?>&crop=<?php echo $crop?>')">Add Task <i class="fas fa-tasks"></i></button>
+            <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('add_cycle_task.php?cycle=<?php echo $cycle?>')">Add Task <i class="fas fa-tasks"></i></button>
             <?php }?>
             
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('add_observation.php?cycle=<?php echo $cycle?>&crop=<?php echo $crop?>')">Add Observations <i class="fas fa-pen-clip"></i></button>
@@ -211,9 +238,7 @@
             <button style="background:#dfdfdf; border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="abandonCycle('<?php echo $cycle?>')" title="Abandon crop cycle">Abandon Cycle <i class="fas fa-close"></i></button>
 
         </section>
-        <section id="all_forms">
-
-        </section>
+        
         <!-- check for on going tasks -->
         <?php
             $tasks = $get_visits->fetch_details_2cond('tasks', 'cycle', 'task_status', $cycle, 0);
@@ -230,23 +255,24 @@
                 }
         ?>
         <section id="main_consult">
-            <div class="add_user_form" style="width:60%; margin:10px">
+            <div class="add_user_form" style="width:100%; margin:0!important">
                 <h3 style="padding:8px; font-size:.8rem;text-align:left;background:var(--tertiaryColor)"><?php echo $title?> currently on going</h3>
                 <!-- <form method="POST" id="addUserForm"> -->
-                <div class="consultant" style="display:flex; gap:1rem; flex-wrap:wrap; padding:10px; margin-bottom:0">
-                    <?php
-                        //get consultant name
-                        $cons = $get_visits->fetch_details_cond('users', 'user_id', $posted_by);
-                        foreach($cons as $con){
-                            $posted = $con->full_name;
-                        };
-                        
-                    ?>
-                    <p>Date: <span style="color:brown; text-transform:uppercase"><?php echo date("d M, Y, H:ia", strtotime($date_posted))?></span></p>
-                    <p>Posted By: <span style="color:brown; text-transform:uppercase"><?php echo $posted?></span></p>
-                    <p>Started on: <span style="color:brown; text-transform:uppercase"><?php echo date("d-M-Y, H:ia", strtotime($start_date))?></span></p>
-                </div>
+                <div class="ongoing">
                 <section class="addUserForm" style="padding:10px!important; margin:0!important">
+                    <div class="consultant" style="display:flex; gap:1rem; flex-wrap:wrap; padding:10px; margin-bottom:0">
+                        <?php
+                            //get consultant name
+                            $cons = $get_visits->fetch_details_cond('users', 'user_id', $posted_by);
+                            foreach($cons as $con){
+                                $posted = $con->full_name;
+                            };
+                            
+                        ?>
+                        <p>Date: <span style="color:brown; text-transform:uppercase"><?php echo date("d M, Y, H:ia", strtotime($date_posted))?></span></p>
+                        <p>Posted By: <span style="color:brown; text-transform:uppercase"><?php echo $posted?></span></p>
+                        <p>Started on: <span style="color:brown; text-transform:uppercase"><?php echo date("d-M-Y, H:ia", strtotime($start_date))?></span></p>
+                    </div>
                     <div class="inputs" style="gap:.5rem">
                         <input type="hidden" name="task_id" id="task_id" value="<?php echo $task_id?>">
                         <input type="hidden" name="cycle" id="cycle" value="<?php echo $cycle?>">
@@ -261,17 +287,73 @@
                         
                         <div class="data" style="width:auto!important">
                             <button type="button" id="add_cat" name="add_cat" style="font-size:.8rem; padding:7px" onclick="updateCycleTask()">Update <i class="fas fa-layer-group"></i></button>
-                            <a style="border-radius:15px; background:#dfdfdf;color:#222; padding:6px; box-shadow:1px 1px 1px #222; border:1px solid #fff" title="add items used for task" href="javascript:void(0)" onclick="endTask('<?php echo $task_id?>')">Add Items <i class="fas fa-plus-square"></i></a>
-                            <a style="border-radius:15px; background:#dfdfdf;color:#222;padding:6px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="endTask('<?php echo $task_id?>')">End Task <i class="fas fa-close"></i></a>
+                            <a style="border-radius:15px; background:#dfdfdf;color:#222; padding:6px; box-shadow:1px 1px 1px #222; border:1px solid #fff" title="add items used for task" href="javascript:void(0)" onclick="showForm('add_cycle_task_items.php?task_id=<?php echo $task_id?>&cycle=<?php echo $cycle?>')">Add Items <i class="fas fa-plus-square"></i></a>
+                            <a style="border-radius:15px; background:#dfdfdf;color:#222;padding:6px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="showForm('end_task.php?task=<?php echo $task_id?>')">End Task <i class="fas fa-close"></i></a>
                         </div>
                     </div>
                     
-                </section>    
+                </section> 
+                <div class="allResults" style="margin:10px!important">
+                    <h2 style="font-size:.9rem; text-align:center;">Items Used for task</h2>
+                    <table id="data_table" class="searchTable">
+                        <thead>
+                            <tr style="background:transparent; color:#222">
+                                <td>S/N</td>
+                                <td>Item</td>
+                                <td>Qty</td>
+                                <td>Posted By</td>
+                                <td>Post Date</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                                $n = 1;
+                                $rows = $get_visits->fetch_details_cond('task_items', 'task_id', $task_id);
+                                if(gettype($rows) === 'array'){
+                                foreach($rows as $row):
+                            ?>
+                            <tr>
+                                <td style="text-align:center; color:red;"><?php echo $n?></td>
+                                <td>
+                                    <?php 
+                                        $str = $get_visits->fetch_details_group('items', 'item_name', 'item_id', $row->item);
+                                        echo $str->item_name;
+                                    ?>
+                                </td>
+                                <td style="color:green; text-align:center">
+                                    <?php 
+                                        echo $row->quantity;
+                                    ?>
+                                </td>
+                                <td>
+                                    <?php
+                                        //get posted by
+                                        $posted_by = $get_visits->fetch_details_group('users', 'full_name', 'user_id', $row->posted_by);
+                                        echo $posted_by->full_name;
+                                    ?>
+                                </td>
+                                <td style="color:var(--primaryColor)"><?php echo date("d-m-Y, h:ia", strtotime($row->post_date))?></td>
+                            </tr>
+                            
+                            <?php $n++; endforeach;}?>
+                        </tbody>
+                    </table>
+                    
+                    <?php
+                        if(gettype($rows) == "string"){
+                            echo "<p class='no_result'>'No item found'</p>";
+                        }
+                    
+                    ?>
+                </div>
+                </div>
             </div>
         </section>
         <?php }?>
         
-        
+        <section id="all_forms">
+
+        </section>
         <div class="tasks_notes">
             <section id="main_consult" class="tasks notes">
                 <h3 style="background:var(--primaryColor)">Tasks Done</h3>

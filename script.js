@@ -6932,7 +6932,9 @@ function addCrop(id, name){
 //add itemused fo a task
 function addTaskItem(){
      let task_id = document.getElementById("task_id").value;
+     let cycle = document.getElementById("cycle").value;
      let task_item = document.getElementById("task_item").value;
+     let invoice = document.getElementById("invoice").value;
      let quantity = document.getElementById("quantity").value;
      if(task_item.length == 0 || task_item.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input item name!");
@@ -6946,9 +6948,9 @@ function addTaskItem(){
           $.ajax({
                type : "POST",
                url : "../controller/add_task_item.php",
-               data : {task_id:task_id, task_item:task_item, quantity:quantity},
+               data : {task_id:task_id, task_item:task_item, quantity:quantity,cycle:cycle, invoice:invoice},
                beforeSend : function(){
-                    document.getElementById("new_data").scrollIntoView();
+                    // document.getElementById("new_data").scrollIntoView();
                     $("#new_data").html("<div class='processing'><div class='loader'></div></div>");
                },
                success : function(response){
