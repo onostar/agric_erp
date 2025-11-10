@@ -6657,7 +6657,50 @@ function updateCycleTask(){
           })
      }
 }
-
+//end task
+function endTask(){
+     let task_id = document.getElementById("task_id").value;
+     let cycle = document.getElementById("cycle").value;
+     let labour_cost = document.getElementById("labour_cost").value;
+     let end_date = document.getElementById("end_date").value;
+     todayDate = new Date();
+    if(end_date.length == 0 || end_date.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input date and time task was completed!");
+          $("#end_date").focus();
+          return;
+     
+     }else if(new Date(end_date) > todayDate){
+          alert("You can only end a task today or later!");
+          $("#end_date").focus();
+          return;
+    
+     }else if(parseFloat(labour_cost) < 0){
+          alert("Labour Cost must be a number!");
+          $("#labour_cost").focus();
+          return;
+     }else{
+          let confirm_end = confirm("Are you sure you want to end this task?", "");
+          if(!confirm_end){
+               return;
+          }else{
+               $.ajax({
+                    type : "POST",
+                    url : "../controller/end_task.php",
+                    data : {task_id:task_id, labour_cost:labour_cost, end_date:end_date},
+                    beforeSend: function(){
+                         $("#all_forms").html("<div class='processing'><div class='loader'></div></div>");
+                    },
+                    success : function(response){
+                         $("#cycles").html(response);
+                         // $(".tasks").html(response);
+                         setTimeout(function(){
+                              showPage("cycle_details.php?cycle="+cycle);
+                         }, 2000);
+                    }
+               })
+          }
+     }
+}
 //add task
 function addObservation(){
      let cycle = document.getElementById("cycle").value;

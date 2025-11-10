@@ -288,7 +288,7 @@
                         <div class="data" style="width:auto!important">
                             <button type="button" id="add_cat" name="add_cat" style="font-size:.8rem; padding:7px" onclick="updateCycleTask()">Update <i class="fas fa-layer-group"></i></button>
                             <a style="border-radius:15px; background:#dfdfdf;color:#222; padding:6px; box-shadow:1px 1px 1px #222; border:1px solid #fff" title="add items used for task" href="javascript:void(0)" onclick="showForm('add_cycle_task_items.php?task_id=<?php echo $task_id?>&cycle=<?php echo $cycle?>')">Add Items <i class="fas fa-plus-square"></i></a>
-                            <a style="border-radius:15px; background:#dfdfdf;color:#222;padding:6px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="showForm('end_task.php?task=<?php echo $task_id?>')">End Task <i class="fas fa-close"></i></a>
+                            <a style="border-radius:15px; background:#dfdfdf;color:#222;padding:6px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="showForm('end_task_form.php?task=<?php echo $task_id?>')">End Task <i class="fas fa-close"></i></a>
                         </div>
                     </div>
                     
