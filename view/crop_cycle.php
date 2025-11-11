@@ -53,7 +53,15 @@
                 <!-- <td><?php echo $detail->variety?></td> -->
                 <td style="color:red"><?php echo $detail->area_used?></td>
                 <td><?php echo date("d-M-Y", strtotime($detail->start_date))?></td>
-                <td style="color:var(--tertiaryColor)"><?php echo date("d-M-Y", strtotime($detail->expected_harvest))?></td>
+                <td style="color:var(--tertiaryColor)">
+                    <?php 
+                        if($detail->expected_harvest == "0000-00-00" || $detail->expected_harvest == NULL){
+                            echo "N/A";
+                        }else{
+                            echo date("d-M-Y", strtotime($detail->expected_harvest));
+                        }
+                    ?>
+                </td>
                 <td style="text-align:center"><?php echo $detail->expected_yield?></td>
                 <!-- <td>
                     <?php

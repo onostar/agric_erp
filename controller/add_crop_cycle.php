@@ -9,7 +9,7 @@
     $area = htmlspecialchars(stripslashes($_POST['area_used']));
     // $variety = htmlspecialchars(stripslashes($_POST['variety']));
     $start_date = htmlspecialchars(stripslashes($_POST['start_date']));
-    $harvest = htmlspecialchars(stripslashes($_POST['harvest']));
+    // $harvest = htmlspecialchars(stripslashes($_POST['harvest']));
     $note = ucwords(htmlspecialchars(stripslashes($_POST['notes'])));
     // $yield = htmlspecialchars(stripslashes($_POST['yield']));
     $data = array(
@@ -19,7 +19,7 @@
         'variety' => $variety, */
         'area_used' => $area,
         'start_date' => $start_date,
-        'expected_harvest' => $harvest,
+        // 'expected_harvest' => $harvest,
         // 'expected_yield' => $yield,
         'notes' => $note,
         'created_by' => $user,

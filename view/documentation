@@ -23,3 +23,14 @@ once field isued for crop cycle, it becomes unavailable. when cro cycle ends it 
 for customers - we have tow types, landowners and non-landowners. should they be tied to locations?
 
 currently rents isper year, so installment is calculated agsinst total rent from duration * annual rent.
+
+going back to crop cycle - if start date has not reached, u cannot add or edit any task
+also if land preparation has not been done, you cannot add anything. also if a task is on going, you cant add another task.
+
+expected yield is calculated only after plantingof suckers
+
+expected harvest date is caluclated from the day of induction task.
+
+harvest button should only display when harvest date is due.
+
+if harvest has not been done, pruning and sucker management will not work.

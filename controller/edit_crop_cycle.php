@@ -10,17 +10,17 @@
     $area = htmlspecialchars(stripslashes($_POST['area_used']));
     // $variety = htmlspecialchars(stripslashes($_POST['variety']));
     $start_date = htmlspecialchars(stripslashes($_POST['start_date']));
-    $harvest = htmlspecialchars(stripslashes($_POST['harvest']));
+    // $harvest = htmlspecialchars(stripslashes($_POST['harvest']));
     $note = ucwords(htmlspecialchars(stripslashes($_POST['notes'])));
-    $yield = htmlspecialchars(stripslashes($_POST['yield']));
+    // $yield = htmlspecialchars(stripslashes($_POST['yield']));
     $data = array(
         'field' => $field,
         /* 'crop' => $crop,
         'variety' => $variety, */
         'area_used' => $area,
         'start_date' => $start_date,
-        'expected_harvest' => $harvest,
-        'expected_yield' => $yield,
+        // 'expected_harvest' => $harvest,
+        // 'expected_yield' => $yield,
         'notes' => $note,
     );
     // instantiate class
@@ -37,8 +37,8 @@
         $old_area = $row->area_used;
         // $old_variety = $row->variety;
         $old_start = $row->start_date;
-        $old_harvest = $row->expected_harvest;
-        $old_yield = $row->expected_yield;
+        // $old_harvest = $row->expected_harvest;
+        // $old_yield = $row->expected_yield;
         $old_note = $row->notes;
     }
     
@@ -120,10 +120,10 @@
         'new_variety' => $variety, */
         'old_start' => $old_start,
         'new_start' => $start_date,
-        'old_harvest' => $old_harvest,
-        'new_harvest' => $harvest,
-        'old_yield' => $old_yield,
-        'new_yield' => $yield,
+        /* 'old_harvest' => $old_harvest,
+        'new_harvest' => $harvest, */
+        /* 'old_yield' => $old_yield,
+        'new_yield' => $yield, */
         'old_notes' => $old_note,
         'new_notes' => $note,
         'updated_by' => $user,

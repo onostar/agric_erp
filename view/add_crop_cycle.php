@@ -48,10 +48,10 @@
                    <label for="start_date">Start Date</label>
                    <input type="date" name="start_date" id="start_date" required>
                 </div>
-                <div class="data" style="width:30%;">
+                <!-- <div class="data" style="width:30%;">
                    <label for="harvest">Expected Harvest Date</label>
                    <input type="date" name="harvest" id="harvest" required>
-                </div>
+                </div> -->
                 <!-- <div class="data" style="width:30%;">
                    <label for="harvest">Expected Yield</label>
                    <input type="number" name="yield" id="yield" required>
@@ -60,7 +60,7 @@
                    <label for="harvest">Other Notes</label>
                    <input type="text" name="notes" id="notes">
                 </div>
-                <div class="data">
+                <div class="data" style="width:auto">
                     <button type="button" id="add_item" name="add_item" onclick="addCropCycle()">Save record <i class="fas fa-save"></i></button>
                 </div>
             </div>

@@ -3,7 +3,7 @@
     
     if(isset($_GET['cycle'])){
         $cycle = $_GET['cycle'];
-        $crop = $_GET['crop'];
+        // $crop = $_GET['crop'];
     include "../classes/dbh.php";
     include "../classes/select.php";
     //get crop name
@@ -17,34 +17,40 @@
         <section class="addUserForm">
             <div class="inputs" style="gap:1rem">
                 <input type="hidden" name="cycle" id="cycle" value="<?php echo $cycle?>">
-                <div class="data" style="width:100%">
-                    <label for="task_title">Task title</label>
+                <div class="data" style="width:48%">
+                    <label for="task_title">Task</label>
                     <select name="task_title" id="task_title">
                         <option value="" disabled selected>Select Task</option>
+                        <option value="PLANTING">PLANTING</option>
+                        <option value="FERTILIZER APPLICATION">FERTILIZER APPLICATION</option>
+                        <option value="WEEDING">WEEDING</option>
+                        <option value="INDUCTION">INDUCTION</option>
+                        <option value="PRUNING">PRUNING</option>
+                        <option value="SUCKER REMOVAL">SUCKER REMOVAL</option>
                     </select>
                 </div>
                 <div class="data" style="width:48%">
                     <label for="start_date">Start date</label>
-                    <input type="datetime-local" name="start_date" id="start_date" required>
+                    <input type="datetime-local" name="start_date" id="start_date" value="<?php echo date("Y-m-d H:i")?>" required>
                 </div>
-                <div class="data" style="width:48%">
+                <!-- <div class="data" style="width:48%">
                     <label for="end_date">End date</label>
                     <input type="datetime-local" name="end_date" id="end_date" required>
-                </div>
-                <div class="data" style="width:100%">
-                    <label for="description">Notes/Observations</label>
+                </div> -->
+                <!-- <div class="data" style="width:100%">
+                    <label for="description">Notes</label>
                     <textarea name="description" id="description" placeholder="Brief description of task done with observations" required></textarea>
-                </div>
+                </div> -->
                 <div class="data" style="width:100%">
                     <label for="description">Assigned Workers</label>
                     <textarea name="workers" id="workers" placeholder="Input Names of Workers involved in this task (seperate by a comma)" required></textarea>
                 </div>
-                <div class="data" style="width:50%">
+                <!-- <div class="data" style="width:50%">
                     <label for="labour_cost">Labour Cost (NGN)</label>
                     <input type="number" name="labour_cost" id="labour_cost" value="0" placeholder="Input labour cost for this task" required>
-                </div>
+                </div> -->
                 <div class="data" style="width:auto">
-                    <button type="submit" id="add_cat" name="add_cat" onclick="addCycleTask()">Save <i class="fas fa-layer-group"></i></button>
+                    <button type="type" id="add_cat" name="add_cat" onclick="addCycleTask()">Save <i class="fas fa-layer-group"></i></button>
                     <a style="border-radius:15px; background:brown;color:#fff;padding:8px; box-shadow:1px 1px 1px #222"href="javascript:void(0)" onclick="closeAllForms()"><i class="fas fa-close"></i> Close</a>
                 </div>
             </div>

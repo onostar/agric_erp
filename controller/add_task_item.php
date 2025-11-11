@@ -71,6 +71,17 @@
             $add_data = new add_data('task_items', $data);
             $add_data->create_data();
             if($add_data){
+                //check if task is planting and update expected harvest quantity
+                if($task_title == "PLANTING" && $item_name == "SUCKER"){
+                    //get total suckers planted in this cycle
+                    $total_suckers = $get_details->fetch_sum_double('task_items', 'quantity', 'cycle', $cycle, 'item', $item);
+                    foreach($total_suckers as $sucker){
+                        $suckers_planted = $sucker->total;
+                    }
+                    //update expected yield quantity in crop cycle table
+                    $update_cycle = new Update_table();
+                    $update_cycle->update('crop_cycles', 'expected_yield', 'cycle_id', $suckers_planted, $cycle);
+                }
                 //add into accounting data
                 //get farm input ledger
                 if($cycle == 0 || $cycle == ""){    

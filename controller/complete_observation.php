@@ -4,7 +4,7 @@
     $date = date("Y-m-d H:i:s");
     $user = $_SESSION['user_id'];
     $cycle = htmlspecialchars(stripslashes($_POST['cycle']));
-    $description = ucwords(htmlspecialchars(stripslashes($_POST['description'])));
+    $description = ucwords(htmlspecialchars(stripslashes($_POST['observation'])));
     
     include "../classes/dbh.php";
     include "../classes/select.php";

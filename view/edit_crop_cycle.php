@@ -101,26 +101,26 @@
                    <label for="start_date">Start Date</label>
                    <input type="date" name="start_date" id="start_date" required value="<?php echo date("Y-m-d", strtotime($start_date))?>">
                 </div>
-                <div class="data" style="width:30%;">
+                <!-- <div class="data" style="width:30%;">
                    <label for="harvest">Expected Harvest Date</label>
                    <input type="date" name="harvest" id="harvest" value="<?php echo date("Y-m-d", strtotime($expected_harvest))?>" required>
-                </div>
-                <?php if($harvs > 0){?>
-                <div class="data" style="width:30%;">
+                </div> -->
+                <?php /* if($harvs > 0){ */?>
+                <!-- <div class="data" style="width:30%;">
                    <label for="harvest">Expected Yield</label>
                    <input type="number" name="yield" id="yield" value="<?php echo $expected_yield?>" readonly>
-                </div>
-                <?php }else{?>
-                    <div class="data" style="width:30%;">
+                </div> -->
+                <?php /* }else{ */?>
+               <!--  <div class="data" style="width:30%;">
                    <label for="harvest">Expected Yield</label>
                    <input type="number" name="yield" id="yield" value="<?php echo $expected_yield?>" required>
-                </div>
-                <?php }?>
-                <div class="data" style="width:60%;">
+                </div> -->
+                <?php /* } */?>
+                <div class="data" style="width:65%;">
                    <label for="harvest">Other Notes</label>
                    <input type="text" name="notes" id="notes" value="<?php echo $other_notes?>">
                 </div>
-                <div class="data">
+                <div class="data" style="width:auto">
                     <button type="button" id="add_item" name="add_item" onclick="editCropCycle()">Update record <i class="fas fa-save"></i></button>
                 </div>
             </div>

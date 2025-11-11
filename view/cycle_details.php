@@ -132,19 +132,30 @@
                 </div>
                 <div class="data">
                     <label for="phone_number">Expected Harvest Date:</label>
-                    <input type="text" required value="<?php echo date("d-M-Y", strtotime($end))?>" readonly>
+                    <?php
+                        if($end == "0000-00-00" || $end == NULL){
+                            $harvest_date = "N/A";
+                        }else{
+                            $harvest_date = date("d-M-Y", strtotime($end));
+                        }
+                    ?>
+                    <input type="text" required value="<?php echo $harvest_date?>" readonly>
                 </div>
                 <div class="data">
                     <label for="phone_number">Expected yield:</label>
                     <input type="text" required value="<?php echo $yield?>" readonly style="color:green">
                 </div>
                 <div class="data">
-                    <label for="phone_number">Days Remaining:</label>
+                    <label for="phone_number">Days To harvest:</label>
                     <?php
-                        $date = new DateTime($end);
-                        $now = new DateTime();
-                        $interval = $date->diff($now);
-                        $days_remaining = $interval->days;
+                        if($harvest_date == "N/A"){
+                            $days_remaining = "N/A";
+                        }else{
+                            $date = new DateTime($harvest_date);
+                            $now = new DateTime();
+                            $interval = $date->diff($now);
+                            $days_remaining = $interval->days;
+                        }
                     ?>
                     <input type="text" style="color:var(--secondaryColor)" required value="<?php echo $days_remaining.' days'; ?>" readonly>
                 </div>
@@ -198,6 +209,10 @@
                 
             </div>
         </section>
+        <?php
+            //check if start date is reached before opening tasks sections
+            if(strtotime(date("Y-m-d H:i")) >= strtotime($start)){
+        ?>
         <section id="allergy" style="width:auto; background:transparent; box-shadow:none; margin:10px 0">
             <?php
                 //check if land preparation has been done
@@ -218,27 +233,42 @@
                 }else{
                     $plant_status = -1;
                 }
+                //check for induction task
+                $inds = $get_visits->fetch_details_2cond('tasks', 'cycle', 'title', $cycle, 'INDUCTION');
+                if(is_array($inds)){
+                    foreach($inds as $ind){
+                        $induction_status = $ind->task_status;
+                    }
+                }else{
+                    $induction_status = -1;
+                }
+                //check for any ongoing tasks
+                $ongoing_tasks = $get_visits->fetch_count_2cond('tasks', 'cycle', $cycle, 'task_status', 0);
+                
+                
                 //meaning no land preparation started yet
                 if($task_status == -1){
             ?>
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('land_preparation.php?cycle=<?php echo $cycle?>')">Start Land Preparation <i class="fas fa-landmark"></i></button>
             <?php }
             //if land preparation has been completed, allow adding of other tasks
-            if($task_status == 1){?>
+            if($task_status == 1 && $ongoing_tasks == 0){?>
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('add_cycle_task.php?cycle=<?php echo $cycle?>')">Add Task <i class="fas fa-tasks"></i></button>
             <?php }?>
             
-            <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('add_observation.php?cycle=<?php echo $cycle?>&crop=<?php echo $crop?>')">Add Observations <i class="fas fa-pen-clip"></i></button>
+            <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('add_observation.php?cycle=<?php echo $cycle?>')">Add Observations <i class="fas fa-pen-clip"></i></button>
             <?php
-            //if planting has been completed, allow harvest
-            if($plant_status == 1){?>
+            
+            //check if expected harvest date has been reached and planting and induction has been done before showing harvest button
+            if(strtotime(date("Y-m-d H:i")) >= strtotime($harvest_date) && $plant_status == 1 && $induction_status == 1){
+            ?>
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('start_harvest_crop.php?cycle=<?php echo $cycle?>&crop=<?php echo $crop?>')">Harvest Crop <i class="fas fa-seedling"></i></button>
             <?php }?>
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="closeCycle('<?php echo $cycle?>')" title="complete crop cycle">Close Cycle <i class="fas fa-check-double"></i></button>
             <button style="background:#dfdfdf; border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="abandonCycle('<?php echo $cycle?>')" title="Abandon crop cycle">Abandon Cycle <i class="fas fa-close"></i></button>
 
         </section>
-        
+        <?php } ?>
         <!-- check for on going tasks -->
         <?php
             $tasks = $get_visits->fetch_details_2cond('tasks', 'cycle', 'task_status', $cycle, 0);

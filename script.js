@@ -6454,7 +6454,7 @@ function addCropCycle(){
      let area_used = document.getElementById("area_used").value;
      // let variety = document.getElementById("variety").value;
      let start_date = document.getElementById("start_date").value;
-     let harvest = document.getElementById("harvest").value;
+     // let harvest = document.getElementById("harvest").value;
      // let yield = document.getElementById("yield").value;
      let notes = document.getElementById("notes").value;
      if(field.length == 0 || field.replace(/^\s+|\s+$/g, "").length == 0){
@@ -6477,10 +6477,10 @@ function addCropCycle(){
           alert("Please input cycle start date!");
           $("#start_date").focus();
           return;
-     }else if(harvest.length == 0 || harvest.replace(/^\s+|\s+$/g, "").length == 0){
+     /* }else if(harvest.length == 0 || harvest.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input expected harvest date!");
           $("#harvest").focus();
-          return;
+          return; */
      /* }else if(yield.length == 0 || yield.replace(/^\s+|\s+$/g, "").length == 0 || yield <= 0){
           alert("Please input expected harvest yield!");
           $("#yield").focus();
@@ -6489,7 +6489,7 @@ function addCropCycle(){
           $.ajax({
                type : "POST",
                url : "../controller/add_crop_cycle.php",
-               data : {field:field, area_used:area_used,  start_date:start_date, harvest:harvest, notes:notes /* crop:crop, variety:variety,yield:yield */},
+               data : {field:field, area_used:area_used,  start_date:start_date, /* harvest:harvest,  */notes:notes /* crop:crop, variety:variety,yield:yield */},
                beforeSend: function(){
                     $("#crop_cycle").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -6576,7 +6576,7 @@ function addCycleTask(){
      // let end_date = document.getElementById("end_date").value;
      todayDate = new Date();
      if(task_title.length == 0 || task_title.replace(/^\s+|\s+$/g, "").length == 0){
-          alert("Please input task title!");
+          alert("Please input select task!");
           $("#task_title").focus();
           return;
      }else if(start_date.length == 0 || start_date.replace(/^\s+|\s+$/g, "").length == 0){
@@ -6704,16 +6704,16 @@ function endTask(){
 //add task
 function addObservation(){
      let cycle = document.getElementById("cycle").value;
-     let description = document.getElementById("description").value;
-    if(description.length == 0 || description.replace(/^\s+|\s+$/g, "").length == 0){
-          alert("Please input task description!");
-          $("#description").focus();
+     let observation = document.getElementById("observation").value;
+    if(observation.length == 0 || observation.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input observations!");
+          $("#observation").focus();
           return;
      }else{
           $.ajax({
                type : "POST",
                url : "../controller/complete_observation.php",
-               data : {description:description, cycle:cycle},
+               data : {observation:observation, cycle:cycle},
                beforeSend: function(){
                     $("#all_forms").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -7075,8 +7075,8 @@ function editCropCycle(){
      let area_used = document.getElementById("area_used").value;
      // let variety = document.getElementById("variety").value;
      let start_date = document.getElementById("start_date").value;
-     let harvest = document.getElementById("harvest").value;
-     let yield = document.getElementById("yield").value;
+     // let harvest = document.getElementById("harvest").value;
+     // let yield = document.getElementById("yield").value;
      let notes = document.getElementById("notes").value;
      if(field.length == 0 || field.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please Select field!");
@@ -7098,19 +7098,19 @@ function editCropCycle(){
           alert("Please input cycle start date!");
           $("#start_date").focus();
           return;
-     }else if(harvest.length == 0 || harvest.replace(/^\s+|\s+$/g, "").length == 0){
+    /*  }else if(harvest.length == 0 || harvest.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input expected harvest date!");
           $("#harvest").focus();
-          return;
-     }else if(parseFloat(yield) < 0){
+          return; */
+    /*  }else if(parseFloat(yield) < 0){
           alert("Please input expected harvest yield!");
           $("#yield").focus();
-          return;
+          return; */
      }else{
           $.ajax({
                type : "POST",
                url : "../controller/edit_crop_cycle.php",
-               data : {cycle:cycle, field:field, /* crop:crop, */ area_used:area_used, /* variety:variety, */ start_date:start_date, harvest:harvest, notes:notes, yield:yield},
+               data : {cycle:cycle, field:field, /* crop:crop, */ area_used:area_used, /* variety:variety, */ start_date:start_date, /* harvest:harvest, */ notes:notes/* yield:yield */},
                beforeSend: function(){
                     $("#crop_cycle").html("<div class='processing'><div class='loader'></div></div>");
                },

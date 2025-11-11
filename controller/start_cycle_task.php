@@ -55,10 +55,18 @@
         "done_by" => $user,
         "post_date" => $date
     );
+    //check if there is an harvest done for this cycle and task is pruning or sucker management
+    $harvests = $get_details->fetch_count_cond('harvests', 'cycle', $cycle);
+    if($harvests <= 0 && ($task == "PRUNING" || $task == "SUCKER REMOVAL")){
+        echo "<p class='exist' style='background:red;color:#fff'>Harvest has not been recorded for this crop cycle. Cannot start the selected task.</p>";
+        // echo "<script>$('.exist').fadeOut(5000);</script>";
+        echo "<script>alert('Harvest has NOT been recorded for this crop cycle. Cannot start the selected task.')</script>";
+        exit();
+    }else{
     //check if there is an ongoing task in this crop cycle
     $check = $get_details->fetch_count_2cond('tasks', 'cycle', $cycle, 'task_status', 0);
     if($check > 0){
-        echo "<p class='exist'>There is an ongoing task in this crop cycle. Please complete it before adding another task.</p>";
+        echo "<p class='exist' style='background:red;color:#fff'>There is an ongoing task in this crop cycle. Please complete it before adding another task.</p>";
         echo "<script>$('.exist').fadeOut(5000);</script>";
         echo "<script>alert('There is an ongoing task in this crop cycle. Please complete it before adding another task.')</script>";
         exit();
@@ -67,11 +75,21 @@
         $add_task = new add_data("tasks", $data);
         $add_task->create_data();
         if($add_task){
+            //check if task is induction and update expected harvest date of cycle
+            if($task == "INDUCTION"){
+                //get induction date
+                $induction_date = date("Y-m-d", strtotime($start));
+                //calculate expected harvest date (6 months from induction date)
+                $expected_harvest = date("Y-m-d", strtotime("+5 months", strtotime($induction_date)));
+                //update expected harvest date of cycle
+                $update_cycle = new update_table();
+                $update_cycle->update('crop_cycles', 'expected_harvest', 'cycle_id', $expected_harvest, $cycle);
+            }
             //get last inserted task
-            $ids = $get_details->fetch_lastInserted('tasks', 'task_id');
-            $task_id = $ids->task_id;
+            /* $ids = $get_details->fetch_lastInserted('tasks', 'task_id');
+            $task_id = $ids->task_id; */
             
         ?>
         <div class="success"><p><?php echo $task?>  Started Successfully <i class="fas fa-thumbs-up"></i></p></div>
-<?php } }?>
+<?php } } }?>
     
