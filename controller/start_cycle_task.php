@@ -63,6 +63,16 @@
         echo "<script>alert('Harvest has NOT been recorded for this crop cycle. Cannot start the selected task.')</script>";
         exit();
     }else{
+        //check if prunning has been done if task is sucker removal
+        if($task == "SUCKER REMOVAL"){
+            $prunings = $get_details->fetch_count_2cond('tasks', 'cycle', $cycle, 'title', 'PRUNING');
+            if($prunings <= 0){
+                echo "<p class='exist' style='background:red;color:#fff'>Pruning has not been done for this crop cycle. Cannot start sucker removal task.</p>";
+                // echo "<script>$('.exist').fadeOut(5000);</script>";
+                echo "<script>alert('Pruning has NOT been done for this crop cycle. Cannot start sucker removal task.')</script>";
+                exit();
+            }
+        }
     //check if there is an ongoing task in this crop cycle
     $check = $get_details->fetch_count_2cond('tasks', 'cycle', $cycle, 'task_status', 0);
     if($check > 0){

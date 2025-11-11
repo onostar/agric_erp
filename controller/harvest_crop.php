@@ -6,7 +6,8 @@
     $farm = $_SESSION['store_id'];
     $trans_type ="harvest";
 
-    $crop = htmlspecialchars(stripslashes($_POST['crop']));
+    // $crop = htmlspecialchars(stripslashes($_POST['crop']));
+    $crop =  1; //pineapple
     $cycle = htmlspecialchars(stripslashes($_POST['cycle']));
     $quantity = htmlspecialchars(stripslashes($_POST['quantity']));
 
@@ -43,7 +44,7 @@
         $crop_name = $row->item_name;
         // $cost = $row->cost_price;
     }
-    $details = "Harvested $quantity of $crop_name from $field_name field";
+    $details = "Harvested $quantity of Pineapples from $field_name field";
     //get ratio of expected yield to quantity harvested
     $ratio = $quantity / $yield;
     //get cycle tasks cost and items used for task total cost
@@ -219,15 +220,15 @@
         $add_credit = new add_data('transactions', $credit_labour);
         $add_credit->create_data();
         //check if total quantity harvested has reached expected yield to close cycle
-        if($total_quantity >= $yield){
+        /* if($total_quantity >= $yield){
             //update cycle to closed
             $update_cycle = new Update_table();
             $update_cycle->update('crop_cycles', 'cycle_status', 'cycle_id', 1, $cycle);
             //update field status to available
             $update_field = new Update_table();
             $update_field->update('fields', 'field_status', 'field_id', 0, $field);
-        }
-        echo "<div class='success'><p>$quantity $crop_name Harvested successfully! <i class='fas fa-thumbs-up'></i></p></div>";
+        } */
+        echo "<div class='success'><p>$quantity Pineapples Harvested successfully! <i class='fas fa-thumbs-up'></i></p></div>";
     }else{
         echo "<p style='background:red; color:#fff; padding:5px'>Failed to harvest crop <i class='fas fa-thumbs-down'></i></p>";
     }

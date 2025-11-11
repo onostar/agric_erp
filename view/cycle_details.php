@@ -51,6 +51,10 @@
     padding:5px;
     font-size: .75rem;
  }
+ .notes{
+    max-height:500px;
+    overflow-y:auto;
+ }
  @media screen and (max-width: 768px){
     .ongoing{
         flex-direction: column;
@@ -262,7 +266,7 @@
             //check if expected harvest date has been reached and planting and induction has been done before showing harvest button
             if(strtotime(date("Y-m-d H:i")) >= strtotime($harvest_date) && $plant_status == 1 && $induction_status == 1){
             ?>
-            <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('start_harvest_crop.php?cycle=<?php echo $cycle?>&crop=<?php echo $crop?>')">Harvest Crop <i class="fas fa-seedling"></i></button>
+            <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('start_harvest_crop.php?cycle=<?php echo $cycle?>')">Harvest Crop <i class="fas fa-seedling"></i></button>
             <?php }?>
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="closeCycle('<?php echo $cycle?>')" title="complete crop cycle">Close Cycle <i class="fas fa-check-double"></i></button>
             <button style="background:#dfdfdf; border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="abandonCycle('<?php echo $cycle?>')" title="Abandon crop cycle">Abandon Cycle <i class="fas fa-close"></i></button>

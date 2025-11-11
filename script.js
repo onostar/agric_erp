@@ -6728,7 +6728,7 @@ function addObservation(){
 //harvest crop
 function harvest(){
      let cycle = document.getElementById("cycle").value;
-     let crop = document.getElementById("crop").value;
+     // let crop = document.getElementById("crop").value;
      let quantity = document.getElementById("quantity").value;
     if(parseFloat(quantity) <= 0){
           alert("Please input harvested quantity!");
@@ -6738,12 +6738,15 @@ function harvest(){
           $.ajax({
                type : "POST",
                url : "../controller/harvest_crop.php",
-               data : {quantity:quantity, cycle:cycle, crop:crop},
+               data : {quantity:quantity, cycle:cycle /* crop:crop */},
                beforeSend: function(){
-                    $("#all_forms").html("<div class='processing'><div class='loader'></div></div>");
+                    $("#cycles").html("<div class='processing'><div class='loader'></div></div>");
                },
                success : function(response){
-                    $("#all_forms").html(response);
+                    $("#cycles").html(response);
+                    setTimeout(function(){
+                         showPage("cycle_details.php?cycle="+cycle);
+                    }, 2000);
                }
           })
      }
