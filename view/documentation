@@ -27,7 +27,7 @@ currently rents isper year, so installment is calculated agsinst total rent from
 going back to crop cycle - if start date has not reached, u cannot add or edit any task
 also if land preparation has not been done, you cannot add anything. also if a task is on going, you cant add another task.
 
-expected yield is calculated only after plantingof suckers
+expected yield is calculated only after planting of suckers
 
 expected harvest date is caluclated from the day of induction task.
 
