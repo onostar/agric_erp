@@ -6751,6 +6751,43 @@ function harvest(){
           })
      }
 }
+//remove  crop
+function removeCrop(){
+     let cycle = document.getElementById("cycle").value;
+     // let crop = document.getElementById("crop").value;
+     let quantity = document.getElementById("quantity").value;
+     let reason = document.getElementById("reason").value;
+     let other_notes = document.getElementById("other_notes").value;
+    if(parseFloat(quantity) <= 0){
+          alert("Please input harvested quantity!");
+          $("#quantity").focus();
+          return;
+     }else if(reason.length == 0 || reason.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select reason for removal!");
+          $("#reason").focus();
+          return;
+    }else if(other_notes.length == 0 || other_notes.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input other details!");
+          $("#other_notes").focus();
+          return;
+    
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/remove_crop.php",
+               data : {quantity:quantity, cycle:cycle, reason:reason, other_notes:other_notes},
+               beforeSend: function(){
+                    $("#cycles").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#cycles").html(response);
+                    setTimeout(function(){
+                         showPage("cycle_details.php?cycle="+cycle);
+                    }, 2000);
+               }
+          })
+     }
+}
 
 //get owners of field
 function getFieldOwners(input){

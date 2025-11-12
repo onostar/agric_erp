@@ -267,6 +267,7 @@
             if(strtotime(date("Y-m-d H:i")) >= strtotime($harvest_date) && $plant_status == 1 && $induction_status == 1){
             ?>
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('start_harvest_crop.php?cycle=<?php echo $cycle?>')">Harvest Crop <i class="fas fa-seedling"></i></button>
+            <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('remove_crop_form.php?cycle=<?php echo $cycle?>')">Remove Crop <i class="fas fa-box-open"></i></button>
             <?php }?>
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="closeCycle('<?php echo $cycle?>')" title="complete crop cycle">Close Cycle <i class="fas fa-check-double"></i></button>
             <button style="background:#dfdfdf; border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="abandonCycle('<?php echo $cycle?>')" title="Abandon crop cycle">Abandon Cycle <i class="fas fa-close"></i></button>
@@ -588,7 +589,7 @@
             </section>
 
         </div>
-        
+        <!-- harvests -->
        <section id="last_consult">
             <h3>Harvests</h3>
             <div class="displays allResults new_data" style="width:100%!important;margin:0!important">
@@ -613,7 +614,7 @@
                         ?>
                         <tr>
                             <td style="text-align:center; color:red;"><?php echo $n?></td>
-                            <td style="color:var(--moreColor)"><?php echo date("d-m-Y h:ia", strtotime($detail->post_date));?></td>
+                            <td style="color:var(--moreColor)"><?php echo date("d-M-Y h:ia", strtotime($detail->post_date));?></td>
                             <td><?php echo $detail->quantity ?></td>
                             <td><?php echo "₦".number_format($detail->unit_cost, 2);?></td>
                             <td style="color:red">
@@ -634,6 +635,52 @@
                                     //get posted by
                                     $get_posted_by = new selects();
                                     $checks = $get_posted_by->fetch_details_cond('users',  'user_id', $detail->posted_by);
+                                    foreach($checks as $check){
+                                        $full_name = $check->full_name;
+                                    }
+                                    echo $full_name;
+                                ?>
+                            </td>
+                            
+                        </tr>
+                        <?php $n++; endforeach;}?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <!-- crop removals -->
+       <section id="last_consult">
+            <h3>Crop Removals</h3>
+            <div class="displays allResults new_data" style="width:100%!important;margin:0!important">
+                <table id="data_table" class="searchTable">
+                    <thead>
+                        <tr style="background:var(--moreColor)">
+                            <td>S/N</td>
+                            <td>Date</td>
+                            <td>Qty (kg)</td>
+                            <td>Reason</td>
+                            <td>Other Details</td>
+                            <td>Removed By</td>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            $n = 1;
+                            $removes = $get_users->fetch_details_cond('crop_removal', 'cycle', $cycle);
+                            if(gettype($removes) === 'array'){
+                            foreach($removes as $remove):
+                        ?>
+                        <tr>
+                            <td style="text-align:center; color:red;"><?php echo $n?></td>
+                            <td style="color:var(--moreColor)"><?php echo date("d-M-Y h:ia", strtotime($remove->date_removed));?></td>
+                            <td><?php echo $remove->quantity ?></td>
+                            <td><?php echo $remove->reason ?></td>
+                            <td><?php echo $remove->other_notes ?></td>
+                            <td>
+                                <?php
+                                    //get posted by
+                                    $checks = $get_visits->fetch_details_cond('users',  'user_id', $remove->removed_by);
                                     foreach($checks as $check){
                                         $full_name = $check->full_name;
                                     }

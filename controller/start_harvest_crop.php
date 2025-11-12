@@ -21,8 +21,8 @@
                     <input type="number" id="quantity" id="quantity">
                 </div>
                 <div class="data" style="width:auto">
-                    <button type="submit" id="add_cat" name="add_cat" onclick="harvest()">Save <i class="fas fa-layer-group"></i></button>
-                    <a style="border-radius:15px; background:brown;color:#fff;padding:8px; box-shadow:1px 1px 1px #222"href="javascript:void(0)" onclick="closeAllForms()"><i class="fas fa-close"></i> Close</a>
+                    <button type="button" id="add_cat" name="add_cat" onclick="harvest()">Save <i class="fas fa-layer-group"></i></button>
+                    <a style="border-radius:15px; background:brown;color:#fff;padding:8px; box-shadow:1px 1px 1px #222"href="javascript:void(0)" onclick="closeAllForms()"><i class="fas fa-close"></i> Close form</a>
                 </div>
             </div>
             
