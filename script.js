@@ -6657,7 +6657,35 @@ function updateCycleTask(){
           })
      }
 }
-//end task
+//update general task
+function updateTask(){
+     
+     let task_id = document.getElementById("task_id").value;
+     let description = document.getElementById("description").value;
+     let workers = document.getElementById("workers").value;
+     if(workers.length == 0 || workers.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input assigned workers!");
+          $("#workers").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/update_general_task.php",
+               data : {task_id:task_id, description:description, workers:workers},
+               beforeSend: function(){
+                    $("#all_forms").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#cycles").html(response);
+                    // $(".tasks").html(response);
+                    setTimeout(function(){
+                         showPage("general_task_details.php?task="+task_id);
+                    }, 2000);
+               }
+          })
+     }
+}
+//end task for crop cycle
 function endTask(){
      let task_id = document.getElementById("task_id").value;
      let cycle = document.getElementById("cycle").value;
@@ -6695,6 +6723,50 @@ function endTask(){
                          // $(".tasks").html(response);
                          setTimeout(function(){
                               showPage("cycle_details.php?cycle="+cycle);
+                         }, 2000);
+                    }
+               })
+          }
+     }
+}
+//end general task
+function endGeneralTask(){
+     let task_id = document.getElementById("task_id").value;
+     let cycle = document.getElementById("cycle").value;
+     let labour_cost = document.getElementById("labour_cost").value;
+     let end_date = document.getElementById("end_date").value;
+     todayDate = new Date();
+    if(end_date.length == 0 || end_date.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input date and time task was completed!");
+          $("#end_date").focus();
+          return;
+     
+     }else if(new Date(end_date) > todayDate){
+          alert("You can only end a task today or later!");
+          $("#end_date").focus();
+          return;
+    
+     }else if(parseFloat(labour_cost) < 0){
+          alert("Labour Cost must be a number!");
+          $("#labour_cost").focus();
+          return;
+     }else{
+          let confirm_end = confirm("Are you sure you want to end this task?", "");
+          if(!confirm_end){
+               return;
+          }else{
+               $.ajax({
+                    type : "POST",
+                    url : "../controller/end_task.php",
+                    data : {task_id:task_id, labour_cost:labour_cost, end_date:end_date},
+                    beforeSend: function(){
+                         $("#all_forms").html("<div class='processing'><div class='loader'></div></div>");
+                    },
+                    success : function(response){
+                         $("#cycles").html(response);
+                         // $(".tasks").html(response);
+                         setTimeout(function(){
+                              showPage("general_task.php");
                          }, 2000);
                     }
                })
@@ -6759,7 +6831,7 @@ function removeCrop(){
      let reason = document.getElementById("reason").value;
      let other_notes = document.getElementById("other_notes").value;
     if(parseFloat(quantity) <= 0){
-          alert("Please input harvested quantity!");
+          alert("Please input quantity!");
           $("#quantity").focus();
           return;
      }else if(reason.length == 0 || reason.replace(/^\s+|\s+$/g, "").length == 0){
@@ -7012,7 +7084,7 @@ function addCrop(id, name){
      $("#search_results").html('');
 }
 
-//add itemused fo a task
+//add itemused fo a crop cycle task
 function addTaskItem(){
      let task_id = document.getElementById("task_id").value;
      let cycle = document.getElementById("cycle").value;
@@ -7032,6 +7104,40 @@ function addTaskItem(){
                type : "POST",
                url : "../controller/add_task_item.php",
                data : {task_id:task_id, task_item:task_item, quantity:quantity,cycle:cycle, invoice:invoice},
+               beforeSend : function(){
+                    // document.getElementById("new_data").scrollIntoView();
+                    $("#new_data").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#new_data").html(response);
+               }
+          });
+          $("#task_item").val("");
+          $("#item").val("");
+          $("#quantity").val("");
+          $("#task_item").focus();
+     }
+}
+//add itemused fo a general task
+function addGeneralTaskItem(){
+     let task_id = document.getElementById("task_id").value;
+     // let cycle = document.getElementById("cycle").value;
+     let task_item = document.getElementById("task_item").value;
+     let invoice = document.getElementById("invoice").value;
+     let quantity = document.getElementById("quantity").value;
+     if(task_item.length == 0 || task_item.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input item name!");
+          $("#task_item").focus();
+          return;
+     }else if(parseFloat(quantity) <= 0){
+          alert("Please input quantity used!");
+          $("#quantity").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/add_general_task_item.php",
+               data : {task_id:task_id, task_item:task_item, quantity:quantity,invoice:invoice},
                beforeSend : function(){
                     // document.getElementById("new_data").scrollIntoView();
                     $("#new_data").html("<div class='processing'><div class='loader'></div></div>");
@@ -7169,11 +7275,11 @@ function editCropCycle(){
 function addTask(){
      let field = document.getElementById("field").value;
      let task_title = document.getElementById("task_title").value;
-     let description = document.getElementById("description").value;
+     // let description = document.getElementById("description").value;
      let workers = document.getElementById("workers").value;
-     let labour_cost = document.getElementById("labour_cost").value;
+     // let labour_cost = document.getElementById("labour_cost").value;
      let start_date = document.getElementById("start_date").value;
-     let end_date = document.getElementById("end_date").value;
+     // let end_date = document.getElementById("end_date").value;
      todayDate = new Date();
      if(field.length == 0 || field.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please select field!");
@@ -7183,43 +7289,43 @@ function addTask(){
           alert("Please input date and time task started!");
           $("#start_date").focus();
           return;
-     }else if(end_date.length == 0 || end_date.replace(/^\s+|\s+$/g, "").length == 0){
+     /* }else if(end_date.length == 0 || end_date.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input date and time task ended!");
           $("#end_date").focus();
           return;
      }else if(new Date(start_date) > new Date(end_date)){
           alert("Start date can not be greater than end date!");
           $("#start_date").focus();
-          return;
+          return; */
      }else if(new Date(start_date) > todayDate){
           alert("You cannot start a futuristic task!");
           $("#start_date").focus();
           return;
-     }else if(new Date(end_date) > todayDate){
+     /* }else if(new Date(end_date) > todayDate){
           alert("You can only end a task today or later!");
           $("#end_date").focus();
-          return;
+          return; */
      }else if(task_title.length == 0 || task_title.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input task title!");
           $("#task_title").focus();
           return;
-     }else if(description.length == 0 || description.replace(/^\s+|\s+$/g, "").length == 0){
+    /*  }else if(description.length == 0 || description.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input task description!");
           $("#description").focus();
-          return;
+          return; */
      }else if(workers.length == 0 || workers.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input assigned workers!");
           $("#workers").focus();
           return;
-     }else if(parseFloat(labour_cost) < 0){
+     /* }else if(parseFloat(labour_cost) < 0){
           alert("Labour Cost must be a number!");
           $("#labour_cost").focus();
-          return;
+          return; */
      }else{
           $.ajax({
                type : "POST",
                url : "../controller/add_general_task.php",
-               data : {task_title:task_title, description:description, workers:workers, field:field, labour_cost:labour_cost, start_date:start_date, end_date:end_date},
+               data : {task_title:task_title, /* description:description,  */workers:workers, field:field, /* labour_cost:labour_cost,  */start_date:start_date /* end_date:end_date */},
                beforeSend: function(){
                     $("#general_tasks").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -8814,5 +8920,32 @@ function payRent(){
           }else{
                return;
           }
+     }
+}
+
+//start sucker removal
+function removeSuckers(){
+     let cycle = document.getElementById("cycle").value;
+     // let crop = document.getElementById("crop").value;
+     let quantity = document.getElementById("quantity").value;
+    if(parseFloat(quantity) <= 0){
+          alert("Please input quantity!");
+          $("#quantity").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/remove_suckers.php",
+               data : {quantity:quantity, cycle:cycle /* crop:crop */},
+               beforeSend: function(){
+                    $("#cycles").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#cycles").html(response);
+                    setTimeout(function(){
+                         showPage("cycle_details.php?cycle="+cycle);
+                    }, 2000);
+               }
+          })
      }
 }

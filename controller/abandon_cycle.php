@@ -33,11 +33,11 @@
         );
         $update = new Update_table;
         $update->updateAny('crop_cycles', $data, 'cycle_id', $id);
-        //update field status to occupied
+        //update field status to available
         $update_field = new update_table;
         $update_field->update('fields', 'field_status', 'field_id', 0, $field_id);
         if($update){
-            echo "<div class='success'><p style='background:red'>$crop_name Crop Cycle Abandoned! <i class='fas fa-thumbs-down'></i></p></div>";
+            echo "<div class='success'><p style='background:red'>Crop Cycle Abandoned at $field_name! <i class='fas fa-thumbs-down'></i></p></div>";
         }   
 
     }

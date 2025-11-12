@@ -51,6 +51,7 @@
         'quantity' => $quantity,
         'reason' => $reason,
         'other_notes' => $notes,
+        'trx_number' => $trx_num,
         'removed_by' => $user,
         'date_removed' => $date
     );

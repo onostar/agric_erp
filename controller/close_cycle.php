@@ -16,7 +16,7 @@
         if(gettype($cycle) === 'array'){
             foreach($cycle as $cyc){
                 $field_id = $cyc->field;
-                $crop_id = $cyc->crop;
+                // $crop_id = $cyc->crop;
             }
             //get field name
             $field = $get_cycle->fetch_details_group('fields', 'field_name', 'field_id', $field_id);
@@ -33,11 +33,11 @@
         );
         $update = new Update_table;
         $update->updateAny('crop_cycles', $data, 'cycle_id', $id);
-        //update field status to occupied
+        //update field status to available
         $update_field = new update_table;
         $update_field->update('fields', 'field_status', 'field_id', 0, $field_id);
         if($update){
-            echo "<div class='success'><p>$crop_name Crop Cycle Completed successfully! <i class='fas fa-thumbs-up'></i></p></div>";
+            echo "<div class='success'><p>Crop Cycle Completed successfully for $field_name! <i class='fas fa-thumbs-up'></i></p></div>";
         }   
 
     }

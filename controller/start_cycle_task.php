@@ -57,22 +57,13 @@
     );
     //check if there is an harvest done for this cycle and task is pruning or sucker management
     $harvests = $get_details->fetch_count_cond('harvests', 'cycle', $cycle);
-    if($harvests <= 0 && ($task == "PRUNING" || $task == "SUCKER REMOVAL")){
+    if($harvests <= 0 && $task == "PRUNING"){
         echo "<p class='exist' style='background:red;color:#fff'>Harvest has not been recorded for this crop cycle. Cannot start the selected task.</p>";
         // echo "<script>$('.exist').fadeOut(5000);</script>";
         echo "<script>alert('Harvest has NOT been recorded for this crop cycle. Cannot start the selected task.')</script>";
         exit();
     }else{
-        //check if prunning has been done if task is sucker removal
-        if($task == "SUCKER REMOVAL"){
-            $prunings = $get_details->fetch_count_2cond('tasks', 'cycle', $cycle, 'title', 'PRUNING');
-            if($prunings <= 0){
-                echo "<p class='exist' style='background:red;color:#fff'>Pruning has not been done for this crop cycle. Cannot start sucker removal task.</p>";
-                // echo "<script>$('.exist').fadeOut(5000);</script>";
-                echo "<script>alert('Pruning has NOT been done for this crop cycle. Cannot start sucker removal task.')</script>";
-                exit();
-            }
-        }
+       
     //check if there is an ongoing task in this crop cycle
     $check = $get_details->fetch_count_2cond('tasks', 'cycle', $cycle, 'task_status', 0);
     if($check > 0){
@@ -95,6 +86,7 @@
                 $update_cycle = new update_table();
                 $update_cycle->update('crop_cycles', 'expected_harvest', 'cycle_id', $expected_harvest, $cycle);
             }
+           
             //get last inserted task
             /* $ids = $get_details->fetch_lastInserted('tasks', 'task_id');
             $task_id = $ids->task_id; */

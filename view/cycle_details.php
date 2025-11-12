@@ -159,6 +159,9 @@
                             $now = new DateTime();
                             $interval = $date->diff($now);
                             $days_remaining = $interval->days;
+                            if($days_remaining < 0){
+                                $days_remaining = 0;
+                            }
                         }
                     ?>
                     <input type="text" style="color:var(--secondaryColor)" required value="<?php echo $days_remaining.' days'; ?>" readonly>
@@ -249,7 +252,10 @@
                 //check for any ongoing tasks
                 $ongoing_tasks = $get_visits->fetch_count_2cond('tasks', 'cycle', $cycle, 'task_status', 0);
                 
-                
+                //check if prunning has been done
+                $prunings = $get_visits->fetch_count_3cond('tasks', 'cycle', $cycle, 'title', 'PRUNING', 'task_status', 1);
+
+        
                 //meaning no land preparation started yet
                 if($task_status == -1){
             ?>
@@ -268,6 +274,9 @@
             ?>
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('start_harvest_crop.php?cycle=<?php echo $cycle?>')">Harvest Crop <i class="fas fa-seedling"></i></button>
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('remove_crop_form.php?cycle=<?php echo $cycle?>')">Remove Crop <i class="fas fa-box-open"></i></button>
+            <?php }?>
+            <?php if($prunings > 0){?>
+            <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('start_sucker_removal.php?cycle=<?php echo $cycle?>')" title="Remove uckers">Remove Suckers <i class="fas fa-tree"></i></button>
             <?php }?>
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="closeCycle('<?php echo $cycle?>')" title="complete crop cycle">Close Cycle <i class="fas fa-check-double"></i></button>
             <button style="background:#dfdfdf; border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="abandonCycle('<?php echo $cycle?>')" title="Abandon crop cycle">Abandon Cycle <i class="fas fa-close"></i></button>
@@ -598,7 +607,7 @@
                         <tr style="background:var(--primaryColor)">
                             <td>S/N</td>
                             <td>Date</td>
-                            <td>Quantity</td>
+                            <td>Qty (kg)</td>
                             <td>Unit Cost</td>
                             <td>Total Cost</td>
                             <td>Posted by</td>
@@ -615,7 +624,7 @@
                         <tr>
                             <td style="text-align:center; color:red;"><?php echo $n?></td>
                             <td style="color:var(--moreColor)"><?php echo date("d-M-Y h:ia", strtotime($detail->post_date));?></td>
-                            <td><?php echo $detail->quantity ?></td>
+                            <td style="text-align:center;color:green"><?php echo $detail->quantity ?></td>
                             <td><?php echo "₦".number_format($detail->unit_cost, 2);?></td>
                             <td style="color:red">
                                 <?php
@@ -674,13 +683,55 @@
                         <tr>
                             <td style="text-align:center; color:red;"><?php echo $n?></td>
                             <td style="color:var(--moreColor)"><?php echo date("d-M-Y h:ia", strtotime($remove->date_removed));?></td>
-                            <td><?php echo $remove->quantity ?></td>
+                            <td style="text-align:center;color:green"><?php echo $remove->quantity ?></td>
                             <td><?php echo $remove->reason ?></td>
                             <td><?php echo $remove->other_notes ?></td>
                             <td>
                                 <?php
                                     //get posted by
                                     $checks = $get_visits->fetch_details_cond('users',  'user_id', $remove->removed_by);
+                                    foreach($checks as $check){
+                                        $full_name = $check->full_name;
+                                    }
+                                    echo $full_name;
+                                ?>
+                            </td>
+                            
+                        </tr>
+                        <?php $n++; endforeach;}?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <!-- sucker removals -->
+       <section id="last_consult">
+            <h3>Suckers Removed</h3>
+            <div class="displays allResults new_data" style="width:100%!important;margin:0!important">
+                <table id="data_table" class="searchTable">
+                    <thead>
+                        <tr style="background:var(--primaryColor)">
+                            <td>S/N</td>
+                            <td>Date</td>
+                            <td>Qty (kg)</td>
+                            <td>Removed By</td>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            $n = 1;
+                            $sucks = $get_users->fetch_details_cond('sucker_removal', 'cycle', $cycle);
+                            if(gettype($sucks) === 'array'){
+                            foreach($sucks as $suck):
+                        ?>
+                        <tr>
+                            <td style="text-align:center; color:red;"><?php echo $n?></td>
+                            <td style="color:var(--moreColor)"><?php echo date("d-M-Y h:ia", strtotime($suck->date_removed));?></td>
+                            <td style="text-align:center;color:green"><?php echo $suck->quantity ?></td>
+                            <td>
+                                <?php
+                                    //get posted by
+                                    $checks = $get_visits->fetch_details_cond('users',  'user_id', $suck->removed_by);
                                     foreach($checks as $check){
                                         $full_name = $check->full_name;
                                     }

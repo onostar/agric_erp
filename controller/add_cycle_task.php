@@ -26,7 +26,7 @@
                         <option value="WEEDING">WEEDING</option>
                         <option value="INDUCTION">INDUCTION</option>
                         <option value="PRUNING">PRUNING</option>
-                        <option value="SUCKER REMOVAL">SUCKER REMOVAL</option>
+                        <!-- <option value="SUCKER REMOVAL">SUCKER REMOVAL</option> -->
                     </select>
                 </div>
                 <div class="data" style="width:48%">

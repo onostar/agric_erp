@@ -32,6 +32,10 @@
     /* border-bottom:1px solid #b3b3b3ff!important; */
     padding:0 20px 0!important;
  }
+ .notes{
+    max-height:500px;
+    overflow-y:auto;
+ }
  </style>
 <?php
     session_start();
@@ -70,15 +74,16 @@
 
             
             //get item name
-            $rows = $get_visits->fetch_details_cond('items', 'item_id', $crop);
+            /* $rows = $get_visits->fetch_details_cond('items', 'item_id', $crop);
             foreach($rows as $row){
                 $crop_name = $row->item_name;
-            }
+            } */
 ?>
         <a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222; position:fixed;"href="javascript:void(0)" onclick="showPage('crop_cycle_report.php')"><i class="fas fa-close"></i> Close</a>
 
     <div id="patient_details">
-        <h3 style="background:var(--tertiaryColor); color:#fff">Crop Cycle for <?php echo $crop_name?></h3>
+        <h3 style="background:var(--tertiaryColor); color:#fff">Crop Cycle CY0<?php echo $cycle?></h3>
+
         <!-- <form method="POST" id="addUserForm"> -->
         <section class="nomenclature">
             <!-- <div class="profile_foto" style="width:22%; margin:0 10px 0 0">
@@ -95,10 +100,10 @@
                     <label for="phone_number">Area used:</label>
                     <input type="text" required value="<?php echo $area?>Hec" readonly>
                 </div>
-                <div class="data">
+                <!-- <div class="data">
                     <label for="phone_number">Crop Variety:</label>
                     <input type="text" required value="<?php echo $variety?>" readonly>
-                </div>
+                </div> -->
                 
                 <div class="data">
                     <label for="customer_store">Start Date:</label>
@@ -111,7 +116,14 @@
                 </div>
                 <div class="data">
                     <label for="phone_number">Expected Harvest Date:</label>
-                    <input type="text" required value="<?php echo date("d-M-Y", strtotime($end))?>" readonly>
+                    <?php
+                        if($end == "0000-00-00" || $end == NULL){
+                            $harvest_date = "N/A";
+                        }else{
+                            $harvest_date = date("d-M-Y", strtotime($end));
+                        }
+                    ?>
+                    <input type="text" required value="<?php echo $harvest_date?>" readonly>
                 </div>
                 <div class="data">
                     <label for="phone_number">Expected yield:</label>
@@ -132,12 +144,19 @@
                 </div>
                 <?php }else{?>
                 <div class="data">
-                    <label for="phone_number">Days Remaining:</label>
+                    <label for="phone_number">Days To harvest:</label>
                     <?php
-                        $date = new DateTime($end);
-                        $now = new DateTime();
-                        $interval = $date->diff($now);
-                        $days_remaining = $interval->days;
+                        if($harvest_date == "N/A"){
+                            $days_remaining = "N/A";
+                        }else{
+                            $date = new DateTime($harvest_date);
+                            $now = new DateTime();
+                            $interval = $date->diff($now);
+                            $days_remaining = $interval->days;
+                            if($days_remaining < 0){
+                                $days_remaining = 0;
+                            }
+                        }
                     ?>
                     <input type="text" style="color:var(--secondaryColor)" required value="<?php echo $days_remaining.' days'; ?>" readonly>
                 </div>
@@ -210,64 +229,7 @@
                 </div>
             </div>
         </section>
-        <section id="last_consult">
-            <h3>Harvests</h3>
-            <div class="displays allResults new_data" style="width:100%!important;margin:0!important">
-                <table id="data_table" class="searchTable">
-                    <thead>
-                        <tr style="background:var(--primaryColor)">
-                            <td>S/N</td>
-                            <td>Date</td>
-                            <td>Quantity</td>
-                            <td>Unit Cost</td>
-                            <td>Total Cost</td>
-                            <td>Posted by</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                            $n = 1;
-                            $get_users = new selects();
-                            $details = $get_users->fetch_details_cond('harvests', 'cycle', $cycle);
-                            if(gettype($details) === 'array'){
-                            foreach($details as $detail):
-                        ?>
-                        <tr>
-                            <td style="text-align:center; color:red;"><?php echo $n?></td>
-                            <td style="color:var(--moreColor)"><?php echo date("d-m-Y h:ia", strtotime($detail->post_date));?></td>
-                            <td><?php echo $detail->quantity ?></td>
-                            <td><?php echo "₦".number_format($detail->unit_cost, 2);?></td>
-                            <td style="color:red">
-                                <?php
-                                    //get total cost
-                                    $costs = $get_users->fetch_sum_2colCond('harvests', 'quantity', 'unit_cost', 'harvest_id', $detail->harvest_id);
-                                    if(is_array($costs)){
-                                        foreach($costs as $cost){
-                                            echo "₦".number_format($cost->total, 2);
-                                        }
-                                    }else{
-                                        echo "₦0.00";
-                                    }
-                                ?>
-                            </td>
-                            <td>
-                                <?php
-                                    //get posted by
-                                    $get_posted_by = new selects();
-                                    $checks = $get_posted_by->fetch_details_cond('users',  'user_id', $detail->posted_by);
-                                    foreach($checks as $check){
-                                        $full_name = $check->full_name;
-                                    }
-                                    echo $full_name;
-                                ?>
-                            </td>
-                            
-                        </tr>
-                        <?php $n++; endforeach;}?>
-                    </tbody>
-                </table>
-            </div>
-        </section>
+        
         <div class="tasks_notes">
             <section id="main_consult" class="tasks notes">
                 <h3 style="background:var(--primaryColor)">Tasks Done</h3>
@@ -291,7 +253,33 @@
                         <p>Date: <span style="color:brown; text-transform:uppercase"><?php echo date("d M, Y, H:ia", strtotime($tsk->post_date))?></span></p>
                         <p>Posted By: <span style="color:brown; text-transform:uppercase"><?php echo $done_by?></span></p>
                         <p>Started on: <span style="color:brown; text-transform:uppercase"><?php echo date("d-M-Y, H:ia", strtotime($tsk->start_date))?></span></p>
+                        <?php if($tsk->task_status == 1){?>
                         <p>Ended: <span style="color:brown; text-transform:uppercase"><?php echo date("d-M-Y, H:ia", strtotime($tsk->end_date))?></span></p>
+                        <?php
+                        //get days used for the task
+                            $ended = new DateTime($tsk->end_date);
+                            $started = new DateTime($tsk->start_date);
+                            $interval = $ended->diff($started);
+                            $days_used = $interval->days;
+                            if($days_used < 1){
+                                $days_used = 1;
+                            }
+                        ?>
+                        <p>Days used: <span style="color:brown; text-transform:uppercase"><?php echo $days_used.' days'; ?></span></p>
+                        <?php }else{?>
+                        <p>Status: <span style="color:brown;">Ongoing <i class="fas fa-spinner"></i></span></p>
+                        <?php
+                        //get days used for the task so far
+                            $started = new DateTime($tsk->start_date);
+                            $now = new DateTime();
+                            $interval = $now->diff($started);
+                            $days_gone = $interval->days;
+                            if($days_gone < 1){
+                                $days_gone = 1;
+                            }
+                        ?>
+                        <p>Days ongoing: <span style="color:brown; "><?php echo $days_gone.' day(s)'; ?></span></p>
+                        <?php }?>
                     </div>
                     <form>
                         <div class="inputs">
@@ -330,7 +318,7 @@
                             <tbody>
                                 <?php
                                     $m = 1;
-                                    $items = $get_users->fetch_details_cond('task_items', 'task_id', $tsk->task_id);
+                                    $items = $get_visits->fetch_details_cond('task_items', 'task_id', $tsk->task_id);
                                     if(gettype($items) === 'array'){
                                     foreach($items as $item):
                                 ?>
@@ -338,7 +326,7 @@
                                     <td style="text-align:center; color:red;"><?php echo $m?></td>
                                     <td style="color:var(--moreColor)">
                                         <?php 
-                                            $str = $get_users->fetch_details_group('items', 'item_name', 'item_id', $item->item);
+                                            $str = $get_visits->fetch_details_group('items', 'item_name', 'item_id', $item->item);
                                             echo $str->item_name;
                                         ?>
                                     </td>
@@ -351,8 +339,7 @@
                                     <td>
                                         <?php
                                             //get posted by
-                                            $get_posted_by = new selects();
-                                            $checks = $get_posted_by->fetch_details_cond('users',  'user_id', $item->posted_by);
+                                            $checks = $get_visits->fetch_details_cond('users',  'user_id', $item->posted_by);
                                             foreach($checks as $check){
                                                 $full_name = $check->full_name;
                                             }
@@ -441,10 +428,154 @@
                 </div>
                 <?php }}?>
             </section>
-
-        </div>
         
-       
+        </div>
+        <section id="last_consult">
+            <h3>Harvests</h3>
+            <div class="displays allResults new_data" style="width:100%!important;margin:0!important">
+                <table id="data_table" class="searchTable">
+                    <thead>
+                        <tr style="background:var(--primaryColor)">
+                            <td>S/N</td>
+                            <td>Date</td>
+                            <td>Qty (kg)</td>
+                            <td>Unit Cost</td>
+                            <td>Total Cost</td>
+                            <td>Posted by</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            $n = 1;
+                            $get_users = new selects();
+                            $details = $get_users->fetch_details_cond('harvests', 'cycle', $cycle);
+                            if(gettype($details) === 'array'){
+                            foreach($details as $detail):
+                        ?>
+                        <tr>
+                            <td style="text-align:center; color:red;"><?php echo $n?></td>
+                            <td style="color:var(--moreColor)"><?php echo date("d-m-Y h:ia", strtotime($detail->post_date));?></td>
+                            <td style="text-align:center; color:green"><?php echo $detail->quantity ?></td>
+                            <td><?php echo "₦".number_format($detail->unit_cost, 2);?></td>
+                            <td style="color:red">
+                                <?php
+                                    //get total cost
+                                    $costs = $get_users->fetch_sum_2colCond('harvests', 'quantity', 'unit_cost', 'harvest_id', $detail->harvest_id);
+                                    if(is_array($costs)){
+                                        foreach($costs as $cost){
+                                            echo "₦".number_format($cost->total, 2);
+                                        }
+                                    }else{
+                                        echo "₦0.00";
+                                    }
+                                ?>
+                            </td>
+                            <td>
+                                <?php
+                                    //get posted by
+                                    $get_posted_by = new selects();
+                                    $checks = $get_posted_by->fetch_details_cond('users',  'user_id', $detail->posted_by);
+                                    foreach($checks as $check){
+                                        $full_name = $check->full_name;
+                                    }
+                                    echo $full_name;
+                                ?>
+                            </td>
+                            
+                        </tr>
+                        <?php $n++; endforeach;}?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <!-- crop removals -->
+       <section id="last_consult">
+            <h3>Crop Removals</h3>
+            <div class="displays allResults new_data" style="width:100%!important;margin:0!important">
+                <table id="data_table" class="searchTable">
+                    <thead>
+                        <tr style="background:var(--moreColor)">
+                            <td>S/N</td>
+                            <td>Date</td>
+                            <td>Qty (kg)</td>
+                            <td>Reason</td>
+                            <td>Other Details</td>
+                            <td>Removed By</td>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            $n = 1;
+                            $removes = $get_users->fetch_details_cond('crop_removal', 'cycle', $cycle);
+                            if(gettype($removes) === 'array'){
+                            foreach($removes as $remove):
+                        ?>
+                        <tr>
+                            <td style="text-align:center; color:red;"><?php echo $n?></td>
+                            <td style="color:var(--moreColor)"><?php echo date("d-M-Y h:ia", strtotime($remove->date_removed));?></td>
+                            <td style="text-align:center;color:green"><?php echo $remove->quantity ?></td>
+                            <td><?php echo $remove->reason ?></td>
+                            <td><?php echo $remove->other_notes ?></td>
+                            <td>
+                                <?php
+                                    //get posted by
+                                    $checks = $get_visits->fetch_details_cond('users',  'user_id', $remove->removed_by);
+                                    foreach($checks as $check){
+                                        $full_name = $check->full_name;
+                                    }
+                                    echo $full_name;
+                                ?>
+                            </td>
+                            
+                        </tr>
+                        <?php $n++; endforeach;}?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        <!-- sucker removals -->
+       <section id="last_consult">
+            <h3>Suckers Removed</h3>
+            <div class="displays allResults new_data" style="width:100%!important;margin:0!important">
+                <table id="data_table" class="searchTable">
+                    <thead>
+                        <tr style="background:var(--primaryColor)">
+                            <td>S/N</td>
+                            <td>Date</td>
+                            <td>Qty (kg)</td>
+                            <td>Removed By</td>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            $n = 1;
+                            $sucks = $get_users->fetch_details_cond('sucker_removal', 'cycle', $cycle);
+                            if(gettype($sucks) === 'array'){
+                            foreach($sucks as $suck):
+                        ?>
+                        <tr>
+                            <td style="text-align:center; color:red;"><?php echo $n?></td>
+                            <td style="color:var(--moreColor)"><?php echo date("d-M-Y h:ia", strtotime($suck->date_removed));?></td>
+                            <td style="text-align:center;color:green"><?php echo $suck->quantity ?></td>
+                            <td>
+                                <?php
+                                    //get posted by
+                                    $checks = $get_visits->fetch_details_cond('users',  'user_id', $suck->removed_by);
+                                    foreach($checks as $check){
+                                        $full_name = $check->full_name;
+                                    }
+                                    echo $full_name;
+                                ?>
+                            </td>
+                            
+                        </tr>
+                        <?php $n++; endforeach;}?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     </div>
         
 <?php

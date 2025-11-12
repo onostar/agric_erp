@@ -32,9 +32,9 @@
             <tr style="background:var(--moreColor)">
                 <td>S/N</td>
                 <td>Field</td>
-                <td>Crop</td>
+                <!-- <td>Crop</td>
                 <td>Crop Variety</td>
-                <td>Area Used (Hec)</td>
+                <td>Area Used (Hec)</td> -->
                 <td>Start Date</td>
                 <td>Expected Harvest</td>
                 <td>Status</td>
@@ -54,24 +54,34 @@
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
                 <td style="color:var(--primaryColor)">
                     <?php 
-                        $str = $get_details->fetch_details_group('fields', 'field_name', 'field_id', $detail->field);
+                        $str = $get_purchase->fetch_details_group('fields', 'field_name', 'field_id', $detail->field);
                         echo $str->field_name;
                     ?>
                 </td>
-                <td>
+                <!-- <td>
                     <?php 
-                        $str = $get_details->fetch_details_group('items', 'item_name', 'item_id', $detail->crop);
-                        echo $str->item_name;
+                        /* $str = $get_purchase->fetch_details_group('items', 'item_name', 'item_id', $detail->crop);
+                        echo $str->item_name; */
                     ?>
                 </td>
-                <td><?php echo $detail->variety?></td>
+                <td><?php echo $detail->variety?></td> -->
                 <td style="color:red"><?php echo $detail->area_used?></td>
                 <td><?php echo date("d-M-Y", strtotime($detail->start_date))?></td>
-                <td style="color:var(--tertiaryColor)"><?php echo date("d-M-Y", strtotime($detail->expected_harvest))?></td>
+                <td style="color:var(--tertiaryColor)">
+                    <?php 
+                        if($detail->expected_harvest == "0000-00-00" || $detail->expected_harvest == NULL){
+                            echo "Not set";
+                        }else{
+                            echo date("d-M-Y", strtotime($detail->expected_harvest));
+                        }
+                    ?>
+                </td>
                 <td>
                     <?php
-                        if($detail->cycle_status == 0){
+                        if($detail->cycle_status == 0 && date("Y-m-d",strtotime($detail->start_date)) <= date("Y-m-d H:i")){
                             echo "<span style='color:var(--moreColor)'>Ongoing <i class='fas fa-spinner'></i></span>";
+                        }elseif($detail->cycle_status == 0 && date("Y-m-d",strtotime($detail->start_date)) > date("Y-m-d H:i")){
+                            echo "<span style='color:var(--moreColor)'>Not started <i class='fas fa-clock'></i></span>";
                         }elseif($detail->cycle_status == -1){
                             echo "<span style='color:red'>Abandoned <i class='fas fa-close'></i></span>";
                         }else{
