@@ -352,16 +352,19 @@
         foreach($check_dues as $due){
             $total_loan_due = $due->total;
         }
+        $fmt_total_cost = number_format($purchase_cost, 2);
+        $fmt_total_paid = number_format($total_paid, 2);
+        $fmt_rent = number_format($annual_rent, 2);
+        $fmt_remaining = number_format($purchase_cost - $total_paid, 2);
         if($total_loan_paid === $total_loan_due){
-             $fmt_total_cost = number_format($purchase_cost, 2);
-            $fmt_total_paid = number_format($total_paid, 2);
-            $fmt_rent = number_format($annual_rent, 2);
+           
             //update loan status
             $update_loan = new Update_table();
             $update_loan->update('assigned_fields', 'contract_status', 'assigned_id', 2, $loan_id);
 
             //now generate rent payment schedule for the field
             $installments = $duration; //yearly
+            $rent_schedule_text = "<ul>";
             $start_date = new DateTime($date);
             for($i = 1; $i <= $installments; $i++){
                 $due_date = clone $start_date;$due_date->modify("+$i year");
@@ -384,7 +387,7 @@
             $rent_schedule_text .= "</ul>";
 
             // build email message for full payment
-            $message = "
+            $email_message = "
             <p>Dear $client,</p>
             <p>Congratulations! You have successfully completed your field purchase payment.</p>
             <h3>Purchase Summary:</h3>
@@ -402,7 +405,7 @@
             <p>Your annual rent returns will now commence according to the following schedule:</p>
             $rent_schedule_text
             <p>Thank you for your trust in <strong>Davidorlah Farms</strong>. We look forward to building a fruitful partnership with you.</p>
-            <br><p>Warm regards,<br><strong>Farm Management Team</strong><br>Onostar Media</p>";
+            <br><p>Warm regards,<br><strong>Farm Management Team</strong><br>Davidorlah Farms</p>";
 
             // insert notification
             $notif_data = array(
@@ -416,7 +419,7 @@
             $add_data->create_data();
         } else {
             // partial payment message
-            $message = "
+            $email_message = "
             <p>Dear $client,</p>
             <p>Your recent payment has been received successfully for your field purchase.</p>
             <h3>Purchase Summary:</h3>
@@ -433,7 +436,7 @@
             </ul>
             <p>Once your installment payments are completed, your annual rent returns will start immediately.</p>
             <p>Thank you for your continued commitment.</p>
-            <br><p>Warm regards,<br><strong>Farm Management Team</strong><br>Onostar Media</p>";
+            <br><p>Warm regards,<br><strong>Farm Management Team</strong><br>Davidorlah Farms</p>";
 
             // partial payment notification
             $notif_data = array(
@@ -448,14 +451,7 @@
         }
         $amount = number_format($amount, 2);
         $trx_date = date("jS F Y, h:ia", strtotime($date));
-        $message = "<p>Dear $client, <br>We confirm the receipt of your payment of ₦$amount on $trx_date towards your loan repayment.<br>
-        Transaction ID: $receipt<br>
-        Your account has been updated accordingly. Thank you for your commitment.<br>
-        If you have any questions or need a receipt, feel free to contact us.</p>
-       
-        <p>Warm regards,<br> 
-        $company<br>
-        Customer Support";
+        $message = $email_message;
         //insert into notifications
         $notif_data = array(
             'client' => $customer,

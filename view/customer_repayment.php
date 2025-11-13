@@ -12,11 +12,28 @@
     $cus = $get_details->fetch_details_group('customers', 'customer', 'customer_id', $customer_id);
     $client = $cus->customer;
     //check for current loan
-    $rows = $get_details->fetch_details_2cond('assigned_fields', 'customer', 'contract_status', $customer_id, 1);
+    $rows = $get_details->fetch_details_2cond('assigned_fields', 'customer', 'contract_status', $customer_id, 2);
     if(is_array($rows)){
         foreach($rows as $row){
             $loan = $row->assigned_id;
-        
+            //check for rent schedule start date
+            $schedules = $get_details->fetch_details_condLimitAsc('rent_schedule', 'assigned_id', $loan, 1, 'due_date');
+            if(is_array($schedules)){
+                foreach($schedules as $schedule){
+                    $start_date = $schedule->due_date;
+                }
+            }else{
+                $start_date = "N/A";
+            }
+            //check for rent schedule last due date
+            $due_dates = $get_details->fetch_details_condLimitDesc('rent_schedule', 'assigned_id', $loan, 1, 'due_date');
+            if(is_array($due_dates)){
+                foreach($due_dates as $due_date){
+                    $end_date = $due_date->due_date;
+                }
+            }else{
+                $end_date = "N/A";
+            }   
     
 
 ?>
@@ -42,38 +59,38 @@
                        </div>
                         <div class="data" style="width:24%;">
                             <label for="amount" style="text-align:left!important;">Rent (₦)</label>
-                            <input type="text" value="<?php echo '₦'.number_format($row->rent, 2)?>" readonly style="color:green">
+                            <input type="text" value="<?php echo '₦'.number_format($row->annual_rent, 2)?>" readonly style="color:green">
                         </div>
                         <div class="data" style="width:24%;">
                             <label for="purpose" style="text-align:left!important;">Lease Date:</label>
                             <input type="text" value="<?php echo date("d-M-Y, h:ia", strtotime($row->assigned_date))?>" readonly>
                         </div>
                         <div class="data" style="width:24%;">
-                            <label for="purpose" style="text-align:left!important;">Start Date:</label>
-                            <input type="text" value="<?php echo date("d-M-Y, h:ia", strtotime($row->start_date))?>" readonly>
+                            <label for="purpose" style="text-align:left!important;">First Due Date:</label>
+                            <input type="text" value="<?php echo date("d-M-Y", strtotime($start_date))?>" readonly>
                         </div>
                         
                         <div class="data" style="width:24%;">
                             <label for="duration" style="text-align:left!important;">Duration</label>
-                            <input type="text" value="<?php echo $row->duration?> Years" readonly>
+                            <input type="text" value="<?php echo $row->contract_duration?> Years" readonly>
                         </div>
-                        <div class="data" style="width:24%;">
+                        <!-- <div class="data" style="width:24%;">
                             <label for="repayment" style="text-align:left!important;">Repayment Frequency</label>
                             <input type="text" value="<?php echo $row->frequency?>" readonly>
-                        </div>
+                        </div> -->
                         
                         
-                        <div class="data" style="width:24%;">
+                        <!-- <div class="data" style="width:24%;">
                             <label for="">Total Payable Amount:</label>
                             <input type="text" value="<?php echo '₦'.number_format($row->total_repayment, 2)?>" readonly style="color:var(--tertiaryColor)">
                         </div>
                         <div class="data" style="width:24%;">
                             <label for=""><?php echo $row->frequency?> Installment:</label>
                             <input type="text" value="<?php echo '₦'.number_format($row->installment, 2)?>" readonly style="color:var(--otherColor)">
-                        </div>
+                        </div> -->
                         <div class="data" style="width:24%;">
                             <label for="purpose" style="text-align:left!important;">Due Date:</label>
-                            <input type="text" value="<?php echo date("d-M-Y", strtotime($row->due_date))?>" readonly>
+                            <input type="text" value="<?php echo date("d-M-Y", strtotime($end_date))?>" readonly>
                         </div>
                         
                     </div>
@@ -81,7 +98,7 @@
             </div>
         </section>
         <section style="width:100%">
-             <h3 style="background:var(--labColor); text-align:center; color:#fff; font-size:.9rem;padding:5px;">Repayment Schedule</h3>
+             <h3 style="background:var(--labColor); text-align:center; color:#fff; font-size:.9rem;padding:5px;">Rent payment Schedule</h3>
             <div class="displays allResults" style="width:100%!important; margin:0!important">
                 <table id="item_list_table" class="searchTable">
                     <thead>

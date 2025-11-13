@@ -135,16 +135,16 @@
                     <?php if($balance >= 0){?>
                     <div class="data">
                         <label for="balance">Account balance:</label>
-                        <input type="text" value="<?php echo "₦".number_format(0, 2)?>" style="color:red;">
+                        <input type="text" value="<?php echo "₦".number_format($balance, 2)?>" style="color:red;">
                     </div>
                     <?php }else{?>
                     <div class="data">
                         <label for="balance">Account balance:</label>
-                        <input type="text" value="<?php echo "₦".number_format(-($balance), 2)?>" style="color:green;">
+                        <input type="text" value="<?php echo "₦".number_format(0, 2)?>" style="color:green;">
                     </div>
                     <?php }?>
                     <div class="data">
-                        <label for="balance">Loan Due:</label>
+                        <label for="balance">Rent Due:</label>
                         <input type="text" value="<?php echo "₦".number_format($debt, 2)?>" style="color:red;">
                     </div>
                 </div>

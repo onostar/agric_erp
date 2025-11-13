@@ -76,8 +76,14 @@
         //get loan details
         $loan_details = $get_details->fetch_details_cond('assigned_fields', 'assigned_id', $loan_id);
         foreach($loan_details as $loan){
-            $loan_amount = $loan->total_repayment;
-            $total_payable = $loan->total_repayment;
+            $annual_rent = $loan->annual_rent;
+            $field = $loan->field;
+            // $total_payable = $loan->total_repayment;
+        }
+        //get field name
+        $field_details = $get_details->fetch_details_cond('fields', 'field_id', $field);
+        foreach($field_details as $field_detail){
+            $field_name = $field_detail->field_name;
         }
         //get balance 
         $balance = $amount_due - $amount_paid;
@@ -209,13 +215,13 @@
             $dr_class = $inv->class;
         }
         //cash or bank
-        $debit_data = array(
+        $credit_data = array(
             'account' => $dr_ledger,
             'account_type' => $dr_type,
             'sub_group' => $dr_group,
             'class' => $dr_class,
             'details' => 'Rent payment',
-            'debit' => $amount,
+            'credit' => $amount,
             'post_date' => $date,
             'posted_by' => $user,
             'trx_number' => $trx_num,
@@ -224,13 +230,13 @@
 
         );
         //customer ledger
-        $credit_data = array(
+        $debit_data = array(
             'account' => $ledger,
             'account_type' => $ledger_type,
             'sub_group' => $ledger_group,
             'class' => $ledger_class,
             'details' => 'Rent payment',
-            'credit' => $amount,
+            'debit' => $amount,
             'post_date' => $date,
             'posted_by' => $user,
             'trx_number' => $trx_num,
@@ -343,14 +349,16 @@
         if($total_loan_paid === $total_loan_due){
             //update loan status
             $update_loan = new Update_table();
-            $update_loan->update('assigned_fields', 'contract_status', 'loan_id', 2, $loan_id);
+            $update_loan->update('assigned_fields', 'contract_status', 'loan_id', 3, $loan_id);
         }
+        
         $amount = number_format($amount, 2);
         $trx_date = date("jS F Y, h:ia", strtotime($date));
-        $message = "<p>Dear $client, <br>We confirm the receipt of your payment of ₦$amount on $trx_date towards your loan repayment.<br>
+        $message = "<p>Dear $client, <br>Your annual rent return of ₦$annual_rent has been paid for your field ($field_name).<br>
+Payment Date: $date.<br><br>
+Thank you for investing with Davidorlah Farms.<br>
         Transaction ID: $receipt<br>
-        Your account has been updated accordingly. Thank you for your commitment.<br>
-        If you have any questions or need a receipt, feel free to contact us.</p>
+       .</p>
        
         <p>Warm regards,<br> 
         $company<br>
@@ -358,17 +366,12 @@
         //insert into notifications
         $notif_data = array(
             'client' => $customer,
-            'subject' => 'Loan Payment Confirmation',
-            'message' => 'Dear '.$client.',
-            We confirm the receipt of your payment of ₦'.$amount.' on '.$trx_date.' towards your loan repayment.
-            Transaction ID: '.$receipt.'
-            Your account has been updated accordingly. Thank you for your commitment.
-            
-            If you have any questions or need a receipt, feel free to contact us
+            'subject' => 'Rent Payment Confirmation',
+            'message' => 'Dear '.$client.', Your annual rent return of ₦$annual_rent has been paid for your field ('.$field_name.').
 
-            Warm regards,
-            '.$company.'
-            Customer Support',
+Payment Date: '.$date.'
+
+Thank you for investing with Davidorlah Farms',
             'post_date' => $date,
         );
         $add_data = new add_data('notifications', $notif_data);
@@ -418,15 +421,15 @@
         $from = 'admin@dorthprosuite.com';
         $from_name = "$company";
         $name = "$company";
-        $subj = 'Loan Payment Confirmation';
+        $subj = 'Rent Payment Confirmation';
         $msg = "<div>$message</div>";
         
         $error=smtpmailer($to, $from, $name ,$subj, $msg);
         
 ?>
-    <div id="printBtn">
+    <!-- <div id="printBtn">
         <button onclick="printDepositReceipt('<?php echo $receipt?>')">Print Receipt <i class="fas fa-print"></i></button>
-    </div>
+    </div> -->
 <?php
 
         echo "<p style='color:green; margin:5px 50px'>Payment posted successfully!</p>";

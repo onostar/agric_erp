@@ -122,6 +122,19 @@
                 return $rows;
             }
         }
+        //fetch details with condition and a limit ascending order
+        public function fetch_details_condLimitAsc($table, $column, $condition, $limit, $order){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column ORDER BY $order ASC LIMIT $limit");
+            $get_user->bindValue("$column", $condition);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
          //fetch details with 2 condition order by
         public function fetch_details_2condOrder($table, $con1, $con2, $value1, $value2, $order){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $con1 = :$con1 AND $con2 = :$con2 ORDER BY $order");
