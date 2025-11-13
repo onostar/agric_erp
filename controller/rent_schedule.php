@@ -16,17 +16,21 @@ $annual_rent = htmlspecialchars(stripslashes($_POST['annual_rent']));
 $start = htmlspecialchars(stripslashes($_POST['start_date']));
 $installment_amount = htmlspecialchars(stripslashes($_POST['installment_amount']));
 
-// determine total installments
-if($payment_duration == "3"){
-    $installments = 3;
-} elseif($payment_duration == "6"){
-    $installments = 6;
-} elseif($payment_duration == "1"){
-    $installments = 1;
-} else {
-    $installments = 1;
-}
+ // determine total installments based on purchase duration in months
+    $installments = 0;
+    if($payment_duration == "3"){
+        $installments = 3;
+    }else if($payment_duration == "6"){
+        $installments = 6;
+    }else if($payment_duration == "1"){
+        $installments = 1;
+    }else{
+        // fallback (default to 1)
+        $installments = 1;
+    }
 
+    // installment amount
+    // $installment_amount = $repayment / $installments;
 $assign_data = array(
     'field' => $id,
     'customer' => $customer,
@@ -44,15 +48,17 @@ $assign_data = array(
 require "../PHPMailer/PHPMailerAutoload.php";
 require "../PHPMailer/class.phpmailer.php";
 require "../PHPMailer/class.smtp.php";
+
+// instantiate class
 include "../classes/dbh.php";
 include "../classes/select.php";
 include "../classes/update.php";
 include "../classes/inserts.php";
 
 $get_details = new selects();
-$update = new Update_table;
 
 // update field to mark customer ownership
+$update = new Update_table;
 $update->update('fields', 'customer', 'field_id', $customer, $id);
 
 if($update){
@@ -71,21 +77,24 @@ if($update){
         $customer_email = $cu->customer_email;
     }
 
-    // get field info
+    //get fieldname
     $fds = $get_details->fetch_details_cond('fields','field_id', $id);
     foreach($fds as $fd){
         $field_name = $fd->field_name;
         $size = $fd->field_size;
         $location = $fd->location;
     }
-
-    // generate purchase payment schedule
+   
+    //generate purchase payment schedule
     $start_date = new DateTime($start);
     for($i = 1; $i <= $installments; $i++){
-        // ✅ make the first installment = start date
         $due_date = clone $start_date;
-        if($i > 1){
-            $due_date->modify('+' . ($i - 1) . ' month');
+        if($frequency == "Weekly") {
+            $due_date->modify("+$i week");
+        } elseif ($frequency == "Monthly") {
+            $due_date->modify("+$i month");
+        } elseif ($frequency == "Yearly") {
+            $due_date->modify("+$i year");
         }
 
         $repayment_data = array(
@@ -99,70 +108,93 @@ if($update){
             'post_date' => $date
         );
 
-        $insert_repayment = new add_data('field_payment_schedule', $repayment_data);
+        $insert_repayment = new add_data('rent_schedule', $repayment_data);
         $insert_repayment->create_data();
-    }
+    } 
+    // generate rent repayment schedule
+    /* $start_date = new DateTime($start);
+    for($i = 1; $i <= $installments; $i++){
+        $due_date = clone $start_date;
+        if($frequency == "Weekly") {
+            $due_date->modify("+$i week");
+        } elseif ($frequency == "Monthly") {
+            $due_date->modify("+$i month");
+        } elseif ($frequency == "Yearly") {
+            $due_date->modify("+$i year");
+        }
+
+        $repayment_data = array(
+            'field' => $id,
+            'assigned_id' => $assigned_id,
+            'customer' => $customer,
+            'due_date' => $due_date->format('Y-m-d'),
+            'amount_due' => $installment_amount,
+            'store' => $farm,
+            'posted_by' => $user,
+            'post_date' => $date
+        );
+
+        $insert_repayment = new add_data('rent_schedule', $repayment_data);
+        $insert_repayment->create_data();
+    } */
 
     // get first & last repayment dates
-    $first_ids = $get_details->fetch_lastInsertedConAsc('field_payment_schedule', 'due_date', 'assigned_id', $assigned_id);
+    $first_ids = $get_details->fetch_lastInsertedConAsc('rent_schedule', 'due_date', 'assigned_id', $assigned_id);
     foreach($first_ids as $first_id){
         $first_repayment_date = $first_id->due_date;
     }
 
-    $last_ids = $get_details->fetch_lastInsertedCon('field_payment_schedule', 'due_date', 'assigned_id', $assigned_id);
+    $last_ids = $get_details->fetch_lastInsertedCon('rent_schedule', 'due_date', 'assigned_id', $assigned_id);
     foreach($last_ids as $last_id){
         $last_repayment_date = $last_id->due_date;
     }
 
-    // update assigned_fields with active status
+    // update assigned_fields with contract active status
     $update = new Update_table();
     $update->update_double('assigned_fields', 'contract_status', 1, 'due_date', $last_repayment_date, 'assigned_id', $assigned_id);
 
-    // formatting
-    $install_amount_fmt = number_format($installment_amount, 2);
-    $purchase_fmt = number_format($purchase_cost, 2);
-    $annual_rent_fmt = number_format($annual_rent, 2);
+    $install_amount = number_format($installment_amount, 2);
+    $rent_fmt = number_format($rent, 2);
+    $total = number_format($repayment, 2);
 
-    // build purchase message
+    // build notification message
     $message = "
     <p>Dear $client,</p>
-    <p>Congratulations! Your <strong>field purchase contract</strong> has been successfully activated.</p>
+    <p>We are pleased to inform you that your field has been successfully assigned and activated under our rental program.</p>
 
-    <h3 style='color:green;'>Purchase Details:</h3>
+    <h3 style='color:green;'>Field Rent Details:</h3>
     <ul>
         <li><strong>Field:</strong> $field_name</li>
         <li><strong>Location:</strong> $location</li>
-        <li><strong>Size:</strong> $size Hectares</li>
-        <li><strong>Purchase Cost:</strong> ₦$purchase_fmt</li>
+        <li><strong>Size:</strong> $size Hec.</li>
         <li><strong>Contract Duration:</strong> $duration year(s)</li>
-        <li><strong>Annual Rent/Return:</strong> ₦$annual_rent_fmt ($rent_percentage%)</li>
-        <li><strong>Installment Amount:</strong> ₦$install_amount_fmt</li>
-        <li><strong>First Installment Date:</strong> $first_repayment_date</li>
-        <li><strong>Final Installment Date:</strong> $last_repayment_date</li>
+        <li><strong>Payment Frequency:</strong> $frequency</li>
+        <li><strong>Total Rent:</strong> ₦$total</li>
+        <li><strong>Installment Amount:</strong> ₦$install_amount</li>
+        <li><strong>First Repayment Date:</strong> $first_repayment_date</li>
+        <li><strong>Final Repayment Date:</strong> $last_repayment_date</li>
     </ul>
 
-    <p>Once all installments are completed, your contract will be marked as <strong>fully purchased</strong> and you will begin to receive your <strong>annual rent/returns</strong> according to the agreed rate and contract duration.</p>
+    <p>Please ensure timely payments according to your schedule to keep your contract active.</p>
+    <p>You can log in to your client portal to view your field details, rent schedule, and payment history.</p>
 
-    <p>You can log in to your <strong>Customer Portal</strong> anytime to track your payments, field details, and rent status.</p>
-
-    <br>
-    <p>Thank you for investing with <strong>Davidorlah Farms</strong>.</p>
+    <br><p>Thank you for choosing <strong>Davidorlah Farms</strong>.</p>
     <p>Warm regards,<br>
     <strong>Farm Management Team</strong><br>
     Onostar Media</p>";
 
-    // notification
+    // insert into notifications table
     $notif_data = array(
         'client' => $customer,
-        'subject' => 'Your Field Purchase Contract is Active',
-        'message' => 'Dear '.$client.', your field ('.$field_name.' - '.$size.' Hectares) located at '.$location.' has been successfully assigned for purchase. Once installments are completed, you will start receiving annual returns of ₦'.$annual_rent_fmt.' ('.$rent_percentage.'%) for '.$duration.' year(s).',
+        'subject' => 'Your Field Has Been Assigned',
+        'message' => 'Dear '.$client.', your field ('.$field_name.' => '.$size.' Hectares) located at '.$location.' has been successfully assigned under our rental program. Please log in to your client portal to view your rent schedule and payment dates.',
         'post_date' => $date,
     );
 
     $add_data = new add_data('notifications', $notif_data);
     $add_data->create_data();
 
-    /* send mail */
+    /* send mails to customer */
     function smtpmailer($to, $from, $from_name, $subject, $body){
         $mail = new PHPMailer();
         $mail->IsSMTP();
@@ -181,6 +213,7 @@ if($update){
         $mail->Subject = $subject;
         $mail->Body = $body;
         $mail->AddAddress($to);
+        // $mail->AddAddress('onostarmedia@gmail.com');
 
         if(!$mail->Send()){
             return "Failed to send mail";
@@ -192,11 +225,11 @@ if($update){
     $to = $customer_email;
     $from = 'admin@dorthprosuite.com';
     $from_name = "Davidorlah Farms";
-    $subj = 'Your Field Purchase Contract is Active';
+    $subj = 'Your Field Assignment is Successful';
     $msg = "<div>$message</div>";
 
     smtpmailer($to, $from, $from_name, $subj, $msg);
 
-    echo "<div class='success'><p>Field purchase successfully recorded and contract activated! <i class='fas fa-thumbs-up'></i></p></div>";
+    echo "<div class='success'><p>Field assigned to client successfully! <i class='fas fa-thumbs-up'></i></p></div>";
 }
 ?>

@@ -59,7 +59,13 @@
                         echo $customer;
                     ?>
                 </td>
-                <td><?php echo $detail->field_size?></td>
+                <td>
+                    <?php 
+                        //convert to square meters
+                        $sqm = $detail->field_size * 10000;
+                        echo $detail->field_size." (".number_format($sqm)." m&sup2;)";
+                    ?>
+                </td>
                 <td><?php echo $detail->soil_type?></td>
                 <td><?php echo $detail->soil_ph?></td>
                 <td><?php echo $detail->topography?></td>

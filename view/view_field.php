@@ -75,8 +75,8 @@
                 </div>
                 
                <div class="data" style="width:31%">
-                    <label for="rent">Rent Amount (NGN)</label>
-                    <input type="number" name="rent" id="rent" value="<?php echo $row->rent?>">
+                    <label for="purchase_cost">Purchase Cost (NGN)</label>
+                    <input type="number" name="purchase_cost" id="purchase_cost" value="<?php echo $row->purchase_cost?>">
                 </div>
                 <div class="data" style="width:auto">
                     <button type="button" id="change_price" name="change_price" onclick="updateField()">Update <i class="fas fa-save"></i></button>

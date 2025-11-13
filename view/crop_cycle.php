@@ -51,7 +51,13 @@
                     ?>
                 </td> -->
                 <!-- <td><?php echo $detail->variety?></td> -->
-                <td style="color:red"><?php echo $detail->area_used?></td>
+                <td style="color:red">
+                    <?php 
+                        //convert to square meters
+                        $sqm = $detail->area_used * 10000;
+                        echo $detail->area_used." (".number_format($sqm)." m&sup2;)";
+                    ?>
+                </td>
                 <td><?php echo date("d-M-Y", strtotime($detail->start_date))?></td>
                 <td style="color:var(--tertiaryColor)">
                     <?php 

@@ -15,7 +15,7 @@
         <div class="clear"></div>
     </div> -->
     <div class="add_user_form" style="width:50%; margin:10px 0;">
-        <h3 style="background:var(--tertiaryColor); color:#fff; text-align:left!important;">Post Customer Rent payment</h3>
+        <h3 style="background:var(--tertiaryColor); color:#fff; text-align:left!important;">Post Customer Field Payment</h3>
         
             <!-- search forms -->
         <!-- <form method="POST" id="addUserForm"> -->
@@ -24,7 +24,7 @@
                     <!-- bar items form -->
                     <div class="data" style="width:90%; position:relative">
                     <label for="customer">Select customer</label>
-                        <input type="search" name="customer" id="customer" oninput="getCustomersName(this.value, 'get_customer_repay.php')" placeholder="Enter customer name or phone number">
+                        <input type="search" name="customer" id="customer" oninput="getCustomersName(this.value, 'get_customer_pay.php')" placeholder="Enter customer name or phone number">
                         <div class="search_results" id="search_results">
 
                         </div>

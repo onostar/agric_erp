@@ -6380,7 +6380,7 @@ function addField(){
      let latitude = document.getElementById("latitude").value;
      let longitude = document.getElementById("longitude").value;
      let location = document.getElementById("location").value;
-     let rent = document.getElementById("rent").value;
+     let purchase_cost = document.getElementById("purchase_cost").value;
      if(field.length == 0 || field.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input field name!");
           $("#field").focus();
@@ -6405,27 +6405,27 @@ function addField(){
           alert("Please input field longitude!");
           $("#longitude").focus();
           return;
-     }else if(!rent){
-          alert("Please input field lease amount!");
-          $("#rent").focus();
+     }else if(!purchase_cost){
+          alert("Please input field purchase cost!");
+          $("#purchase_cost").focus();
           return;
      }else if(!location){
           alert("Please input field location!");
-          $("#rent").focus();
+          $("#location").focus();
           return;
-     }else if(parseFloat(latitude) <= 0 || parseFloat(longitude) <= 0){
+     }else if(parseFloat(latitude) < 0 || parseFloat(longitude) < 0){
           alert("Latitude or longitude values cannot be less than or equals to zero!");
           $("#latitude").focus();
           return;
-     }else if(parseFloat(rent) < 0){
-          alert("Field lease amount cannot be less than zero!");
-          $("#rent").focus();
+     }else if(parseFloat(purchase_cost) <= 0){
+          alert("Field purchase cost cannot be less than or equal to zero!");
+          $("#purchase_cost").focus();
           return;
      }else{
           $.ajax({
                type : "POST",
                url : "../controller/add_field.php",
-               data : {field:field, field_size:field_size, soil_type:soil_type, soil_ph:soil_ph, topography:topography, rent:rent, latitude:latitude, longitude:longitude, location:location},
+               data : {field:field, field_size:field_size, soil_type:soil_type, soil_ph:soil_ph, topography:topography, purchase_cost:purchase_cost, latitude:latitude, longitude:longitude, location:location},
                beforeSend: function(){
                     $(".info").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -6898,7 +6898,7 @@ function updateField(){
      let latitude = document.getElementById("latitude").value;
      let longitude = document.getElementById("longitude").value;
      let location = document.getElementById("location").value;
-     let rent = document.getElementById("rent").value;
+     let purchase_cost = document.getElementById("purchase_cost").value;
      if(field.length == 0 || field.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input field name!");
           $("#field").focus();
@@ -6927,23 +6927,23 @@ function updateField(){
           alert("Please input field longitude!");
           $("#longitude").focus();
           return;
-     }else if(!rent){
-          alert("Please input field lease amount!");
-          $("#rent").focus();
+     }else if(!purchase_cost){
+          alert("Please input field purchase cost!");
+          $("#purchase_cost").focus();
           return;
      }else if(parseFloat(latitude) < 0 || parseFloat(longitude) < 0){
           alert("Latitude or longitude values cannot be less than or equals to zero!");
           $("#latitude").focus();
           return;
-     }else if(parseFloat(rent) < 0){
-          alert("Field lease amount cannot be less than zero!");
-          $("#rent").focus();
+     }else if(parseFloat(purchase_cost) <= 0){
+          alert("Field purchase cost cannot be less than or equal to zero!");
+          $("#purchase_cost").focus();
           return;
      }else{
           $.ajax({
                type : "POST",
                url : "../controller/update_field.php",
-               data : {field:field, field_id:field_id,field_size:field_size, soil_type:soil_type, soil_ph:soil_ph, topography:topography, rent:rent, latitude:latitude, longitude:longitude, location:location},
+               data : {field:field, field_id:field_id,field_size:field_size, soil_type:soil_type, soil_ph:soil_ph, topography:topography, purchase_cost:purchase_cost, latitude:latitude, longitude:longitude, location:location},
                beforeSend: function(){
                     $("#farm_fields").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -6962,9 +6962,10 @@ function assignField(){
      let field_id = document.getElementById("field_id").value;
      let customer = document.getElementById("customer").value;
      let duration = document.getElementById("duration").value;
-     let frequency = document.getElementById("frequency").value;
-     let rent = document.getElementById("rent").value;
-     let repayment = document.getElementById("repayment").value;
+     let purchase_cost = document.getElementById("purchase_cost").value;
+     let payment_duration = document.getElementById("payment_duration").value;
+     let annual_rent = document.getElementById("annual_rent").value;
+     let rent_percentage = document.getElementById("rent_percentage").value;
      let start_date = document.getElementById("start_date").value;
      let installment_amount = document.getElementById("installment_amount").value;
      let today = new Date();
@@ -6977,13 +6978,21 @@ function assignField(){
           alert("Please select contract duration!");
           $("#duration").focus();
           return;
-     }else if(!frequency){
-          alert("Please select repayment frequency!");
-          $("#frequency").focus();
+     }else if(!payment_duration){
+          alert("Please select purchase payment duration!");
+          $("#payment_duration").focus();
           return;
      }else if(!installment_amount){
           alert("Please select frequency to get installment!");
           $("#frequency").focus();
+          return;
+     }else if(!rent_percentage){
+          alert("Please select rent percentage to get annual rent!");
+          $("#rent_percentage").focus();
+          return;
+     }else if(!annual_rent){
+          alert("Please select rent percentage to get annual rent!");
+          $("#rent_percentage").focus();
           return;
      }else if(!start_date){
           alert("Please input contract start date!");
@@ -6997,7 +7006,7 @@ function assignField(){
           $.ajax({
                type : "POST",
                url : "../controller/assign_field.php",
-               data : {field_id:field_id, customer:customer, duration:duration, frequency:frequency, rent:rent, repayment:repayment, start_date:start_date, installment_amount:installment_amount},
+               data : {field_id:field_id, customer:customer, duration:duration, purchase_cost:purchase_cost, payment_duration:payment_duration, rent_percentage:rent_percentage, annual_rent:annual_rent, start_date:start_date, installment_amount:installment_amount},
                beforeSend: function(){
                     $("#farm_fields").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -8803,7 +8812,7 @@ function takeStaff(id, name){
 }
 
 //calculate total repayment
-function calculateRepayment(){
+/* function calculateRepayment(){
      let duration = parseFloat(document.getElementById("duration").value);
      let rent = parseFloat(document.getElementById("rent").value);
      let repayment = document.getElementById("repayment");
@@ -8820,9 +8829,23 @@ function calculateRepayment(){
           $("#installment_amount").val('');
           $("#install").val('');
      }
+} */
+//calculateannual rentfromcost of purchase and percentagge
+function calculateRent(){
+    
+     let purchase_cost = parseFloat(document.getElementById("purchase_cost").value);
+     let rent_percentage = document.getElementById("rent_percentage").value;
+     let annual_rent = document.getElementById("annual_rent");
+     let rent = document.getElementById("rent");
+     
+     let total = rent_percentage * purchase_cost / 100;
+     annual_rent.value = total;
+     rent.value = total.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });;
+     
+
 }
 //calculate installment
-function calculateInstallments(){
+/* function calculateInstallments(){
      let duration = parseFloat(document.getElementById("duration").value);
      let repayment = parseFloat(document.getElementById("repayment").value);
      let frequency = document.getElementById("frequency").value;
@@ -8851,6 +8874,38 @@ function calculateInstallments(){
           }
           //installment amountss
           let installment_pay = repayment /installments;
+        
+          installment_amount.value = installment_pay;
+          install.value = installment_pay.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });;
+     }
+} */
+function calculateInstallments(){
+     let payment_duration = parseFloat(document.getElementById("payment_duration").value);
+     let purchase_cost = parseFloat(document.getElementById("purchase_cost").value);
+  
+     let install = document.getElementById("install");
+     let installment_amount = document.getElementById("installment_amount");
+     if(!payment_duration){
+          alert("Please select purchase payment duration");
+          $("#payment_duration").focus();
+          $("#installment_amount").val('');
+          $("#install").val('0.00');
+          return;
+     }else{
+          // Calculate total number of installments based on duration in MONTHS
+          let installments = 0;
+          if(payment_duration == "3"){
+               installments = 3;
+          }else if(payment_duration == "6"){
+               installments = 6;
+          }else if(payment_duration == "1"){
+               installments = 1;
+          }else{
+               // fallback (default to 1)
+               installments = 1;
+          }
+          //installment amountss
+          let installment_pay = purchase_cost /installments;
         
           installment_amount.value = installment_pay;
           install.value = installment_pay.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });;
@@ -8908,6 +8963,71 @@ function payRent(){
                $.ajax({
                     type : "POST",
                     url : "../controller/pay_rent.php",
+                    data : {posted:posted, customer:customer, schedule:schedule, payment_mode:payment_mode, amount:amount, details:details, store:store, invoice:invoice, bank:bank, trans_date:trans_date},
+                    beforeSend : function(){
+                         $("#fund_account").html("<div class='processing'><div class='loader'></div></div>");
+                    },
+                    success : function(response){
+                    $("#fund_account").html(response);
+                    }
+               })
+               return false;   
+          }else{
+               return;
+          }
+     }
+}
+//payment for field purchase
+function payField(){
+     let invoice = document.getElementById("invoice").value;
+     let posted = document.getElementById("posted").value;
+     let trans_date = document.getElementById("trans_date").value;
+     let customer = document.getElementById("customer").value;
+     let balance = document.getElementById("balance").value;
+     let store = document.getElementById("store").value;
+     let schedule = document.getElementById("schedule").value;
+     let amount = document.getElementById("amount").value;
+     let payment_mode = document.getElementById("payment_mode").value;
+     let details = document.getElementById("details").value;
+     let bank = document.getElementById("bank").value;
+     let todayDate = new Date();
+     if(payment_mode == "POS" || payment_mode == "Transfer"){
+          if(bank.length == 0 || bank.replace(/^\s+|\s+$/g, "").length == 0){
+               alert("Please select bank!");
+               $("#bank").focus();
+               return;
+          }    
+     }
+     if(payment_mode.length == 0 || payment_mode.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select payment_mode!");
+          $("#payment_mode").focus();
+          return;
+     }else if(amount.length == 0 || amount.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input transaction amount");
+          $("#amount").focus();
+          return;
+     }else if(parseFloat(amount) > parseFloat(balance)){
+          alert("The amount entered exceeds the balance due. Please enter an amount that is less than or equal to the balance.");
+          $("#balance").focus();
+          return;
+     }else if(trans_date.length == 0 || trans_date.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input transaction date");
+          $("#trans_date").focus();
+          return;
+     }else if(details.length == 0 || details.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter description of transaction");
+          $("#details").focus();
+          return;
+     }else if(new Date(trans_date) > todayDate){
+          alert("Transaction date cannot be futuristic!");
+          $("#trans_date").focus();
+          return;
+     }else{
+          let confirmPost = confirm("Are you sure you want to post this transaction?", "");
+          if(confirmPost){
+               $.ajax({
+                    type : "POST",
+                    url : "../controller/pay_field_purchase.php",
                     data : {posted:posted, customer:customer, schedule:schedule, payment_mode:payment_mode, amount:amount, details:details, store:store, invoice:invoice, bank:bank, trans_date:trans_date},
                     beforeSend : function(){
                          $("#fund_account").html("<div class='processing'><div class='loader'></div></div>");

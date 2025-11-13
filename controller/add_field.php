@@ -8,7 +8,7 @@
     $size = htmlspecialchars(stripslashes($_POST['field_size']));
     $soil_type = htmlspecialchars(stripslashes($_POST['soil_type']));
     $ph = htmlspecialchars(stripslashes($_POST['soil_ph']));
-    $amount = htmlspecialchars(stripslashes($_POST['rent']));
+    $amount = htmlspecialchars(stripslashes($_POST['purchase_cost']));
     $latitude = htmlspecialchars(stripslashes($_POST['latitude']));
     $longitude = htmlspecialchars(stripslashes($_POST['longitude']));
     $location = htmlspecialchars(stripslashes($_POST['location']));
@@ -22,7 +22,7 @@
         'latitude' => $latitude,
         'longitude' => $longitude,
         'location' => $location,
-        'rent' => $amount,
+        'purchase_cost' => $amount,
         'topography' => $topography,
         'created_by' => $user,
         'created_at' => $date

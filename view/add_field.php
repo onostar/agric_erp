@@ -46,8 +46,8 @@
                 </div>
                
                 <div class="data" style="width:48%;">
-                   <label for="rent"> Annual Rent Amount (NGN)</label>
-                   <input type="number" name="rent" id="rent" value=0>
+                   <label for="purchase_cost"> Purchase Cost (NGN)</label>
+                   <input type="number" name="purchase_cost" id="purchase_cost" value=0>
                 </div>
                 <div class="data">
                     <button type="button" id="add_item" name="add_item" onclick="addField()">Save record <i class="fas fa-save"></i></button>

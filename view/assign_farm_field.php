@@ -29,6 +29,10 @@
             }
             
     ?>
+    <div class="add_btn">
+        <button onclick="showPage('add_customer.php')">Add New Customer <i class="fas fa-user-plus"></i></button>
+        <div class="clear"></div>
+    </div>
     <div class="add_user_form priceForm" style="margin:10px 20px; width:50%;">
         <h3 style="background:var(--tertiaryColor)">Assign "<?php echo strtoupper($row->field_name)?>" to client</h3>
         <form style="text-align:left;">
@@ -44,38 +48,49 @@
                     <input type="hidden" id="customer" name="customer" value="<?php echo$row->customer?>">
                 </div>
                 <div class="data">
-                    <label for="duration">Duration</label>
-                    <select name="duration" id="duration" onchange="calculateRepayment()">
+                    <label for="duration">Contact Duration</label>
+                    <select name="duration" id="duration">
                         <option value="" selected disabled>Select Contract Duration</option>
-                        <option value="1">1 Year</option>
-                        <option value="2">2 Years</option>
-                        <option value="3">3 Years</option>
+                        <option value="3">3 Year</option>
+                        <option value="5">5 Years</option>
+                        <option value="10">10 Years</option>
                     </select>
                     
                 </div>
+               
                 <div class="data">
-                    <label for="frequency">Repayment Frequency</label>
-                    <select name="frequency" id="frequency" onchange="calculateInstallments()">
-                        <option value="" selected disabled>Select Repayment Frequency</option>
-                        <option value="Weekly">Weekly</option>
-                        <option value="Monthly">Monthly</option>
-                        <option value="Yearly">Yearly</option>
+                    <label for="rent">Purchase Cost (NGN)</label>
+                    <input type="text" value="<?php echo number_format($row->purchase_cost,2)?>" readonly>
+                    <input type="hidden" id="purchase_cost" name="purchase_cost" value="<?php echo $row->purchase_cost?>">
+                </div>
+                 <div class="data">
+                    <label for="payment_duration">Purchase Payment Duration</label>
+                    <select name="payment_duration" id="payment_duration" onchange="calculateInstallments()">
+                        <option value="" selected disabled>Select Payment Duration</option>
+                        <option value="3">3 Months</option>
+                        <option value="6">6 Months</option>
+                        <option value="1">Outright Purchase</option>
+                        
                     </select>
                 </div>
-                <div class="data">
-                    <label for="rent">Annual Rate (NGN)</label>
-                    <input type="text" value="<?php echo number_format($row->rent,2)?>" readonly>
-                    <input type="hidden" id="rent" name="rent" value="<?php echo $row->rent?>">
-                </div>
-                <div class="data">
-                    <label for="repayment">Total Repayment (NGN)</label>
-                    <input type="text" id="repay" name="repay" style="background:#cdcdcd" value="0.00" readonly>
-                    <input type="hidden" id="repayment" name="repayment">
-                </div>
+                
                 <div class="data">
                     <label for="installments">Installment Amount (NGN)</label>
                     <input type="text" id="install" name="install" style="background:#fff; color:green" value="0.00" readonly>
                     <input type="hidden" id="installment_amount" name="installment_amount">
+                </div>
+                <div class="data">
+                    <label for="rent_percentage">Rent Percentage (%)</label>
+                    <select name="rent_percentage" id="rent_percentage" onchange="calculateRent()">
+                        <option value="" selected disabled>Select Rent percentage</option>
+                        <option value="25">25%</option>
+                        <option value="36">36%</option>
+                    </select>
+                </div>
+                <div class="data">
+                    <label for="annual_rent">Annual Rent</label>
+                    <input type="text" id="rent" name="rent" style="background:#fff; color:green" value="0.00" readonly>
+                    <input type="hidden" id="annual_rent" name="annual_rent">
                 </div>
                 <div class="data">
                     <label for="start_date">Start Date</label>

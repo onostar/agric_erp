@@ -28,7 +28,7 @@
                 <td>Soil Type</td>
                 <td>Soil PH</td>
                 <td>Topography</td>
-                <td>Status</td>
+                <!-- <td>Status</td> -->
                 <td></td>
                 <!-- <td>Created</td> -->
             </tr>
@@ -49,15 +49,15 @@
                 <td><?php echo $detail->soil_type?></td>
                 <td><?php echo $detail->soil_ph?></td>
                 <td><?php echo $detail->topography?></td>
-                <td>
+                <!-- <td>
                     <?php
-                        if($detail->field_status == 0){
+                        /* if($detail->field_status == 0){
                             echo "<span style='color:green'>Available</span>";
                         }else{
                             echo "<span style='color:red'>Unavailable</span>";
-                        }
+                        } */
                     ?>
-                </td>
+                </td> -->
                 <!-- <td><?php echo date("d-m-Y", strtotime($detail->created_at))?></td> -->
                 <td>
                     <a href="javascript:void(0)" onclick="window.open('../view/view_field_details.php?field=<?php echo $detail->field_id?>')" style="color:#fff; background:var(--otherColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;">View <i class="fas fa-eye"></i></a>
