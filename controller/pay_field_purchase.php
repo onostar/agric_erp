@@ -80,7 +80,15 @@
             $duration = $loan->contract_duration;
             $annual_rent = $loan->annual_rent;
             $field_id = $loan->field;
+            $rent_percentage = $loan->rent_percentage;
             // $total_payable = $loan->total_repayment;
+        }
+        //getfield details
+        $fields = $get_details->fetch_details_cond('fields', 'field_id', $field_id);
+        foreach($fields as $fd){
+            $field_name = $fd->field_name;
+            $size = $fd->field_size;
+            $location = $fd->location;
         }
         //get balance 
         $balance = $amount_due - $amount_paid;
@@ -298,7 +306,7 @@
         //cash flow date
         $flow_data = array(
             'account' => $dr_ledger,
-            'details' => 'Loan Repayment',
+            'details' => 'Field Purchase Payment',
             'trx_number' => $trx_num,
             'amount' => $amount,
             'trans_type' => 'inflow',
@@ -335,6 +343,7 @@
         $add_processing_income = new add_data('other_income', $process_data);
         $add_processing_income->create_data(); */
         //check if all repayments have been paid and update loan status
+       
         $check_repayments = $get_details->fetch_sum_single('field_payment_schedule', 'amount_paid', 'assigned_id', $loan_id);
         foreach($check_repayments as $rep){
             $total_loan_paid = $rep->total;
@@ -344,6 +353,9 @@
             $total_loan_due = $due->total;
         }
         if($total_loan_paid === $total_loan_due){
+             $fmt_total_cost = number_format($purchase_cost, 2);
+            $fmt_total_paid = number_format($total_paid, 2);
+            $fmt_rent = number_format($annual_rent, 2);
             //update loan status
             $update_loan = new Update_table();
             $update_loan->update('assigned_fields', 'contract_status', 'assigned_id', 2, $loan_id);
