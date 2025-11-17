@@ -221,7 +221,7 @@
                 <tbody id="result">
                     <?php
                         $n = 1;
-                        $loans = $get_info->fetch_details_2cond('assigned_fields', 'customer', 'contract_status', $user_id, 1);
+                        $loans = $get_info->fetch_details_2cond('assigned_fields', 'customer', 'contract_status', $user_id, 2);
                         if(is_array($loans)){
                             foreach($loans as $loan){
                                 $repays = $get_info->fetch_details_2cond('rent_schedule', 'field', 'payment_status', $loan->field, 0);

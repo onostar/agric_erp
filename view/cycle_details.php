@@ -252,8 +252,10 @@
                 //check for any ongoing tasks
                 $ongoing_tasks = $get_visits->fetch_count_2cond('tasks', 'cycle', $cycle, 'task_status', 0);
                 
-                //check if prunning has been done
-                $prunings = $get_visits->fetch_count_3cond('tasks', 'cycle', $cycle, 'title', 'PRUNING', 'task_status', 1);
+                /* //check if prunning has been done
+                $prunings = $get_visits->fetch_count_3cond('tasks', 'cycle', $cycle, 'title', 'PRUNING', 'task_status', 1); */
+                //check for harvests
+                $harvests = $get_visits->fetch_count_cond('harvests', 'cycle', $cycle);
 
         
                 //meaning no land preparation started yet
@@ -275,7 +277,7 @@
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('start_harvest_crop.php?cycle=<?php echo $cycle?>')">Harvest Crop <i class="fas fa-seedling"></i></button>
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('remove_crop_form.php?cycle=<?php echo $cycle?>')">Remove Crop <i class="fas fa-box-open"></i></button>
             <?php }?>
-            <?php if($prunings > 0){?>
+            <?php if($harvests > 0){?>
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('start_sucker_removal.php?cycle=<?php echo $cycle?>')" title="Remove uckers">Remove Suckers <i class="fas fa-tree"></i></button>
             <?php }?>
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="closeCycle('<?php echo $cycle?>')" title="complete crop cycle">Close Cycle <i class="fas fa-check-double"></i></button>

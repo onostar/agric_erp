@@ -149,8 +149,8 @@
                     $next_balance = $next->amount_due - $next->amount_paid;
                     $to_pay = min($overpaid, $next_balance);
                     // Proportional interest and fee for this overpaid portion
-                    $next_interest = ($to_pay * $interest_portion) / $total_payable;
-                    $next_fee = ($to_pay * $processing_portion) / $total_payable;
+                    /* $next_interest = ($to_pay * $interest_portion) / $total_payable;
+                    $next_fee = ($to_pay * $processing_portion) / $total_payable; */
                     $new_paid = $next->amount_paid + $to_pay;
 
                     if($new_paid >= $next->amount_due) {
@@ -162,8 +162,8 @@
                     $extra_data = $repayment_data;
                     $extra_data['schedule'] = $next->repayment_id;
                     $extra_data['amount'] = $to_pay;
-                    $extra_data['interest'] = $next_interest;
-                    $extra_data['processing_fee'] = $next_fee;
+                    /* $extra_data['interest'] = $next_interest;
+                    $extra_data['processing_fee'] = $next_fee; */
                     $extra_data['details'] = 'Excess from previous';
                     (new add_data('field_payments', $extra_data))->create_data();
 
