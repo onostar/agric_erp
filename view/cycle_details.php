@@ -278,7 +278,8 @@
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('remove_crop_form.php?cycle=<?php echo $cycle?>')">Remove Crop <i class="fas fa-box-open"></i></button>
             <?php }?>
             <?php if($harvests > 0){?>
-            <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('start_sucker_removal.php?cycle=<?php echo $cycle?>')" title="Remove uckers">Remove Suckers <i class="fas fa-tree"></i></button>
+            <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('sucker_removal.php?cycle=<?php echo $cycle?>')" title="Remove uckers">Remove Suckers <i class="fas fa-tree"></i></button>
+            <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="showForm('start_pruning.php?cycle=<?php echo $cycle?>')" title="Pruning">Pruning <i class="fas fa-leaf"></i></button>
             <?php }?>
             <button style="background:#dfdfdf;border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="closeCycle('<?php echo $cycle?>')" title="complete crop cycle">Close Cycle <i class="fas fa-check-double"></i></button>
             <button style="background:#dfdfdf; border:1px solid #fff; font-size:.8rem; padding:5px 8px; color:#222; box-shadow:1px 1px 1px #222; margin:5px 0" onclick="abandonCycle('<?php echo $cycle?>')" title="Abandon crop cycle">Abandon Cycle <i class="fas fa-close"></i></button>
@@ -334,6 +335,11 @@
                         <div class="data" style="width:auto!important">
                             <button type="button" id="add_cat" name="add_cat" style="font-size:.8rem; padding:7px" onclick="updateCycleTask()">Update <i class="fas fa-layer-group"></i></button>
                             <a style="border-radius:15px; background:#dfdfdf;color:#222; padding:6px; box-shadow:1px 1px 1px #222; border:1px solid #fff" title="add items used for task" href="javascript:void(0)" onclick="showForm('add_cycle_task_items.php?task_id=<?php echo $task_id?>&cycle=<?php echo $cycle?>')">Add Items <i class="fas fa-plus-square"></i></a>
+                            <?php if($title == "PRUNING"){?>
+                            <a style="border-radius:15px; background:#dfdfdf;color:#222; padding:6px; box-shadow:1px 1px 1px #222; border:1px solid #fff" title="add items used for task" href="javascript:void(0)" onclick="showForm('start_remove_leaves.php?task_id=<?php echo $task_id?>&cycle=<?php echo $cycle?>')">Remove Leaves <i class="fas fa-leaf"></i></a>
+                            <?php } if($title == "SUCKER REMOVAL"){?>
+                            <a style="border-radius:15px; background:#dfdfdf;color:#222; padding:6px; box-shadow:1px 1px 1px #222; border:1px solid #fff" title="add items used for task" href="javascript:void(0)" onclick="showForm('start_sucker_removal.php?task_id=<?php echo $task_id?>&cycle=<?php echo $cycle?>')">Remove Suckers <i class="fas fa-tree"></i></a>
+                            <?php }?>
                             <a style="border-radius:15px; background:#dfdfdf;color:#222;padding:6px; box-shadow:1px 1px 1px #222; border:1px solid #fff" href="javascript:void(0)" onclick="showForm('end_task_form.php?task=<?php echo $task_id?>')">End Task <i class="fas fa-close"></i></a>
                         </div>
                     </div>
@@ -657,6 +663,14 @@
                         <?php $n++; endforeach;}?>
                     </tbody>
                 </table>
+                <?php
+                    $harvs = $get_users->fetch_sum_single('harvests', 'quantity', 'cycle', $cycle);
+                    if(gettype($harvs) === 'array'){
+                        foreach($harvs as $har){
+                            echo "<p class='total_amount' style='color:green; text-align:right; font-size:.9rem; '>Total Harvest: ".number_format($har->total, 2)."kg</p>";
+                        }
+                    }
+                ?>
             </div>
         </section>
         <!-- crop removals -->
@@ -703,6 +717,14 @@
                         <?php $n++; endforeach;}?>
                     </tbody>
                 </table>
+                <?php
+                    $total_removes = $get_users->fetch_sum_single('crop_removal', 'quantity', 'cycle', $cycle);
+                    if(gettype($total_removes) === 'array'){
+                        foreach($total_removes as $rmv){
+                            echo "<p class='total_amount' style='color:green; text-align:right; font-size:.9rem; '>Total Removed: ".number_format($rmv->total, 2)."kg</p>";
+                        }
+                    }
+                ?>
             </div>
         </section>
         <!-- sucker removals -->
@@ -745,6 +767,64 @@
                         <?php $n++; endforeach;}?>
                     </tbody>
                 </table>
+                <?php
+                    $total_removes = $get_users->fetch_sum_single('sucker_removal', 'quantity', 'cycle', $cycle);
+                    if(gettype($total_removes) === 'array'){
+                        foreach($total_removes as $rmv){
+                            echo "<p class='total_amount' style='color:green; text-align:right; font-size:.9rem; '>Total Removed: ".number_format($rmv->total, 2)."kg</p>";
+                        }
+                    }
+                ?>
+            </div>
+        </section>
+        <!-- sucker removals -->
+       <section id="last_consult">
+            <h3>Pruning Records</h3>
+            <div class="displays allResults new_data" style="width:100%!important;margin:0!important">
+                <table id="data_table" class="searchTable">
+                    <thead>
+                        <tr style="background:var(--primaryColor)">
+                            <td>S/N</td>
+                            <td>Date</td>
+                            <td>Qty (kg)</td>
+                            <td>Removed By</td>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            $n = 1;
+                            $pruns = $get_users->fetch_details_cond('pruning', 'cycle', $cycle);
+                            if(gettype($pruns) === 'array'){
+                            foreach($pruns as $prun):
+                        ?>
+                        <tr>
+                            <td style="text-align:center; color:red;"><?php echo $n?></td>
+                            <td style="color:var(--moreColor)"><?php echo date("d-M-Y h:ia", strtotime($prun->date_removed));?></td>
+                            <td style="text-align:center;color:green"><?php echo $prun->quantity ?></td>
+                            <td>
+                                <?php
+                                    //get posted by
+                                    $checks = $get_visits->fetch_details_cond('users',  'user_id', $prun->removed_by);
+                                    foreach($checks as $check){
+                                        $full_name = $check->full_name;
+                                    }
+                                    echo $full_name;
+                                ?>
+                            </td>
+                            
+                        </tr>
+                        <?php $n++; endforeach;}?>
+                    </tbody>
+                </table>
+                <?php
+                    $total_removes = $get_users->fetch_sum_single('pruning', 'quantity', 'cycle', $cycle);
+                    if(gettype($total_removes) === 'array'){
+                        foreach($total_removes as $rmv){
+                            echo "<p class='total_amount' style='color:green; font-size:.9rem; text-align:right;'>Total Leaves Removed: ".number_format($rmv->total, 2)."kg</p>";
+                        }
+                    }
+                ?>
             </div>
         </section>
     </div>

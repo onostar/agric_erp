@@ -16,7 +16,7 @@
                 <option value="">Select Category</option>
                 <option value="Farm Input">Farm Input</option>
                 <option value="Crop">Crop</option>
-                <option value="Livestock">Livestock</option>
+                <!-- <option value="Livestock">Livestock</option> -->
                 <option value="Consumable">Consumable</option>
                 
             </select>

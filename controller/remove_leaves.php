@@ -4,13 +4,13 @@
     $date = date("Y-m-d H:i:s");
     $user = $_SESSION['user_id'];
     $farm = $_SESSION['store_id'];
-    $trans_type ="sucker_removal";
+    $trans_type ="pruning";
 
     // $crop = htmlspecialchars(stripslashes($_POST['crop']));
-    $sucker =  "SUCKER";
+    $leaves =  "LEAVES";
     $cycle = htmlspecialchars(stripslashes($_POST['cycle']));
-    $quantity = htmlspecialchars(stripslashes($_POST['quantity']));
     $task = htmlspecialchars(stripslashes($_POST['task_id']));
+    $quantity = htmlspecialchars(stripslashes($_POST['quantity']));
 
     include "../classes/dbh.php";
     include "../classes/select.php";
@@ -37,15 +37,15 @@
         $ran_num .= $random_num;
     }
     $trx_num = "TR".$ran_num.$todays_date;
-    $rows = $get_details->fetch_details_cond('items', 'item_name', $sucker);
+    $rows = $get_details->fetch_details_cond('items', 'item_name', $leaves);
     foreach($rows as $row){
         $item_id = $row->item_id;
         $item_type = $row->item_type;
         $reorder_level = $row->reorder_level;
-        $crop_name = $sucker;
+        $crop_name = $leaves;
         $cost = $row->cost_price;
     }
-    $details = "Suckers removed from $field_name";
+    $details = "Leaves removed from $field_name";
    
     
     $prev_qtys = $get_details->fetch_details_2cond('inventory', 'item', 'store', $item_id, $farm);
@@ -87,11 +87,11 @@
     $inser_trail->create_data();
     
     //stockin item
-    //data to stockin into sucker_removal table
-    $sucker_data = array(
+    //data to stockin into leaves_removal table
+    $leaves_data = array(
         'cycle' => $cycle,
-        'crop' => $item_id,
         'task_id' => $task,
+        'crop' => $item_id,
         'farm' => $farm,
         'field' => $field,
         'quantity' => $quantity,
@@ -99,7 +99,7 @@
         'removed_by' => $user,
         'date_removed' => $date
     );
-    $stock_in = new add_data('sucker_removal', $sucker_data);
+    $stock_in = new add_data('pruning', $leaves_data);
     $stock_in->create_data();
     if($stock_in){
         //add into accounting data
@@ -151,7 +151,6 @@
             'details' => $details,
             'trans_date' => $date,
             'store' => $farm
-
         );
         //add debit
         $add_debit = new add_data('transactions', $debit_data);
@@ -160,7 +159,7 @@
         $add_credit = new add_data('transactions', $credit_inputs);
         $add_credit->create_data();
         
-        echo "<div class='success'><p>$quantity kg of $sucker(S) Removed successfully from $field_name! <i class='fas fa-thumbs-up'></i></p></div>";
+        echo "<div class='success'><p>$quantity kg of $leaves(S) Removed from $field_name successfully! <i class='fas fa-thumbs-up'></i></p></div>";
     }else{
-        echo "<p style='background:red; color:#fff; padding:5px'>Failed to remove suckers from $field_name <i class='fas fa-thumbs-down'></i></p>";
+        echo "<p style='background:red; color:#fff; padding:5px'>Failed to remove leaves from $field_name <i class='fas fa-thumbs-down'></i></p>";
     }

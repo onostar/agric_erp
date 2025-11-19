@@ -25,7 +25,7 @@
                         <option value="FERTILIZER APPLICATION">FERTILIZER APPLICATION</option>
                         <option value="WEEDING">WEEDING</option>
                         <option value="INDUCTION">INDUCTION</option>
-                        <option value="PRUNING">PRUNING</option>
+                        <!-- <option value="PRUNING">PRUNING</option> -->
                         <!-- <option value="SUCKER REMOVAL">SUCKER REMOVAL</option> -->
                     </select>
                 </div>

@@ -9046,6 +9046,7 @@ function payField(){
 //start sucker removal
 function removeSuckers(){
      let cycle = document.getElementById("cycle").value;
+     let task_id = document.getElementById("task_id").value;
      // let crop = document.getElementById("crop").value;
      let quantity = document.getElementById("quantity").value;
     if(parseFloat(quantity) <= 0){
@@ -9056,7 +9057,33 @@ function removeSuckers(){
           $.ajax({
                type : "POST",
                url : "../controller/remove_suckers.php",
-               data : {quantity:quantity, cycle:cycle /* crop:crop */},
+               data : {quantity:quantity, cycle:cycle, task_id:task_id /* crop:crop */},
+               beforeSend: function(){
+                    $("#cycles").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#cycles").html(response);
+                    setTimeout(function(){
+                         showPage("cycle_details.php?cycle="+cycle);
+                    }, 2000);
+               }
+          })
+     }
+}
+//start leaves removal
+function removeLeaves(){
+     let cycle = document.getElementById("cycle").value;
+     let task_id = document.getElementById("task_id").value;
+     let quantity = document.getElementById("quantity").value;
+    if(parseFloat(quantity) <= 0){
+          alert("Please input quantity!");
+          $("#quantity").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/remove_leaves.php",
+               data : {quantity:quantity, cycle:cycle, task_id:task_id},
                beforeSend: function(){
                     $("#cycles").html("<div class='processing'><div class='loader'></div></div>");
                },
