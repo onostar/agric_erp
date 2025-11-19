@@ -74,10 +74,10 @@
                     <input type="number" name="longitude" id="longitude" value="<?php echo $row->longitude?>">
                 </div>
                 
-               <div class="data" style="width:31%">
+               <!-- <div class="data" style="width:31%">
                     <label for="purchase_cost">Purchase Cost (NGN)</label>
                     <input type="number" name="purchase_cost" id="purchase_cost" value="<?php echo $row->purchase_cost?>">
-                </div>
+                </div> -->
                 <div class="data" style="width:auto">
                     <button type="button" id="change_price" name="change_price" onclick="updateField()">Update <i class="fas fa-save"></i></button>
                     <a href="javascript:void(0)" title="close form" style='background:red; padding:10px; border-radius:15px; border:1px solid #fff;box-shadow:1px 1px 1px #222; color:#fff' onclick="showPage('farm_fields.php')">Return <i class='fas fa-angle-double-left'></i></a>

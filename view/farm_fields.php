@@ -13,10 +13,11 @@
     
 </style>
 <div class="displays allResults" id="farm_fields" style="width:90%!important;margin:20px 50px!important">
-    <h2>Farm Fields</h2>
+    <h2>Farm Fields/Lands</h2>
     <hr>
     <div class="search">
-        <input type="search" id="searchStaff" placeholder="Enter keyword" onkeyup="searchData(this.value)"> <a style="background:brown; color:#fff; padding:4px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222;" href="javascript:void(0)" onclick="showPage('add_field.php')" title="Add Farm Field">Add Field <i class="fas fa-seedling"></i></a>
+        <input type="search" id="searchStaff" placeholder="Enter keyword" onkeyup="searchData(this.value)">
+        <!-- <a style="background:brown; color:#fff; padding:4px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222;" href="javascript:void(0)" onclick="showPage('add_field.php')" title="Add Farm Field">Add Field <i class="fas fa-seedling"></i></a> -->
     </div>
     <table id="room_list_table" class="searchTable">
         <thead>
@@ -62,7 +63,7 @@
                 <td>
                     <?php 
                         //convert to square meters
-                        $sqm = $detail->field_size * 10000;
+                        $sqm = $detail->field_size * 7500;
                         echo $detail->field_size." (".number_format($sqm)." m&sup2;)";
                     ?>
                 </td>

@@ -6049,8 +6049,14 @@ function addAsset(){
                type : "POST",
                url : "../controller/add_asset.php",
                data : {asset:asset, supplier:supplier, purchase_date:purchase_date, cost:cost, salvage_value:salvage_value, useful_life:useful_life, deployment:deployment, location:location, ledger:ledger, specification:specification, quantity:quantity},
+               beforeSend: function(){
+                    $("#assets").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success : function(response){
-               $(".info").html(response);
+                    $("#assets").html(response);
+                    setTimeout(function(){
+                         showPage("add_asset.php");
+                    }, 2000);
                }
           })
      }
@@ -6065,6 +6071,100 @@ function addAsset(){
      $("#ledger").val('');
      $("#specification").val('');
      $("#asset").focus();
+     return false;
+}
+//update asset
+function updateAsset(){
+     let asset_id = document.getElementById("asset_id").value;
+     let asset = document.getElementById("asset").value;
+     let supplier = document.getElementById("supplier").value;
+     let purchase_date = document.getElementById("purchase_date").value;
+     let cost = document.getElementById("cost").value;
+     let quantity = document.getElementById("quantity").value;
+     let salvage_value = document.getElementById("salvage_value").value;
+     let useful_life = document.getElementById("useful_life").value;
+     let deployment = document.getElementById("deployment").value;
+     let location = document.getElementById("location").value;
+     let ledger = document.getElementById("ledger").value;
+     todayDate = new Date();
+     let specification = document.getElementById("specification").value;
+     if(asset.length == 0 || asset.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input asset name!");
+          $("#asset").focus();
+          return;
+     }else if(quantity.length == 0 || quantity.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input quantity purchased!");
+          $("#quantity").focus();
+          return;
+     }else if(quantity <= 0){
+          alert("Please input quantity purchased!");
+          $("#quantity").focus();
+          return;
+     }else if(supplier.length == 0 || supplier.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input supplier name!");
+          $("#supplier").focus();
+          return;
+     }else if(purchase_date.length == 0 || purchase_date.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter purchase date!");
+          $("#purchase_date").focus();
+          return;
+     }else if(new Date(purchase_date) > todayDate){
+          alert("Purchase date can not be futuristic!");
+          $("#purchase_date").focus();
+          return;
+     }else if(new Date(purchase_date) > new Date(deployment)){
+          alert("DPurchase date cannot be greater than deployment date!");
+          $("#deployment").focus();
+          return;
+     }else if(cost.length == 0 || cost.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input asset cost!");
+          $("#cost").focus();
+          return;
+     }else if(salvage_value.length == 0 || salvage_value.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input salvage value!");
+          $("#salvage_value").focus();
+          return;
+     }else if(useful_life.length == 0 || useful_life.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input useful life!");
+          $("#useful_life").focus();
+          return;
+     }else if(deployment.length == 0 || deployment.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input deployment date!");
+          $("#deployment").focus();
+          return;
+     }else if(location.length == 0 || location.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select asset location!");
+          $("#location").focus();
+          return;
+     }else if(ledger.length == 0 || ledger.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select asset class!");
+          $("#ledger").focus();
+          return;
+     }else if(specification.length == 0 || specification.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input asset specifications!");
+          $("#specification").focus();
+          return;
+     }else if(cost <= 0 || salvage_value <= 0 || useful_life <= 0){
+          alert("Values cannot be less than or equal to 0!");
+          $("#salvage_value").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/update_asset.php",
+               data : {asset_id:asset_id, asset:asset, supplier:supplier, purchase_date:purchase_date, cost:cost, salvage_value:salvage_value, useful_life:useful_life, deployment:deployment, location:location, ledger:ledger, specification:specification, quantity:quantity},
+               beforeSend: function(){
+                    $("#assets").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#assets").html(response);
+                    setTimeout(function(){
+                        showPage("asset_register.php");
+                    }, 2000);
+               }
+          })
+     }
+     
      return false;
 }
 
@@ -6898,7 +6998,7 @@ function updateField(){
      let latitude = document.getElementById("latitude").value;
      let longitude = document.getElementById("longitude").value;
      let location = document.getElementById("location").value;
-     let purchase_cost = document.getElementById("purchase_cost").value;
+     // let purchase_cost = document.getElementById("purchase_cost").value;
      if(field.length == 0 || field.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input field name!");
           $("#field").focus();
@@ -6927,23 +7027,23 @@ function updateField(){
           alert("Please input field longitude!");
           $("#longitude").focus();
           return;
-     }else if(!purchase_cost){
+     /* }else if(!purchase_cost){
           alert("Please input field purchase cost!");
           $("#purchase_cost").focus();
-          return;
+          return; */
      }else if(parseFloat(latitude) < 0 || parseFloat(longitude) < 0){
           alert("Latitude or longitude values cannot be less than or equals to zero!");
           $("#latitude").focus();
           return;
-     }else if(parseFloat(purchase_cost) <= 0){
+     /* }else if(parseFloat(purchase_cost) <= 0){
           alert("Field purchase cost cannot be less than or equal to zero!");
           $("#purchase_cost").focus();
-          return;
+          return; */
      }else{
           $.ajax({
                type : "POST",
                url : "../controller/update_field.php",
-               data : {field:field, field_id:field_id,field_size:field_size, soil_type:soil_type, soil_ph:soil_ph, topography:topography, purchase_cost:purchase_cost, latitude:latitude, longitude:longitude, location:location},
+               data : {field:field, field_id:field_id,field_size:field_size, soil_type:soil_type, soil_ph:soil_ph, topography:topography, /* purchase_cost:purchase_cost,  */latitude:latitude, longitude:longitude, location:location},
                beforeSend: function(){
                     $("#farm_fields").html("<div class='processing'><div class='loader'></div></div>");
                },

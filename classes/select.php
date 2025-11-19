@@ -762,11 +762,24 @@ public function fetch_suspension_days($staff){
         }
 
         
-        //fetch tax rate based on income
+        //fetch count 2 condition
         public function fetch_count_2cond($table, $column1, $condition1, $column2, $condition2){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column1 = :$column1 AND $column2 = :$column2");
             $get_user->bindValue("$column1", $condition1);
             $get_user->bindValue("$column2", $condition2);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                return $get_user->rowCount();
+            }else{
+                return "0";
+            }
+        }
+        //fetch count 2 condition and 1 negative condition
+        public function fetch_count_2cond1neg($table, $column1, $condition1, $column2, $condition2,$negCon, $negVal){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column1 = :$column1 AND $column2 = :$column2 AND $negCon != :negVal");
+            $get_user->bindValue("$column1", $condition1);
+            $get_user->bindValue("$column2", $condition2);
+            $get_user->bindValue("negVal", $negVal);
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 return $get_user->rowCount();

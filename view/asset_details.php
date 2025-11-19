@@ -30,8 +30,8 @@
         }
         //get location
         $get_cat_name = new selects();
-        $cat_name = $get_cat_name->fetch_details_group('asset_locations', 'location', 'location_id', $location);
-        $loc_name = $cat_name->location;
+        $cat_name = $get_cat_name->fetch_details_group('stores', 'store', 'store_id', $location);
+        $loc_name = $cat_name->store;
         //get ledger
         $get_ledg_name = new selects();
         $ledg_name = $get_ledg_name->fetch_details_group('ledgers', 'ledger', 'acn', $ledger);

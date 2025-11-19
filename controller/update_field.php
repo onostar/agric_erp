@@ -11,7 +11,7 @@
     $ph = htmlspecialchars(stripslashes($_POST['soil_ph']));
     $topography = ucwords(htmlspecialchars(stripslashes($_POST['topography'])));
     // $customer = htmlspecialchars(stripslashes($_POST['customer']));
-     $amount = htmlspecialchars(stripslashes($_POST['purchase_cost']));
+    //  $amount = htmlspecialchars(stripslashes($_POST['purchase_cost']));
     $latitude = htmlspecialchars(stripslashes($_POST['latitude']));
     $longitude = htmlspecialchars(stripslashes($_POST['longitude']));
     $location = htmlspecialchars(stripslashes($_POST['location']));
@@ -23,7 +23,7 @@
         'soil_ph' => $ph,
         'latitude' => $latitude,
         'longitude' => $longitude,
-        'purchase_cost' => $amount,
+        // 'purchase_cost' => $amount,
         'topography' => $topography,
         'location' => $location,
         'updated_by' => $user,
@@ -34,10 +34,18 @@
     include "../classes/select.php";
     include "../classes/update.php";
     include "../classes/inserts.php";
+    //get field details
+    $check = new selects();
+    $fields = $check->fetch_details_cond('fields', 'field_id', $id);
+    foreach($fields as $fieldd){
+        $asset = $fieldd->asset_id;
+    }
     //update field
     $update = new Update_table;
     $update->updateAny('fields', $data, 'field_id', $id);
     if($update){
+        //update details on asset table
+        $update->update('assets', 'asset','asset_id', $field, $asset);
         echo "<div class='success'><p>Field Details updated for $field successfully! <i class='fas fa-thumbs-up'></i></p></div>";
     }
     

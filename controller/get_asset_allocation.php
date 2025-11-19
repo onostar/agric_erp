@@ -14,14 +14,14 @@
         foreach($rows as $row):
             //get location name
             $get_loc = new selects();
-            $locs = $get_loc->fetch_details_group('asset_locations', 'location', 'location_id', $row->location);
-            $location = $locs->location;
+            $locs = $get_loc->fetch_details_group('stores', 'store', 'store_id', $row->location);
+            $location = $locs->store;
             
     ?>
     <div class="add_user_form priceForm" style="width:100%">
         <h3 style="background:var(--tertiaryColor)">Allocate or Reassign <?php echo strtoupper($row->asset)?></h3>
         <section class="addUserForm" style="text-align:left;">
-            <div class="inputs" style="flex-wrap:wrap; gap:.2rem;">
+            <div class="inputs" style="flex-wrap:wrap; gap:.2rem; justify-content:left;">
                 <!-- <div class="data item_head"> -->
                     <input type="hidden" name="asset_id" id="asset_id" value="<?php echo $row->asset_id?>" required>
                 <div class="data" style="width:32%">
@@ -42,10 +42,10 @@
                         <option value="">Select Location</option>
                         <?php
                             $get_dep = new selects();
-                            $ros = $get_dep->fetch_details_negCond1('asset_locations', 'location_id', $row->location);
+                            $ros = $get_dep->fetch_details_negCond1('stores', 'store_id', $row->location);
                             foreach($ros as $ro){
                         ?>
-                        <option value="<?php echo $ro->location_id?>"><?php echo $ro->location?></option>
+                        <option value="<?php echo $ro->store_id?>"><?php echo $ro->store?></option>
                         <?php }?>
                     </select>
                 </div>

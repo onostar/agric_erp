@@ -74,6 +74,8 @@ session_start();
                 </td> -->
                 <td>
                     <a style="color:#fff;background:var(--otherColor); padding:5px; border-radius:10px" href="javascript:void(0)" title="View details" onclick="showPage('asset_details.php?asset=<?php echo $detail->asset_id?>')">View <i class="fas fa-eye"></i></a>
+                    <a href="javascript:void(0)" onclick="showPage('update_asset.php?asset=<?php echo $detail->asset_id?>')" title="update asset details" style="color:#fff; background:var(--tertiaryColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;"><i class="fas fa-edit"></i></a>
+
                 </td>
                 
             </tr>

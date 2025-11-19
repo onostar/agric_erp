@@ -3,6 +3,7 @@ date_default_timezone_set("Africa/Lagos");
     session_start();
     $user = $_SESSION['user_id'];
     $asset = strtoupper(htmlspecialchars(stripslashes($_POST['asset'])));
+    $asset_id = strtoupper(htmlspecialchars(stripslashes($_POST['asset_id'])));
     $supplier = strtoupper(htmlspecialchars(stripslashes($_POST['supplier'])));
     $purchase = htmlspecialchars(stripslashes($_POST['purchase_date']));
     $cost = htmlspecialchars(stripslashes($_POST['cost']));
@@ -31,7 +32,7 @@ date_default_timezone_set("Africa/Lagos");
         $locate =  $cat_name->store;
     }
     $loc = substr($locate, 0, 3);
-    $asset_no = "DAVIDORLAH/".$loc."/".$asset_year."/".$asset_month."/";
+    $asset_no = "DAVIDORLAH/".$loc."/".$asset_year."/".$asset_month."/".$asset_id;
 
     //get ledger details
     $ledgs = $get_details->fetch_details_cond('ledgers', 'acn', $ledger);
@@ -52,45 +53,42 @@ date_default_timezone_set("Africa/Lagos");
         'specification' => $spec,
         'deployment_date' => $deploy,
         'purchase_date' => $purchase,
-        'post_date' => $date,
-        'posted_by' => $user,
+        'updated_at' => $date,
+        'updated_by' => $user,
     );
 
     //check if asset exists
-    $results = $get_details->fetch_count_2cond('assets', 'asset', $asset,'location', $location);
+    $results = $get_details->fetch_count_2cond1neg('assets', 'asset', $asset,'location', $location,'asset_id', $asset_id);
     if($results > 0){
         echo "<p class='exist'>$asset already exists for $locate</p>";
     }else{
         //add new record
-        $add_data = new add_data('assets', $data);
-        $add_data->create_data();
+        $add_data = new Update_table();
+        $add_data->updateAny('assets', $data, 'asset_id', $asset_id);
         if($add_data){
-            //update asset number
-            //fetch last inserted
-            $fetch_last = new selects();
-            $ids = $fetch_last->fetch_lastInserted('assets', 'asset_id');
-            $asset_id = $ids->asset_id;
-            //fetch asset account
-            $fetch_assets = new selects();
-            $count = $fetch_assets->fetch_count('assets');
-            $new_asset_no = $asset_no.$asset_id;
-            $update_asset = new Update_table();
-            $update_asset->update('assets', 'asset_no', 'asset_id', $new_asset_no, $asset_id);
-            
             //check if asset is a land asset and also add to field table.
-            if($ledger_name == "LAND AND BUILDING"){
-                $field_data = array(
-                    'asset_id' => $asset_id,
-                    'field_name' => $asset,
-                    'purchase_cost' => $cost,
-                    'created_by' => $user,
-                    'created_at' => $date
-                );
-                $add_field = new add_data('fields', $field_data);
-                $add_field->create_data();
+            //check if asset exists in field table before
+            $field_exists = $get_details->fetch_count_cond('fields', 'asset_id', $asset_id);
+            if($field_exists > 0){
+                //update purchase cost
+                $update_field = new Update_table();
+                $update_field->update_double('fields', 'purchase_cost', $cost, 'field_name',$asset, 'asset_id', $asset_id);
+            }else{
+                //add new record
+                if($ledger_name == "LAND AND BUILDING"){
+                    $field_data = array(
+                        'asset_id' => $asset_id,
+                        'field_name' => $asset,
+                        'purchase_cost' => $cost,
+                        'created_by' => $user,
+                        'created_at' => $date
+                    );
+                    $add_field = new add_data('fields', $field_data);
+                    $add_field->create_data();
+                }
             }
 
-            echo "<div class='success'><p>$asset added successfully <i class='fas fa-thumbs-up'></i></p></div>";
+            echo "<div class='success'><p>$asset updated successfully <i class='fas fa-thumbs-up'></i></p></div>";
         }
     }
     

@@ -10,7 +10,7 @@
 
     //allocate asset
     $update_expense = new Update_table();
-    $update_expense->update('assets', 'location', 'asset_id',$location, $id);
+    $update_expense->update('assets', 'location', 'asset_id', $location, $id);
     if($update_expense){
         echo "<div class='success'><p>Asset Allocated successfully!</p></div>";
     }

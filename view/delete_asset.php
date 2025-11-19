@@ -55,8 +55,8 @@ session_start();
                     <?php
                         //get location
                         $get_cat_name = new selects();
-                        $cat_name = $get_cat_name->fetch_details_group('asset_locations', 'location', 'location_id', $detail->location);
-                        echo $cat_name->location;
+                        $cat_name = $get_cat_name->fetch_details_group('stores', 'store', 'store_id', $detail->location);
+                        echo $cat_name->store;
                     ?>
                 </td>
                 <td class="prices">
