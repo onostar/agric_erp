@@ -11,6 +11,9 @@ $customer = htmlspecialchars(stripslashes($_POST['customer']));
 $duration = htmlspecialchars(stripslashes($_POST['duration']));
 $payment_duration = htmlspecialchars(stripslashes($_POST['payment_duration']));
 $purchase_cost = htmlspecialchars(stripslashes($_POST['purchase_cost']));
+$discount = htmlspecialchars(stripslashes($_POST['discount']));
+$total_due = htmlspecialchars(stripslashes($_POST['total_due']));
+$documentation = htmlspecialchars(stripslashes($_POST['documentation']));
 $rent_percentage = htmlspecialchars(stripslashes($_POST['rent_percentage']));
 $annual_rent = htmlspecialchars(stripslashes($_POST['annual_rent']));
 $start = htmlspecialchars(stripslashes($_POST['start_date']));
@@ -34,6 +37,9 @@ $assign_data = array(
     'payment_duration' => $payment_duration,
     'installment' => $installment_amount,
     'purchase_cost' => $purchase_cost,
+    'discount' => $discount,
+    'total_due' => $total_due,
+    'documentation' => $documentation,
     'rent_percentage' => $rent_percentage,
     'annual_rent' => $annual_rent,
     'start_date' => $start,
@@ -121,6 +127,9 @@ if($update){
     // formatting
     $install_amount_fmt = number_format($installment_amount, 2);
     $purchase_fmt = number_format($purchase_cost, 2);
+    $discount_fmt = number_format($discount, 2);
+    $due_fmt = number_format($total_due, 2);
+    $doc_fmt = number_format($documentation, 2);
     $annual_rent_fmt = number_format($annual_rent, 2);
 
     // build purchase message
@@ -134,6 +143,9 @@ if($update){
         <li><strong>Location:</strong> $location</li>
         <li><strong>Size:</strong> $size Hectares</li>
         <li><strong>Purchase Cost:</strong> ₦$purchase_fmt</li>
+        <li><strong>Discount applied:</strong> ₦$discount_fmt</li>
+        <li><strong>Total Due:</strong> ₦$due_fmt</li>
+        <li><strong>Documentation Fee:</strong> ₦$doc_fmt</li>
         <li><strong>Contract Duration:</strong> $duration year(s)</li>
         <li><strong>Annual Rent/Return:</strong> ₦$annual_rent_fmt ($rent_percentage%)</li>
         <li><strong>Installment Amount:</strong> ₦$install_amount_fmt</li>
@@ -143,13 +155,13 @@ if($update){
 
     <p>Once all installments are completed, your contract will be marked as <strong>fully purchased</strong> and you will begin to receive your <strong>annual rent/returns</strong> according to the agreed rate and contract duration.</p>
 
-    <p>You can log in to your <strong>Customer Portal</strong> anytime to track your payments, field details, and rent status.</p>
+    <p>You can log in to your <strong><a href='davidorlah.dorthprosuite.com/client_portal'>Customer Portal</a></strong> anytime to track your payments, field details, and rent status.</p>
 
     <br>
     <p>Thank you for investing with <strong>Davidorlah Farms</strong>.</p>
     <p>Warm regards,<br>
     <strong>Farm Management Team</strong><br>
-    Onostar Media</p>";
+    Davidorlah Nigeria Limited</p>";
 
     // notification
     $notif_data = array(

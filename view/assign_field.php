@@ -36,7 +36,7 @@
             <?php
                 $n = 1;
                 $get_details = new selects();
-                $details = $get_details->fetch_details_condorder('fields', 'customer', 0,'field_name');
+                $details = $get_details->fetch_fields();
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
@@ -61,7 +61,7 @@
                 <td>
                     <?php 
                         //convert to square meters
-                        $sqm = $detail->field_size * 10000;
+                        $sqm = $detail->field_size * 7500;
                         echo $detail->field_size." (".number_format($sqm)." m&sup2;)";
                     ?>
                 </td>

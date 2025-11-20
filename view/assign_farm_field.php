@@ -33,13 +33,13 @@
         <button onclick="showPage('add_customer.php')">Add New Customer <i class="fas fa-user-plus"></i></button>
         <div class="clear"></div>
     </div>
-    <div class="add_user_form priceForm" style="margin:10px 20px; width:50%;">
+    <div class="add_user_form priceForm" style="margin:10px 20px; width:70%;">
         <h3 style="background:var(--tertiaryColor)">Assign "<?php echo strtoupper($row->field_name)?>" to client</h3>
         <form style="text-align:left;">
             <div class="inputs" style="flex-wrap:wrap; gap:1rem; justify-content:left">
                 <!-- <div class="data item_head"> -->
                     <input type="hidden" name="field_id" id="field_id" value="<?php echo $id?>" required>
-                <div class="data" style="width:100%">
+                <div class="data" style="width:61%">
                     <label for="customer">Client</label>
                     <input type="text" name="item" id="item" value="<?php echo $customer?>" oninput="getFieldOwners(this.value)" placeholder="Search client name">
                     <div class="search_results" id="search_results" style="position:relative;">
@@ -47,7 +47,7 @@
                     </div>
                     <input type="hidden" id="customer" name="customer" value="<?php echo$row->customer?>">
                 </div>
-                <div class="data">
+                <div class="data" style="width:35%">
                     <label for="duration">Contact Duration</label>
                     <select name="duration" id="duration">
                         <option value="" selected disabled>Select Contract Duration</option>
@@ -58,12 +58,20 @@
                     
                 </div>
                
-                <div class="data">
-                    <label for="rent">Purchase Cost (NGN)</label>
-                    <input type="text" value="<?php echo number_format($row->purchase_cost,2)?>" readonly>
-                    <input type="hidden" id="purchase_cost" name="purchase_cost" value="<?php echo $row->purchase_cost?>">
+                <div class="data" style="width:31%">
+                    <label for="purchase_cost">Purchase Amount (NGN)</label>
+                    <input type="number" id="purchase_cost" name="purchase_cost" value="0.00" required oninput="getTotalDue()">
                 </div>
-                 <div class="data">
+                <div class="data" style="width:31%">
+                    <label for="discount">Discount (NGN)</label>
+                    <input type="number" id="discount" name="discount" value="0.00" required oninput="getTotalDue()">
+                </div>
+                <div class="data" style="width:31%">
+                    <label for="total_due">Total Due (NGN)</label>
+                    <input type="text" id="due" name="due" value="0.00" style="background:#fdfdfd;color:#222" readonly>
+                    <input type="hidden" id="total_due" name="total_due" value="0.00" readonly>
+                </div>
+                 <div class="data" style="width:31%">
                     <label for="payment_duration">Purchase Payment Duration</label>
                     <select name="payment_duration" id="payment_duration" onchange="calculateInstallments()">
                         <option value="" selected disabled>Select Payment Duration</option>
@@ -74,12 +82,12 @@
                     </select>
                 </div>
                 
-                <div class="data">
+                <div class="data" style="width:31%">
                     <label for="installments">Installment Amount (NGN)</label>
                     <input type="text" id="install" name="install" style="background:#fff; color:green" value="0.00" readonly>
                     <input type="hidden" id="installment_amount" name="installment_amount">
                 </div>
-                <div class="data">
+                <div class="data" style="width:31%">
                     <label for="rent_percentage">Rent Percentage (%)</label>
                     <select name="rent_percentage" id="rent_percentage" onchange="calculateRent()">
                         <option value="" selected disabled>Select Rent percentage</option>
@@ -87,12 +95,16 @@
                         <option value="36">36%</option>
                     </select>
                 </div>
-                <div class="data">
+                <div class="data" style="width:31%">
                     <label for="annual_rent">Annual Rent</label>
                     <input type="text" id="rent" name="rent" style="background:#fff; color:green" value="0.00" readonly>
                     <input type="hidden" id="annual_rent" name="annual_rent">
                 </div>
-                <div class="data">
+                <div class="data" style="width:31%">
+                    <label for="documentation">Documentation Fee (NGN)</label>
+                    <input type="number" id="documentation" name="documentation" required>
+                </div>
+                <div class="data" style="width:31%">
                     <label for="start_date">Start Date</label>
                     <input type="date" id="start_date" name="start_date">
                 </div>

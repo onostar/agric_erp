@@ -7063,11 +7063,14 @@ function assignField(){
      let customer = document.getElementById("customer").value;
      let duration = document.getElementById("duration").value;
      let purchase_cost = document.getElementById("purchase_cost").value;
+     let discount = document.getElementById("discount")?.value || 0;
+     let total_due = document.getElementById("total_due").value;
      let payment_duration = document.getElementById("payment_duration").value;
      let annual_rent = document.getElementById("annual_rent").value;
      let rent_percentage = document.getElementById("rent_percentage").value;
      let start_date = document.getElementById("start_date").value;
      let installment_amount = document.getElementById("installment_amount").value;
+     let documentation = document.getElementById("documentation").value;
      let today = new Date();
      let start = new Date(start_date);
      if(customer.length == 0 || customer.replace(/^\s+|\s+$/g, "").length == 0){
@@ -7077,6 +7080,14 @@ function assignField(){
      }else if(!duration){
           alert("Please select contract duration!");
           $("#duration").focus();
+          return;
+     }else if(!total_due || parseFloat(total_due) <= 0){
+          alert("Please input purchase amount!");
+          $("#purchase_cost").focus();
+          return;
+     }else if(!documentation || parseFloat(documentation) <= 0){
+          alert("Please input documentation fee!");
+          $("#documentation").focus();
           return;
      }else if(!payment_duration){
           alert("Please select purchase payment duration!");
@@ -7106,7 +7117,7 @@ function assignField(){
           $.ajax({
                type : "POST",
                url : "../controller/assign_field.php",
-               data : {field_id:field_id, customer:customer, duration:duration, purchase_cost:purchase_cost, payment_duration:payment_duration, rent_percentage:rent_percentage, annual_rent:annual_rent, start_date:start_date, installment_amount:installment_amount},
+               data : {field_id:field_id, customer:customer, duration:duration, purchase_cost:purchase_cost, discount:discount, total_due:total_due,payment_duration:payment_duration, rent_percentage:rent_percentage, annual_rent:annual_rent, documentation:documentation, start_date:start_date, installment_amount:installment_amount},
                beforeSend: function(){
                     $("#farm_fields").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -8933,12 +8944,13 @@ function takeStaff(id, name){
 //calculateannual rentfromcost of purchase and percentagge
 function calculateRent(){
     
-     let purchase_cost = parseFloat(document.getElementById("purchase_cost").value);
+     // let purchase_cost = parseFloat(document.getElementById("purchase_cost").value);
+     let total_due = parseFloat(document.getElementById("total_due").value);
      let rent_percentage = document.getElementById("rent_percentage").value;
      let annual_rent = document.getElementById("annual_rent");
      let rent = document.getElementById("rent");
      
-     let total = rent_percentage * purchase_cost / 100;
+     let total = rent_percentage * total_due / 100;
      annual_rent.value = total;
      rent.value = total.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });;
      
@@ -8981,7 +8993,8 @@ function calculateRent(){
 } */
 function calculateInstallments(){
      let payment_duration = parseFloat(document.getElementById("payment_duration").value);
-     let purchase_cost = parseFloat(document.getElementById("purchase_cost").value);
+     // let purchase_cost = parseFloat(document.getElementById("purchase_cost").value);
+     let total_due = parseFloat(document.getElementById("total_due").value);
   
      let install = document.getElementById("install");
      let installment_amount = document.getElementById("installment_amount");
@@ -8990,6 +9003,10 @@ function calculateInstallments(){
           $("#payment_duration").focus();
           $("#installment_amount").val('');
           $("#install").val('0.00');
+          return;
+     }else if(!total_due || total_due <= 0){
+          alert("Total due must be greater than 0");
+          $("purchase_cost").focus();
           return;
      }else{
           // Calculate total number of installments based on duration in MONTHS
@@ -9005,13 +9022,30 @@ function calculateInstallments(){
                installments = 1;
           }
           //installment amountss
-          let installment_pay = purchase_cost /installments;
+          let installment_pay = total_due /installments;
         
           installment_amount.value = installment_pay;
           install.value = installment_pay.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });;
      }
 }
+//calculate total due based on purchase cost and discount
+function getTotalDue(){
+     let purchase_cost = parseFloat(document.getElementById("purchase_cost").value);
+     let discount = parseFloat(document.getElementById("discount")?.value || 0);
+     let total_due = document.getElementById("total_due");
+     let due = document.getElementById("due");
+     
+     let total = purchase_cost - discount;
+     total_due.value = total;
+     due.value = total.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });;
+     $("#payment_duration").val('');
+     $("#install").val('');
+     $("#installment_amount").val('');
+     $("#rent_percentage").val('');
+     $("#rent").val('');
+     $("#annual_rent").val('');
 
+}
 //rent repayment
 function payRent(){
      let invoice = document.getElementById("invoice").value;
