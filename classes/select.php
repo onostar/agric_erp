@@ -1404,6 +1404,19 @@ public function fetch_suspension_days($staff){
                 return $rows;
             }
         }
+        //fetch land for assignment
+        public function fetch_customer_due_fields($customer){
+            $get_user = $this->connectdb()->prepare("SELECT fields.field_name, fields.field_size, fields.field_id, assigned_fields.contract_status, assigned_fields.assigned_id, assigned_fields.total_due FROM fields, assigned_fields WHERE fields.customer = :customer AND assigned_fields.contract_status = 1 AND assigned_fields.field = fields.field_id ORDER BY fields.field_name");
+            $get_user->bindValue("customer", $customer);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch sales order from two selected date
         public function fetch_salesOrderDate($from, $to, $store){
             $get_user = $this->connectdb()->prepare("SELECT SUM(total_amount) AS total, invoice, posted_by, post_date FROM sales WHERE sales_status = 1 AND store = :store AND date(post_date) BETWEEN '$from' AND '$to' GROUP BY invoice ORDER BY post_date");
