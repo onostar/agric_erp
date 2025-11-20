@@ -9230,3 +9230,50 @@ function removeLeaves(){
           })
      }
 }
+
+//upload receip/evidence of payment
+function uploadReceipt(){
+     let assigned_id = document.getElementById("assigned_id").value;
+     let customer = document.getElementById("customer").value;
+     let receipt = document.getElementById("receipt").value;
+     let amount = document.getElementById("amount").value;
+     let remark = document.getElementById("remark").value;
+     if(receipt.length == 0 || receipt.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please upload receipt!");
+          $("#receipt").focus();
+          return;
+     }else if(amount.length == 0 || amount.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter amount paid!");
+          $("#amount").focus();
+          return;
+     }else if(parseFloat(amount) <= 0){
+          alert("Amount paid must be greater than zero!");
+          $("#amount").focus();
+          return;
+     }else{
+          var fd = new FormData();
+          var files = $('#receipt')[0].files[0];
+          fd.append('receipt',files);
+          fd.append('assigned_id',assigned_id);
+          fd.append('customer',customer);
+          fd.append('amount',amount);
+          fd.append('remark',remark);
+          $.ajax({
+               type : "POST",
+               url : "../controller/upload_receipt.php",
+               data: fd,
+               contentType: false,
+               processData: false,
+               beforeSend: function(){
+                    $("#upload_receipt_div").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#upload_receipt_div").html(response);
+                    setTimeout(function(){
+                         showPage("upload_payment.php")
+                    }, 2000);
+               }
+          })
+     }
+     return false;    
+}

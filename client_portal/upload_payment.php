@@ -26,6 +26,7 @@
                 <td>Field</td>
                 <td>Field Size (Hec)</td>
                 <td>Purchase Amount</td>
+                <td>Total Paid</td>
                 <td>Amount Due</td>
                 <td></td>
             </tr>
@@ -44,13 +45,47 @@
                 
                 <td style="color:var(--otherColor)"><?php echo $detail->field_size?></td>
                 <td><?php echo "₦".number_format($detail->total_due, 2)?></td>
-                <td>
+                <td style="color:green;">
+                    <?php
+                        //get total paid amount
+                        $paid = $get_details->fetch_sum_double('field_payment_schedule', 'amount_paid', 'payment_status', 0, 'assigned_id', $detail->assigned_id);
+                        if(is_array($paid)){
+                            foreach($paid as $pay){
+                                $amount_paid = $pay->total;
+                            }
+                        }else{
+                            $amount_paid = 0;
+                        }
+                        echo "₦".number_format($amount_paid, 2);
+                    ?>
+                </td>
+                <td style="color:red;">
                     <?php
                         //get amount due from payment shedule
+                         //balance
+                       $oweds = $get_details->fetch_sum_double('field_payment_schedule', 'amount_due', 'payment_status', 0, 'assigned_id', $detail->assigned_id);
+                       if(is_array($oweds)){
+                           foreach($oweds as $owed){
+                               $balance_due = $owed->total;
+                           }
+                        }else{
+                            $balance_due = 0;
+                        }
+                        //get total paid amount
+                        $paid = $get_details->fetch_sum_double('field_payment_schedule', 'amount_paid', 'payment_status', 0, 'assigned_id', $detail->assigned_id);
+                        if(is_array($paid)){
+                            foreach($paid as $pay){
+                                $amount_paid = $pay->total;
+                            }
+                        }else{
+                            $amount_paid = 0;
+                        }
+                        $debt = $balance_due - $amount_paid;
+                        echo "₦".number_format($debt, 2);
                     ?>
                 </td>
                 <td>
-                    <a href="javascript:void(0)" onclick="showPage('upload_receipt.php?assignment=<?php echo $detail->assign_id?>')" style="color:#fff; background:var(--primaryColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;" title="upload payment receipt">Upload <i class="fas fa-upload"></i></a>
+                    <a href="javascript:void(0)" onclick="showPage('upload_receipt.php?assigned_id=<?php echo $detail->assigned_id?>')" style="color:#fff; background:var(--otherColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #222; border-radius:15px;" title="upload payment receipt">Add Payment <i class="fas fa-upload"></i></a>
                     
                 </td>
                 
