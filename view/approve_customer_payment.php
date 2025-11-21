@@ -93,7 +93,8 @@
                     <?php echo date("d-M-Y, h:ia", strtotime($detail->upload_date))?>
                 </td>
                 <td>
-                    <a href="../receipts/<?php echo $detail->evidence?>" target=" _blank"style="color:#fff; background:var(--otherColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #222; border-radius:15px;" title="upload payment receipt">View <i class="fas fa-eye"></i></a>
+                    <a href="../receipts/<?php echo $detail->evidence?>" target=" _blank"style="color:#fff; background:var(--otherColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #222; border-radius:15px;" title="view payment evidence">View <i class="fas fa-eye"></i></a>
+                    <a href="javascript:void(0)" onclick="showPage('approve_payment.php?assigned_id=<?php echo $detail->assigned_id?>&payment_id=<?php echo $detail->payment_id?>')" style="color:#fff; background:var(--tertiaryColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #222; border-radius:15px;" title="approve payment">Approve <i class="fas fa-check"></i></a>
                     
                 </td>
                 
