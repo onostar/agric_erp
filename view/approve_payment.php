@@ -5,14 +5,15 @@
         $user = $_SESSION['user_id'];
     include "../classes/dbh.php";
     include "../classes/select.php";
-    if(isset($_GET['customer'])){
+    if(isset($_GET['assigned_id']) && isset($_GET['customer'])){
         $customer_id = htmlspecialchars(stripslashes($_GET['customer']));
+        $assigned_id = htmlspecialchars(stripslashes($_GET['assigned_id']));
     //get customer details
     $get_details = new selects();
     $cus = $get_details->fetch_details_group('customers', 'customer', 'customer_id', $customer_id);
     $client = $cus->customer;
     //check for current loan
-    $rows = $get_details->fetch_details_2cond('assigned_fields', 'customer', 'contract_status', $customer_id, 1);
+    $rows = $get_details->fetch_details_cond('assigned_fields', 'assigned_id', $assigned_id);
     if(is_array($rows)){
         foreach($rows as $row){
             $loan = $row->assigned_id;
@@ -21,7 +22,7 @@
 
 ?>
 <div class="info" style="margin:0!important; width:90%!important"></div>
-<a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222; position:fixed" href="javascript:void(0)" onclick="showPage('post_field_payment.php')"><i class="fas fa-angle-double-left"></i> Return</a>
+<a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222; position:fixed" href="javascript:void(0)" onclick="showPage('approve_customer_payment.php')"><i class="fas fa-angle-double-left"></i> Return</a>
     <div class="displays allResults" style="width:100%;">
     <section id="prescriptions">
             <div class="add_user_form" style="margin:0!important;width:100%!important">
@@ -45,11 +46,19 @@
                             <input type="text" value="<?php echo '₦'.number_format($row->purchase_cost, 2)?>" readonly style="color:green">
                         </div>
                         <div class="data" style="width:24%;">
+                            <label for="amount" style="text-align:left!important;">Discount (₦)</label>
+                            <input type="text" value="<?php echo '₦'.number_format($row->discount, 2)?>" readonly style="color:green">
+                        </div>
+                        <div class="data" style="width:24%;">
+                            <label for="amount" style="text-align:left!important;">Total Payable (₦)</label>
+                            <input type="text" value="<?php echo '₦'.number_format($row->total_due, 2)?>" readonly style="color:green">
+                        </div>
+                        <div class="data" style="width:24%;">
                             <label for="purpose" style="text-align:left!important;">Purchase Date:</label>
                             <input type="text" value="<?php echo date("d-M-Y, h:ia", strtotime($row->assigned_date))?>" readonly>
                         </div>
                         <div class="data" style="width:24%;">
-                            <label for="purpose" style="text-align:left!important;">Start Date:</label>
+                            <label for="purpose" style="text-align:left!important;">Contract Start Date:</label>
                             <input type="text" value="<?php echo date("d-M-Y, h:ia", strtotime($row->start_date))?>" readonly>
                         </div>
                         
@@ -64,10 +73,10 @@
                             ?>
                             <input type="text" value="<?php echo $pay_duration?> " readonly>
                         </div>
-                        <div class="data" style="width:24%;">
+                        <!-- <div class="data" style="width:24%;">
                             <label for=""> Installment:</label>
                             <input type="text" value="<?php echo '₦'.number_format($row->installment, 2)?>" readonly style="color:var(--otherColor)">
-                        </div>
+                        </div> -->
                         <div class="data" style="width:24%;">
                             <label for="repayment" style="text-align:left!important;">Rent Contract Duration</label>
                             <input type="text" value="<?php echo $row->contract_duration?> Years" readonly>
@@ -172,7 +181,7 @@
             }else{
                 ?>
                 <div class="not_available"><p><strong><i class="fas fa-exclamation-triangle" style="color: #cfb20e;"></i> No Active Field</strong><br>The selected customer have no active Field. Cannot proceed!</p>
-                <a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222;" href="javascript:void(0)" onclick="showPage('post_field_payment.php')"><i class="fas fa-angle-double-left"></i> Return</a></div>
+                <a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222;" href="javascript:void(0)" onclick="showPage('approve_customer_payment.php')"><i class="fas fa-angle-double-left"></i> Return</a></div>
         <?php
             }
         }
