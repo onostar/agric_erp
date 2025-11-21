@@ -2,6 +2,7 @@
     session_start();
     date_default_timezone_set("Africa/Lagos");
     $user = $_SESSION['user_id'];
+    $store = $_SESSION['store_id'];
     $date = date("Y-m-d H:i:s");
     $customer = htmlspecialchars(stripslashes($_POST['customer']));
     $assigned_id = htmlspecialchars(stripslashes($_POST['assigned_id']));
@@ -45,7 +46,8 @@
         'remark' => $remark,
         'upload_date' => $date,
         'field' => $field,
-        'posted_by' => $user
+        'posted_by' => $user,
+        'store' => $store
     );
    
 
