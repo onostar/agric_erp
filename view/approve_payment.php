@@ -5,13 +5,23 @@
         $user = $_SESSION['user_id'];
     include "../classes/dbh.php";
     include "../classes/select.php";
-    if(isset($_GET['assigned_id']) && isset($_GET['customer'])){
-        $customer_id = htmlspecialchars(stripslashes($_GET['customer']));
+    if(isset($_GET['assigned_id']) && isset($_GET['payment'])){
+        $payment_id = htmlspecialchars(stripslashes($_GET['payment']));
         $assigned_id = htmlspecialchars(stripslashes($_GET['assigned_id']));
+        //get customers from payment evidence
+        $get_details = new selects();
+        $pays = $get_details->fetch_details_cond('payment_evidence', 'payment_id', $payment_id);
+        foreach($pays as $pay){
+            $customer_id = $pay->customer;
+            $amount = $pay->amount;
+        }
+
     //get customer details
-    $get_details = new selects();
-    $cus = $get_details->fetch_details_group('customers', 'customer', 'customer_id', $customer_id);
-    $client = $cus->customer;
+    $cus = $get_details->fetch_details_cond('customers', 'customer_id', $customer_id);
+    foreach($cus as $cu){
+        $client = $cu->customer;
+        $acn = $cu->acn;
+    }
     //check for current loan
     $rows = $get_details->fetch_details_cond('assigned_fields', 'assigned_id', $assigned_id);
     if(is_array($rows)){
@@ -97,7 +107,144 @@
                 </section>   
             </div>
         </section>
-        <section style="width:100%">
+        <!-- payment form -->
+        <?php
+        //get latest schedule
+        $schedules = $get_details->fetch_details_2condLimitAsc('field_payment_schedule', 'assigned_id', $assigned_id, 'payment_status', 0, 1, 'repayment_id');
+        if(is_array($schedules)){
+            foreach($schedules as $schedule){
+                $schedule_id = $schedule->repayment_id;
+            }
+        }
+        //generate deposit receipt
+        //get current date
+        $todays_date = date("dmyhi");
+        $ran_num ="";
+        for($i = 0; $i < 3; $i++){
+            $random_num = random_int(0, 3);
+            $ran_num .= $random_num;
+        }
+        $receipt_id = "LP".$todays_date.$ran_num.$user.$schedule_id;
+        //get balance from transactions
+        $bals = $get_details->fetch_account_balance($acn);
+        if(gettype($bals) == 'array'){
+            foreach($bals as $bal){
+                $balance = $bal->balance;
+            }
+        }
+        //get loan details
+        $lns = $get_details->fetch_details_cond('field_payment_schedule', 'repayment_id', $schedule_id);
+        foreach($lns as $lns){
+            $amount_due = $lns->amount_due;
+            $payment_status = $lns->payment_status;
+        }
+       //get total paid
+       $ttls = $get_details->fetch_sum_single('field_payment_schedule', 'amount_paid', 'assigned_id', $assigned_id);
+       if(gettype($ttls) == 'array'){
+            foreach($ttls as $ttl){
+                $total_paid = $ttl->total;
+            }
+        }else{
+            $total_paid = 0;
+        }
+       //get total due
+       $ttlx = $get_details->fetch_sum_single('field_payment_schedule', 'amount_due', 'assigned_id', $assigned_id);
+       if(gettype($ttlx) == 'array'){
+            foreach($ttlx as $ttx){
+                $total_due = $ttx->total;
+            }
+        }else{
+            $total_due = 0;
+        }
+        //
+        $debt = $total_due - $total_paid;
+
+?>
+
+
+    <div class="fund_account" style="width:100%; margin:5px 0;">
+        <h3 style="background:var(--labColor); text-align:left">Post customer field payments</h3>
+        <!-- <form method="POST" id="addUserForm"> -->
+        <div class="details_forms">
+            <section class="addUserForm">
+                <div class="inputs" style="flex-wrap:wrap">
+                    <input type="hidden" name="invoice" id="invoice" value="<?php echo $receipt_id?>">
+                    <input type="hidden" name="posted" id="posted" value="<?php echo $user_id?>">
+                    <input type="hidden" name="customer" id="customer" value="<?php echo $customer_id?>">
+                    <input type="hidden" name="payment_id" id="payment_id" value="<?php echo $payment_id?>">
+                    <input type="hidden" name="balance" id="balance" value="<?php echo $debt?>">
+                    <input type="hidden" name="store" id="store" value="<?php echo $store?>">
+                    <input type="hidden" name="schedule" id="schedule" value="<?php echo $schedule_id?>">
+                    
+                    <div class="data" style="width:100%; margin:5px 0">
+                        <label for="amount"> Transaction Date</label>
+                        <input type="date" name="trans_date" id="trans_date" value="<?php echo date('Y-m-d')?>">
+                    </div>
+                    <div class="data" style="width:50%; margin:5px 0">
+                        <label for="amount"> Amount paid</label>
+                        <input type="text"  readonly value="<?php echo "₦" . number_format($amount, 2)?>">
+                        <input type="hidden" name="amount" id="amount" value="<?php echo $amount?>">
+                    </div>
+                    <div class="data" style="width:45%">
+                        <label for="Payment_mode"><span class="ledger">Dr. Ledger</span> (Cash/Bank)</label>
+                        <select name="payment_mode" id="payment_mode" onchange="checkMode(this.value)">
+                            <option value=""selected>Select payment option</option>
+                            <option value="Cash">Cash</option>
+                            <option value="POS">POS</option>
+                            <option value="Transfer">Transfer</option>
+                        </select>
+                    </div>
+                    <div class="data" id="selectBank"  style="width:100%!important">
+                        <select name="bank" id="bank">
+                            <option value=""selected>Select Bank</option>
+                            <?php
+                                $get_bank = new selects();
+                                $rows = $get_bank->fetch_details('banks', 10, 10);
+                                foreach($rows as $row):
+                            ?>
+                            <option value="<?php echo $row->bank_id?>"><?php echo $row->bank?></option>
+                            <?php endforeach?>
+                        </select>
+                    </div>
+                    <div class="data" style="width:100%; margin:5px 0">
+                        <label for="details"> Description</label>
+                        <textarea name="details" id="details" cols="30" rows="5" placeholder="Enter a detailed description of the transaction"></textarea>
+                    </div>
+                    <div class="data" style="width:50%; margin:5px 0">
+                        <button type="submit" id="post_exp" name="post_exp" onclick="payField('package')">Post payment <i class="fas fa-cash-register"></i></button>
+                    </div>
+                </div>
+            </section>
+            <section class="customer_details" style="height:100%;">
+                <div class="inputs">
+                    <div class="data">
+                        <label for="customer_id">Customer ID:</label>
+                        <input type="text" value="<?php echo $acn?>">
+                    </div>
+                    <div class="data">
+                        <label for="customer_name"><span class="ledger" style="color:#fff">Cr. Ledger</span> (Client):</label>
+                        <input type="text" value="<?php echo $client?>">
+                    </div>
+                    <?php if($balance >= 0){?>
+                    <div class="data">
+                        <label for="balance">Account balance:</label>
+                        <input type="text" value="<?php echo "₦".number_format($balance, 2)?>" style="color:red;">
+                    </div>
+                    <?php }else{?>
+                    <div class="data">
+                        <label for="balance">Account balance:</label>
+                        <input type="text" value="<?php echo "₦".number_format(0, 2)?>" style="color:green;">
+                    </div>
+                    <?php }?>
+                    <div class="data">
+                        <label for="balance">Payment Due:</label>
+                        <input type="text" value="<?php echo "₦".number_format($debt, 2)?>" style="color:red;">
+                    </div>
+                </div>
+            </section> 
+        </div>
+    </div>
+       <!--  <section style="width:100%">
              <h3 style="background:var(--labColor); text-align:center; color:#fff; font-size:.9rem;padding:5px;">Payment Schedule</h3>
             <div class="displays allResults" style="width:100%!important; margin:0!important">
                 <table id="item_list_table" class="searchTable">
@@ -172,7 +319,7 @@
                     </div>
                 
             </div>
-        </section>
+        </section> -->
     </div>
     
 </div>

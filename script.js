@@ -4015,18 +4015,13 @@ function customerDeposit(){
 
 // prinit deposit receipt for fund wallet
 function printDepositReceipt(invoice){
-     window.open("../controller/deposit_receipt.php?receipt="+invoice);
-     // alert(item_id);
-     /* $.ajax({
-          type : "GET",
-          url : "../controller/sales_receipt.php?receipt="+invoice,
-          success : function(response){
-               $("#direct_sales").html(response);
-          }
-     }) */
-     /* setTimeout(function(){
-          $("#direct_sales").load("direct_sales.php #direct_sales");
-     }, 100); */
+     window.open("../controller/deposit_receipt.php?receipt="+invoice)
+     return false;
+ 
+ }
+// prinit receipt for customer land payment
+function printPaymentReceipt(invoice){
+     window.open("../controller/field_payment_receipt.php?receipt="+invoice)
      return false;
  
  }
@@ -9112,7 +9107,7 @@ function payRent(){
      }
 }
 //payment for field purchase
-function payField(){
+function payField(id){
      let invoice = document.getElementById("invoice").value;
      let posted = document.getElementById("posted").value;
      let trans_date = document.getElementById("trans_date").value;
@@ -9122,6 +9117,7 @@ function payField(){
      let schedule = document.getElementById("schedule").value;
      let amount = document.getElementById("amount").value;
      let payment_mode = document.getElementById("payment_mode").value;
+     let payment_id = document.getElementById("payment_id")?.value || 0;
      let details = document.getElementById("details").value;
      let bank = document.getElementById("bank").value;
      let todayDate = new Date();
@@ -9162,12 +9158,12 @@ function payField(){
                $.ajax({
                     type : "POST",
                     url : "../controller/pay_field_purchase.php",
-                    data : {posted:posted, customer:customer, schedule:schedule, payment_mode:payment_mode, amount:amount, details:details, store:store, invoice:invoice, bank:bank, trans_date:trans_date},
+                    data : {posted:posted, customer:customer, schedule:schedule, payment_mode:payment_mode, amount:amount, details:details, store:store, invoice:invoice, bank:bank, trans_date:trans_date, payment_id:payment_id},
                     beforeSend : function(){
-                         $("#fund_account").html("<div class='processing'><div class='loader'></div></div>");
+                         $("#"+id).html("<div class='processing'><div class='loader'></div></div>");
                     },
                     success : function(response){
-                    $("#fund_account").html(response);
+                         $("#"+id).html(response);
                     }
                })
                return false;   

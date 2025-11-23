@@ -6,6 +6,7 @@
     $customer = htmlspecialchars(stripslashes($_POST['customer']));
     $store = htmlspecialchars(stripslashes($_POST['store']));
     $mode = htmlspecialchars(stripslashes($_POST['payment_mode']));
+    $payment_id = htmlspecialchars(stripslashes($_POST['payment_id']));
     $amount = htmlspecialchars(stripslashes($_POST['amount']));
     $schedule = htmlspecialchars(stripslashes($_POST['schedule']));
     $bank = htmlspecialchars(stripslashes($_POST['bank']));
@@ -76,7 +77,7 @@
         //get loan details
         $loan_details = $get_details->fetch_details_cond('assigned_fields', 'assigned_id', $loan_id);
         foreach($loan_details as $loan){
-            $purchase_cost = $loan->purchase_cost;
+            $purchase_cost = $loan->total_due;
             $duration = $loan->contract_duration;
             $annual_rent = $loan->annual_rent;
             $field_id = $loan->field;
@@ -134,10 +135,17 @@
             'posted_by' => $user,
             'post_date' => $date,
             'trx_number' => $trx_num,
+            'trx_date' => $trans_date
             
         );
         $add_repayment = new add_data('field_payments', $repayment_data);
         $add_repayment->create_data();
+        //check if payment iscoming through payment evidence submitted
+        if($payment_id != 0){
+            //update payment evidence status to approved
+            $update_evidence = new Update_table();
+            $update_evidence->update_double('payment_evidence', 'payment_status', 1, 'trx_number', $trx_num, 'payment_id', $payment_id);
+        }
         //handle excess payment
         if($new_balance < 0) {
             $overpaid = -$new_balance;
@@ -343,7 +351,7 @@
         $add_processing_income = new add_data('other_income', $process_data);
         $add_processing_income->create_data(); */
         //check if all repayments have been paid and update loan status
-       
+        
         $check_repayments = $get_details->fetch_sum_single('field_payment_schedule', 'amount_paid', 'assigned_id', $loan_id);
         foreach($check_repayments as $rep){
             $total_loan_paid = $rep->total;
@@ -522,7 +530,7 @@
         
 ?>
     <div id="printBtn">
-        <button onclick="printDepositReceipt('<?php echo $receipt?>')">Print Receipt <i class="fas fa-print"></i></button>
+        <button onclick="printPaymentReceipt('<?php echo $receipt?>')">Print Receipt <i class="fas fa-print"></i></button>
     </div>
 <?php
 

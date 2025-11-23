@@ -118,7 +118,7 @@
                         <textarea name="details" id="details" cols="30" rows="5" placeholder="Enter a detailed description of the transaction"></textarea>
                     </div>
                     <div class="data" style="width:50%; margin:5px 0">
-                        <button type="submit" id="post_exp" name="post_exp" onclick="payField()">Post payment <i class="fas fa-cash-register"></i></button>
+                        <button type="submit" id="post_exp" name="post_exp" onclick="payField('fund_account')">Post payment <i class="fas fa-cash-register"></i></button>
                     </div>
                 </div>
             </section>

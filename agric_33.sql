@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 20, 2025 at 06:54 AM
+-- Generation Time: Nov 23, 2025 at 09:06 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -242,6 +242,7 @@ CREATE TABLE `assigned_fields` (
   `discount` decimal(12,2) NOT NULL,
   `total_due` decimal(12,2) NOT NULL,
   `documentation` decimal(12,2) NOT NULL,
+  `documentation_status` int(11) NOT NULL,
   `start_date` date DEFAULT NULL,
   `due_date` date DEFAULT NULL,
   `contract_status` int(11) NOT NULL,
@@ -253,12 +254,12 @@ CREATE TABLE `assigned_fields` (
 -- Dumping data for table `assigned_fields`
 --
 
-INSERT INTO `assigned_fields` (`assigned_id`, `field`, `customer`, `contract_duration`, `payment_duration`, `rent_percentage`, `annual_rent`, `installment`, `purchase_cost`, `discount`, `total_due`, `documentation`, `start_date`, `due_date`, `contract_status`, `assigned_by`, `assigned_date`) VALUES
-(8, 8, 9, 2, 0, 0.00, 5000000.00, 5000000.00, 10000000.00, 0.00, 0.00, 0.00, '2025-10-30', '2027-10-30', 1, 1, '2025-10-29 13:51:17'),
-(9, 7, 10, 3, 0, 0.00, 3000000.00, 3000000.00, 9000000.00, 0.00, 0.00, 0.00, '2025-11-01', '2028-11-01', 1, 1, '2025-10-31 12:00:55'),
-(12, 9, 10, 3, 1, 25.00, 3750000.00, 15000000.00, 15000000.00, 0.00, 0.00, 0.00, '2025-11-14', '2025-11-14', 2, 1, '2025-11-13 14:34:42'),
-(14, 10, 12, 5, 3, 36.00, 10800000.00, 10000000.00, 30000000.00, 0.00, 0.00, 0.00, '2025-11-21', '2026-01-21', 2, 1, '2025-11-14 12:10:08'),
-(15, 11, 10, 5, 3, 25.00, 6000000.00, 8000000.00, 25000000.00, 1000000.00, 24000000.00, 250000.00, '2025-11-28', '2026-01-28', 1, 1, '2025-11-20 06:41:05');
+INSERT INTO `assigned_fields` (`assigned_id`, `field`, `customer`, `contract_duration`, `payment_duration`, `rent_percentage`, `annual_rent`, `installment`, `purchase_cost`, `discount`, `total_due`, `documentation`, `documentation_status`, `start_date`, `due_date`, `contract_status`, `assigned_by`, `assigned_date`) VALUES
+(8, 8, 9, 2, 0, 0.00, 5000000.00, 5000000.00, 10000000.00, 0.00, 0.00, 0.00, 0, '2025-10-30', '2027-10-30', 1, 1, '2025-10-29 13:51:17'),
+(9, 7, 10, 3, 0, 0.00, 3000000.00, 3000000.00, 9000000.00, 0.00, 0.00, 0.00, 0, '2025-11-01', '2028-11-01', 1, 1, '2025-10-31 12:00:55'),
+(12, 9, 10, 3, 1, 25.00, 3750000.00, 15000000.00, 15000000.00, 0.00, 0.00, 0.00, 0, '2025-11-14', '2025-11-14', 2, 1, '2025-11-13 14:34:42'),
+(14, 10, 12, 5, 3, 36.00, 10800000.00, 10000000.00, 30000000.00, 0.00, 0.00, 0.00, 0, '2025-11-21', '2026-01-21', 2, 1, '2025-11-14 12:10:08'),
+(15, 11, 10, 5, 3, 25.00, 6000000.00, 8000000.00, 25000000.00, 1000000.00, 24000000.00, 250000.00, 0, '2025-11-28', '2026-01-28', 1, 1, '2025-11-20 06:41:05');
 
 -- --------------------------------------------------------
 
@@ -406,7 +407,11 @@ INSERT INTO `cash_flows` (`fow_id`, `account`, `destination`, `details`, `trx_nu
 (25, 1010228, 0, 'Field Purchase Payment', 'TR045131125085317', 666000.00, 'inflow', 'operating', 1, '2025-11-13 20:53:17', 1),
 (26, 1010228, 0, 'Field Purchase Payment', 'TR224141125123710', 50000.00, 'inflow', 'operating', 1, '2025-11-14 12:37:10', 1),
 (27, 1010228, 0, 'Field Purchase Payment', 'TR551141125124220', 20000000.00, 'inflow', 'operating', 1, '2025-11-14 12:42:20', 1),
-(28, 1010228, 0, 'asset purchase', 'TR592201125043620', 40000000.00, 'outflow', 'investing', 0, '2025-11-20 04:36:20', 1);
+(28, 1010228, 0, 'asset purchase', 'TR592201125043620', 40000000.00, 'outflow', 'investing', 0, '2025-11-20 04:36:20', 1),
+(29, 1010228, 0, 'Field Purchase Payment', 'TR148231125070742', 4000000.00, 'inflow', 'operating', 1, '2025-11-23 07:07:42', 0),
+(30, 1010228, 0, 'Field Purchase Payment', 'TR674231125072916', 3000000.00, 'inflow', 'operating', 1, '2025-11-23 07:29:16', 0),
+(31, 1010228, 0, 'Field Purchase Payment', 'TR818231125081235', 400000.00, 'inflow', 'operating', 1, '2025-11-23 08:12:35', 0),
+(32, 1010228, 0, 'Field Purchase Payment', 'TR635231125081532', 100000.00, 'inflow', 'operating', 1, '2025-11-23 08:15:32', 0);
 
 -- --------------------------------------------------------
 
@@ -599,7 +604,11 @@ INSERT INTO `customer_trail` (`id`, `customer`, `invoice`, `description`, `amoun
 (16, 12, '', 'Field Purchase Payment', 20000000.00, 'TR668141125122601', 1, 1, '2025-11-14 12:26:01'),
 (17, 12, '', 'Field Purchase Payment', 50000.00, 'TR224141125123710', 1, 1, '2025-11-14 12:37:10'),
 (18, 12, '', 'Field Purchase Payment', 19950000.00, 'TR693141125123840', 1, 1, '2025-11-14 12:38:40'),
-(19, 12, '', 'Field Purchase Payment', 20000000.00, 'TR551141125124220', 1, 1, '2025-11-14 12:42:20');
+(19, 12, '', 'Field Purchase Payment', 20000000.00, 'TR551141125124220', 1, 1, '2025-11-14 12:42:20'),
+(20, 10, '', 'Field Purchase Payment', 4000000.00, 'TR148231125070742', 1, 0, '2025-11-23 07:07:42'),
+(21, 10, '', 'Field Purchase Payment', 3000000.00, 'TR674231125072916', 1, 0, '2025-11-23 07:29:16'),
+(22, 10, '', 'Field Purchase Payment', 400000.00, 'TR818231125081235', 1, 0, '2025-11-23 08:12:35'),
+(23, 10, '', 'Field Purchase Payment', 100000.00, 'TR635231125081532', 1, 0, '2025-11-23 08:15:32');
 
 -- --------------------------------------------------------
 
@@ -715,7 +724,11 @@ INSERT INTO `deposits` (`deposit_id`, `store`, `customer`, `amount`, `payment_mo
 (12, 1, 12, 20000000.00, 'Cash', 0, 'LP1411251225101311154', 'TR668141125122601', 'Field Purchase Payment', 'Ghfghfgh', '2025-11-14', '2025-11-14 12:26:01', 1),
 (13, 1, 12, 50000.00, 'Cash', 0, 'LP1411251236002131155', 'TR224141125123710', 'Field Purchase Payment', 'Hjghjg', '2025-11-14', '2025-11-14 12:37:10', 1),
 (14, 1, 12, 19950000.00, 'Cash', 0, 'LP1411251238123121155', 'TR693141125123840', 'Field Purchase Payment', 'Jhghj', '2025-11-14', '2025-11-14 12:38:40', 1),
-(15, 1, 12, 20000000.00, 'Cash', 0, 'LP1411251242000301155', 'TR551141125124220', 'Field Purchase Payment', 'Ghfgh', '2025-11-14', '2025-11-14 12:42:20', 1);
+(15, 1, 12, 20000000.00, 'Cash', 0, 'LP1411251242000301155', 'TR551141125124220', 'Field Purchase Payment', 'Ghfgh', '2025-11-14', '2025-11-14 12:42:20', 1),
+(16, 1, 10, 4000000.00, 'Cash', 0, 'LP23112507071321157', 'TR148231125070742', 'Field Purchase Payment', 'Paid', '2025-11-23', '2025-11-23 07:07:42', 0),
+(17, 1, 10, 3000000.00, 'Cash', 0, 'LP23112507271021157', 'TR674231125072916', 'Field Purchase Payment', 'Jjjj', '2025-11-23', '2025-11-23 07:29:16', 0),
+(18, 1, 10, 400000.00, 'Cash', 0, 'LP23112508120331157', 'TR818231125081235', 'Field Purchase Payment', 'Lknkl', '2025-11-23', '2025-11-23 08:12:35', 0),
+(19, 1, 10, 100000.00, 'Cash', 0, 'LP23112508140331157', 'TR635231125081532', 'Field Purchase Payment', 'Nbvbbn', '2025-11-23', '2025-11-23 08:15:32', 0);
 
 -- --------------------------------------------------------
 
@@ -937,6 +950,7 @@ CREATE TABLE `field_payments` (
   `details` text NOT NULL,
   `invoice` varchar(50) NOT NULL,
   `bank` int(11) NOT NULL,
+  `trx_date` date DEFAULT NULL,
   `posted_by` int(11) NOT NULL,
   `post_date` datetime DEFAULT NULL,
   `trx_number` varchar(50) NOT NULL
@@ -946,19 +960,23 @@ CREATE TABLE `field_payments` (
 -- Dumping data for table `field_payments`
 --
 
-INSERT INTO `field_payments` (`payment_id`, `customer`, `store`, `loan`, `schedule`, `amount`, `interest`, `processing_fee`, `penalty`, `payment_mode`, `details`, `invoice`, `bank`, `posted_by`, `post_date`, `trx_number`) VALUES
-(1, 10, 1, 12, 150, 5000000, 0, 0, 0.00, 'Cash', 'Klqjkljd', 'LP1311250518110311150', 0, 1, '2025-11-13 17:18:47', 'TR542131125051847'),
-(2, 10, 1, 12, 150, 4000, 0, 0, 0.00, 'Cash', 'Gh', 'LP1311250623133031150', 0, 1, '2025-11-13 18:24:28', 'TR773131125062428'),
-(3, 10, 1, 12, 150, 30000, 0, 0, 0.00, 'Cash', 'Adfdf', 'LP1311250828220031150', 0, 1, '2025-11-13 20:32:33', 'TR239131125083233'),
-(4, 10, 1, 12, 150, 3000000, 0, 0, 0.00, 'Cash', 'Jkhjkhk', 'LP1311250835021011150', 0, 1, '2025-11-13 20:35:44', 'TR376131125083544'),
-(5, 10, 1, 12, 150, 3000000, 0, 0, 0.00, 'Cash', 'Da,sc', 'LP1311250838232011150', 0, 1, '2025-11-13 20:39:04', 'TR436131125083904'),
-(6, 10, 1, 12, 150, 300000, 0, 0, 0.00, 'Cash', 'Nmwdsfm,', 'LP1311250845330011150', 0, 1, '2025-11-13 20:46:05', 'TR625131125084605'),
-(7, 10, 1, 12, 150, 666000, 0, 0, 0.00, 'Cash', 'Nghhj', 'LP1311250853222031150', 0, 1, '2025-11-13 20:53:17', 'TR045131125085317'),
-(8, 12, 1, 14, 154, 10000000, 0, 0, 0.00, 'Cash', 'Ghfghfgh', 'LP1411251225101311154', 0, 1, '2025-11-14 12:26:01', 'TR668141125122601'),
-(9, 12, 1, 14, 155, 50000, 0, 0, 0.00, 'Cash', 'Hjghjg', 'LP1411251236002131155', 0, 1, '2025-11-14 12:37:10', 'TR224141125123710'),
-(10, 12, 1, 14, 155, 9950000, 0, 0, 0.00, 'Cash', 'Jhghj', 'LP1411251238123121155', 0, 1, '2025-11-14 12:38:40', 'TR693141125123840'),
-(11, 12, 1, 14, 155, 10000000, 0, 0, 0.00, 'Cash', 'Ghfgh', 'LP1411251242000301155', 0, 1, '2025-11-14 12:42:20', 'TR551141125124220'),
-(12, 12, 1, 14, 156, 10000000, 0, 0, 0.00, 'Cash', 'Excess from previous', 'LP1411251242000301155', 0, 1, '2025-11-14 12:42:20', 'TR551141125124220');
+INSERT INTO `field_payments` (`payment_id`, `customer`, `store`, `loan`, `schedule`, `amount`, `interest`, `processing_fee`, `penalty`, `payment_mode`, `details`, `invoice`, `bank`, `trx_date`, `posted_by`, `post_date`, `trx_number`) VALUES
+(1, 10, 1, 12, 150, 5000000, 0, 0, 0.00, 'Cash', 'Klqjkljd', 'LP1311250518110311150', 0, NULL, 1, '2025-11-13 17:18:47', 'TR542131125051847'),
+(2, 10, 1, 12, 150, 4000, 0, 0, 0.00, 'Cash', 'Gh', 'LP1311250623133031150', 0, NULL, 1, '2025-11-13 18:24:28', 'TR773131125062428'),
+(3, 10, 1, 12, 150, 30000, 0, 0, 0.00, 'Cash', 'Adfdf', 'LP1311250828220031150', 0, NULL, 1, '2025-11-13 20:32:33', 'TR239131125083233'),
+(4, 10, 1, 12, 150, 3000000, 0, 0, 0.00, 'Cash', 'Jkhjkhk', 'LP1311250835021011150', 0, NULL, 1, '2025-11-13 20:35:44', 'TR376131125083544'),
+(5, 10, 1, 12, 150, 3000000, 0, 0, 0.00, 'Cash', 'Da,sc', 'LP1311250838232011150', 0, NULL, 1, '2025-11-13 20:39:04', 'TR436131125083904'),
+(6, 10, 1, 12, 150, 300000, 0, 0, 0.00, 'Cash', 'Nmwdsfm,', 'LP1311250845330011150', 0, NULL, 1, '2025-11-13 20:46:05', 'TR625131125084605'),
+(7, 10, 1, 12, 150, 666000, 0, 0, 0.00, 'Cash', 'Nghhj', 'LP1311250853222031150', 0, NULL, 1, '2025-11-13 20:53:17', 'TR045131125085317'),
+(8, 12, 1, 14, 154, 10000000, 0, 0, 0.00, 'Cash', 'Ghfghfgh', 'LP1411251225101311154', 0, NULL, 1, '2025-11-14 12:26:01', 'TR668141125122601'),
+(9, 12, 1, 14, 155, 50000, 0, 0, 0.00, 'Cash', 'Hjghjg', 'LP1411251236002131155', 0, NULL, 1, '2025-11-14 12:37:10', 'TR224141125123710'),
+(10, 12, 1, 14, 155, 9950000, 0, 0, 0.00, 'Cash', 'Jhghj', 'LP1411251238123121155', 0, NULL, 1, '2025-11-14 12:38:40', 'TR693141125123840'),
+(11, 12, 1, 14, 155, 10000000, 0, 0, 0.00, 'Cash', 'Ghfgh', 'LP1411251242000301155', 0, NULL, 1, '2025-11-14 12:42:20', 'TR551141125124220'),
+(12, 12, 1, 14, 156, 10000000, 0, 0, 0.00, 'Cash', 'Excess from previous', 'LP1411251242000301155', 0, NULL, 1, '2025-11-14 12:42:20', 'TR551141125124220'),
+(13, 10, 1, 15, 157, 4000000, 0, 0, 0.00, 'Cash', 'Paid', 'LP23112507071321157', 0, NULL, 0, '2025-11-23 07:07:42', 'TR148231125070742'),
+(14, 10, 1, 15, 157, 3000000, 0, 0, 0.00, 'Cash', 'Jjjj', 'LP23112507271021157', 0, NULL, 0, '2025-11-23 07:29:16', 'TR674231125072916'),
+(15, 10, 1, 15, 157, 400000, 0, 0, 0.00, 'Cash', 'Lknkl', 'LP23112508120331157', 0, '2025-11-23', 0, '2025-11-23 08:12:35', 'TR818231125081235'),
+(16, 10, 1, 15, 157, 100000, 0, 0, 0.00, 'Cash', 'Nbvbbn', 'LP23112508140331157', 0, '2025-11-23', 0, '2025-11-23 08:15:32', 'TR635231125081532');
 
 -- --------------------------------------------------------
 
@@ -990,7 +1008,7 @@ INSERT INTO `field_payment_schedule` (`repayment_id`, `assigned_id`, `field`, `c
 (154, 14, 10, 12, 10000000.00, 10000000.00, 0.00, 1, '2025-11-21', 1, '2025-11-14 12:10:08', 1),
 (155, 14, 10, 12, 10000000.00, 10000000.00, 0.00, 1, '2025-12-21', 1, '2025-11-14 12:10:08', 1),
 (156, 14, 10, 12, 10000000.00, 10000000.00, 0.00, 1, '2026-01-21', 1, '2025-11-14 12:10:08', 1),
-(157, 15, 11, 10, 8000000.00, 0.00, 0.00, 1, '2025-11-28', 0, '2025-11-20 06:41:05', 1),
+(157, 15, 11, 10, 8000000.00, 7500000.00, 0.00, 1, '2025-11-28', 0, '2025-11-20 06:41:05', 1),
 (158, 15, 11, 10, 8000000.00, 0.00, 0.00, 1, '2025-12-28', 0, '2025-11-20 06:41:05', 1),
 (159, 15, 11, 10, 8000000.00, 0.00, 0.00, 1, '2026-01-28', 0, '2025-11-20 06:41:05', 1);
 
@@ -1386,7 +1404,15 @@ INSERT INTO `notifications` (`notification_id`, `client`, `subject`, `message`, 
 (104, 12, 'Field purchase Payment Confirmation', 'Dear MERCY,\r\n            We confirm the receipt of your payment of ₦50,000.00 on 14th November 2025, 12:37pm towards your Field purchase.\r\n            Transaction ID: LP1411251236002131155\r\n            Your account has been updated accordingly. Thank you for your commitment.\r\n            \r\n            If you have any questions or need a receipt, feel free to contact us\r\n\r\n            Warm regards,\r\n            Davidorlah Farm\r\n            Customer Support', 0, '2025-11-14 12:37:10'),
 (105, 12, 'Field Purchase Completed - Annual Rent Activated', 'Dear MERCY, your field (OKUN AJAH FARM - 50.00 hectares) has been fully paid. Your annual rent of ₦10,800,000.00 will commence now for the next 5 year(s).', 0, '2025-11-14 12:42:20'),
 (106, 12, 'Field purchase Payment Confirmation', 'Dear MERCY,\r\n            We confirm the receipt of your payment of ₦20,000,000.00 on 14th November 2025, 12:42pm towards your Field purchase.\r\n            Transaction ID: LP1411251242000301155\r\n            Your account has been updated accordingly. Thank you for your commitment.\r\n            \r\n            If you have any questions or need a receipt, feel free to contact us\r\n\r\n            Warm regards,\r\n            Davidorlah Farm\r\n            Customer Support', 0, '2025-11-14 12:42:20'),
-(107, 10, 'Your Field Purchase Contract is Active', 'Dear KELLY IKPEFUA, your field (MARYLAND FIELD - 200.00 Hectares) located at maryland lagos has been successfully assigned for purchase. Once installments are completed, you will start receiving annual returns of ₦6,000,000.00 (25%) for 5 year(s).', 1, '2025-11-20 06:41:05');
+(107, 10, 'Your Field Purchase Contract is Active', 'Dear KELLY IKPEFUA, your field (MARYLAND FIELD - 200.00 Hectares) located at maryland lagos has been successfully assigned for purchase. Once installments are completed, you will start receiving annual returns of ₦6,000,000.00 (25%) for 5 year(s).', 1, '2025-11-20 06:41:05'),
+(108, 10, 'Field Purchase Payment Update', 'Dear KELLY IKPEFUA, your payment for MARYLAND FIELD (200.00 hectares) has been received. Total paid so far: ₦4,000,000.00, remaining balance: ₦21,000,000.00. Once fully paid, your annual rent of ₦6,000,000.00 will begin.', 1, '2025-11-23 07:07:42'),
+(109, 10, 'Field purchase Payment Confirmation', 'Dear KELLY IKPEFUA,\r\n            We confirm the receipt of your payment of ₦4,000,000.00 on 23rd November 2025, 07:07am towards your Field purchase.\r\n            Transaction ID: LP23112507071321157\r\n            Your account has been updated accordingly. Thank you for your commitment.\r\n            \r\n            If you have any questions or need a receipt, feel free to contact us\r\n\r\n            Warm regards,\r\n            Davidorlah Farm\r\n            Customer Support', 0, '2025-11-23 07:07:42'),
+(110, 10, 'Field Purchase Payment Update', 'Dear KELLY IKPEFUA, your payment for MARYLAND FIELD (200.00 hectares) has been received. Total paid so far: ₦7,000,000.00, remaining balance: ₦17,000,000.00. Once fully paid, your annual rent of ₦6,000,000.00 will begin.', 1, '2025-11-23 07:29:16'),
+(111, 10, 'Field purchase Payment Confirmation', 'Dear KELLY IKPEFUA,\r\n            We confirm the receipt of your payment of ₦3,000,000.00 on 23rd November 2025, 07:29am towards your Field purchase.\r\n            Transaction ID: LP23112507271021157\r\n            Your account has been updated accordingly. Thank you for your commitment.\r\n            \r\n            If you have any questions or need a receipt, feel free to contact us\r\n\r\n            Warm regards,\r\n            Davidorlah Farm\r\n            Customer Support', 1, '2025-11-23 07:29:16'),
+(112, 10, 'Field Purchase Payment Update', 'Dear KELLY IKPEFUA, your payment for MARYLAND FIELD (200.00 hectares) has been received. Total paid so far: ₦7,400,000.00, remaining balance: ₦16,600,000.00. Once fully paid, your annual rent of ₦6,000,000.00 will begin.', 0, '2025-11-23 08:12:35'),
+(113, 10, 'Field purchase Payment Confirmation', 'Dear KELLY IKPEFUA,\r\n            We confirm the receipt of your payment of ₦400,000.00 on 23rd November 2025, 08:12am towards your Field purchase.\r\n            Transaction ID: LP23112508120331157\r\n            Your account has been updated accordingly. Thank you for your commitment.\r\n            \r\n            If you have any questions or need a receipt, feel free to contact us\r\n\r\n            Warm regards,\r\n            Davidorlah Farm\r\n            Customer Support', 0, '2025-11-23 08:12:35'),
+(114, 10, 'Field Purchase Payment Update', 'Dear KELLY IKPEFUA, your payment for MARYLAND FIELD (200.00 hectares) has been received. Total paid so far: ₦7,500,000.00, remaining balance: ₦16,500,000.00. Once fully paid, your annual rent of ₦6,000,000.00 will begin.', 0, '2025-11-23 08:15:32'),
+(115, 10, 'Field purchase Payment Confirmation', 'Dear KELLY IKPEFUA,\r\n            We confirm the receipt of your payment of ₦100,000.00 on 23rd November 2025, 08:15am towards your Field purchase.\r\n            Transaction ID: LP23112508140331157\r\n            Your account has been updated accordingly. Thank you for your commitment.\r\n            \r\n            If you have any questions or need a receipt, feel free to contact us\r\n\r\n            Warm regards,\r\n            Davidorlah Farm\r\n            Customer Support', 0, '2025-11-23 08:15:32');
 
 -- --------------------------------------------------------
 
@@ -1523,6 +1549,37 @@ CREATE TABLE `payments` (
   `posted_by` int(11) NOT NULL,
   `invoice` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `payment_evidence`
+--
+
+CREATE TABLE `payment_evidence` (
+  `payment_id` int(11) NOT NULL,
+  `assigned_id` int(11) NOT NULL,
+  `store` int(11) NOT NULL,
+  `field` int(11) NOT NULL,
+  `customer` int(11) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `evidence` varchar(1024) NOT NULL,
+  `remark` text NOT NULL,
+  `payment_status` int(11) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `posted_by` int(11) NOT NULL,
+  `upload_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `payment_evidence`
+--
+
+INSERT INTO `payment_evidence` (`payment_id`, `assigned_id`, `store`, `field`, `customer`, `amount`, `evidence`, `remark`, `payment_status`, `trx_number`, `posted_by`, `upload_date`) VALUES
+(7, 15, 1, 11, 10, 4000000.00, '02044_7.pdf', 'nil', 1, 'TR148231125070742', 10, '2025-11-20 15:48:57'),
+(8, 15, 0, 11, 10, 3000000.00, '83918_8.jpg', 'jjj', 1, 'TR674231125072916', 10, '2025-11-23 07:26:08'),
+(9, 15, 0, 11, 10, 400000.00, '75497_9.jpg', 'nil', 1, 'TR818231125081235', 10, '2025-11-23 08:11:24'),
+(10, 15, 0, 11, 10, 100000.00, '81275_10.jpeg', 'j', 1, 'TR635231125081532', 10, '2025-11-23 08:13:29');
 
 -- --------------------------------------------------------
 
@@ -2280,7 +2337,11 @@ INSERT INTO `sub_menus` (`sub_menu_id`, `menu`, `sub_menu`, `url`, `status`) VAL
 (198, 4, 'Rents Due', 'invoices_due', 0),
 (199, 11, 'View General Tasks', 'view_general_tasks', 0),
 (200, 4, 'Post Field Payment', 'post_field_payment', 0),
-(201, 4, 'Payments Due', 'payments_due', 0);
+(201, 4, 'Payments Due', 'payments_due', 0),
+(203, 14, 'Upload Receipt', 'upload_payment', 0),
+(204, 14, 'Receipt Upload Reports', 'receipt_upload_report', 0),
+(205, 4, 'Approve Payment', 'approve_customer_payment', 0),
+(206, 14, 'My Field Payments', 'customer_field_payments', 0);
 
 -- --------------------------------------------------------
 
@@ -2546,7 +2607,15 @@ INSERT INTO `transactions` (`transaction_id`, `account_type`, `sub_group`, `clas
 (207, 1, 1, 3, 1010329, 5000.000, 0.000, 'TR024191125082051', 'Suckers removed from LEKKIE GARDEN', 0, '2025-11-19', 1, '2025-11-19 08:20:51', 1),
 (208, 4, 6, 13, 40601384, 0.000, 5000.000, 'TR024191125082051', 'Suckers removed from LEKKIE GARDEN', 0, '2025-11-19', 1, '2025-11-19 08:20:51', 1),
 (209, 1, 2, 5, 1020524, 40000000.000, 0.000, 'TR592201125043620', 'Payment For Asset Purchased', 0, '2025-11-20', 0, '2025-11-20 04:36:20', 1),
-(210, 1, 1, 2, 1010228, 0.000, 40000000.000, 'TR592201125043620', 'Payment For Asset Purchased', 0, '2025-11-20', 0, '2025-11-20 04:36:20', 1);
+(210, 1, 1, 2, 1010228, 0.000, 40000000.000, 'TR592201125043620', 'Payment For Asset Purchased', 0, '2025-11-20', 0, '2025-11-20 04:36:20', 1),
+(211, 1, 1, 2, 1010228, 4000000.000, 0.000, 'TR148231125070742', 'Field Purchase payment', 0, '2025-11-23', 1, '2025-11-23 07:07:42', 0),
+(212, 1, 1, 4, 1010498, 0.000, 4000000.000, 'TR148231125070742', 'Field Purchase Payment', 0, '2025-11-23', 1, '2025-11-23 07:07:42', 0),
+(213, 1, 1, 2, 1010228, 3000000.000, 0.000, 'TR674231125072916', 'Field Purchase payment', 0, '2025-11-23', 1, '2025-11-23 07:29:16', 0),
+(214, 1, 1, 4, 1010498, 0.000, 3000000.000, 'TR674231125072916', 'Field Purchase Payment', 0, '2025-11-23', 1, '2025-11-23 07:29:16', 0),
+(215, 1, 1, 2, 1010228, 400000.000, 0.000, 'TR818231125081235', 'Field Purchase payment', 0, '2025-11-23', 1, '2025-11-23 08:12:35', 0),
+(216, 1, 1, 4, 1010498, 0.000, 400000.000, 'TR818231125081235', 'Field Purchase Payment', 0, '2025-11-23', 1, '2025-11-23 08:12:35', 0),
+(217, 1, 1, 2, 1010228, 100000.000, 0.000, 'TR635231125081532', 'Field Purchase payment', 0, '2025-11-23', 1, '2025-11-23 08:15:32', 0),
+(218, 1, 1, 4, 1010498, 0.000, 100000.000, 'TR635231125081532', 'Field Purchase Payment', 0, '2025-11-23', 1, '2025-11-23 08:15:32', 0);
 
 -- --------------------------------------------------------
 
@@ -2997,6 +3066,12 @@ ALTER TABLE `payments`
   ADD PRIMARY KEY (`payment_id`);
 
 --
+-- Indexes for table `payment_evidence`
+--
+ALTER TABLE `payment_evidence`
+  ADD PRIMARY KEY (`payment_id`);
+
+--
 -- Indexes for table `payroll`
 --
 ALTER TABLE `payroll`
@@ -3268,7 +3343,7 @@ ALTER TABLE `banks`
 -- AUTO_INCREMENT for table `cash_flows`
 --
 ALTER TABLE `cash_flows`
-  MODIFY `fow_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `fow_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -3310,7 +3385,7 @@ ALTER TABLE `customers`
 -- AUTO_INCREMENT for table `customer_trail`
 --
 ALTER TABLE `customer_trail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `cycle_changes`
@@ -3334,7 +3409,7 @@ ALTER TABLE `departments`
 -- AUTO_INCREMENT for table `deposits`
 --
 ALTER TABLE `deposits`
-  MODIFY `deposit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `deposit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `depreciation`
@@ -3388,7 +3463,7 @@ ALTER TABLE `fields`
 -- AUTO_INCREMENT for table `field_payments`
 --
 ALTER TABLE `field_payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `field_payment_schedule`
@@ -3478,7 +3553,7 @@ ALTER TABLE `multiple_payments`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
 
 --
 -- AUTO_INCREMENT for table `observations`
@@ -3521,6 +3596,12 @@ ALTER TABLE `outstanding`
 --
 ALTER TABLE `payments`
   MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `payment_evidence`
+--
+ALTER TABLE `payment_evidence`
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `payroll`
@@ -3652,7 +3733,7 @@ ALTER TABLE `stores`
 -- AUTO_INCREMENT for table `sub_menus`
 --
 ALTER TABLE `sub_menus`
-  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=203;
+  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=207;
 
 --
 -- AUTO_INCREMENT for table `sucker_removal`
@@ -3688,7 +3769,7 @@ ALTER TABLE `tax_rules`
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=211;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=219;
 
 --
 -- AUTO_INCREMENT for table `transfers`
