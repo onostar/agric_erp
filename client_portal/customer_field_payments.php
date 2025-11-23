@@ -93,12 +93,12 @@
             echo "<p class='no_result'>'$details'</p>";
         }
         //get total cos of payments today
-            $ttls = $get_details->fetch_sum_curdateCon('field_payments', 'amount', 'date(post_date)', 'customer', $customer);
-            if(gettype($ttls) === 'array'){
-                foreach($ttls as $ttl){
-                    echo "<p class='total_amount' style='color:green; text-align:center;'>Total: ₦".number_format($ttl->total, 2)."</p>";
-                }
+        $ttls = $get_details->fetch_sum_curdateCon('field_payments', 'amount', 'date(post_date)', 'customer', $customer);
+        if(gettype($ttls) === 'array'){
+            foreach($ttls as $ttl){
+                echo "<p class='total_amount' style='color:green; text-align:center;'>Total: ₦".number_format($ttl->total, 2)."</p>";
             }
+        }
     ?>
        
 </div>
