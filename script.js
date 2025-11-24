@@ -4025,6 +4025,12 @@ function printPaymentReceipt(invoice){
      return false;
  
  }
+// prinit receipt for customer documentation payment
+function printDocReceipt(invoice){
+     window.open("../controller/documentation_receipt.php?receipt="+invoice)
+     return false;
+ 
+ }
  //get item to check history
 function getHistoryItems(item_name){
      let item = item_name;
@@ -9272,4 +9278,72 @@ function uploadReceipt(){
           })
      }
      return false;    
+}
+
+//payment for documentation
+function payDocumentation(){
+     let invoice = document.getElementById("invoice").value;
+     let posted = document.getElementById("posted").value;
+     let trans_date = document.getElementById("trans_date").value;
+     let customer = document.getElementById("customer").value;
+     let balance = document.getElementById("balance").value;
+     let store = document.getElementById("store").value;
+     let assigned_id = document.getElementById("assigned_id").value;
+     let amount = document.getElementById("amount").value;
+     let payment_mode = document.getElementById("payment_mode").value;
+     let payment_id = document.getElementById("payment_id")?.value || 0;
+     let details = document.getElementById("details").value;
+     let bank = document.getElementById("bank").value;
+     let todayDate = new Date();
+     if(payment_mode == "POS" || payment_mode == "Transfer"){
+          if(bank.length == 0 || bank.replace(/^\s+|\s+$/g, "").length == 0){
+               alert("Please select bank!");
+               $("#bank").focus();
+               return;
+          }    
+     }
+     if(payment_mode.length == 0 || payment_mode.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select payment_mode!");
+          $("#payment_mode").focus();
+          return;
+     }else if(amount.length == 0 || amount.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input transaction amount");
+          $("#amount").focus();
+          return;
+     }else if(parseFloat(amount) > parseFloat(balance)){
+          alert("The amount entered exceeds the balance due. Please enter an amount that is less than or equal to the balance.");
+          $("#balance").focus();
+          return;
+     }else if(trans_date.length == 0 || trans_date.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input transaction date");
+          $("#trans_date").focus();
+          return;
+     }else if(details.length == 0 || details.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter description of transaction");
+          $("#details").focus();
+          return;
+     }else if(new Date(trans_date) > todayDate){
+          alert("Transaction date cannot be futuristic!");
+          $("#trans_date").focus();
+          return;
+     }else{
+          let confirmPost = confirm("Are you sure you want to post this transaction?", "");
+          if(confirmPost){
+               $.ajax({
+                    type : "POST",
+                    url : "../controller/pay_documentation.php",
+                    data : {posted:posted, customer:customer, assigned_id:assigned_id, payment_mode:payment_mode, amount:amount, details:details, store:store, invoice:invoice, bank:bank, trans_date:trans_date, balance:balance},
+                    beforeSend : function(){
+                         $("#fund_account").html("<div class='processing'><div class='loader'></div></div>");
+                    },
+                    success : function(response){
+                         $("#fund_account").html(response);
+                         
+                    }
+               })
+               return false;   
+          }else{
+               return;
+          }
+     }
 }

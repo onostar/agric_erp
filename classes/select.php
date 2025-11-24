@@ -1960,6 +1960,21 @@ public function fetch_suspension_days($staff){
                 return $rows;
             }
         }
+        public function fetch_sum_date_range($table, $column, $col1, $val1, $date_col, $date_limit){
+            $get_user = $this->connectdb()->prepare("SELECT SUM($column) as total FROM $table WHERE $col1 = :col1 AND $date_col <= :date_limit");
+            $get_user->bindValue("col1", $val1);
+            $get_user->bindValue("date_limit", $date_limit);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+            
+        }
+
         //fetch sum between two dates and  2 condition
         public function fetch_sum_2date2Cond($table, $column1, $column2, $condition1, $condition2, $value1, $value2, $value3, $value4){
             $get_user = $this->connectdb()->prepare("SELECT SUM($column1) as total FROM $table WHERE $condition1 = :$condition1 AND $condition2 = :$condition2 AND $column2 BETWEEN '$value1' AND '$value2'");

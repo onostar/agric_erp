@@ -30,7 +30,7 @@
         'customer' => $customer,
         'payment_mode' => $mode,
         'amount' => $amount,
-        'details' => $details,
+        'details' => 'Field purchase payment',
         'invoice' => $receipt,
         'store' => $store,
         'bank' => $bank,
@@ -311,7 +311,7 @@
         );
         $add_pro = new add_data('transactions', $process_data);
         $add_pro->create_data(); */
-        //cash flow date
+        //cash flow data
         $flow_data = array(
             'account' => $dr_ledger,
             'details' => 'Field Purchase Payment',
@@ -412,8 +412,8 @@
             </ul>
             <p>Your annual rent returns will now commence according to the following schedule:</p>
             $rent_schedule_text
-            <p>Thank you for your trust in <strong>Davidorlah Farms</strong>. We look forward to building a fruitful partnership with you.</p>
-            <br><p>Warm regards,<br><strong>Farm Management Team</strong><br>Davidorlah Farms</p>";
+            <p>Thank you for your trust in <strong>Davidorlah Nigeria Limited</strong>. We look forward to building a fruitful partnership with you.</p>
+            <br><p>Warm regards,<br><strong>Farm Management Team</strong><br>Davidorlah Nigeria Limited</p>";
 
             // insert notification
             $notif_data = array(
@@ -444,7 +444,7 @@
             </ul>
             <p>Once your installment payments are completed, your annual rent returns will start immediately.</p>
             <p>Thank you for your continued commitment.</p>
-            <br><p>Warm regards,<br><strong>Farm Management Team</strong><br>Davidorlah Farms</p>";
+            <br><p>Warm regards,<br><strong>Farm Management Team</strong><br>Davidorlah Nigeria Limited</p>";
 
             // partial payment notification
             $notif_data = array(

@@ -8,22 +8,23 @@ if(isset($_GET['receipt'])){
 
     $user = $_SESSION['user_id'];
     $invoice = $_GET['receipt'];
-    $type = "Field Deposit Receipt";
+    $type = "Field Documentation Receipt";
     
     $get_details = new selects();
 
     /* -------------------------------------------------
         Fetch payment details
     ------------------------------------------------- */
-    $payment_rows = $get_details->fetch_details_cond('field_payments', 'invoice', $invoice);
+    $payment_rows = $get_details->fetch_details_cond('documentation_fees', 'invoice', $invoice);
     foreach($payment_rows as $pay){
-        $customer = $pay->customer;
+        $customer = $pay->client;
         $pay_mode = $pay->payment_mode;
         $paid_date = $pay->trx_date;
         $post_date = $pay->post_date;
         $amount = $pay->amount;
-        $assigned_id = $pay->loan;
+        $assigned_id = $pay->assigned_id;
         $store = $pay->store;
+        $field = $pay->field;
     }
 
     /* -------------------------------------------------
@@ -50,7 +51,7 @@ if(isset($_GET['receipt'])){
     ------------------------------------------------- */
     $assigned = $get_details->fetch_details_cond('assigned_fields', 'assigned_id', $assigned_id);
     foreach($assigned as $asf){
-        $field = $asf->field;
+        $documentation = $asf->documentation;
         $purchase_cost = $asf->total_due;
     }
 
@@ -67,16 +68,15 @@ if(isset($_GET['receipt'])){
     /* -------------------------------------------------
         Get total paid so far
     ------------------------------------------------- */
-    /* $tp = $get_details->fetch_sum_single('field_payments', 'amount', 'loan', $assigned_id);
-    $total_paid = (is_array($tp)) ? $tp[0]->total : 0; */
-    $total_paid_query = $get_details->fetch_sum_date_range('field_payments', 'amount', 'loan',$assigned_id, 'post_date', $post_date);
+    
+    $total_paid_query = $get_details->fetch_sum_date_range('documentation_fees', 'amount', 'assigned_id', $assigned_id, 'post_date', $post_date);
 
     $total_paid = (is_array($total_paid_query)) ? $total_paid_query[0]->total : 0;
 
     /* -------------------------------------------------
         Calculate field balance
     ------------------------------------------------- */
-    $balance = $purchase_cost - $total_paid;
+    $balance = $documentation - $total_paid;
 ?>
 
 <div class="sales_receipt">
@@ -113,6 +113,7 @@ if(isset($_GET['receipt'])){
         <p><strong>Field Size:</strong> <?php echo $size; ?>Hectares</p>
         <p><strong>Location:</strong> <?php echo $location; ?></p>
         <p><strong>Total Purchase Cost:</strong> ₦<?php echo number_format($purchase_cost); ?></p>
+        <p><strong>Documentation Fee:</strong> ₦<?php echo number_format($documentation); ?></p>
     </div>
 
     <table id="postsales_table" class="searchTable">
@@ -124,7 +125,7 @@ if(isset($_GET['receipt'])){
         </thead>
         <tbody>
             <tr>
-                <td>Being <?php echo $pay_mode; ?> deposit for purchase of <?php echo $field_name; ?> (<?php echo $location; ?>)</td>
+                <td>Being <?php echo $pay_mode; ?> deposit for documentation fee on <?php echo $field_name; ?> (<?php echo $location; ?>)</td>
                 <td><?php echo number_format($amount); ?></td>
             </tr>
         </tbody>
