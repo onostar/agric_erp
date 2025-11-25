@@ -3,6 +3,19 @@
         label{
             font-size:.8rem!important;
         }
+        @media screen and (max-width: 800px){
+             .add_user_form{
+                margin:0!important;
+             }
+            .add_user_form .inputs{
+                flex-wrap: wrap!important;
+                gap:.3rem;
+            }
+            .add_user_form .inputs .data{
+                width:100%!important;
+            }
+        }
+        
     </style>
 <?php
     session_start();
@@ -10,6 +23,17 @@
     // instantiate class
     include "../classes/dbh.php";
     include "../classes/select.php";
+
+    //get rate
+    $get_details = new selects();
+    $rts = $get_details->fetch_details('exchange_rates');
+    if(is_array($rts)){
+        foreach($rts as $rt){
+            $rate = $rt->rate;
+        }
+    }else{
+        $rate = 0;
+    }
             
     ?>
     <div class="add_btn">
@@ -45,13 +69,19 @@
                     </select>
                 </div>
             </div>
+            
             <div class="inputs" id="complete_invest">
                 <div class="data" style="width:48%">
-                    <label for="amount" id="amount_currency">Amount</label>
-                    <input type="number" id="amount" name="amount" value="0.00" required oninput="getRate()">
+                    <input type="hidden" name="rate" id="rate" value="<?php echo $rate?>">
+                    <label for="">Exchange Rate</label>
+                    <input type="text" id="exchange_rate" name="exchange_rate" readonly style="background:#fdfdfd; color:#222">
                 </div>
                 <div class="data" style="width:48%">
-                    <label for="installments">Total Amount in Naira (₦)</label>
+                    <label for="amount" id="amount_currency">Amount</label>
+                    <input type="number" id="amount" name="amount" value="0.00" required oninput="getTotalRate()">
+                </div>
+                <div class="data" style="width:48%">
+                    <label for="total_in_naira">Total Amount in Naira (₦)</label>
                     <input type="text" id="total_in_naira" name="total_in_naira" style="background:#fff; color:green" value="0.00" readonly>
                     <input type="hidden" id="total_naira" name="total_naira">
                 </div>

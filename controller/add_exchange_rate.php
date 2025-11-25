@@ -13,10 +13,7 @@
     );
     // instantiate class
     include "../classes/dbh.php";
-    include "../classes/select.php";
     include "../classes/inserts.php";
-    include "../classes/update.php";
-    $check = new selects();
    
     //create item
     $add_data = new add_data('exchange_rates', $data);

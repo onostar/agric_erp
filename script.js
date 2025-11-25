@@ -9038,7 +9038,7 @@ function getTotalDue(){
      
      let total = purchase_cost - discount;
      total_due.value = total;
-     due.value = total.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });;
+     due.value = total.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
      $("#payment_duration").val('');
      $("#install").val('');
      $("#installment_amount").val('');
@@ -9355,6 +9355,8 @@ function showInvestment(){
      let customer = document.getElementById("customer").value;
      let label = document.getElementById("amount_currency");
      let complete_invest = document.getElementById("complete_invest");
+     let exchange_rate = document.getElementById("exchange_rate");
+     let rate = document.getElementById("rate").value;
      if(!customer){
           alert("Please select an investor");
           $("#item").focus();
@@ -9369,11 +9371,16 @@ function showInvestment(){
           let icon;
           if(currency == "Dollar"){
                icon = "$";
+               exchange_rate.value = "₦"+rate.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+"/$1.00";
           }else{
                icon = "₦"
+               exchange_rate.value = 0;
           }
           complete_invest.style.display = "flex";
           label.innerText = "Amount in "+currency+" ("+icon+")";
+          $("#amount").val("0");
+          $("#total_naira").val("0");
+          $("#total_in_naira").val("0");
      }
 }
 
@@ -9405,5 +9412,121 @@ function addExchangeRate(){
                     }, 2000);
                }
           })
+     }
+}
+//edit exchange rate
+function editExchangeRate(){
+     let exchange = document.getElementById("exchange").value;
+     let rate = document.getElementById("rate").value;
+     if(!rate){
+          alert("Please input exchange rate");
+          $("#rate").focus();
+          return;
+    
+     }else if(parseFloat(rate) <= 0){
+          alert("Exchange rate cannot be lesser or equal to 0");
+          $("#rate").focus();
+          return;
+     
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/edit_exchange_rate.php",
+               data : {rate:rate, exchange:exchange},
+               beforeSend : function(){
+                    $("#exchange_rate").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#exchange_rate").html(response);
+                    setTimeout(function(){
+                         showPage("exchange_rate.php");
+                    }, 2000);
+               }
+          })
+     }
+}
+
+//get total due based on exchange rate and amount entered
+function getTotalRate(){
+     let currency = document.getElementById("currency").value;
+     let rate = document.getElementById("rate").value;
+     let amount = parseFloat(document.getElementById("amount")?.value || 0);
+     let total_naira = document.getElementById("total_naira");
+     let total_in_naira = document.getElementById("total_in_naira");
+     if(!currency){
+          alert("Please Select Currency");
+          $("#currency").focus();
+          return;
+     }else if(currency == "Dollar" && rate == 0){
+          alert("No dollar exchange rate found! Please set-up exchange rate before proceeding");
+          return;
+     }else{
+          let total = 0;
+          if(currency == "Dollar"){
+               total = rate * amount;
+          }else{
+               total = amount;
+          }
+          total_naira.value = total;
+          total_in_naira.value = total.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+     }
+}
+
+// start investment on client conncentrate
+function invest(){
+     let customer = document.getElementById("customer").value;
+     let duration = document.getElementById("duration").value;
+     let currency = document.getElementById("currency").value;
+     let rate = document.getElementById("rate")?.value || 0;
+     let amount = document.getElementById("amount").value;
+     let total_naira = document.getElementById("total_naira").value;
+     
+     let start_date = document.getElementById("start_date").value;
+    
+     let today = new Date();
+     let start = new Date(start_date);
+     if(customer.length == 0 || customer.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select client!");
+          $("#item").focus();
+          return;
+     }else if(!duration){
+          alert("Please select contract duration!");
+          $("#duration").focus();
+          return;
+     }else if(!currency){
+          alert("Please select transaction currency!");
+          $("#duration").focus();
+          return;
+    
+     }else if(!amount || parseFloat(amount) <= 0){
+          alert("Please input amount invested!");
+          $("#amount").focus();
+          return;
+     
+     }else if(!start_date){
+          alert("Please input contract start date!");
+          $("#start_date").focus();
+          return;
+     }else if(start < today){
+          alert("Start date cannot be less than current date!");
+          $("#start_date").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/start_investment.php",
+               data : {customer:customer, duration:duration, rate:rate, amount:amount, total_naira:total_naira,currency:currency, start_date:start_date,},
+               beforeSend: function(){
+                    $("#concentrates").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#concentrates").html(response);
+                    setTimeout(function(){
+                         showPage("concentrate_investment.php");
+                    }, 2000);
+               }
+          })
+          
+          return false; 
      }
 }
