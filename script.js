@@ -9347,3 +9347,63 @@ function payDocumentation(){
           }
      }
 }
+
+//display investment when currency isselected
+function showInvestment(){
+     let currency = document.getElementById("currency").value;
+     let duration = document.getElementById("duration").value;
+     let customer = document.getElementById("customer").value;
+     let label = document.getElementById("amount_currency");
+     let complete_invest = document.getElementById("complete_invest");
+     if(!customer){
+          alert("Please select an investor");
+          $("#item").focus();
+          $("#currency").val('');
+          return;
+     }else if(!duration){
+          alert("Please select contract duration");
+          $("#duration").focus();
+          $("#currency").val('');
+          return;
+     }else{
+          let icon;
+          if(currency == "Dollar"){
+               icon = "$";
+          }else{
+               icon = "₦"
+          }
+          complete_invest.style.display = "flex";
+          label.innerText = "Amount in "+currency+" ("+icon+")";
+     }
+}
+
+//add exchange rate
+function addExchangeRate(){
+     let rate = document.getElementById("rate").value;
+     if(!rate){
+          alert("Please input exchange rate");
+          $("#rate").focus();
+          return;
+    
+     }else if(parseFloat(rate) <= 0){
+          alert("Exchange rate cannot be lesser or equal to 0");
+          $("#rate").focus();
+          return;
+     
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/add_exchange_rate.php",
+               data : {rate:rate},
+               beforeSend : function(){
+                    $("#exchange_rate").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#exchange_rate").html(response);
+                    setTimeout(function(){
+                         showPage("exchange_rate.php");
+                    }, 2000);
+               }
+          })
+     }
+}

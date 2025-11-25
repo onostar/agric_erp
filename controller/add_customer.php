@@ -85,10 +85,10 @@
             //now update
             $update = new Update_table();
             $update->update_double('customers', 'ledger_id', $ledger_id, 'acn', $acn, 'customer_id', $customer_id);
-            if($type == "Landowner"){
+            if($type == "Investor"){
                 //mail message
                 $message = "<p>Dear $customer,</p>
-                <p>Welcome to <strong>Davidorlah Farms</strong>! Your customer profile has been successfully created, and you now have access to your personal customer portal where you can view your account details, monitor transactions, and stay updated on your activities.</p>
+                <p>Welcome to <strong>Davidorlah Nigeria Limited</strong>! Your customer profile has been successfully created, and you now have access to your personal customer portal where you can view your account details, monitor transactions, and stay updated on your activities.</p>
 
                 <p>You can log in using the link below:</p>
                 <p><a href='https://davidorlah.dorthprosuite.com/client_portal/' target='_blank'>
@@ -101,10 +101,10 @@
 
                 <p>If you have any questions or need support, feel free to contact us at any time.</p>
 
-                <p>Thank you for choosing <strong>Davidorlah Farms</strong>.</p>
+                <p>Thank you for choosing <strong>Davidorlah Nigeria Limited</strong>.</p>
 
                 <p>Warm regards,<br>
-                <strong>Farm Management Team</strong><br>
+                <strong>Management Team</strong><br>
                 Davidorlah Nigeria Limited
                 </p>";
                 /* send mail */
@@ -136,8 +136,8 @@
 
                 $to = $email_address;
                 $from = 'admin@dorthprosuite.com';
-                $from_name = "Davidorlah Farms";
-                $subj = 'Your Customer Portal Access Details - Davidorlah Farms';
+                $from_name = "Davidorlah Nigeria Limited";
+                $subj = 'Your Customer Portal Access Details - Davidorlah Nig Ltd';
                 $msg = "<div>$message</div>";
 
                 smtpmailer($to, $from, $from_name, $subj, $msg);  

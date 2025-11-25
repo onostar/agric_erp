@@ -51,7 +51,7 @@
                     <label for="duration">Contact Duration</label>
                     <select name="duration" id="duration">
                         <option value="" selected disabled>Select Contract Duration</option>
-                        <option value="3">3 Year</option>
+                        <option value="3">3 Years</option>
                         <option value="5">5 Years</option>
                         <option value="10">10 Years</option>
                     </select>

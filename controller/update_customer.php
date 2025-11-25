@@ -37,9 +37,65 @@
     }elseif($ledg > 0){
         echo "<p class='exist'><span>$customer</span> already exists in ledger</p>";
     }else{
-        if($type == "Landowner" && empty($password)){
+        if($type == "Investor" && empty($password)){
             $new_password = 123;
             $update_data->update('customers', 'user_password', 'customer_id', $new_password, $customer_id);
+             //mail message
+             $email_address = $email;
+            $message = "<p>Dear $customer,</p>
+            <p>Welcome to <strong>Davidorlah Nigeria Limited</strong>! Your customer profile has been successfully created, and you now have access to your personal customer portal where you can view your account details, monitor transactions, and stay updated on your activities.</p>
+
+            <p>You can log in using the link below:</p>
+            <p><a href='https://davidorlah.dorthprosuite.com/client_portal/' target='_blank'>
+            Customer Portal Login
+            </a></p>
+            <br>
+            <p><strong>Login Details:</strong><br>
+            Username: $email_address<br>
+            Password: 123<br>
+
+            <p>If you have any questions or need support, feel free to contact us at any time.</p>
+
+            <p>Thank you for choosing <strong>Davidorlah Nigeria Limited</strong>.</p>
+
+            <p>Warm regards,<br>
+            <strong>Management Team</strong><br>
+            Davidorlah Nigeria Limited
+            </p>";
+            /* send mail */
+            function smtpmailer($to, $from, $from_name, $subject, $body){
+                $mail = new PHPMailer();
+                $mail->IsSMTP();
+                $mail->SMTPAuth = true; 
+                $mail->SMTPSecure = 'ssl'; 
+                $mail->Host = 'www.dorthprosuite.com';
+                $mail->Port = 465; 
+                $mail->Username = 'admin@dorthprosuite.com';
+                $mail->Password = 'yMcmb@her0123!';   
+
+                $mail->IsHTML(true);
+                $mail->From="admin@dorthprosuite.com";
+                $mail->FromName=$from_name;
+                $mail->Sender=$from;
+                $mail->AddReplyTo($from, $from_name);
+                $mail->Subject = $subject;
+                $mail->Body = $body;
+                $mail->AddAddress($to);
+
+                if(!$mail->Send()){
+                    return "Failed to send mail";
+                } else {
+                    return "Message Sent Successfully";
+                }
+            }
+
+            $to = $email_address;
+            $from = 'admin@dorthprosuite.com';
+            $from_name = "Davidorlah Nigeria Limited";
+            $subj = 'Your Customer Portal Access Details - Davidorlah Nig Ltd';
+            $msg = "<div>$message</div>";
+
+            smtpmailer($to, $from, $from_name, $subj, $msg);
         }
         //update customer
         $update_data->update_quadruple('customers', 'customer', $customer, 'phone_numbers',$phone, 'customer_address', $address, 'customer_email', $email, 'customer_id', $customer_id);

@@ -41,8 +41,8 @@
                     <label for="email">Customer Type</label>
                     <select name="customer_type" id="customer_type">
                         <option value="<?php echo $row->customer_type?>" selected><?php echo $row->customer_type?></option>
-                        <option value="Landowner">LANDOWNER</option>
-                        <option value="Non-Landowner">NON-LANDOWNER</option>
+                        <option value="Investor">INVESTOR</option>
+                        <option value="Retail Customer">RETAIL CUSTOMER</option>
                     </select>
                 </div>
                 <div class="data" style="width:auto">

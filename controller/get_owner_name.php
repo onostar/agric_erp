@@ -6,7 +6,7 @@
     include "../classes/select.php";
    
     $get_customer = new selects();
-    $rows = $get_customer->fetch_details_likeCond('customers', 'customer', $input);
+    $rows = $get_customer->fetch_details_like1Cond('customers', 'customer', $input, 'customer_type', 'Investor');
     if(gettype($rows) == 'array'){
         foreach($rows as $row):
         

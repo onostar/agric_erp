@@ -25,8 +25,8 @@
                     <label for="customer_type">Customer type</label>
                     <select name="customer_type" id="customer_type">
                         <option value="" selected>Select type</option>
-                        <option value="Landowner">LANDOWNER</option>
-                        <option value="Non-Landowner">NON-LANDOWNER</option>
+                        <option value="Investor">INVESTOR</option>
+                        <option value="Retail Customer">RETAIL CUSTOMER</option>
                     </select>
                 </div>
             </div>

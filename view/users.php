@@ -93,11 +93,11 @@ date_default_timezone_set("Africa/Lagos");
                     <img src="../images/logo.png" alt="Logo" class="img-fluid">
                 </a>
             </h1>
-            <h2 style="margin-left:50px!important"><?php echo $company?></h2>
+            <h2 style="margin-left:50px!important"><?php echo $store?></h2>
             <!-- <div class="other_menu">
                 <a href="#" title="Our Gallery"><?php echo ucwords($role);?></a>
             </div> -->
-            <a href="#" title="current store" class="other_menu"><?php echo ucwords($store);?></a>
+            <!-- <a href="#" title="current store" class="other_menu"><?php echo ucwords($store);?></a> -->
 
             <div class="login">
                 
