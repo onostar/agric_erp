@@ -9,7 +9,7 @@ date_default_timezone_set("Africa/Lagos");
         $username = $_SESSION['user'];
         // instantiate classes
         $fetch_user = new selects();
-        $users = $fetch_user->fetch_details_2cond('customers', 'customer_email', 'customer_type', $username, 'Landowner');
+        $users = $fetch_user->fetch_details_2cond('customers', 'customer_email', 'customer_type', $username, 'Investor');
         foreach($users as $user){
             $fullname = $user->customer;
             // $role = $user->user_role;

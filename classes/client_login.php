@@ -3,7 +3,7 @@
     class Login extends Dbh{
         /* check if user exists */
         protected function checkUser($username, $password){
-            $get_pwd = $this->connectdb()->prepare("SELECT user_password FROM customers WHERE customer_email = :customer_email AND customer_type = 'Landowner'");
+            $get_pwd = $this->connectdb()->prepare("SELECT user_password FROM customers WHERE customer_email = :customer_email AND customer_type = 'Investor'");
             $get_pwd->bindValue("customer_email",$username);
             $get_pwd->execute();
 
@@ -20,7 +20,7 @@
                         $_SESSION['error'] = "Error! Wrong Password";
                         header("Location: ../client_portal/index.php");
                     }else{
-                        $get_user = $this->connectdb()->prepare("SELECT * FROM customers WHERE customer_email = :customer_email AND user_password = :user_password AND customer_type = 'Landowner'");
+                        $get_user = $this->connectdb()->prepare("SELECT * FROM customers WHERE customer_email = :customer_email AND user_password = :user_password AND customer_type = 'Investor'");
                         $get_user->bindValue("customer_email", $username);
                         $get_user->bindValue("user_password", $hashedPwd);
                         $get_user->execute();

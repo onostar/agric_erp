@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 23, 2025 at 09:06 AM
+-- Generation Time: Nov 27, 2025 at 11:17 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -257,8 +257,8 @@ CREATE TABLE `assigned_fields` (
 INSERT INTO `assigned_fields` (`assigned_id`, `field`, `customer`, `contract_duration`, `payment_duration`, `rent_percentage`, `annual_rent`, `installment`, `purchase_cost`, `discount`, `total_due`, `documentation`, `documentation_status`, `start_date`, `due_date`, `contract_status`, `assigned_by`, `assigned_date`) VALUES
 (8, 8, 9, 2, 0, 0.00, 5000000.00, 5000000.00, 10000000.00, 0.00, 0.00, 0.00, 0, '2025-10-30', '2027-10-30', 1, 1, '2025-10-29 13:51:17'),
 (9, 7, 10, 3, 0, 0.00, 3000000.00, 3000000.00, 9000000.00, 0.00, 0.00, 0.00, 0, '2025-11-01', '2028-11-01', 1, 1, '2025-10-31 12:00:55'),
-(12, 9, 10, 3, 1, 25.00, 3750000.00, 15000000.00, 15000000.00, 0.00, 0.00, 0.00, 0, '2025-11-14', '2025-11-14', 2, 1, '2025-11-13 14:34:42'),
-(14, 10, 12, 5, 3, 36.00, 10800000.00, 10000000.00, 30000000.00, 0.00, 0.00, 0.00, 0, '2025-11-21', '2026-01-21', 2, 1, '2025-11-14 12:10:08'),
+(12, 9, 10, 3, 1, 25.00, 3750000.00, 15000000.00, 15000000.00, 0.00, 15000000.00, 250000.00, 1, '2025-11-14', '2025-11-14', 2, 1, '2025-11-13 14:34:42'),
+(14, 10, 12, 5, 3, 36.00, 10800000.00, 10000000.00, 30000000.00, 0.00, 30000000.00, 250000.00, 0, '2025-11-21', '2026-01-21', 2, 1, '2025-11-14 12:10:08'),
 (15, 11, 10, 5, 3, 25.00, 6000000.00, 8000000.00, 25000000.00, 1000000.00, 24000000.00, 250000.00, 0, '2025-11-28', '2026-01-28', 1, 1, '2025-11-20 06:41:05');
 
 -- --------------------------------------------------------
@@ -411,7 +411,10 @@ INSERT INTO `cash_flows` (`fow_id`, `account`, `destination`, `details`, `trx_nu
 (29, 1010228, 0, 'Field Purchase Payment', 'TR148231125070742', 4000000.00, 'inflow', 'operating', 1, '2025-11-23 07:07:42', 0),
 (30, 1010228, 0, 'Field Purchase Payment', 'TR674231125072916', 3000000.00, 'inflow', 'operating', 1, '2025-11-23 07:29:16', 0),
 (31, 1010228, 0, 'Field Purchase Payment', 'TR818231125081235', 400000.00, 'inflow', 'operating', 1, '2025-11-23 08:12:35', 0),
-(32, 1010228, 0, 'Field Purchase Payment', 'TR635231125081532', 100000.00, 'inflow', 'operating', 1, '2025-11-23 08:15:32', 0);
+(32, 1010228, 0, 'Field Purchase Payment', 'TR635231125081532', 100000.00, 'inflow', 'operating', 1, '2025-11-23 08:15:32', 0),
+(35, 1010228, 0, 'Field Documentation Payment', 'TR362241125103056', 150000.00, 'inflow', 'operating', 1, '2025-11-24 10:30:56', 1),
+(36, 1010228, 0, 'Field Documentation Payment', 'TR515241125012325', 100000.00, 'inflow', 'operating', 1, '2025-11-24 13:23:25', 1),
+(39, 1010228, 0, 'Investment Payment', 'TR581271125110759', 3100000.00, 'inflow', 'operating', 10, '2025-11-27 11:07:59', 1);
 
 -- --------------------------------------------------------
 
@@ -456,7 +459,7 @@ CREATE TABLE `companies` (
 --
 
 INSERT INTO `companies` (`company_id`, `company`, `logo`, `amount`, `date_created`) VALUES
-(1, 'Davidorlah Farm', 'davidorlah.png', 200000, '2025-08-28 14:46:39');
+(1, 'Davidorlah Nigeria Limited', 'davidorlah.png', 200000, '2025-08-28 14:46:39');
 
 -- --------------------------------------------------------
 
@@ -565,10 +568,10 @@ CREATE TABLE `customers` (
 --
 
 INSERT INTO `customers` (`customer_id`, `customer`, `ledger_id`, `acn`, `customer_type`, `user_password`, `phone_numbers`, `customer_address`, `customer_email`, `wallet_balance`, `amount_due`, `reg_date`, `created_by`, `updated_at`) VALUES
-(9, 'JIMOH IBRAHIM', 97, 1010497, 'Landowner', '$2y$10$gzJXM2rqk1kUYcN/S2zIEuiD0E//9V7Plxj2Xxi/rTMrs/09DncJG', '091234567898', 'Wehgfhjcbn', 'onostarkels@gmail.com', 0, 0, '2025-10-29 13:49:16', 1, NULL),
-(10, 'KELLY IKPEFUA', 98, 1010498, 'Landowner', '$2y$10$sKGhHvnYNPfci8kraHKu..u7lIm/F.SAUVGccIPcJovenJ4VvHyTa', '07068897968', 'Lagos', 'onostarmedia@gmail.com', 0, 0, '2025-10-29 13:56:57', 1, NULL),
-(12, 'MERCY', 100, 10104100, 'Landowner', '$2y$10$4hSTTjsKSgIVNgxLemYcXuZAw0iqe9JXcNxEOFhF0/CY6LBSqYUsu', '9878686', 'Lagos', 'mercyoteje97@gmail.com', 0, 0, '2025-11-14 12:06:54', 1, NULL),
-(14, 'JAMES BROWN', 102, 10104102, 'Landowner', '123', '09012345678', 'Benin', 'onolunosepro@gmail.com', 0, 0, '2025-11-20 05:26:05', 1, NULL);
+(9, 'JIMOH IBRAHIM', 97, 1010497, 'Investor', '$2y$10$gzJXM2rqk1kUYcN/S2zIEuiD0E//9V7Plxj2Xxi/rTMrs/09DncJG', '091234567898', 'Wehgfhjcbn', 'onostarkels@gmail.com', 0, 0, '2025-10-29 13:49:16', 1, NULL),
+(10, 'KELLY IKPEFUA', 98, 1010498, 'Investor', '$2y$10$sKGhHvnYNPfci8kraHKu..u7lIm/F.SAUVGccIPcJovenJ4VvHyTa', '07068897968', 'Lagos', 'onostarmedia@gmail.com', 0, 0, '2025-10-29 13:56:57', 1, NULL),
+(12, 'MERCY', 100, 10104100, 'Investor', '$2y$10$4hSTTjsKSgIVNgxLemYcXuZAw0iqe9JXcNxEOFhF0/CY6LBSqYUsu', '9878686', 'Lagos', 'mercyoteje97@gmail.com', 0, 0, '2025-11-14 12:06:54', 1, NULL),
+(14, 'JAMES BROWN', 102, 10104102, 'Retail Customer', '123', '09012345678', 'Benin', 'onolunosepro@gmail.com', 0, 0, '2025-11-20 05:26:05', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -608,7 +611,13 @@ INSERT INTO `customer_trail` (`id`, `customer`, `invoice`, `description`, `amoun
 (20, 10, '', 'Field Purchase Payment', 4000000.00, 'TR148231125070742', 1, 0, '2025-11-23 07:07:42'),
 (21, 10, '', 'Field Purchase Payment', 3000000.00, 'TR674231125072916', 1, 0, '2025-11-23 07:29:16'),
 (22, 10, '', 'Field Purchase Payment', 400000.00, 'TR818231125081235', 1, 0, '2025-11-23 08:12:35'),
-(23, 10, '', 'Field Purchase Payment', 100000.00, 'TR635231125081532', 1, 0, '2025-11-23 08:15:32');
+(23, 10, '', 'Field Purchase Payment', 100000.00, 'TR635231125081532', 1, 0, '2025-11-23 08:15:32'),
+(24, 10, '', 'Field Documentation Payment', 150000.00, 'TR018241125102332', 1, 1, '2025-11-24 10:23:32'),
+(25, 10, '', 'Field Documentation Payment', 150000.00, 'TR759241125102645', 1, 1, '2025-11-24 10:26:45'),
+(28, 10, '', 'Field Documentation Payment', 150000.00, 'TR362241125103056', 1, 1, '2025-11-24 10:30:56'),
+(29, 10, '', 'Field Documentation Payment', 100000.00, 'TR515241125012325', 1, 1, '2025-11-24 13:23:25'),
+(30, 10, '', 'Field Documentation Payment', 3100000.00, 'TR254271125103001', 10, 1, '2025-11-27 10:30:01'),
+(33, 10, '', 'Field Documentation Payment', 3100000.00, 'TR581271125110759', 10, 1, '2025-11-27 11:07:59');
 
 -- --------------------------------------------------------
 
@@ -728,7 +737,13 @@ INSERT INTO `deposits` (`deposit_id`, `store`, `customer`, `amount`, `payment_mo
 (16, 1, 10, 4000000.00, 'Cash', 0, 'LP23112507071321157', 'TR148231125070742', 'Field Purchase Payment', 'Paid', '2025-11-23', '2025-11-23 07:07:42', 0),
 (17, 1, 10, 3000000.00, 'Cash', 0, 'LP23112507271021157', 'TR674231125072916', 'Field Purchase Payment', 'Jjjj', '2025-11-23', '2025-11-23 07:29:16', 0),
 (18, 1, 10, 400000.00, 'Cash', 0, 'LP23112508120331157', 'TR818231125081235', 'Field Purchase Payment', 'Lknkl', '2025-11-23', '2025-11-23 08:12:35', 0),
-(19, 1, 10, 100000.00, 'Cash', 0, 'LP23112508140331157', 'TR635231125081532', 'Field Purchase Payment', 'Nbvbbn', '2025-11-23', '2025-11-23 08:15:32', 0);
+(19, 1, 10, 100000.00, 'Cash', 0, 'LP23112508140331157', 'TR635231125081532', 'Field Purchase Payment', 'Nbvbbn', '2025-11-23', '2025-11-23 08:15:32', 0),
+(20, 1, 10, 150000.00, 'Cash', 0, 'LP241125102100232112', 'TR018241125102332', 'Field Documentation Payment', 'Documentation payment', '2025-11-24', '2025-11-24 10:23:32', 1),
+(21, 1, 10, 150000.00, 'Cash', 0, 'LP241125102632001112', 'TR759241125102645', 'Field Documentation Payment', 'Documentation payment', '2025-11-24', '2025-11-24 10:26:45', 1),
+(24, 1, 10, 150000.00, 'Cash', 0, 'LP241125103023010112', 'TR362241125103056', 'Field Documentation Payment', 'Documentation payment', '2025-11-24', '2025-11-24 10:30:56', 1),
+(25, 1, 10, 100000.00, 'Cash', 0, 'LP241125012301023112', 'TR515241125012325', 'Field Documentation Payment', 'Documentation payment', '2025-11-24', '2025-11-24 13:23:25', 1),
+(26, 10, 10, 3100000.00, 'Cash', 0, 'INV271125102923016', 'TR254271125103001', 'Field Documentation Payment', 'Investment payment', '2025-11-27', '2025-11-27 10:30:01', 1),
+(29, 10, 10, 3100000.00, 'Cash', 0, 'INV271125110713316', 'TR581271125110759', 'Field Documentation Payment', 'Investment payment', '2025-11-27', '2025-11-27 11:07:59', 1);
 
 -- --------------------------------------------------------
 
@@ -837,6 +852,58 @@ CREATE TABLE `disposed_assets` (
   `disposed_date` datetime DEFAULT NULL,
   `disposed_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `documentation_fees`
+--
+
+CREATE TABLE `documentation_fees` (
+  `payment_id` int(11) NOT NULL,
+  `assigned_id` int(11) NOT NULL,
+  `field` int(11) NOT NULL,
+  `client` int(11) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `payment_mode` varchar(50) NOT NULL,
+  `bank` int(11) NOT NULL,
+  `trx_date` date DEFAULT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `invoice` varchar(50) NOT NULL,
+  `store` int(11) NOT NULL,
+  `post_date` datetime DEFAULT NULL,
+  `posted_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `documentation_fees`
+--
+
+INSERT INTO `documentation_fees` (`payment_id`, `assigned_id`, `field`, `client`, `amount`, `payment_mode`, `bank`, `trx_date`, `trx_number`, `invoice`, `store`, `post_date`, `posted_by`) VALUES
+(3, 12, 9, 10, 150000.00, 'Cash', 0, '2025-11-24', 'TR362241125103056', 'LP241125103023010112', 1, '2025-11-24 10:30:56', 1),
+(4, 12, 9, 10, 100000.00, 'Cash', 0, '2025-11-24', 'TR515241125012325', 'LP241125012301023112', 1, '2025-11-24 13:23:25', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `exchange_rates`
+--
+
+CREATE TABLE `exchange_rates` (
+  `exchange_id` int(11) NOT NULL,
+  `rate` decimal(12,2) NOT NULL,
+  `added_at` datetime DEFAULT NULL,
+  `added_by` int(11) NOT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `updated_by` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `exchange_rates`
+--
+
+INSERT INTO `exchange_rates` (`exchange_id`, `rate`, `added_at`, `added_by`, `updated_at`, `updated_by`) VALUES
+(1, 1550.00, '2025-11-25 08:42:29', 1, '2025-11-25 13:39:27', 1);
 
 -- --------------------------------------------------------
 
@@ -1092,6 +1159,98 @@ INSERT INTO `inventory` (`inventory_id`, `item`, `item_type`, `store`, `cost_pri
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `investments`
+--
+
+CREATE TABLE `investments` (
+  `investment_id` int(11) NOT NULL,
+  `customer` int(11) NOT NULL,
+  `store` int(11) NOT NULL,
+  `duration` int(11) NOT NULL,
+  `currency` varchar(50) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `total_in_naira` decimal(12,2) NOT NULL,
+  `exchange_rate` decimal(12,2) NOT NULL,
+  `contract_status` int(11) NOT NULL,
+  `posted_by` int(11) NOT NULL,
+  `post_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `investments`
+--
+
+INSERT INTO `investments` (`investment_id`, `customer`, `store`, `duration`, `currency`, `amount`, `total_in_naira`, `exchange_rate`, `contract_status`, `posted_by`, `post_date`) VALUES
+(6, 10, 10, 3, 'Dollar', 2000.00, 3100000.00, 1550.00, 1, 1, '2025-11-27 07:22:06');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `investment_payments`
+--
+
+CREATE TABLE `investment_payments` (
+  `payment_id` int(11) NOT NULL,
+  `investment` int(11) NOT NULL,
+  `customer` int(11) NOT NULL,
+  `invoice` varchar(50) NOT NULL,
+  `payment_mode` varchar(50) NOT NULL,
+  `bank` int(11) NOT NULL,
+  `currency` varchar(50) NOT NULL,
+  `amount` decimal(12,2) NOT NULL,
+  `amount_in_naira` decimal(12,2) NOT NULL,
+  `trx_number` varchar(50) NOT NULL,
+  `trx_date` date DEFAULT NULL,
+  `store` int(11) NOT NULL,
+  `posted_by` int(11) NOT NULL,
+  `post_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `investment_payments`
+--
+
+INSERT INTO `investment_payments` (`payment_id`, `investment`, `customer`, `invoice`, `payment_mode`, `bank`, `currency`, `amount`, `amount_in_naira`, `trx_number`, `trx_date`, `store`, `posted_by`, `post_date`) VALUES
+(3, 6, 10, 'INV271125110713316', 'Cash', 0, 'Dollar', 3100000.00, 3100000.00, 'TR581271125110759', '2025-11-27', 10, 1, '2025-11-27 11:07:59');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `investment_returns`
+--
+
+CREATE TABLE `investment_returns` (
+  `schedule_id` int(11) NOT NULL,
+  `investment_id` int(11) NOT NULL,
+  `customer` int(11) NOT NULL,
+  `due_date` date DEFAULT NULL,
+  `payment_status` int(11) NOT NULL,
+  `percentage` float NOT NULL,
+  `amount_due` decimal(12,2) NOT NULL,
+  `store` int(11) NOT NULL,
+  `posted_by` int(11) NOT NULL,
+  `post_date` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `investment_returns`
+--
+
+INSERT INTO `investment_returns` (`schedule_id`, `investment_id`, `customer`, `due_date`, `payment_status`, `percentage`, `amount_due`, `store`, `posted_by`, `post_date`) VALUES
+(2, 6, 10, '2026-11-27', 0, 30, 930000.00, 10, 1, '2025-11-27 10:44:27'),
+(3, 6, 10, '2027-05-27', 0, 15, 465000.00, 10, 1, '2025-11-27 10:44:27'),
+(4, 6, 10, '2027-11-27', 0, 15, 465000.00, 10, 1, '2025-11-27 10:44:27'),
+(5, 6, 10, '2028-05-27', 0, 15, 465000.00, 10, 1, '2025-11-27 10:44:27'),
+(6, 6, 10, '2028-11-27', 0, 15, 465000.00, 10, 1, '2025-11-27 10:44:27'),
+(7, 6, 10, '2026-11-27', 0, 30, 930000.00, 10, 1, '2025-11-27 11:07:59'),
+(8, 6, 10, '2027-05-27', 0, 15, 465000.00, 10, 1, '2025-11-27 11:07:59'),
+(9, 6, 10, '2027-11-27', 0, 15, 465000.00, 10, 1, '2025-11-27 11:07:59'),
+(10, 6, 10, '2028-05-27', 0, 15, 465000.00, 10, 1, '2025-11-27 11:07:59'),
+(11, 6, 10, '2028-11-27', 0, 15, 465000.00, 10, 1, '2025-11-27 11:07:59');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `issue_items`
 --
 
@@ -1139,7 +1298,8 @@ INSERT INTO `items` (`item_id`, `department`, `category`, `item_name`, `item_typ
 (1, '12', 37, 'PINEAPPLE', 'Crop', 4525, 5000, 0, 0, 0, 0, 10, '', 0, '2025-09-18 12:23:46'),
 (18, '1', 40, 'NPK FERTILIZER', 'Farm Input', 1000, 5000, 0, 0, 0, 0, 5, '', 0, '2025-09-18 15:04:22'),
 (20, '1', 41, 'SUCKER', 'Farm Input', 500, 0, 0, 0, 0, 0, 10, '', 0, '2025-11-10 07:01:16'),
-(21, '12', 37, 'LEAVES', 'Crop', 0, 0, 0, 0, 0, 0, 10, '', 0, '2025-11-19 07:49:08');
+(21, '12', 37, 'LEAVES', 'Crop', 0, 0, 0, 0, 0, 0, 10, '', 0, '2025-11-19 07:49:08'),
+(22, '12', 37, 'CONCENTRATE', 'Crop', 0, 0, 0, 0, 0, 0, 10, '', 0, '2025-11-24 12:27:25');
 
 -- --------------------------------------------------------
 
@@ -1340,7 +1500,8 @@ INSERT INTO `menus` (`menu_id`, `menu`) VALUES
 (11, 'Farm Management'),
 (12, 'Human Resource'),
 (13, 'Uploads'),
-(14, 'Customer Menu');
+(14, 'Customer Menu'),
+(15, 'Concentrate');
 
 -- --------------------------------------------------------
 
@@ -1412,7 +1573,20 @@ INSERT INTO `notifications` (`notification_id`, `client`, `subject`, `message`, 
 (112, 10, 'Field Purchase Payment Update', 'Dear KELLY IKPEFUA, your payment for MARYLAND FIELD (200.00 hectares) has been received. Total paid so far: ₦7,400,000.00, remaining balance: ₦16,600,000.00. Once fully paid, your annual rent of ₦6,000,000.00 will begin.', 0, '2025-11-23 08:12:35'),
 (113, 10, 'Field purchase Payment Confirmation', 'Dear KELLY IKPEFUA,\r\n            We confirm the receipt of your payment of ₦400,000.00 on 23rd November 2025, 08:12am towards your Field purchase.\r\n            Transaction ID: LP23112508120331157\r\n            Your account has been updated accordingly. Thank you for your commitment.\r\n            \r\n            If you have any questions or need a receipt, feel free to contact us\r\n\r\n            Warm regards,\r\n            Davidorlah Farm\r\n            Customer Support', 0, '2025-11-23 08:12:35'),
 (114, 10, 'Field Purchase Payment Update', 'Dear KELLY IKPEFUA, your payment for MARYLAND FIELD (200.00 hectares) has been received. Total paid so far: ₦7,500,000.00, remaining balance: ₦16,500,000.00. Once fully paid, your annual rent of ₦6,000,000.00 will begin.', 0, '2025-11-23 08:15:32'),
-(115, 10, 'Field purchase Payment Confirmation', 'Dear KELLY IKPEFUA,\r\n            We confirm the receipt of your payment of ₦100,000.00 on 23rd November 2025, 08:15am towards your Field purchase.\r\n            Transaction ID: LP23112508140331157\r\n            Your account has been updated accordingly. Thank you for your commitment.\r\n            \r\n            If you have any questions or need a receipt, feel free to contact us\r\n\r\n            Warm regards,\r\n            Davidorlah Farm\r\n            Customer Support', 0, '2025-11-23 08:15:32');
+(115, 10, 'Field purchase Payment Confirmation', 'Dear KELLY IKPEFUA,\r\n            We confirm the receipt of your payment of ₦100,000.00 on 23rd November 2025, 08:15am towards your Field purchase.\r\n            Transaction ID: LP23112508140331157\r\n            Your account has been updated accordingly. Thank you for your commitment.\r\n            \r\n            If you have any questions or need a receipt, feel free to contact us\r\n\r\n            Warm regards,\r\n            Davidorlah Farm\r\n            Customer Support', 0, '2025-11-23 08:15:32'),
+(116, 10, 'Field Documentation Payment Update', 'Dear KELLY IKPEFUA, your documentation payment for IGANDO FARM FIELD (900.00 hectares) has been received. Total paid so far: ₦150,000.00, remaining balance: ₦100,000.00', 0, '2025-11-24 10:30:56'),
+(117, 10, 'Field Documentation Payment Confirmation', 'Dear KELLY IKPEFUA,\r\n            We confirm the receipt of your payment of ₦150,000.00 on 24th November 2025, 10:30am towards your Field documentaion.\r\n            Transaction ID: LP241125103023010112\r\n            Your account has been updated accordingly. Thank you for your commitment.\r\n            \r\n            If you have any questions or need a receipt, feel free to contact us\r\n\r\n            Warm regards,\r\n            Davidorlah Farm\r\n            Customer Support', 0, '2025-11-24 10:30:56'),
+(118, 10, 'Field Documentation payment Completed', 'Dear KELLY IKPEFUA, Documentation for your field (IGANDO FARM FIELD - 900.00 hectares) has been fully paid. ', 0, '2025-11-24 13:23:25'),
+(119, 10, 'Field Documentation Payment Confirmation', 'Dear KELLY IKPEFUA,\r\n            We confirm the receipt of your payment of ₦100,000.00 on 24th November 2025, 01:23pm towards your Field documentaion.\r\n            Transaction ID: LP241125012301023112\r\n            Your account has been updated accordingly. Thank you for your commitment.\r\n            \r\n            If you have any questions or need a receipt, feel free to contact us\r\n\r\n            Warm regards,\r\n            Davidorlah Farm\r\n            Customer Support', 0, '2025-11-24 13:23:25'),
+(120, 10, 'Your Concentrate Investment Has Been Created', 'Dear KELLY IKPEFUA, your Concentrate Production Investment has been successfully created. Please proceed with the investment payment to activate your 3-year contract. You will earn 30% after the first 12 months and 15% every 6 months thereafter.', 0, '2025-11-27 06:40:49'),
+(121, 10, 'Your Concentrate Investment Has Been Created', 'Dear KELLY IKPEFUA, your Concentrate Production Investment has been successfully created. Please proceed with the investment payment to activate your 3-year contract. You will earn 30% after the first 12 months and 15% every 6 months thereafter.', 0, '2025-11-27 06:40:54'),
+(122, 10, 'Your Concentrate Investment Has Been Created', 'Dear KELLY IKPEFUA, your Concentrate Production Investment has been successfully created. Please proceed with the investment payment to activate your 3-year contract. You will earn 30% after the first 12 months and 15% every 6 months thereafter.', 0, '2025-11-27 06:46:23'),
+(123, 10, 'Your Concentrate Investment Has Been Created', 'Dear KELLY IKPEFUA, your Concentrate Production Investment has been successfully created. Please proceed with the investment payment to activate your 3-year contract. You will earn 30% after the first 12 months and 15% every 6 months thereafter.', 0, '2025-11-27 06:47:34'),
+(124, 10, 'Your Concentrate Investment Has Been Created', 'Dear KELLY IKPEFUA, your Concentrate Production Investment has been successfully created. Please proceed with the investment payment to activate your 3-year contract. You will earn 30% after the first 12 months and 15% every 6 months thereafter.', 0, '2025-11-27 06:50:11'),
+(125, 10, 'Your Concentrate Investment Has Been Created', 'Dear KELLY IKPEFUA, your Concentrate Production Investment has been successfully created. Please proceed with the investment payment to activate your 3-year contract. You will earn 30% after the first 12 months and 15% every 6 months thereafter.', 1, '2025-11-27 07:22:06'),
+(126, 10, 'Concentrate Investment Payment Completed', 'Dear KELLY IKPEFUA, your investment of $2,000.00 has been fully paid.', 0, '2025-11-27 10:35:11'),
+(127, 10, 'Concentrate Investment Payment Completed', 'Dear KELLY IKPEFUA, your investment of $2,000.00 has been fully paid.', 0, '2025-11-27 10:44:27'),
+(128, 10, 'Concentrate Investment Payment Completed', 'Dear KELLY IKPEFUA, your investment of $2,000.00 has been fully paid.', 0, '2025-11-27 11:07:59');
 
 -- --------------------------------------------------------
 
@@ -2340,8 +2514,17 @@ INSERT INTO `sub_menus` (`sub_menu_id`, `menu`, `sub_menu`, `url`, `status`) VAL
 (201, 4, 'Payments Due', 'payments_due', 0),
 (203, 14, 'Upload Receipt', 'upload_payment', 0),
 (204, 14, 'Receipt Upload Reports', 'receipt_upload_report', 0),
-(205, 4, 'Approve Payment', 'approve_customer_payment', 0),
-(206, 14, 'My Field Payments', 'customer_field_payments', 0);
+(205, 4, 'Approve Field Payment', 'approve_customer_payment', 0),
+(206, 14, 'My Field Payments', 'customer_field_payments', 0),
+(207, 4, 'Documentation Fee', 'documentation_fee', 0),
+(208, 6, 'Field Payments', 'field_payment_report', 0),
+(209, 6, 'Documentation Payments', 'documentation_payments', 0),
+(210, 14, 'My Documentation Payments', 'customer_documentaion_payments', 0),
+(211, 15, 'Production', 'concentrate_production', 0),
+(212, 15, 'Client Investment', 'concentrate_investment', 0),
+(213, 1, 'Exchange Rate', 'exchange_rate', 0),
+(214, 4, 'Post Investment', 'post_investment_payment', 0),
+(215, 14, 'Concentrate Investments', 'my_investments', 0);
 
 -- --------------------------------------------------------
 
@@ -2615,7 +2798,13 @@ INSERT INTO `transactions` (`transaction_id`, `account_type`, `sub_group`, `clas
 (215, 1, 1, 2, 1010228, 400000.000, 0.000, 'TR818231125081235', 'Field Purchase payment', 0, '2025-11-23', 1, '2025-11-23 08:12:35', 0),
 (216, 1, 1, 4, 1010498, 0.000, 400000.000, 'TR818231125081235', 'Field Purchase Payment', 0, '2025-11-23', 1, '2025-11-23 08:12:35', 0),
 (217, 1, 1, 2, 1010228, 100000.000, 0.000, 'TR635231125081532', 'Field Purchase payment', 0, '2025-11-23', 1, '2025-11-23 08:15:32', 0),
-(218, 1, 1, 4, 1010498, 0.000, 100000.000, 'TR635231125081532', 'Field Purchase Payment', 0, '2025-11-23', 1, '2025-11-23 08:15:32', 0);
+(218, 1, 1, 4, 1010498, 0.000, 100000.000, 'TR635231125081532', 'Field Purchase Payment', 0, '2025-11-23', 1, '2025-11-23 08:15:32', 0),
+(223, 1, 1, 2, 1010228, 150000.000, 0.000, 'TR362241125103056', 'Field Documentation payment', 0, '2025-11-24', 1, '2025-11-24 10:30:56', 1),
+(224, 1, 1, 4, 1010498, 0.000, 150000.000, 'TR362241125103056', 'Field Documentation Payment', 0, '2025-11-24', 1, '2025-11-24 10:30:56', 1),
+(225, 1, 1, 2, 1010228, 100000.000, 0.000, 'TR515241125012325', 'Field Documentation payment', 0, '2025-11-24', 1, '2025-11-24 13:23:25', 1),
+(226, 1, 1, 4, 1010498, 0.000, 100000.000, 'TR515241125012325', 'Field Documentation Payment', 0, '2025-11-24', 1, '2025-11-24 13:23:25', 1),
+(231, 1, 1, 2, 1010228, 3100000.000, 0.000, 'TR581271125110759', 'Investment payment', 0, '2025-11-27', 10, '2025-11-27 11:07:59', 1),
+(232, 1, 1, 4, 1010498, 0.000, 3100000.000, 'TR581271125110759', 'Investment Payment', 0, '2025-11-27', 10, '2025-11-27 11:07:59', 1);
 
 -- --------------------------------------------------------
 
@@ -2661,7 +2850,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `full_name`, `username`, `user_role`, `user_password`, `status`, `store`, `reg_date`) VALUES
-(1, 'Administrator', 'Sysadmin', 'Admin', '$2y$10$dcUrnR/.PvfK7XeYcP60hOyW2qnPSSvEq/Wxee6lv5DETW8pbGXYu', 0, 1, '2022-09-27 13:47:21');
+(1, 'Administrator', 'Sysadmin', 'Admin', '$2y$10$dcUrnR/.PvfK7XeYcP60hOyW2qnPSSvEq/Wxee6lv5DETW8pbGXYu', 0, 10, '2022-09-27 13:47:21');
 
 -- --------------------------------------------------------
 
@@ -2910,6 +3099,18 @@ ALTER TABLE `disposed_assets`
   ADD PRIMARY KEY (`disposed_id`);
 
 --
+-- Indexes for table `documentation_fees`
+--
+ALTER TABLE `documentation_fees`
+  ADD PRIMARY KEY (`payment_id`);
+
+--
+-- Indexes for table `exchange_rates`
+--
+ALTER TABLE `exchange_rates`
+  ADD PRIMARY KEY (`exchange_id`);
+
+--
 -- Indexes for table `expenses`
 --
 ALTER TABLE `expenses`
@@ -2956,6 +3157,24 @@ ALTER TABLE `harvests`
 --
 ALTER TABLE `inventory`
   ADD PRIMARY KEY (`inventory_id`);
+
+--
+-- Indexes for table `investments`
+--
+ALTER TABLE `investments`
+  ADD PRIMARY KEY (`investment_id`);
+
+--
+-- Indexes for table `investment_payments`
+--
+ALTER TABLE `investment_payments`
+  ADD PRIMARY KEY (`payment_id`);
+
+--
+-- Indexes for table `investment_returns`
+--
+ALTER TABLE `investment_returns`
+  ADD PRIMARY KEY (`schedule_id`);
 
 --
 -- Indexes for table `issue_items`
@@ -3343,7 +3562,7 @@ ALTER TABLE `banks`
 -- AUTO_INCREMENT for table `cash_flows`
 --
 ALTER TABLE `cash_flows`
-  MODIFY `fow_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `fow_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -3385,7 +3604,7 @@ ALTER TABLE `customers`
 -- AUTO_INCREMENT for table `customer_trail`
 --
 ALTER TABLE `customer_trail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `cycle_changes`
@@ -3409,7 +3628,7 @@ ALTER TABLE `departments`
 -- AUTO_INCREMENT for table `deposits`
 --
 ALTER TABLE `deposits`
-  MODIFY `deposit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `deposit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `depreciation`
@@ -3440,6 +3659,18 @@ ALTER TABLE `disciplines`
 --
 ALTER TABLE `disposed_assets`
   MODIFY `disposed_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `documentation_fees`
+--
+ALTER TABLE `documentation_fees`
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `exchange_rates`
+--
+ALTER TABLE `exchange_rates`
+  MODIFY `exchange_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `expenses`
@@ -3490,6 +3721,24 @@ ALTER TABLE `inventory`
   MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT for table `investments`
+--
+ALTER TABLE `investments`
+  MODIFY `investment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `investment_payments`
+--
+ALTER TABLE `investment_payments`
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `investment_returns`
+--
+ALTER TABLE `investment_returns`
+  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
 -- AUTO_INCREMENT for table `issue_items`
 --
 ALTER TABLE `issue_items`
@@ -3499,7 +3748,7 @@ ALTER TABLE `issue_items`
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `item_transfers`
@@ -3541,7 +3790,7 @@ ALTER TABLE `loans`
 -- AUTO_INCREMENT for table `menus`
 --
 ALTER TABLE `menus`
-  MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `multiple_payments`
@@ -3553,7 +3802,7 @@ ALTER TABLE `multiple_payments`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=129;
 
 --
 -- AUTO_INCREMENT for table `observations`
@@ -3733,7 +3982,7 @@ ALTER TABLE `stores`
 -- AUTO_INCREMENT for table `sub_menus`
 --
 ALTER TABLE `sub_menus`
-  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=207;
+  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=216;
 
 --
 -- AUTO_INCREMENT for table `sucker_removal`
@@ -3769,7 +4018,7 @@ ALTER TABLE `tax_rules`
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=219;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=233;
 
 --
 -- AUTO_INCREMENT for table `transfers`

@@ -22,9 +22,9 @@
                 //check if transaction is in labour payments table
                 if($table->table_name == 'labour_payments'){
                     //get task id
-                    $tasks = $check_column->fetch_details_cond('labour_payments', 'trx_number', $trx_number);
-                    foreach($tasks as $task){
-                        $task_id = $task->task;
+                    $taskss = $check_column->fetch_details_cond('labour_payments', 'trx_number', $trx_number);
+                    foreach($taskss as $tasks){
+                        $task_id = $tasks->task;
                     }
                     $update_task = new Update_table();
                     $update_task->update('tasks', 'payment_status', 'task_id', 0, $task_id);

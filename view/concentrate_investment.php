@@ -1,4 +1,4 @@
-<div id="concenrates" class="displays">
+<div id="concentrates" class="displays">
     <style>
         label{
             font-size:.8rem!important;
@@ -80,14 +80,10 @@
                     <label for="amount" id="amount_currency">Amount</label>
                     <input type="number" id="amount" name="amount" value="0.00" required oninput="getTotalRate()">
                 </div>
-                <div class="data" style="width:48%">
+                <div class="data" style="width:48%; margin:5px 0">
                     <label for="total_in_naira">Total Amount in Naira (₦)</label>
                     <input type="text" id="total_in_naira" name="total_in_naira" style="background:#fff; color:green" value="0.00" readonly>
                     <input type="hidden" id="total_naira" name="total_naira">
-                </div>
-                <div class="data" style="width:48%; margin:5px 0">
-                    <label for="start_date">Start Date</label>
-                    <input type="date" id="start_date" name="start_date">
                 </div>
                 <div class="data" style="width:auto; margin:5px 0">
                     <button type="button" style="background:var(--tertiaryColor)" id="change_price" name="change_price" onclick="invest()">Save Investment <i class="fas fa-save"></i></button>

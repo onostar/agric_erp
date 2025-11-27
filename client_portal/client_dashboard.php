@@ -19,12 +19,20 @@
             </a>
         </div> 
         <div class="cards" id="card1">
-            <a href="javascript:void(0)" class="page_navs" onclick="showPage('active_crop_cycles.php')">
+            <a href="javascript:void(0)" class="page_navs" onclick="showPage('my_investments.php')">
                 <div class="infos">
-                    <p><i class="fas fa-seedling"></i> Active Crop Cycle</p>
+                    <p><i class="fas fa-briefcase"></i> Active Investments</p>
                     <p>
                     <?php
-                        $cycles = $get_info->fetch_count_2cond('fields', 'customer', $user_id, 'field_status', 1); echo $cycles
+                        $invests = $get_info->fetch_sum_double('investments', 'total_in_naira', 'customer', $user_id, 'contract_status', 1);
+                        if(is_array($invests)){
+                            foreach($invests as $invest){
+                                $total_investment = $invest->total;
+                            }
+                        }else{
+                            $total_investment = 0;
+                        }
+                        echo "₦".number_format($total_investment, 2);
                     ?>
                     </p>
                 </div>

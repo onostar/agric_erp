@@ -14,7 +14,7 @@
     
 </style>
 <div class="displays allResults" id="farm_fields" style="width:90%!important;margin:20px 50px!important">
-    <h2>Upload payment receipts</h2>
+    <h2>Upload Land/Field payment receipts</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchStaff" placeholder="Enter keyword" onkeyup="searchData(this.value)">
