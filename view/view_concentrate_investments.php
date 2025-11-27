@@ -4,21 +4,34 @@
     include "../classes/dbh.php";
     include "../classes/select.php";
     if(isset($_SESSION['user_id'])){
-       $customer = $_SESSION['user_id'];
+       $store = $_SESSION['store_id'];
     
 
 ?>
 <style>
     table td{
-        font-size:.75rem!important;
+        font-size:.7rem!important;
         /* padding:2px!important; */
     }
     
 </style>
 <div id="revenueReport" class="displays management" style="margin:0!important;width:100%!important">
-    
+    <div class="select_date">
+        <!-- <form method="POST"> -->
+        <section>    
+            <div class="from_to_date">
+                <label>Select From Date</label><br>
+                <input type="date" name="from_date" id="from_date"><br>
+            </div>
+            <div class="from_to_date">
+                <label>Select to Date</label><br>
+                <input type="date" name="to_date" id="to_date"><br>
+            </div>
+            <button type="submit" name="search_date" id="search_date" onclick="search('search_concentrate_investments.php')">Search <i class="fas fa-search"></i></button>
+        </section>
+    </div>
 <div class="displays allResults new_data" id="revenue_report">
-    <h2>My Current Concentrate Investments</h2>
+    <h2>Showing Investments Posted Today</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchRoom" placeholder="Enter keyword" onkeyup="searchData(this.value)">
@@ -28,13 +41,14 @@
         <thead>
             <tr style="background:var(--moreColor)">
                 <td>S/N</td>
-                <td>Date</td>
-                <td>Investment No.</td>
+                <td>Time</td>
+                <td>Client</td>
+                <td>Inv. No.</td>
                 <td>Currency</td>
                 <td>Amount</td>
-                <td>Value in Naira (NGN)</td>
-                <td>Amount Paid (NGN)</td>
-                <td>Amount Due (NGN)</td>
+                <td>Value in Naira</td>
+                <td>Amount Paid</td>
+                <td>Amount Due</td>
                 <td>Status</td>
             </tr>
         </thead>
@@ -42,13 +56,23 @@
             <?php
                 $n = 1;
                 $get_details = new selects();
-                $details = $get_details->fetch_details_condOrder('investments', 'customer', $customer, 'post_date');
+                $details = $get_details->fetch_details_condOrder('investments', 'store', $store, 'post_date');
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
-                <td><?php echo date("Y-M-d", strtotime($detail->post_date))?></td>
+                <td><?php echo date("h:i:sa", strtotime($detail->post_date))?></td>
+                <td>
+                    <?php
+                        //get client
+                        $cls = $get_details->fetch_details_cond('customers', 'customer_id', $detail->customer);
+                        foreach($cls as $cl){
+                            $client = $cl->customer;
+                        }
+                        echo $client;
+                    ?>
+                </td>
                 <td style="color:var(--primaryColor)"><?php echo "DAV/CON/00$detail->investment_id"?></td>
                 <td>
                     <?php
@@ -95,7 +119,7 @@
                         }
                     ?>
                     <?php if($detail->contract_status != 0){?>
-                    <a href="javascript:void(0)"  onclick="showPage('view_my_investment.php?investment=<?php echo $detail->investment_id?>&customer=<?php echo $detail->customer?>')" style="color:#fff; background:var(--tertiaryColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #222; border-radius:15px;" title="View details">View <i class="fas fa-eye"></i></a>
+                    <a href="javascript:void(0)"  onclick="showPage('view_client_investment.php?investment=<?php echo $detail->investment_id?>&customer=<?php echo $detail->customer?>')" style="color:#fff; background:var(--tertiaryColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #222; border-radius:15px;" title="View details">View <i class="fas fa-eye"></i></a>
                     <?php }?>
                 </td>
                 
@@ -109,6 +133,13 @@
     <?php
         if(gettype($details) == "string"){
             echo "<p class='no_result'>'$details'</p>";
+        }
+        //get total cos of payments today
+        $ttls = $get_details->fetch_sum_curdateCon('investments', 'total_in_naira', 'date(post_date)', 'store', $store);
+        if(gettype($ttls) === 'array'){
+            foreach($ttls as $ttl){
+                echo "<p class='total_amount' style='color:green; text-align:center;'>Total: ₦".number_format($ttl->total, 2)."</p>";
+            }
         }
     ?>
        

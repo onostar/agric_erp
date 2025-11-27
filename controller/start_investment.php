@@ -39,7 +39,13 @@ include "../classes/update.php";
 include "../classes/inserts.php";
 
 $get_details = new selects();
-
+//check if there is an exisitng unpaid investment
+$checks = $get_details->fetch_count_2cond('investments', 'customer', $customer, 'contract_status', 0);
+if($checks > 0){
+    echo "<script>The selected Client has a pending investment yet to be activated! Kindly make proceed to payment in order to activate the pending investment before proceeding to start a new investment</script>";
+    echo "<div class='success'><p style='background:red'>The selected Client has a pending investment yet to be activated! Kindly make proceed to payment in order to activate the pending investment before proceeding to start a new investment! <i class='fas fa-thumbs-down'></i></p></div>";
+    exit;
+}else{
 $add_data = new add_data('investments', $data);
 $add_data->create_data();
 
@@ -140,5 +146,5 @@ if($currency == "Dollar"){
     smtpmailer($to, $from, $from_name, $subj, $msg);
 
     echo "<div class='success'><p>Concentrate investment posted successfully! <i class='fas fa-thumbs-up'></i></p></div>";
-
+}
 ?>

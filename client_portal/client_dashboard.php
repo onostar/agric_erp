@@ -39,9 +39,9 @@
             </a>
         </div> 
         <div class="cards" id="card5" style="background: var(--moreColor)">
-            <a href="javascript:void(0)" onclick="showPage('loan_status.php')">
+            <a href="javascript:void(0)">
                 <div class="infos">
-                    <p><i class="fas fa-piggy-bank"></i> Payment Due</p>
+                    <p><i class="fas fa-piggy-bank"></i> Payables</p>
                     <p>
                     <?php
                        //balance
@@ -63,7 +63,29 @@
                             $amount_paid = 0;
                         }
                         $debt = $balance_due - $amount_paid;
-                        echo "₦".number_format($debt, 2);
+                        //get investment due
+                        $inves = $get_info->fetch_sum_double('investments', 'total_in_naira', 'contract_status', 0, 'customer', $user_id);
+                        if(is_array($inves)){
+                            foreach($inves as $inve){
+                                $investment_due = $inve->total;
+                            }
+                        }else{
+                            $investment_due = 0;
+                        }
+                        //get payment
+                        $inves_pay = $get_info->fetch_sum_single('investment_payments', 'amount_in_naira', 'customer', $user_id);
+                        if(is_array($inves_pay)){
+                            foreach($inves_pay as $inve_pay){
+                                $investment_paid = $inve_pay->total;
+                            }
+                        }else{
+                            $investment_paid = 0;
+                        }
+                        //investment debt
+                        $investment_debt = $investment_due - $investment_paid;
+                        //total due
+                        $total_debt = $debt + $investment_debt;
+                        echo "₦".number_format($total_debt, 2);
                     ?>
                     </p>
                 </div>
@@ -94,8 +116,30 @@
                         }else{
                             $amount_paid = 0;
                         }
-                        $debt = $balance_due - $amount_paid;
-                        echo "₦".number_format($debt, 2);
+                        //total rent 
+                        $rent = $balance_due - $amount_paid;
+                       //returns schedule
+                       $returns_owe = $get_info->fetch_sum_double('investment_returns', 'amount_due', 'payment_status', 0, 'customer', $user_id);
+                       if(is_array($returns_owe)){
+                           foreach($returns_owe as $return_owe){
+                               $returns_due = $return_owe->total;
+                           }
+                        }else{
+                            $returns_due = 0;
+                        }
+                        //get total paid amount
+                        $returns_paids = $get_info->fetch_sum_double('investment_returns', 'amount_paid', 'payment_status', 0, 'customer', $user_id);
+                        if(is_array($returns_paids)){
+                            foreach($returns_paids as $returns_pay){
+                                $returns_paid = $returns_pay->total;
+                            }
+                        }else{
+                            $returns_paid = 0;
+                        }
+                        //total returns
+                        $total_returns = $returns_due - $returns_paid;
+                        $receviebles = $rent + $total_returns;
+                        echo "₦".number_format($receviebles, 2);
                         
                     ?>
                     </p>
@@ -114,7 +158,7 @@
     <div class="daily_monthly" style="margin:0!important;padding:0!important">
         <!-- daily revenue summary -->
         <div class="daily_report allResults" style="margin:0!important;padding:0!important">
-            <h3 style="background:var(--otherColor); font-family:Poppins">Scheduled Payments</h3>
+            <h3 style="background:var(--otherColor); font-family:Poppins">Scheduled Land/Field Payments</h3>
             <table id="item_list_table" class="searchTable">
                 <thead>
                     <tr>
@@ -176,46 +220,12 @@
                 }
             ?>
         </div>
-        <!-- monthly revenue summary -->
+        <!-- rent schedule -->
         <div class="monthly_report allResults" style="margin:0!important;padding:0!important">
             
             <div class="monthly_encounter" style="margin:0 0 20px; width:100%!important">
                 <h3 style="background:rgb(117, 32, 12)!important; font-family:Poppins">Rent Schedule</h3>
-                <!-- <table>
-                    <thead>
-                        <tr>
-                            <td>S/N</td>
-                            <td>Date</td>
-                            <td>Amount</td>
-                            <td>Details</td>
-                        </tr>
-                    </thead>
-                    <?php
-                       /*  $n = 1;
-                        $trxs = $get_info->fetch_details_condLimitDesc('deposits', 'customer', $user_id, 10, 'post_date');
-                        if(is_array($trxs)){
-                        foreach($trxs as $trx): */
-
-                    ?>
-                    <tbody>
-                        <tr>
-                            <td><?php echo $n?></td>
-                            <td style="color:var(--primaryColor)"><?php echo date("d-M-Y, h:ia", strtotime($trx->post_date))?></td>
-                            <td style="text-align:center; color:green"><?php echo "₦".number_format($trx->amount)?></td>
-                            <td><?php
-                                echo $trx->trx_type;
-                            ?></td>
-                        </tr>
-                    </tbody>
-                    <?php /* $n++; endforeach; } */?>
-
-                    
-                </table>
-                <?php 
-                    /* if(gettype($trxs) == "string"){
-                        echo "<p class='no_result'>'$trxs'</p>";
-                    } */
-                ?> -->
+                
                 <table>
                     <thead>
                         <tr>
@@ -279,6 +289,78 @@
             </div>
            
         </div>
-        
+        <!-- investment returns schedule -->
+        <?php 
+            $invs = $get_info->fetch_details_2cond('investments', 'customer', 'contract_status', $user_id, 1);
+            if(is_array($invs)){
+        ?>
+        <div class="monthly_report allResults" style="margin:0!important;padding:0!important">
+            
+            <div class="monthly_encounter" style="margin:0 0 20px; width:100%!important">
+                <h3 style="background:rgb(117, 32, 12)!important; font-family:Poppins">Investment Returns Schedule</h3>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <td>S/N</td>
+                            <td>Date</td>
+                            <td>Amount</td>
+                            <td>Details</td>
+                        </tr>
+                    </thead>
+                    
+                <tbody id="result">
+                    <?php
+                        $n = 1;
+                        
+                        foreach($invs as $inv){
+                            $repays = $get_info->fetch_details_2cond('investment_returns', 'investment_id', 'payment_status', $inv->investment_id, 0);
+                            if(is_array($repays)){
+                            $allow_next = true; // True until first unpaid schedule is found
+                            foreach($repays as $repay){
+                        
+                    ?>
+                    <tr>
+                        <td style="text-align:center; color:red;"><?php echo $n?></td>
+                        <td><?php echo date("d-M-Y", strtotime($repay->due_date))?></td>
+                        <td style="color:var(--secondaryColor)"><?php  echo "₦".number_format(($repay->amount_due - $repay->amount_paid), 2)?></td>
+                        <td>
+                            <?php
+                                $date_due = new DateTime($repay->due_date);
+                                $today = new DateTime();
+
+                                // $button = "<a style='border-radius:15px; background:var(--tertiaryColor);color:#fff; padding:3px 6px; box-shadow:1px 1px 1px #222; border:1px solid #fff' href='javascript:void(0)' onclick=\"showPage('client_payment.php?schedule={$repay->repayment_id}&customer={$user_id}')\" title='Post payment'>Pay <i class='fas fa-hand-holding-dollar'></i></a>";
+
+                                if($repay->payment_status == "1"){
+                                    echo "<span style='color:var(--tertiaryColor);'>Paid <i class='fas fa-check-circle'></i></span>";
+                                } else {
+                                    // First unpaid schedule (or any overdue) is allowed to pay only if previous schedules are paid
+                                    if($allow_next || $date_due < $today){
+                                        if($date_due > $today){
+                                            echo "<span style='color:var(--primaryColor);'><i class='fas fa-spinner'></i> Pending </span> ";
+                                        } else {
+                                            echo "<span style='color:red;'><i class='fas fa-clock'></i> Overdue </span> ";
+                                        }
+                                        $allow_next = false; // After showing Add Payment for one, others must wait
+                                    } else {
+                                        echo "<span style='color:#999;'>Waiting for previous payment <i class='fas fa-lock'></i></span>";
+                                    }
+                                }
+                            ?>
+                        </td>
+                    </tr>
+                    
+                    <?php $n++; };}}?>
+                </tbody>
+            </table>
+            <?php
+                if(gettype($repays) == "string"){
+                    echo "<p class='no_result'>'$repays'</p>";
+                }
+            ?>
+            </div>
+           
+        </div>
+        <?php }?>
     </div>
 </div>

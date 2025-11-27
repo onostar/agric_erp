@@ -25,6 +25,7 @@ if(isset($_GET['receipt'])){
         $amount_naira = $pay->amount_in_naira;
         $investment = $pay->investment;
         $store = $pay->store;
+        $posted_by = $pay->posted_by;
     }
 
     /* -------------------------------------------------
@@ -141,7 +142,7 @@ if(isset($_GET['receipt'])){
 <div class="receipt_section">
     <?php
         $get_seller = new selects();
-        $seller = $get_seller->fetch_details_group('users', 'full_name', 'user_id', $user);
+        $seller = $get_seller->fetch_details_group('users', 'full_name', 'user_id', $posted_by);
         echo "<p><strong>Posted by:</strong> $seller->full_name</p>";
     ?>
 </div>
