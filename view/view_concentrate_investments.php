@@ -39,7 +39,7 @@
     </div>
     <table id="data_table" class="searchTable">
         <thead>
-            <tr style="background:var(--moreColor)">
+            <tr style="background:var(--tertiaryColor)">
                 <td>S/N</td>
                 <td>Time</td>
                 <td>Client</td>
@@ -56,7 +56,7 @@
             <?php
                 $n = 1;
                 $get_details = new selects();
-                $details = $get_details->fetch_details_condOrder('investments', 'store', $store, 'post_date');
+                $details = $get_details->fetch_details_curdateCon('investments', 'post_date', 'store', $store);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
