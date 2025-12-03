@@ -11,7 +11,7 @@
     $bank = htmlspecialchars(stripslashes($_POST['bank']));
     $trans_date = htmlspecialchars(stripslashes($_POST['trans_date']));
     $details = ucwords(htmlspecialchars(stripslashes($_POST['details'])));
-    $trans_type = "Loan Repayment";
+    $trans_type = "Investment Returns";
     // $type = "Deposit";
     $date = date("Y-m-d H:i:s");
     $company = $_SESSION['company'];
@@ -29,7 +29,7 @@
         'customer' => $customer,
         'payment_mode' => $mode,
         'amount' => $amount,
-        'details' => $details,
+        'details' => 'Investment Returns',
         'invoice' => $receipt,
         'store' => $store,
         'bank' => $bank,
@@ -67,24 +67,24 @@
         $add_trail->create_data();
         //get schedule details
         $get_details = new selects();
-        $results = $get_details->fetch_details_cond('rent_schedule', 'repayment_id', $schedule);
+        $results = $get_details->fetch_details_cond('investment_returns', 'schedule_id', $schedule);
         foreach($results as $result){
             $amount_due = $result->amount_due;
             $amount_paid = $result->amount_paid;
-            $loan_id = $result->loan;
+            $investment = $result->investment_id;
+            $percentage = $result->percentage;
         }
-        //get loan details
-        $loan_details = $get_details->fetch_details_cond('assigned_fields', 'assigned_id', $loan_id);
+        //get investment details
+        $loan_details = $get_details->fetch_details_cond('investments', 'investment_id', $investment);
         foreach($loan_details as $loan){
-            $annual_rent = $loan->annual_rent;
-            $field = $loan->field;
+            $invested_amount = $loan->amount;
+            $duration = $loan->duration;
+            $currency = $loan->currency;
+            $total_naira = $loan->total_in_naira;
+            $rate = $loan->exchange_rate;
             // $total_payable = $loan->total_repayment;
         }
-        //get field name
-        $field_details = $get_details->fetch_details_cond('fields', 'field_id', $field);
-        foreach($field_details as $field_detail){
-            $field_name = $field_detail->field_name;
-        }
+       
         //get balance 
         $balance = $amount_due - $amount_paid;
         $new_balance = $balance - $amount;
@@ -93,35 +93,26 @@
         }else{
             $amount_received = $balance;
         }
-        // Calculate total interest and processing fee based on loan
-        /* $interest_portion = ($loan_amount * $interest_rate) / 100;
-        $processing_portion = ($loan_amount * $processing_rate) / 100; */
-
-        // Proportional interest and fee for this payment
-       /*  $interest = ($amount_received * $interest_portion) / $total_payable;
-        $processing_fee = ($amount_received * $processing_portion) / $total_payable;
-        $principal = $amount_received - $interest - $processing_fee; */
+        
         
         $total_paid = $amount_paid + $amount_received;
         if($new_balance <= 0){
             //update repayment schedule
             $update = new Update_table();
-            $update->update_double('rent_schedule', 'amount_paid', $amount_due, 'payment_status', 1, 'repayment_id', $schedule);
+            $update->update_double('investment_returns', 'amount_paid', $amount_due, 'payment_status', 1, 'schedule_id', $schedule);
         }else{
             //update repayment schedule
             $update = new Update_table();
-            $update->update('rent_schedule', 'amount_paid', 'repayment_id', $total_paid, $schedule);
+            $update->update('investment_returns', 'amount_paid', 'schedule_id', $total_paid, $schedule);
         }
         
-        //add into repayment table
+        //add into payment table
         $repayment_data = array(
             'customer' => $customer,
             'store' => $store,
-            'loan' => $loan_id,
+            'investment' => $investment,
             'amount' => $amount_received,
             'schedule' => $schedule,
-            /* 'interest' => $interest,
-            'processing_fee' => $processing_fee, */
             'payment_mode' => $mode,
             'details' => $details,
             'invoice' => $receipt,
@@ -129,14 +120,16 @@
             'posted_by' => $user,
             'post_date' => $date,
             'trx_number' => $trx_num,
+            'trx_date' => $trans_date
             
         );
-        $add_repayment = new add_data('rent_payments', $repayment_data);
+        $add_repayment = new add_data('return_payments', $repayment_data);
         $add_repayment->create_data();
+        
         //handle excess payment
-        if($new_balance < 0) {
+        /* if($new_balance < 0) {
             $overpaid = -$new_balance;
-            $schedules = $get_details->fetch_details_2condOrder('rent_schedule', 'payment_status', 'assigned_id', 0, $loan_id, 'due_date');
+            $schedules = $get_details->fetch_details_2condOrder('investment_returns', 'payment_status', 'investment_id', 0, $investment, 'due_date');
             if (is_array($schedules)) {
                 foreach ($schedules as $next) {
                     if ($overpaid <= 0) break;
@@ -149,9 +142,9 @@
                     $new_paid = $next->amount_paid + $to_pay;
 
                     if($new_paid >= $next->amount_due) {
-                        $update->update_double('rent_schedule', 'amount_paid', $next->amount_due, 'payment_status', 1, 'repayment_id', $next->repayment_id);
+                        $update->update_double('field_payment_schedule', 'amount_paid', $next->amount_due, 'payment_status', 1, 'repayment_id', $next->repayment_id);
                     }else{
-                        $update->update('rent_schedule', 'amount_paid', 'repayment_id', $new_paid, $next->repayment_id);
+                        $update->update('field_payment_schedule', 'amount_paid', 'repayment_id', $new_paid, $next->repayment_id);
                     }
 
                     $extra_data = $repayment_data;
@@ -160,7 +153,7 @@
                     $extra_data['interest'] = $next_interest;
                     $extra_data['processing_fee'] = $next_fee;
                     $extra_data['details'] = 'Excess from previous';
-                    (new add_data('rent_payments', $extra_data))->create_data();
+                    (new add_data('field_payments', $extra_data))->create_data();
 
                     $overpaid -= $to_pay;
                 }
@@ -170,7 +163,7 @@
                 $new_wallet = $cust->wallet_balance + $overpaid;
                 $update->update('customers', 'wallet_balance', 'customer_id', $new_wallet, $customer);
             }
-        }
+        } */
         //accounting entries
         // Accounting entries are done once per total amount paid,
         // not per repayment schedule. Even if the amount affects multiple schedules,
@@ -179,8 +172,7 @@
        /*  $interest_income = round(($amount * $interest_portion) / $total_payable, 2);
         $processing_fee_income = round(($amount * $processing_portion) / $total_payable, 2); */
         //get customer details
-        $get_balance = new selects();
-        $bals = $get_balance->fetch_details_cond('customers', 'customer_id', $customer);
+        $bals = $get_details->fetch_details_cond('customers', 'customer_id', $customer);
         foreach($bals as $bal){
             $old_balance = $bal->wallet_balance;
             $ledger = $bal->acn;
@@ -189,8 +181,7 @@
             // $old_debt = $bal->amount_due;
         };
         //get customer account type
-        $get_type = new selects();
-        $types = $get_type->fetch_details_cond('ledgers', 'acn', $ledger);
+        $types = $get_details->fetch_details_cond('ledgers', 'acn', $ledger);
         foreach($types as $type){
             $ledger_type = $type->account_group;
             $ledger_group = $type->sub_group;
@@ -206,8 +197,7 @@
             $bnk = $get_bank->fetch_details_group('banks', 'bank', 'bank_id', $bank);
             $ledger_name = $bnk->bank;
         }
-        $get_inv = new selects();
-        $invs = $get_inv->fetch_details_cond('ledgers', 'ledger', $ledger_name);
+        $invs = $get_details->fetch_details_cond('ledgers', 'ledger', $ledger_name);
         foreach($invs as $inv){
             $dr_ledger = $inv->acn;
             $dr_type = $inv->account_group;
@@ -220,7 +210,7 @@
             'account_type' => $dr_type,
             'sub_group' => $dr_group,
             'class' => $dr_class,
-            'details' => 'Rent payment',
+            'details' => 'Investment Returns',
             'credit' => $amount,
             'post_date' => $date,
             'posted_by' => $user,
@@ -235,7 +225,7 @@
             'account_type' => $ledger_type,
             'sub_group' => $ledger_group,
             'class' => $ledger_class,
-            'details' => 'Rent payment',
+            'details' => 'Investment Returns',
             'debit' => $amount,
             'post_date' => $date,
             'posted_by' => $user,
@@ -251,10 +241,10 @@
         $add_credit = new add_data('transactions', $credit_data);
         $add_credit->create_data();
        
-        //cash flow date
+        //cash flow data
         $flow_data = array(
             'account' => $dr_ledger,
-            'details' => 'Loan Repayment',
+            'details' => 'Investment Returns',
             'trx_number' => $trx_num,
             'amount' => $amount,
             'trans_type' => 'outflow',
@@ -266,24 +256,28 @@
         $add_flow = new add_data('cash_flows', $flow_data);
         $add_flow->create_data();
         
-        //check if all repayments have been paid and update loan status
-        $check_repayments = $get_details->fetch_sum_single('rent_schedule', 'amount_paid', 'assigned_id', $loan_id);
+        
+        $check_repayments = $get_details->fetch_sum_single('investment_returns', 'amount_paid', 'investment_id', $investment);
         foreach($check_repayments as $rep){
             $total_loan_paid = $rep->total;
         }
-        $check_dues = $get_details->fetch_sum_single('rent_schedule', 'amount_due', 'assigned_id', $loan_id);
+        $check_dues = $get_details->fetch_sum_single('investment_returns', 'amount_due', 'investment_id', $investment);
         foreach($check_dues as $due){
             $total_loan_due = $due->total;
         }
+        $fmt_total_cost = number_format($invested_amount, 2);
+       
+        $fmt_return = number_format($amount, 2);
+       
         if($total_loan_paid === $total_loan_due){
-            //update loan status
+           
+            //update investment status
             $update_loan = new Update_table();
-            $update_loan->update('assigned_fields', 'contract_status', 'loan_id', 3, $loan_id);
+            $update_loan->update('investments', 'contract_status', 'investment_id', 2, $investment);
         }
-        
-        $amount = number_format($amount, 2);
-        $trx_date = date("jS F Y, h:ia", strtotime($date));
-        $message = "<p>Dear $client, <br>Your annual rent return of ₦$annual_rent has been paid for your field ($field_name).<br>
+           
+        //payment message
+         $message = "<p>Dear $client, <br>Your investment return of ₦$fmt_return %($percentage) of your ₦$fmt_total_cost has been paid .<br>
 Payment Date: $date.<br><br>
 Thank you for investing with Davidorlah Nigeria Ltd.<br>
         Transaction ID: $receipt<br>
@@ -296,7 +290,7 @@ Thank you for investing with Davidorlah Nigeria Ltd.<br>
         $notif_data = array(
             'client' => $customer,
             'subject' => 'Rent Payment Confirmation',
-            'message' => 'Dear '.$client.', Your annual rent return of ₦'.$annual_rent.' has been paid for your field ('.$field_name.').
+            'message' => 'Dear '.$client.', Your investment return of ₦'.$fmt_return.' has been paid.
 
 Payment Date: '.$date.'
 
@@ -350,14 +344,14 @@ Thank you for investing with Davidorlah Nigeria Ltd',
         $from = 'admin@dorthprosuite.com';
         $from_name = "$company";
         $name = "$company";
-        $subj = 'Rent Payment Confirmation';
+        $subj = 'Investment Return Payment Confirmation';
         $msg = "<div>$message</div>";
         
         $error=smtpmailer($to, $from, $name ,$subj, $msg);
         
 ?>
     <!-- <div id="printBtn">
-        <button onclick="printDepositReceipt('<?php echo $receipt?>')">Print Receipt <i class="fas fa-print"></i></button>
+        <button onclick="printPaymentReceipt('<?php echo $receipt?>')">Print Receipt <i class="fas fa-print"></i></button>
     </div> -->
 <?php
 

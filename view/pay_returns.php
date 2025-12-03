@@ -75,6 +75,23 @@
                            
                         </div>
                         <div class="data" style="width:24%;">
+                            <label for="amount" style="text-align:left!important;">Expected Returns</label>
+                            <?php
+                                //get sum of expected investment returns
+                                $rets = $get_details->fetch_sum_single('investment_returns', 'amount_due', 'investment_id', $investment);
+                                if(is_array($rets)){
+                                    foreach($rets as $ret){
+                                        $expected_returns = $ret->total;
+                                    }
+                                }else{
+                                    $expected_returns = 0;
+                                }
+                            ?>
+                            <input type="text" value="<?php echo '₦'.number_format($expected_returns, 2)?>" readonly style="color:var(--primaryColor)">
+                           
+                        </div>
+                        
+                        <div class="data" style="width:24%;">
                             <label for="purpose" style="text-align:left!important;">Date Posted:</label>
                             <input type="text" value="<?php echo date("d-M-Y, h:ia", strtotime($row->post_date))?>" readonly>
                         </div>
