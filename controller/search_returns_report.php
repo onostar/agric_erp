@@ -9,14 +9,14 @@
     include "../classes/select.php";
 
     $get_revenue = new selects();
-    $details = $get_revenue->fetch_details_2dateConOrder('investment_payments', 'store', 'date(post_date)', $from, $to, $store, 'post_date');
+    $details = $get_revenue->fetch_details_2dateConOrder('return_payments', 'store', 'date(post_date)', $from, $to, $store, 'post_date');
     $n = 1;
 ?>
-<h2>Concentrate Investment Payments between '<?php echo date("jS M, Y", strtotime($from)) . "' and '" . date("jS M, Y", strtotime($to))?>'</h2>
+<h2>Concentrate Return Payments between '<?php echo date("jS M, Y", strtotime($from)) . "' and '" . date("jS M, Y", strtotime($to))?>'</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchRevenue" placeholder="Enter keyword" onkeyup="searchData(this.value)">
-        <a class="download_excel" href="javascript:void(0)" onclick="convertToExcel('data_table', 'Concentrate Investment Payments report')"title="Download to excel"><i class="fas fa-file-excel"></i></a>
+        <a class="download_excel" href="javascript:void(0)" onclick="convertToExcel('data_table', 'Concentrate Investment Returns report')"title="Download to excel"><i class="fas fa-file-excel"></i></a>
     </div>
     <table id="data_table" class="searchTable">
         <thead>
@@ -26,10 +26,10 @@
                 <td>Investment No.</td>
                 <td>Receipt No.</td>
                 <td>Amount Paid</td>
-                <td>Payment Mode</td>
+                <td>Mode</td>
                 <td>Trx Date</td>
                 <td>Date</td>
-                <td></td>
+                <td>Posted By</td>
                 
             </tr>
         </thead>
@@ -55,10 +55,14 @@
                 <td><?php echo $detail->payment_mode;?></td>
                 <td style="color:var(--moreColor)"><?php echo date("d-M-Y", strtotime($detail->trx_date))?></td>
                 <td>
-                    <?php echo date("d-M-Y,h:ia", strtotime($detail->post_date))?>
+                    <?php echo date("d-M-Y, h:ia", strtotime($detail->post_date))?>
                 </td>
                 <td>
-                    <a href="javascript:void(0)"  onclick="printInvestmentReceipt('<?php echo $detail->invoice;?>')"style="color:#fff; background:var(--otherColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #222; border-radius:15px;" title="print receipt">Print <i class="fas fa-print"></i></a>
+                    <?php
+                        //get posted by
+                        $pstd = $get_revenue->fetch_details_group('users', 'full_name', 'user_id', $detail->posted_by);
+                        echo $pstd->full_name;
+                    ?>
                     
                 </td>
                 
@@ -71,7 +75,7 @@
         echo "<p class='no_result'>'$details'</p>";
     }
     //get total cos of payments today
-    $ttls = $get_revenue->fetch_sum_2dateCond('investment_payments', 'amount', 'store', 'date(post_date)', $from, $to,  $store);
+    $ttls = $get_revenue->fetch_sum_2dateCond('return_payments', 'amount', 'store', 'date(post_date)', $from, $to,  $store);
     if(gettype($ttls) === 'array'){
         foreach($ttls as $ttl){
             echo "<p class='total_amount' style='color:green; text-align:center;'>Total: ₦".number_format($ttl->total, 2)."</p>";

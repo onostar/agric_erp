@@ -44,7 +44,7 @@
             <?php
                 $n = 1;
                 $get_users = new selects();
-                $details = $get_users->fetch_details_curdategreater2con('rent_schedule', 'due_date', 'store', $store, 'payment_status', 0);
+                $details = $get_users->fetch_details_curdatelesser2con('rent_schedule', 'due_date', 'store', $store, 'payment_status', 0);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>

@@ -115,7 +115,7 @@
                     </div>
                     <div class="data" style="width:100%; margin:5px 0">
                         <label for="details"> Description</label>
-                        <textarea name="details" id="details" cols="30" rows="5" placeholder="Enter a detailed description of the transaction"></textarea>
+                        <textarea name="details" id="details" cols="30" rows="5" placeholder="Enter a detailed description of the transaction">Rent payment</textarea>
                     </div>
                     <div class="data" style="width:50%; margin:5px 0">
                         <button type="submit" id="post_exp" name="post_exp" onclick="payRent()">Post payment <i class="fas fa-cash-register"></i></button>

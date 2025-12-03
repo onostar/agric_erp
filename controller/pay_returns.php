@@ -73,6 +73,7 @@
             $amount_paid = $result->amount_paid;
             $investment = $result->investment_id;
             $percentage = $result->percentage;
+            $due_date = date("d-M-Y", strtotime($result->due_date));
         }
         //get investment details
         $loan_details = $get_details->fetch_details_cond('investments', 'investment_id', $investment);
@@ -248,7 +249,7 @@
             'trx_number' => $trx_num,
             'amount' => $amount,
             'trans_type' => 'outflow',
-            'activity' => 'investing',
+            'activity' => 'financing',
             'post_date' => $date,
             'posted_by' => $user,
             'store' => $store
@@ -277,24 +278,39 @@
         }
            
         //payment message
-         $message = "<p>Dear $client, <br>Your investment return of ₦$fmt_return %($percentage) of your ₦$fmt_total_cost has been paid .<br>
-Payment Date: $date.<br><br>
-Thank you for investing with Davidorlah Nigeria Ltd.<br>
-        Transaction ID: $receipt<br>
-       .</p>
-       
-        <p>Warm regards,<br> 
-        $company<br>
-        Customer Support";
+        if($currency == "Dollar"){
+            $icon = "$";
+        }else{
+            $icon = "₦";
+        }
+         $message = "
+    <p>Dear $client,</p>
+
+    <p>We are pleased to inform you that your investment return of 
+    <strong>₦$fmt_return</strong> (representing <strong>$percentage%</strong> of your 
+    investment of <strong>$icon$fmt_total_cost</strong>) which is due on <strong>$due_date</strong> has been successfully paid.</p>
+
+    <p>
+        <strong>Payment Date:</strong> $date<br>
+        <strong>Transaction ID:</strong> $receipt
+    </p>
+
+    <p>Thank you for investing with <strong>$company</strong>.
+    We appreciate your continued trust in our services.</p>
+
+    <p>Warm regards,<br>
+    $company<br>
+    Customer Support Team</p>";
         //insert into notifications
         $notif_data = array(
             'client' => $customer,
-            'subject' => 'Rent Payment Confirmation',
-            'message' => 'Dear '.$client.', Your investment return of ₦'.$fmt_return.' has been paid.
+            'subject' => 'Investment Return Payment Confirmation',
+            'message' => "Dear $client, your investment return of ₦$fmt_return has been successfully paid.
 
-Payment Date: '.$date.'
+        Payment Date: $date
+        Transaction ID: $receipt
 
-Thank you for investing with Davidorlah Nigeria Ltd',
+        Thank you for investing with $company.",
             'post_date' => $date,
         );
         $add_data = new add_data('notifications', $notif_data);
@@ -355,6 +371,6 @@ Thank you for investing with Davidorlah Nigeria Ltd',
     </div> -->
 <?php
 
-        echo "<p style='color:green; margin:5px 50px'>Payment posted successfully!</p>";
+        echo "<div class='success'><p style='color:#fff; margin:5px 50px'>Payment posted successfully <i class='fas fa-thumbs-up'></i></p></div>";
     // }
 }

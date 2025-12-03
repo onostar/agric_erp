@@ -9109,7 +9109,10 @@ function payRent(){
                          $("#fund_account").html("<div class='processing'><div class='loader'></div></div>");
                     },
                     success : function(response){
-                    $("#fund_account").html(response);
+                         $("#fund_account").html(response);
+                         setTimeout(function(){
+                              showPage("rent_payments.php");
+                         }, 2000);
                     }
                })
                return false;   
@@ -9595,7 +9598,7 @@ function postInvestment(){
      }
 }
 //payment for investment returns
-function payReturn(id){
+function payReturn(){
      let invoice = document.getElementById("invoice").value;
      let posted = document.getElementById("posted").value;
      let trans_date = document.getElementById("trans_date").value;
@@ -9651,6 +9654,9 @@ function payReturn(id){
                     },
                     success : function(response){
                          $("#fund_account").html(response);
+                         setTimeout(function(){
+                              showPage("pay_investment_returns.php");
+                         }, 2000);
                     }
                })
                return false;   

@@ -318,7 +318,7 @@
             'trx_number' => $trx_num,
             'amount' => $amount,
             'trans_type' => 'inflow',
-            'activity' => 'operating',
+            'activity' => 'investing',
             'post_date' => $date,
             'posted_by' => $user,
             'store' => $store

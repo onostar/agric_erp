@@ -71,7 +71,7 @@
         foreach($results as $result){
             $amount_due = $result->amount_due;
             $amount_paid = $result->amount_paid;
-            $loan_id = $result->loan;
+            $loan_id = $result->assigned_id;
         }
         //get loan details
         $loan_details = $get_details->fetch_details_cond('assigned_fields', 'assigned_id', $loan_id);
@@ -126,6 +126,7 @@
             'details' => $details,
             'invoice' => $receipt,
             'bank' => $bank,
+            'trx_date' => $trans_date,
             'posted_by' => $user,
             'post_date' => $date,
             'trx_number' => $trx_num,
@@ -258,7 +259,7 @@
             'trx_number' => $trx_num,
             'amount' => $amount,
             'trans_type' => 'outflow',
-            'activity' => 'investing',
+            'activity' => 'operating',
             'post_date' => $date,
             'posted_by' => $user,
             'store' => $store
@@ -361,6 +362,6 @@ Thank you for investing with Davidorlah Nigeria Ltd',
     </div> -->
 <?php
 
-        echo "<p style='color:green; margin:5px 50px'>Payment posted successfully!</p>";
+        echo "<div class='success'><p style='color:green; margin:5px 50px'>Payment posted successfully! <i class='fas fa-thumbs-up'></i></p></div>";
     // }
 }

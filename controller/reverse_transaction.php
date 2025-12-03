@@ -23,11 +23,14 @@
                 if($table->table_name == 'labour_payments'){
                     //get task id
                     $taskss = $check_column->fetch_details_cond('labour_payments', 'trx_number', $trx_number);
-                    foreach($taskss as $tasks){
-                        $task_id = $tasks->task;
+                    if(is_array($taskss)){
+                        foreach($taskss as $tasks){
+                            $task_id = $tasks->task;
+                        }
+                    
+                        $update_task = new Update_table();
+                        $update_task->update('tasks', 'payment_status', 'task_id', 0, $task_id);
                     }
-                    $update_task = new Update_table();
-                    $update_task->update('tasks', 'payment_status', 'task_id', 0, $task_id);
                 }
                 $delete_tx = new deletes();
                 $delete_tx->delete_item($table->table_name, 'trx_number', $trx_number);
