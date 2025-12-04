@@ -9,9 +9,9 @@
         $store = $_SESSION['store_id'];
         // echo $user_id;
     
-    if(isset($_GET['customer']) && isset($_GET['schedule'])){
+    if(isset($_GET['customer']) && isset($_GET['investment'])){
         $customer_id = $_GET['customer'];
-        $schedule = $_GET['schedule'];
+        $investment = $_GET['investment'];
         //get customer details;
         $get_details = new selects();
         $rows = $get_details->fetch_details_cond('customers', 'customer_id', $customer_id);
@@ -27,7 +27,7 @@
             $random_num = random_int(0, 3);
             $ran_num .= $random_num;
         }
-        $receipt_id = "LP".$todays_date.$ran_num.$user_id.$schedule;
+        $receipt_id = "LP".$todays_date.$ran_num.$user_id.$investment;
         //get balance from transactions
         $bals = $get_details->fetch_account_balance($acn);
         if(gettype($bals) == 'array'){
@@ -35,44 +35,30 @@
                 $balance = $bal->balance;
             }
         }
-        //get loan details
-        $lns = $get_details->fetch_details_cond('rent_schedule', 'repayment_id', $schedule);
+        //get investmentdetails
+        $lns = $get_details->fetch_details_cond('investments', 'investment_id', $investment);
         foreach($lns as $lns){
-            $assigned = $lns->assigned_id;
-            $amount_due = $lns->amount_due;
-            $payment_status = $lns->payment_status;
+            $amount_invested = $lns->amount;
+            $currency = $lns->currency;
+            $start_date = $lns->start_date;
+            $total_in_naira = $lns->total_in_naira;
         }
-       //get total paid
-       $ttls = $get_details->fetch_sum_single('rent_schedule', 'amount_paid', 'assigned_id', $assigned);
-       if(gettype($ttls) == 'array'){
-            foreach($ttls as $ttl){
-                $total_paid = $ttl->total;
-            }
+        if($currency == "Dollar"){
+            $icon = "$";
         }else{
-            $total_paid = 0;
+            $icon = "₦";
         }
-       //get total due
-       $ttlx = $get_details->fetch_sum_single('rent_schedule', 'amount_due', 'assigned_id', $assigned);
-       if(gettype($ttlx) == 'array'){
-            foreach($ttlx as $ttx){
-                $total_due = $ttx->total;
-            }
-        }else{
-            $total_due = 0;
-        }
-        //
-        $debt = $total_due - $total_paid;
+        $debt = $amount_invested;
 
 ?>
 <div class="back_invoice">
-    <button class="page_navs" id="back" onclick="showPage('customer_repayment.php?customer=<?php echo $customer_id?>')"><i class="fas fa-angle-double-left"></i> Back</button>
+    <button class="page_navs" id="back" onclick="showPage('return_principal.php')"><i class="fas fa-angle-double-left"></i> Back</button>
 
-    <!-- <a href="javascript:void(0)" onclick="showPage('debt_payment.php?customer=<?php echo $customer_id?>') "title="view customer invoices" style="background:green; color:#fff; padding:10px; border-radius:10px; box-shadow:1px 1px 1px #222">View Invoices <i class="fas fa-receipt"></i></a> -->
 </div>
 <div id="deposit" class="displays">
     <div class="info" style="width:70%; margin:5px 0;"></div>
     <div class="fund_account" style="width:80%; margin:5px 0;">
-        <h3 style="background:var(--labColor); text-align:left">Post customer rent payments</h3>
+        <h3 style="background:var(--labColor); text-align:left">Return client investment principal</h3>
         <!-- <form method="POST" id="addUserForm"> -->
         <div class="details_forms">
             <section class="addUserForm">
@@ -82,17 +68,13 @@
                     <input type="hidden" name="customer" id="customer" value="<?php echo $customer_id?>">
                     <input type="hidden" name="balance" id="balance" value="<?php echo $debt?>">
                     <input type="hidden" name="store" id="store" value="<?php echo $store?>">
-                    <input type="hidden" name="schedule" id="schedule" value="<?php echo $schedule?>">
+                    <input type="hidden" name="investment" id="investment" value="<?php echo $investment?>">
                     
-                    <div class="data" style="width:100%; margin:5px 0">
+                    <div class="data" style="width:48%; margin:5px 0">
                         <label for="amount"> Transaction Date</label>
                         <input type="date" name="trans_date" id="trans_date" value="<?php echo date('Y-m-d')?>">
                     </div>
-                    <div class="data" style="width:50%; margin:5px 0">
-                        <label for="amount"> Amount paid</label>
-                        <input type="text" name="amount" id="amount" required placeholder="0.00">
-                    </div>
-                    <div class="data" style="width:45%">
+                    <div class="data" style="width:48%">
                         <label for="Payment_mode"><span class="ledger">Dr. Ledger</span> (Cash/Bank)</label>
                         <select name="payment_mode" id="payment_mode" onchange="checkMode(this.value)">
                             <option value=""selected>Select payment option</option>
@@ -101,6 +83,17 @@
                             <option value="Transfer">Transfer</option>
                         </select>
                     </div>
+                    <div class="data" style="width:48%; margin:5px 0">
+                        <label for="amount"> Amount</label>
+                        <input type="text" readonly value="<?php echo $icon.number_format($amount_invested, 2)?>">
+                        <input type="hidden" id="amount" name="amount" value="<?php echo $amount_invested?>">
+                    </div>
+                    <div class="data" style="width:48%; margin:5px 0">
+                        <label for="amount"> Value in Naira</label>
+                        <input type="text" readonly value="<?php echo "₦".number_format($total_in_naira, 2)?>">
+                        <input type="hidden" name="amount_in_naira" id="amount_in_naira" value="<?php echo $total_in_naira?>">
+                    </div>
+                    
                     <div class="data" id="selectBank"  style="width:100%!important">
                         <select name="bank" id="bank">
                             <option value=""selected>Select Bank</option>
@@ -115,10 +108,10 @@
                     </div>
                     <div class="data" style="width:100%; margin:5px 0">
                         <label for="details"> Description</label>
-                        <textarea name="details" id="details" cols="30" rows="5" placeholder="Enter a detailed description of the transaction">Rent payment</textarea>
+                        <textarea name="details" id="details" cols="30" rows="5">Investment Principal Returns</textarea>
                     </div>
                     <div class="data" style="width:50%; margin:5px 0">
-                        <button type="submit" id="post_exp" name="post_exp" onclick="payRent()">Post payment <i class="fas fa-cash-register"></i></button>
+                        <button type="submit" id="post_exp" name="post_exp" onclick="returnPrincipal()">Post payment <i class="fas fa-cash-register"></i></button>
                     </div>
                 </div>
             </section>
@@ -143,10 +136,10 @@
                         <input type="text" value="<?php echo "₦".number_format(0, 2)?>" style="color:green;">
                     </div>
                     <?php }?>
-                    <div class="data">
-                        <label for="balance">Total Rent Due:</label>
+                    <!-- <div class="data">
+                        <label for="balance">Payment Due:</label>
                         <input type="text" value="<?php echo "₦".number_format($debt, 2)?>" style="color:red;">
-                    </div>
+                    </div> -->
                 </div>
             </section> 
         </div>

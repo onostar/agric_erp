@@ -92,6 +92,19 @@
                             <input type="text" value="<?php echo date("d-M-Y", strtotime($due_date))?>" readonly>
                         </div>
                         <?php }?>
+                        <div class="data" style="width:24%;">
+                            <label for="purpose" style="text-align:left!important;">Contract Status:</label>
+                            <?php
+                                if($row->contract_status == 0){
+                                    $status = "Pending";
+                                }elseif($row->contract_status == 1){
+                                    $status = "Active";
+                                }else{
+                                    $status = "Completed";
+                                }
+                            ?>
+                            <input type="text" value="<?php echo $status?>" readonly>
+                        </div>
                     </div>
                 </section>   
             </div>

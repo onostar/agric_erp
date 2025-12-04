@@ -96,10 +96,9 @@
             }
         }
         //fetch with current date less than condition and 2 condition 
-        public function fetch_details_curdatelesser2con($table, $column, $condition, $value, $condition2, $value2){
-            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE date($column) <= date(CURDATE()) AND $condition = :$condition AND $condition2 = :$condition2");
-            $get_user->bindValue(":$condition", $value);
-            $get_user->bindValue(":$condition2", $value2);
+        public function fetch_due_payments($table, $store){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE date(CURDATE()) >= date(due_date) AND store = :store AND payment_status = 0");
+            $get_user->bindValue(":store", $store);
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 $rows = $get_user->fetchAll();

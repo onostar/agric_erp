@@ -21,7 +21,7 @@
         </section>
     </div> -->
 <div class="displays allResults new_data" id="revenue_report">
-    <h2>Field Purchase Schedule due for payment</h2>
+    <h2>Field Purchase due for payment</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchCheckout" placeholder="Enter keyword" onkeyup="searchData(this.value)">
@@ -44,7 +44,7 @@
             <?php
                 $n = 1;
                 $get_users = new selects();
-                $details = $get_users->fetch_details_curdategreater2con('field_payment_schedule', 'due_date', 'store', $store, 'payment_status', 0);
+                $details = $get_users->fetch_due_payments('field_payment_schedule', $store);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
@@ -105,12 +105,12 @@
         <?php
         // get sum
         $get_total = new selects();
-        $amounts = $get_total->fetch_sum_curdategreater2Con('rent_schedule', 'amount_paid', 'due_date', 'store', $store, 'payment_status', 0);
+        $amounts = $get_total->fetch_sum_curdategreater2Con('field_payment_schedule', 'amount_paid', 'due_date', 'store', $store, 'payment_status', 0);
         foreach($amounts as $amount){
             $paid_amount = $amount->total;
             
         }
-        $dues = $get_total->fetch_sum_curdategreater2Con('rent_schedule', 'amount_due', 'due_date', 'store', $store, 'payment_status', 0);
+        $dues = $get_total->fetch_sum_curdategreater2Con('field_payment_schedule', 'amount_due', 'due_date', 'store', $store, 'payment_status', 0);
         foreach($dues as $due){
             $due_amount = $due->total;
             

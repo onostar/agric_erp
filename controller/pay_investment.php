@@ -186,7 +186,7 @@ $return_schedule_html = "";
 
 if($new_balance <= 0){
     $upd = new Update_table();
-    $upd->update('investments', 'contract_status', 'investment_id', 1, $investment);
+    $upd->update_double('investments', 'contract_status', 1, 'start_date', $date, 'investment_id', $investment);
 
     $return_schedule_html .= "<h3>Your Returns Schedule</h3><ul>";
 
