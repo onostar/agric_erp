@@ -101,7 +101,7 @@ if ($add_deposit) {
     (new add_data('principal_returns', $principal_data))->create_data();
 
     // --- update principal status on investment ---
-    (new Update_table())->update('investments', 'principal_status', 'investment_id', 1, $investment);
+    (new Update_table())->update('investments', 'principal', 'investment_id', 1, $investment);
 
     // --- accounting entries (debit customer ledger, credit cash/bank) ---
     $bals = $get_details->fetch_details_cond('customers', 'customer_id', $customer);

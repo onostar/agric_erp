@@ -9736,3 +9736,70 @@ function returnPrincipal(){
           }
      }
 }
+
+//concentrate production
+function makeConcentrate(){
+     let product_num = document.getElementById("product_num").value;
+     let pineapple = document.getElementById("pineapple").value;
+     let concentrate = document.getElementById("concentrate").value;
+     let pineapple_peel = document.getElementById("pineapple_peel").value;
+     let pineapple_crown = document.getElementById("pineapple_crown").value;
+     let others = document.getElementById("others").value;
+     let pineapple_cost = document.getElementById("pineapple_cost").value;
+     let pineapple_crown_value = document.getElementById("pineapple_crown_value").value;
+     let pineapple_peel_value = document.getElementById("pineapple_peel_value").value;
+     let prev_qty = document.getElementById("prev_qty").value;
+     if(parseFloat(pineapple) <= 0){
+          alert("Please input quantity of pineapple used!");
+          $("#pineapple").focus();
+          return;
+     }else if(parseFloat(prev_qty) <= parseFloat(pineapple)){
+          alert("Available quantity of pineapple is less than quantity required!");
+          $("#pineapple").focus();
+          return;
+     }else if(parseFloat(concentrate) <= 0){
+          alert("Please input quantity of concentrate produced!");
+          $("#concentrate").focus();
+          return;
+     }else if(parseFloat(pineapple_peel) < 0){
+          alert("Please input quantity of pineapple peel left!");
+          $("#pineapple_peel").focus();
+          return;
+     }else if(parseFloat(pineapple_crown) < 0){
+          alert("Please input quantity of pineapple crown left!");
+          $("#pineapple_crown").focus();
+          return;
+     }else if(parseFloat(pineapple_cost) <= 0){
+          alert("Pineapple has no cost price. Kindly input cost of pineapples!");
+          $("#pineapple").focus();
+          return;
+     }else if(parseFloat(pineapple_crown_value) <= 0){
+          alert("Pineapple crown has no recovery value! Kindly input recovery value (Selling price) of pineapple crown!");
+          $("#pineapple").focus();
+          return;
+     }else if(parseFloat(pineapple_peel_value) <= 0){
+          alert("Pineapple peel has no recovery value! Kindly input recovery value (Selling price) of pineapple peel!");
+          $("#pineapple").focus();
+          return;
+     }else{
+          let confirmProd = confirm("Are you sure you want to record this production?", "");
+          if(confirmProd){
+               $.ajax({
+                    type : "POST",
+                    url : "../controller/make_concentrate.php",
+                    data : {product_num:product_num, pineapple:pineapple, concentrate:concentrate, pineapple_peel:pineapple_peel, pineapple_crown:pineapple_crown, others:others, pineapple_cost:pineapple_cost, pineapple_crown_value:pineapple_crown_value, pineapple_peel_value:pineapple_peel_value},
+                    beforeSend: function(){
+                         $("#produce").html("<div class='processing'><div class='loader'></div></div>");
+                    },
+                    success : function(response){
+                         $("#produce").html(response);
+                         /* setTimeout(function(){
+                              showPage("concentrate_production.php");
+                         }, 2000); */
+                    }
+               })
+          }else{
+               return;
+          }
+     }
+}
