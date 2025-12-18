@@ -15,8 +15,11 @@
         $name = $row->item_name;
         //get invoice
         $get_invoice = new selects();
-        $rows = $get_invoice->fetch_details_group('sales', 'invoice', 'sales_id', $sales);
-        $invoice = $rows->invoice;
+        $rows = $get_invoice->fetch_details_cond('sales', 'sales_id', $sales);
+        foreach($rows as $row){
+                $invoice = $row->invoice;
+                $customer = $row->customer;
+        }
         //delete sales
         $delete = new deletes();
         $delete->delete_item('sales', 'sales_id', $sales);

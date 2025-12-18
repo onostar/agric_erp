@@ -35,11 +35,19 @@ date_default_timezone_set("Africa/Lagos");
     $rows = $get_item->fetch_details_cond('items', 'item_id', $item);
      if(gettype($rows) == 'array'){
         foreach($rows as $row){
-            $price = $row->sales_price;
             $name = $row->item_name;
-            $cost = $row->cost_price;
-            // $markup = $row->markup;
-            // $department = $row->department;
+           
+        }
+        //getprice
+        $price_rows = $get_item->fetch_details_2cond('prices', 'item', 'store', $item, $store);
+        if(gettype($price_rows) == 'array'){
+            foreach($price_rows as $pr_row){
+                $price = $pr_row->sales_price;
+                $cost = $pr_row->cost;
+            }
+        }else{
+            $price = 0;
+            $cost = 0;
         }
         //get quantity from inventory
         $get_qty = new selects();
@@ -62,6 +70,9 @@ date_default_timezone_set("Africa/Lagos");
                     </script>";
                     include "../controller/wholesale_details.php";
             }else if($price == 0){
+                echo "<script>
+                    alert('$name has no selling price! Cannot proceed');
+                    </script>";
                 echo "<div class='notify'><p><span>$name</span> does not have selling price! Cannot proceed</p></div>";
                 include "../controller/wholesale_details.php";
             }else{

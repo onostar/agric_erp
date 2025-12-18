@@ -15,12 +15,20 @@
     $rows = $get_item->fetch_items_quantity($store, $item);
      if(is_array($rows)){
         foreach($rows as $row):
-        
+        //get item price
+        $prs = $get_item->fetch_details_2cond('prices', 'item', 'store', $row->item_id, $store);
+        if(is_array($prs)){
+            foreach($prs as $pr){
+                $price = $pr->sales_price;
+            }
+        }else{
+            $price = 0;
+        }
         // if($type == "Dealer"){
     ?>
     
     <div class="results">
-            <a href="javascript:void(0)" onclick="addWholeSales('<?php echo $row->item_id?>')"><?php echo $row->item_name." (Price => ₦".$row->sales_price.", Quantity => ".$row->quantity."kg)"?></a>
+            <a href="javascript:void(0)" onclick="addWholeSales('<?php echo $row->item_id?>')"><?php echo $row->item_name." (Price => ₦".$price.", Quantity => ".$row->quantity."kg)"?></a>
         </div>
 <?php
     // }

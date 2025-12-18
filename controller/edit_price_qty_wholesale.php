@@ -33,34 +33,41 @@
 
         }
     ?>
-    <div class="add_user_form priceForm" style="width:90%; padding:0!important">
+    <div class="add_user_form" style="width:90%; padding:0!important">
         
-        <section class="addUserForm" style="text-align:left; padding:0 0 5px 0; margin:0; width:100%;">
+        <section style="text-align:left; padding:0 0 5px 0; margin:0; width:100%;">
         <h3 style="background:var(--tertiaryColor);">Edit quantity and price for <?php echo strtoupper($name)?></h3>
-            <div class="inputs">
+            <div class="inputs" style="justify-content:left">
                 <div class="data item_head" style="width:auto;background:green">
-                    <h4 title="available quantity">Available Qty: <?php echo $item_qty?>kg</h4>
+                    <?php if($name == "CONCENTRATE"){?>
+                    <h4 title="available quantity">Avai. Qty: <?php echo $item_qty?>Ltr</h4>
+                    <?php } else { ?>
+                    <h4 title="available quantity">Avai. Qty: <?php echo $item_qty?>kg</h4>
+                    <?php } ?>
                     <input type="hidden" name="sales_id" id="sales_id" value="<?php echo $row->sales_id?>" required>
                     <input type="hidden" name="inv_qty" id="inv_qty" value="<?php echo $item_qty?>" required>
                 </div>
-                <div class="data" style="width:20%">
-                    <label for="qty">Qty(kg)</label>
+                <div class="data" style="width:18%">
+                    <?php
+                        if($name == "CONCENTRATE"){
+                    ?>
+                    <label for="qty">Qty (Ltr)</label>
+                    <?php } else { ?>
+                    <label for="qty">Qty (kg)</label>
+                    <?php } ?>
                     <input type="text" name="qty" id="qty" value="<?php echo $row->quantity?>">
                 </div>
-                <div class="data" style="width:20%">
+                <div class="data" style="width:18%">
                     <label for="price">Unit price (NGN)</label>
-                    <?php /* if($role == "Admin"){ */?>
                     <input type="text" name="price" id="price" value="<?php echo $row->price?>">
-                    <!-- <?php /* }else{ */ ?> -->
-                    <!-- <input type="text" name="price" id="price" value="<?php echo $row->price?>" readonly> -->
-                    <!-- <?php /* } */?> -->
+                    
                 </div>
 
-                <div class="data" style="width:20%">
+                <div class="data" style="width:18%">
                     <label for="total_amount">Total Amount (NGN)</label>
                     <input type="text" name="total_amount" id="total_amount" value="<?php echo $row->total_amount?>" readonly>
                 </div>
-                <div class="data" style="width:20%">
+                <div class="data" style="width:auto">
                     <button type="submit" id="change_price" name="change_price" onclick="updatePriceQtyWh()">Update </button>
                     <a href="javascript:void(0)" title="close form" style='background:red; padding:10px; border-radius:5px; color:#fff' onclick="closeForm()">Return</a>
                 </div>

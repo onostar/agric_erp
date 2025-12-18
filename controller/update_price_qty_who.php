@@ -25,8 +25,16 @@
         $item_id = $item->item; */
         //get item price
         // $get_price = new selects();
-        $unit_price = $get_invoice->fetch_details_group('items', 'sales_price', 'item_id', $item_id);
-        $old_price = $unit_price->sales_price;
+        $unit_price = $get_invoice->fetch_details_2cond('prices', 'item', 'store', $item_id, $store);
+        if(is_array($unit_price)){
+            foreach($unit_price as $up){
+                $old_price = $up->sales_price;
+                $cost_price = $up->cost;
+            }
+        }else{
+            $old_price = 0;
+            $cost_price = 0;
+        }
         $discount = $old_price - $price;
         
         $item_qtys = $get_invoice->fetch_sum_double('inventory', 'quantity', 'store', $store, 'item', $item_id);
@@ -36,9 +44,7 @@
         if($qty > $inv_qty){
             echo "<script>alert('Available Quantity is less than required! Can not proceed!')</script>";
         }else{
-            //get cost price
-            $costs = $get_invoice->fetch_details_group('items', 'cost_price', 'item_id', $item_id);
-            $cost_price = $costs->cost_price;
+            
             $total_cost = $qty * $cost_price;
             if($cost_price > $price){
                 echo "<script>alert('Sales price cannot be less than cost price!')</script>";

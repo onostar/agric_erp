@@ -7,7 +7,7 @@ include "../classes/dbh.php";
 include "../classes/select.php";
     session_start();
     if(isset($_GET['receipt'])){
-        $user = $_SESSION['user_id'];
+        // $user = $_SESSION['user_id'];
         $invoice = $_GET['receipt'];
         //get store
         $get_store = new selects();
@@ -29,23 +29,22 @@ include "../classes/select.php";
             $customer = $payment->customer;
             $type = $payment->sales_type;
             $paid_date = $payment->post_date;
-
+            $user = $payment->posted_by;
         }
         //check if payment mode is multiple
         $get_multiples = new selects();
-        $multi = $get_multiples->fetch_count_cond('payments', 'invoice', $invoice);  
-                
+        $multi = $get_multiples->fetch_count_cond('payments', 'invoice', $invoice);   
 ?>
-<div class="sales_receipt">
+<div class="displays allResults sales_receipt">
     <?php include "receipt_header.php"?>
-        <!-- <p><strong>(<?php echo strtoupper($pay_mode)?> Receipt)</strong></p> -->
+        <!-- <p><strong>(<?php echo strtoupper($pay_mode)?>)</strong></p> -->
         <?php if($multi > 1){?>
         <p><strong>(MULTIPLE)</strong></p>
         <?php }else{?>
         <p><strong>(<?php echo strtoupper($pay_mode)?>)</strong></p>
         <?php }?>
     </div>
-    <table id="postsales_table" class="searchTable" style="border-collapse:collapse">
+    <table id="postsales_table" class="searchTable">
         <thead>
             <tr style="background:var(--moreColor)">
                 <td>S/N</td>
@@ -62,20 +61,28 @@ include "../classes/select.php";
                 $details = $get_items->fetch_details_cond('sales','invoice', $invoice);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
+                    //get item name
+                    $get_item_name = new selects();
+                    $item_name = $get_item_name->fetch_details_group('items', 'item_name', 'item_id', $detail->item);
+                    $item_name = $item_name->item_name;
             ?>
-            <tr style="border:1px solid #222">
-                <td style="text-align:center; color:red;"><?php echo $n?></td>
-                <td style="color:var(--moreClor);font-size:.8rem">
+            <tr style="font-size:.9rem">
+                <td style="text-align:center; color:red; font-size:.8rem"><?php echo $n?></td>
+                <td style="color:var(--moreClor); font-size:.8rem">
                     <?php
-                        //get category name
-                        $get_item_name = new selects();
-                        $item_name = $get_item_name->fetch_details_group('items', 'item_name', 'item_id', $detail->item);
-                        echo $item_name->item_name;
+                        
+                        echo $item_name;
                     ?>
                 </td>
-                <td style="text-align:center; color:red;font-size:.8rem"><?php echo $detail->quantity?>kg
+                <?php if($item_name == "CONCENTRATE"){?>
+                <td style="text-align:center; color:red; font-size:.8rem"><?php echo $detail->quantity?>Ltr
                     
                 </td>
+                <?php } else{ ?>
+                <td style="text-align:center; color:red; font-size:.8rem"><?php echo $detail->quantity?>kg
+                    
+                </td>
+                <?php }?>
                 <td style="font-size:.8rem">
                     <?php 
                         echo number_format($detail->price);
@@ -86,8 +93,6 @@ include "../classes/select.php";
                         echo number_format($detail->total_amount);
                     ?>
                 </td>
-                
-                
             </tr>
             
             <?php $n++; endforeach;}?>
@@ -154,42 +159,12 @@ include "../classes/select.php";
                 }
             }
             //balance
-            echo "<p class='total_amount' style='color:green'>Balance: ₦".number_format($balance, 2)."</p>";
+            if($balance > 0){
+                echo "<p class='total_amount' style='color:green'>Balance: ₦".number_format($balance, 2)."</p>";
+            }
         }
         
-        // get sum
-        /* $get_total = new selects();
-        $amounts = $get_total->fetch_sum_con('sales', 'price', 'quantity', 'invoice', $invoice);
-        foreach($amounts as $amount){
-            $total_amount = $amount->total;
-        }
-        // get amount paid from payments;
-        $get_paid = new selects();
-        $amt_paids = $get_paid->fetch_sum_single('payments', 'amount_paid', 'invoice', $invoice);
-        foreach($amt_paids as $amt){
-            $amount_paid = $amt->total;
-        }
-        //get discount
-        $get_discount = new selects();
-        $discs = $get_discount->fetch_sum_2colCond('sales', 'quantity', 'discount', 'invoice', $invoice);
-        foreach($discs as $disc){
-            $discount = $disc->total;
-        }
-        $rows = $get_paid->fetch_details_cond('payments', 'invoice', $invoice);
-        foreach($rows as $row){
-            $amount_paid = $row->amount_paid;
-            $amount_due = $row->amount_due;
-            // $discount = $row->discount;
-            $balance = $amount_due - $amount_paid;
-            //amount due
-            echo "<p class='total_amount' style='color:green'>AMount Due: ₦".number_format($amount_due, 2)."</p>";
-            //amount paid
-            echo "<p class='total_amount' style='color:green'>Amount Paid: ₦".number_format($amount_paid, 2)."</p>";
-            //discount
-            echo "<p class='total_amount' style='color:green'>Total Discount: ₦".number_format($discount, 2)."</p>"; 
-            //balance
-            echo "<p class='total_amount' style='color:green'>Balance: ₦".number_format($balance, 2)."</p>";
-        } */
+        
         //sold by
         $get_seller = new selects();
         $row = $get_seller->fetch_details_group('users', 'full_name', 'user_id', $user);
@@ -209,8 +184,7 @@ include "../classes/select.php";
    
 <?php
     echo "<script>window.print();
-    window.close();</script>
-    ";
+    window.close();</script>";
                     // }
                 }
             // }

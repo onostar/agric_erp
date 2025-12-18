@@ -22,18 +22,25 @@
                 $details = $get_items->fetch_details_cond('sales','invoice', $invoice);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
+                    //get category name
+                        $item_name = $get_items->fetch_details_group('items', 'item_name', 'item_id', $detail->item);
+                        $item_name = $item_name->item_name;
             ?>
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
                 <td style="color:var(--moreClor);">
                     <?php
-                        //get category name
-                        $item_name = $get_items->fetch_details_group('items', 'item_name', 'item_id', $detail->item);
-                        echo $item_name->item_name;
+                        echo $item_name;
                     ?>
                 </td>
                 <td style="text-align:center; color:red;font-size:.8rem">
+                    <?php
+                        if($item_name == "CONCENTRATE"){
+                    ?>
+                    <span style="font-size:1.1rem; margin:0 2px"><?php echo $detail->quantity?>Ltr</span>
+                    <?php } else{ ?>
                     <span style="font-size:1.1rem; margin:0 2px"><?php echo $detail->quantity?>kg</span>
+                    <?php } ?>
                     <a style="color:#fff; background:green;border-radius:5px;padding:4px 8px;" href="javascript:void(0)" title="increase quantity" onclick="increaseQtyWholesale('<?php echo $detail->sales_id?>', '<?php echo $detail->item?>')"><i class="fas fa-arrow-up"></i></a>
                     <a style="color:#fff; background:var(--primaryColor);border-radius:5px;padding:4px 8px;" href="javascript:void(0)" title="decrease quantity" onclick="reduceQtyWholesale('<?php echo $detail->sales_id?>')"><i class="fas fa-arrow-down"></i></a>
                     <a style="color:#fff; background:var(--otherColor);border-radius:5px;padding:4px 8px;" href="javascript:void(0)" title="show more options" onclick="showMoreWholesale('<?php echo $detail->sales_id?>')"><i class="fas fa-pen"></i></a>
@@ -140,6 +147,9 @@
                             }
                         }
                         if(gettype($acns) == 'string'){
+                            $wallet = 0;
+                        }
+                        if($wallet <= 0){
                             $wallet = 0;
                         }
                     ?>
