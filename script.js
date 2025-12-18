@@ -1272,12 +1272,12 @@ function roomPriceForm(item_id){
      let pack_size = document.getElementById("pack_size").value; */
      // let wholesale_price = document.getElementById("wholesale_price").value;
      /* let wholesale_pack = document.getElementById("wholesale_pack").value;*/
-     if(parseInt(cost_price) >= parseInt(sales_price)){
+     /* if(parseInt(cost_price) >= parseInt(sales_price)){
           alert("Selling price can not be lesser than cost price!");
           $("#sales_price").focus();
           return;
      
-     }else if(cost_price.length == 0 || cost_price.replace(/^\s+|\s+$/g, "").length == 0){
+     }else  */if(cost_price.length == 0 || cost_price.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please enter cost price!");
           $("#cost_price").focus();
           return; 
@@ -1286,7 +1286,7 @@ function roomPriceForm(item_id){
           $("#sales_price").focus();
           return;
      
-     }else if(sales_price <= 0 || cost_price < 0){
+     }else if(sales_price < 0 || cost_price < 0 || other_price < 0){
           alert("Prices can not be less than or  equal to 0");
           return;
      
@@ -9779,6 +9779,83 @@ function makeConcentrate(){
                          $("#produce").html(response);
                          setTimeout(function(){
                               showPage("concentrate_production.php");
+                         }, 2000);
+                    }
+               })
+          }else{
+               return;
+          }
+     }
+}
+//briquette production
+function makeBriquette(){
+     let product_num = document.getElementById("product_num").value;
+     let briquette = document.getElementById("briquette").value;
+     let leaves = document.getElementById("leaves").value;
+     let pineapple_peel = document.getElementById("pineapple_peel").value;
+     let pineapple_crown = document.getElementById("pineapple_crown").value;
+     
+     let leave_cost = document.getElementById("leave_cost").value;
+     let pineapple_crown_cost = document.getElementById("pineapple_crown_cost").value;
+     let pineapple_peel_cost = document.getElementById("pineapple_peel_cost").value;
+     let leave_prev_qty = document.getElementById("leave_prev_qty").value;
+     let crown_prev_qty = document.getElementById("crown_prev_qty").value;
+     let peel_prev_qty = document.getElementById("peel_prev_qty").value;
+     if(parseFloat(briquette) <= 0){
+          alert("Please input quantity of briquette produced!");
+          $("#briquette").focus();
+          return;
+     }else if(parseFloat(leaves) < 0){
+          alert("Please input quantity of leaves used!");
+          $("#leaves").focus();
+          return;
+     }else if(parseFloat(pineapple_peel) < 0){
+          alert("Please input quantity of pineapple peel used!");
+          $("#pineapple_peel").focus();
+          return;
+     }else if(parseFloat(pineapple_crown) < 0){
+          alert("Please input quantity of pineapple crown used!");
+          $("#pineapple_crown").focus();
+          return;
+     }else if(parseFloat(leave_cost) <= 0){
+          alert("Leaves has no cost price. Kindly input cost of leaves!");
+          $("#leaves").focus();
+          return;
+     }else if(parseFloat(pineapple_crown_cost) <= 0){
+          alert("Pineapple crown has no cost price. Kindly input cost of pineapple crown!");
+          $("#pineapple_crown").focus();
+          return;
+     }else if(parseFloat(pineapple_peel_cost) <= 0){
+          alert("Pineapple peel has no cost price. Kindly input cost of pineapple peel!");
+          $("#pineapple_peel").focus();
+          return;
+     }else if(parseFloat(leave_prev_qty) < parseFloat(leaves)){
+          alert("Available quantity of leaves is less than quantity required!");
+          $("#leaves").focus();
+          return;
+     }else if(parseFloat(peel_prev_qty) < parseFloat(pineapple_peel)){
+          alert("Available quantity of pineapple peel is less than quantity required!");
+          $("#pineapple_peel").focus();
+          return;
+     }else if(parseFloat(crown_prev_qty) < parseFloat(pineapple_crown)){
+          alert("Available quantity of pineapple crown is less than quantity required!");
+          $("#pineapple_crown").focus();
+          return;
+     
+     }else{
+          let confirmProd = confirm("Are you sure you want to record this production?", "");
+          if(confirmProd){
+               $.ajax({
+                    type : "POST",
+                    url : "../controller/make_briquette.php",
+                    data : {product_num:product_num, leaves:leaves, briquette:briquette, pineapple_peel:pineapple_peel, pineapple_crown:pineapple_crown, leave_cost:leave_cost, pineapple_crown_cost:pineapple_crown_cost, pineapple_peel_cost:pineapple_peel_cost},
+                    beforeSend: function(){
+                         $("#produce").html("<div class='processing'><div class='loader'></div></div>");
+                    },
+                    success : function(response){
+                         $("#produce").html(response);
+                         setTimeout(function(){
+                              showPage("briquette_production.php");
                          }, 2000);
                     }
                })

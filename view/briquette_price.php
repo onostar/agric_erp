@@ -6,11 +6,13 @@
     
     if(isset($_SESSION['user_id'])){
         $store = $_SESSION['store_id'];
+
 ?>
 
-    <div class="info" style="width:80%; margin:0!important"></div>
+    <div class="info" style="width:100%; margin:0!important"></div>
     <div class="displays allResults" style="width:80%;">
         <h2>Manage Item prices for <?php echo $_SESSION['store'];?></h2>
+
         <hr>
         <div class="search">
             <input type="search" id="searchGuestPayment" placeholder="Enter keyword" onkeyup="searchData(this.value)">
@@ -23,7 +25,8 @@
                     <td>item</td>
                     <!-- <td>pack size</td> -->
                     <td>Cost Price (₦)</td>
-                    <td>Sales Price (₦)</td>
+                    <td>Industrial Price (₦)</td>
+                    <td>Non-Industrial Price (₦)</td>
                     <td></td>
                 </tr>
             </thead>
@@ -39,7 +42,6 @@
                 <tr>
                     <td style="text-align:center;"><?php echo $n?></td>
                     
-                    
                     <td><?php echo $row->item_name?></td>
                    
                     <td>
@@ -48,9 +50,12 @@
                     <td>
                         <?php echo number_format($row->sales_price);?>
                     </td>
+                    <td>
+                        <?php echo number_format($row->other_price);?>
+                    </td>
                     
                     <td class="prices">
-                        <a style="background:var(--moreColor)!important; color:#fff!important; padding:5px 8px; border-radius:5px;" href="javascript:void(0)" title="modify price" data-form="check<?php echo $row->item_id?>" class="each_prices" onclick="getForm('<?php echo $row->item_id?>', 'get_conc_price_details.php');"><i class="fas fa-pen"></i></a>
+                        <a style="background:var(--moreColor)!important; color:#fff!important; padding:5px 8px; border-radius:5px;" href="javascript:void(0)" title="modify price" data-form="check<?php echo $row->item_id?>" class="each_prices" onclick="getForm('<?php echo $row->item_id?>', 'get_briquette_price_details.php');"><i class="fas fa-pen"></i></a>
                     </td>
                 </tr>
             <?php $n++; endforeach; }?>

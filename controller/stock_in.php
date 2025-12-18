@@ -92,7 +92,7 @@ date_default_timezone_set("Africa/Lagos");
         if($count > 0){
             //update price
             $update_price = new Update_table();
-            $update_price->update_tripple2Cond('prices', 'cost', $cost_price, 'updated_at', $date, 'updated_by', $user, 'item', $item, 'store', $store);
+            $update_price->update_tripple2Cond('prices', 'cost', $cost_price, 'updated_at', $date, 'updated_by', $posted, 'item', $item, 'store', $store);
             
         }else{
             //insert price

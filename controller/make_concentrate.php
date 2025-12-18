@@ -27,7 +27,11 @@
         $total_crown_value = $pineapple_crown_qty * $pineapple_crown_value;
         $total_peel_value = $pineapple_peel_qty * $pineapple_peel_value;
         //calculate cost of production
-        $production_cost = $total_pineapple_cost - ($total_crown_value + $total_peel_value);
+        $recovery_value = $total_crown_value + $total_peel_value;
+        if($recovery_value > $total_pineapple_cost){
+            $recovery_value = $total_pineapple_cost;
+        }
+        $production_cost = $total_pineapple_cost - $recovery_value;
         $unit_cost = $production_cost / $concentrate_qty;
         //insert into production table
         $insert_production = new inserts();
@@ -309,7 +313,7 @@
             $add_concentrate_credit = new add_data('transactions', $concentrate_credit);
             $add_concentrate_credit->create_data();
             //pineapple crown inventory debited
-            $crown_debit = array(
+            /* $crown_debit = array(
                 'account' => $inventory_ledger,
                 'account_type' => $inv_type,
                 'sub_group' => $inv_sub_group,
@@ -323,10 +327,10 @@
                 'store' => $store,
             );
             $add_crown_debit = new add_data('transactions', $crown_debit);
-            $add_crown_debit->create_data();
+            $add_crown_debit->create_data(); */
             
             //pineapple peel inventory debited
-            $peel_debit = array(
+            /* $peel_debit = array(
                 'account' => $inventory_ledger,
                 'account_type' => $inv_type,
                 'sub_group' => $inv_sub_group,
@@ -340,7 +344,7 @@
                 'store' => $store,
             );
             $add_peel_debit = new add_data('transactions', $peel_debit);
-            $add_peel_debit->create_data();
+            $add_peel_debit->create_data(); */
             
             echo "<div class='success'><p style='background:green'>Concentrate production record saved successfully! <i class='fas fa-thumbs-up'></i></p></div>";
         }

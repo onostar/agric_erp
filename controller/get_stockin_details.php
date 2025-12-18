@@ -17,6 +17,16 @@
     $rows = $get_item->fetch_details_cond('items', 'item_id', $item);
      if(gettype($rows) == 'array'){
         foreach($rows as $row):
+            //get last cost price
+            $price_details = $get_item->fetch_details_2cond('prices', 'item', 'store', $row->item_id, $store);
+            if(is_array($price_details)){
+                foreach($price_details as $pd){
+                    $cost_price = $pd->cost;
+                    
+                }
+            }else{
+                $cost_price = 0;
+            }
     ?>
     <div class="add_user_form" style="width:60%!important; margin:0!important">
         <h3 style="background:var(--otherColor); text-align:left;">Stockin <?php echo strtoupper($row->item_name);?></h3>
@@ -30,12 +40,16 @@
                     <input type="hidden" name="item_id" id="item_id" value="<?php echo $row->item_id?>" required>
                     <input type="hidden" name="item_type" id="item_type" value="<?php echo $row->item_type?>" required>
                 <div class="data" style="width:30%; margin:5px;">
+                    <?php if($row->item_name == "CONCENTRATE"){?>
+                    <label for="quantity">Quantity(Ltr)</label>
+                    <?php }else{?>
                     <label for="quantity">Quantity(kg)</label>
+                    <?php }?>
                     <input type="number" name="quantity" id="quantity">
                 </div>
                 <div class="data" style="width:30%; margin:5px;">
                     <label for="cost_price">Cost price (NGN)</label>
-                    <input type="text" name="cost_price" id="cost_price" value="<?php echo $row->cost_price?>">
+                    <input type="text" name="cost_price" id="cost_price" value="<?php echo $cost_price?>">
                 </div>
                 <!-- <div class="data" style="width:20%; margin:5px;">
                     <label for="sales_price">Retail price (NGN)</label>
