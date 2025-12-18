@@ -23,6 +23,12 @@
         $todays_date = date("dmyhis");
         $ran_num = mt_rand(100, 999);
         $trx_num = "TR".$ran_num.$todays_date;
+        $total_pineapple_cost  = $pineapple_qty * $pineapple_cost;
+        $total_crown_value = $pineapple_crown_qty * $pineapple_crown_value;
+        $total_peel_value = $pineapple_peel_qty * $pineapple_peel_value;
+        //calculate cost of production
+        $production_cost = $total_pineapple_cost - ($total_crown_value + $total_peel_value);
+        $unit_cost = $production_cost / $concentrate_qty;
         //insert into production table
         $insert_production = new inserts();
         $values = array( 
@@ -37,6 +43,9 @@
             'pineapple_peel_value'=> $pineapple_peel_value,
             'trx_number' => $trx_num,
             'pineapple_crown_value'=> $pineapple_crown_value,
+            'total_pineapple_cost' => $total_pineapple_cost,
+            'total_crown_value' => $total_crown_value,
+            'total_peel_value' => $total_peel_value,
             'production_num'=> $production_num,
             'date_produced'=> $date
         );
@@ -47,12 +56,7 @@
             echo "<div class='success'><p style='background:red'>Production record already exists! <i class='fas fa-thumbs-down'></i></p></div>";
             exit;
         }else{
-            $total_pineapple_cost  = $pineapple_qty * $pineapple_cost;
-            $total_crown_value = $pineapple_crown_qty * $pineapple_crown_value;
-            $total_peel_value = $pineapple_peel_qty * $pineapple_peel_value;
-            //calculate cost of production
-            $production_cost = $total_pineapple_cost - ($total_crown_value + $total_peel_value);
-            $unit_cost = $production_cost / $concentrate_qty;
+           
             //raw materials (pineapple)
             //get pineapple id
             $pines = $check->fetch_details_cond('items', 'item_name', 'PINEAPPLE');
@@ -127,7 +131,7 @@
             $add_conc_audit->create_data();
             
             //update concentrate cost price
-            $updates->update('items', 'cost_price', 'item_id', $unit_cost, $conc_id);
+            $updates->update2cond('prices', 'cost', 'item', 'store',  $unit_cost, $conc_id, $store);
             //output product (pineapple peel)
             //get pineapple peel id
             $peels = $check->fetch_details_cond('items', 'item_name', 'PINEAPPLE PEEL');
@@ -172,7 +176,7 @@
             $add_peel_audit = new add_data('audit_trail', $peel_audit);
             $add_peel_audit->create_data();
             //update pineapple peel cost price
-            // $updates->update('items', 'cost_price', 'item_id', $pineapple_peel_value, $peel_id);
+            $updates->update2cond('prices', 'cost', 'item', 'store', $pineapple_peel_value, $peel_id, $store);
             //output product (pineapple crown)
             $crowns = $check->fetch_details_cond('items', 'item_name', 'PINEAPPLE CROWN');
             foreach($crowns as $crow){
@@ -216,7 +220,7 @@
             $add_crown_audit = new add_data('audit_trail', $crown_audit);
             $add_crown_audit->create_data();
             //update pineapple crown cost price
-            // $updates->update('items', 'cost_price', 'item_id', $pineapple_crown_value, $crown_id);
+            $updates->update2cond('prices', 'cost', 'item', 'store', $pineapple_crown_value, $crown_id, $store);
             //insert production record
             $insert_production = new add_data('concentrate_production', $values);
             $insert_production->create_data();

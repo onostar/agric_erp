@@ -110,6 +110,17 @@ date_default_timezone_set("Africa/Lagos");
             $update->bindValue("$condition", $condition_value);
             $update->execute();
         }
+        //update quadruple with two condition
+        public function update_quadruple2condition($table, $column1, $value1, $column2, $value2, $column3, $value3, $column4, $value4, $condition, $condition_value, $con2, $val2){
+            $update = $this->connectdb()->prepare("UPDATE $table SET $column1 = :$column1, $column2 = :$column2, $column3 = :$column3, $column4 = :$column4 WHERE $condition = :$condition AND $con2 = :$con2");
+            $update->bindValue("$column1", $value1);
+            $update->bindValue("$column2", $value2);
+            $update->bindValue("$column3", $value3);
+            $update->bindValue("$column4", $value4);
+            $update->bindValue("$condition", $condition_value);
+            $update->bindValue("$con2", $val2);
+            $update->execute();
+        }
         //update multiple
         public function update_multiple($table, $column1, $value1, $column2, $value2, $column3, $value3, $column4, $value4, $column5, $value5, $condition, $condition_value){
             $update = $this->connectdb()->prepare("UPDATE $table SET $column1 = :$column1, $column2 = :$column2, $column3 = :$column3, $column4 = :$column4, $column5 = :$column5 WHERE $condition = :$condition");
@@ -119,6 +130,18 @@ date_default_timezone_set("Africa/Lagos");
             $update->bindValue("$column4", $value4);
             $update->bindValue("$column5", $value5);
             $update->bindValue("$condition", $condition_value);
+            $update->execute();
+        }
+        //update multiple 2 condition
+        public function update_multiple2Condition($table, $column1, $value1, $column2, $value2, $column3, $value3, $column4, $value4, $column5, $value5, $condition, $condition_value, $con3, $val3){
+            $update = $this->connectdb()->prepare("UPDATE $table SET $column1 = :$column1, $column2 = :$column2, $column3 = :$column3, $column4 = :$column4, $column5 = :$column5 WHERE $condition = :$condition AND $con3 = :$con3");
+            $update->bindValue("$column1", $value1);
+            $update->bindValue("$column2", $value2);
+            $update->bindValue("$column3", $value3);
+            $update->bindValue("$column4", $value4);
+            $update->bindValue("$column5", $value5);
+            $update->bindValue("$condition", $condition_value);
+            $update->bindValue("$con3", $val3);
             $update->execute();
         }
         //update six

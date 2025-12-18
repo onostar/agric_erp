@@ -281,9 +281,22 @@
         }
          //fetch item with quantity
         public function fetch_items_quantity($store, $item){
-           $get_user = $this->connectdb()->prepare("SELECT i.item_id, i.item_name, i.sales_price, IF NULL(SUM(inv.quantity), 0) AS quantity FROM items i LEFT JOIN inventory inv ON inv.item = i.item_id AND inv.store = :store WHERE i.item_name LIKE :item GROUP BY i.item_id ORDER BY i.item_name ASC LIMIT 30");
+           $get_user = $this->connectdb()->prepare("SELECT i.item_id, i.item_name, i.sales_price, IFNULL(SUM(inv.quantity), 0) AS quantity FROM items i LEFT JOIN inventory inv ON inv.item = i.item_id AND inv.store = :store WHERE i.item_name LIKE :item GROUP BY i.item_id ORDER BY i.item_name ASC LIMIT 30");
             $get_user->bindValue("store", $store);
             $get_user->bindValue("item", "%$item%");
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+         //fetch item price
+        public function fetch_item_price($store){
+           $get_user = $this->connectdb()->prepare("SELECT i.item_id, i.item_name, IFNULL(p.cost, 0) AS cost_price,  IFNULL(p.sales_price, 0) AS sales_price, IFNULL(p.other_price, 0) AS other_price FROM items i LEFT JOIN prices p ON p.item = i.item_id AND p.store = :store ORDER BY i.item_name");
+            $get_user->bindValue("store", $store);
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 $rows = $get_user->fetchAll();

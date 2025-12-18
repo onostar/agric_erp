@@ -42,7 +42,9 @@
         padding: 0 12px;
         background: #fff;
     }
-
+    label{
+        font-size:.8rem;
+    }
 </style>
     <div class="add_user_form" style="width:50%; margin:10px 0;">
         <h3 style="background:var(--tertiaryColor); color:#fff; text-align:left!important;">Concentrate Production</h3>
@@ -50,11 +52,12 @@
             //get cost prices of inputs and outputs
             //pineapple cost price
             $get_prices = new selects();
-            $pincs = $get_prices->fetch_details_cond('items', 'item_name', 'PINEAPPLE');
+            $pin = $get_prices->fetch_details_group('items', 'item_id','item_name', 'PINEAPPLE');
+            $pineapple_id = $pin->item_id;
+            $pincs = $get_prices->fetch_details_2cond('prices', 'item', 'store', $pineapple_id, $store);
             if(is_array($pincs)){
                 foreach($pincs as $pinc){
-                    $pineapple_cost = $pinc->cost_price;
-                    $pineapple_id = $pinc->item_id;
+                    $pineapple_cost = $pinc->cost;
                 }
             }else{
                 $pineapple_cost = 0;
@@ -69,7 +72,8 @@
                 $prev_qty = 0;
             }
             //pineapple peel recovery value
-            $pprecs = $get_prices->fetch_details_cond('items', 'item_name', 'PINEAPPLE PEEL');
+            $ppr = $get_prices->fetch_details_group('items', 'item_id', 'item_name', 'PINEAPPLE PEEL');
+            $pprecs = $get_prices->fetch_details_2cond('prices', 'item', 'store', $ppr->item_id, $store);
             if(is_array($pprecs)){
                 foreach($pprecs as $pprec){
                     $pineapple_peel_value = $pprec->sales_price;
@@ -78,7 +82,8 @@
                 $pineapple_peel_value = 0;
             }
             //pineapple crown recovery value
-            $pcrecs = $get_prices->fetch_details_cond('items', 'item_name', 'PINEAPPLE CROWN');
+            $pcr = $get_prices->fetch_details_group('items', 'item_id', 'item_name', 'PINEAPPLE CROWN');
+            $pcrecs = $get_prices->fetch_details_2cond('prices', 'item', 'store', $pcr->item_id, $store);
             if(is_array($pcrecs)){
                 foreach($pcrecs as $prec){
                     $pineapple_crown_value = $prec->sales_price;

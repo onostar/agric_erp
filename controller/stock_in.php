@@ -86,11 +86,30 @@ date_default_timezone_set("Africa/Lagos");
     $stock_in->create_data();
     
     if($stock_in){
-        
+        //check if item price needs to be updated
+        $check = new selects();
+        $count = $check->fetch_count_2cond('prices', 'item', $item, 'store', $store);
+        if($count > 0){
+            //update price
+            $update_price = new Update_table();
+            $update_price->update_tripple2Cond('prices', 'cost', $cost_price, 'updated_at', $date, 'updated_by', $user, 'item', $item, 'store', $store);
+            
+        }else{
+            //insert price
+            $price_data = array(
+                'item' => $item,
+                'store' => $store,
+                'cost' => $cost_price,
+                'added_at' => $date,
+                'added_by' => $posted
+            );
+            $insert_price = new add_data('prices', $price_data);
+            $insert_price->create_data();
+        }
         //update all prices and pack size
-        $update_item = new Update_table();
-        $update_item->update('items', 'cost_price', 'item_id',  $cost_price, $item);
-        if($update_item){
+        /* $update_item = new Update_table();
+        $update_item->update('items', 'cost_price', 'item_id',  $cost_price, $item); */
+        // if($update_price || $insert_price){
         //update expiration
         /* $update_exp = new Update_table();
         $update_exp->update('items', 'expiration_date', 'item_id', $expiration, $item); */
@@ -99,6 +118,6 @@ date_default_timezone_set("Africa/Lagos");
 
     //display stockins for this invoice number
     include "../controller/stockin_details.php";
-        }
+        // }
     }
 ?>

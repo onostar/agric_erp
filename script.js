@@ -1263,10 +1263,11 @@ function roomPriceForm(item_id){
      return false;
  }
  //change product price
- function changeItemPrice(){
+ function changeItemPrice(link){
      let item_id = document.getElementById("item_id").value;
      let cost_price = document.getElementById("cost_price").value;
      let sales_price = document.getElementById("sales_price").value;
+     let other_price = document.getElementById("other_price").value;
      /* let pack_price = document.getElementById("pack_price").value;
      let pack_size = document.getElementById("pack_size").value; */
      // let wholesale_price = document.getElementById("wholesale_price").value;
@@ -1275,10 +1276,7 @@ function roomPriceForm(item_id){
           alert("Selling price can not be lesser than cost price!");
           $("#sales_price").focus();
           return;
-     /*}else if(parseInt(cost_price) >= parseInt(wholesale_price)){
-          alert("Guest price can not be lesser than cost price!");
-          $("#wholesale_price").focus();
-          return;*/
+     
      }else if(cost_price.length == 0 || cost_price.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please enter cost price!");
           $("#cost_price").focus();
@@ -1287,22 +1285,7 @@ function roomPriceForm(item_id){
           alert("Please enter selling price!");
           $("#sales_price").focus();
           return;
-     /*}else if(wholesale_price.length == 0 || wholesale_price.replace(/^\s+|\s+$/g, "").length == 0){
-          alert("Please enter wholesale price!");
-          $("#wholesale_price").focus();
-          return;
-     /* }else if(pack_price.length == 0 || pack_price.replace(/^\s+|\s+$/g, "").length == 0){
-          alert("Please enter pack price!");
-          $("#pack_price").focus();
-          return; */
-     /* }else if(pack_price <= cost_price){
-          alert("Error! Pack price cannot be lesser than cost price!");
-          $("#pack_price").focus();
-          return; */
-     /* }else if(pack_size.length == 0 || pack_size.replace(/^\s+|\s+$/g, "").length == 0){
-          alert("Please enter pack size!");
-          $("#pack_size").focus();
-          return; */
+     
      }else if(sales_price <= 0 || cost_price < 0){
           alert("Prices can not be less than or  equal to 0");
           return;
@@ -1311,17 +1294,18 @@ function roomPriceForm(item_id){
           $.ajax({
                type : "POST",
                url : "../controller/edit_price.php",
-               data: {item_id:item_id, cost_price:cost_price, sales_price:sales_price, /* pack_price:pack_price, wholesale_price:wholesale_price,wholesale_pack:wholesale_pack, pack_size:pack_size */},
+               data: {item_id:item_id, cost_price:cost_price, sales_price:sales_price, other_price:other_price},
                beforeSend : function(){
                     $("#edit_item_price").html("<div class='processing'><div class='loader'></div></div>");
                },
                success : function(response){
                     $("#edit_item_price").html(response);
+                    setTimeout(function(){
+                         showPage(link);
+                    }, 1500);
                }
           })
-          setTimeout(function(){
-               $("#edit_item_price").load("item_price.php #edit_item_price");
-          }, 1500);
+          
           return false
      }
  }
@@ -9793,9 +9777,9 @@ function makeConcentrate(){
                     },
                     success : function(response){
                          $("#produce").html(response);
-                         /* setTimeout(function(){
+                         setTimeout(function(){
                               showPage("concentrate_production.php");
-                         }, 2000); */
+                         }, 2000);
                     }
                })
           }else{
