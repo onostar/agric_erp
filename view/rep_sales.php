@@ -28,7 +28,7 @@
         <div class="clear"></div>
     </div>
     <div class="add_user_form" style="width:50%; margin:10px 0;">
-        <h3 style="background:var(--otherColor); color:#fff; text-align:left!important;">Sales Rep Order</h3>
+        <h3 style="background:var(--otherColor); color:#fff; text-align:left!important;">Non-Industrial Customer Order</h3>
         
             <!-- search forms -->
         <!-- <form method="POST" id="addUserForm"> -->

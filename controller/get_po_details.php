@@ -19,6 +19,16 @@
     $rows = $get_item->fetch_details_cond('items', 'item_id', $item);
      if(gettype($rows) == 'array'){
         foreach($rows as $row):
+             //get last cost price
+            $price_details = $get_item->fetch_details_2cond('prices', 'item', 'store', $row->item_id, $store);
+            if(is_array($price_details)){
+                foreach($price_details as $pd){
+                    $cost_price = $pd->cost;
+                    
+                }
+            }else{
+                $cost_price = 0;
+            }
     ?>
     <div class="add_user_form" style="width:60%!important; margin:0!important">
         <h3 style="background:var(--tertiaryColor); text-align:left;">Raise Order for <?php echo strtoupper($row->item_name);?></h3>
@@ -37,7 +47,7 @@
                 </div>
                 <div class="data" style="width:30%; margin:5px;">
                     <label for="cost_price">Cost price (NGN)</label>
-                    <input type="text" name="cost_price" id="cost_price" value="<?php echo $row->cost_price?>">
+                    <input type="text" name="cost_price" id="cost_price" value="<?php echo $cost_price?>">
                 </div>
                 <!-- <div class="data" style="width:20%; margin:5px;">
                     <label for="sales_price">Retail price (NGN)</label>

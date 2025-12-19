@@ -31,7 +31,7 @@
                         <label for="item"> Search Items</label>
                         <input type="hidden" name="customer" id="customer" value="<?php echo $customer?>">
                         <input type="hidden" name="invoice" id="invoice" value="<?php echo $invoice?>">
-                        <input type="text" name="item" id="item" required placeholder="Input item name" onkeyup="getWholesaleItems(this.value, 'get_wholesale_items.php')" autofocus>
+                        <input type="text" name="item" id="item" required placeholder="Input item name" onkeyup="getWholesaleItems(this.value,'get_non_industry_items.php')" autofocus>
                         <div id="sales_item">
                             
                         </div>

@@ -183,9 +183,23 @@
             );
             $add_briq_audit = new add_data('audit_trail', $briq_audit);
             $add_briq_audit->create_data();
-            
-            //update briquette cost price
-            $updates->update2cond('prices', 'cost', 'item', 'store',  $unit_cost, $briquette_id, $store);
+            //check if briquette is in price list already
+            $briq_prices = $check->fetch_count_2cond('prices', 'item', $briquette_id, 'store', $store);
+            if($briq_prices > 0){
+                  //update briquette cost price
+                $updates->update_tripple2cond('prices', 'cost', $unit_cost,'updated_by', $user_id, 'updated_at', $date, 'item', $briquette_id, 'store', $store);
+            }else{
+                $briq_price = array(
+                    'item' => $briquette_id,
+                    'store' => $store,
+                    'cost' => $unit_cost,
+                    'added_by' => $user_id,
+                    'added_at' => $date
+                );
+                $add_briq_price = new add_data('prices', $briq_price);
+                $add_briq_price->create_data();
+            }
+          
 
             //insert production record
             $insert_production = new add_data('briquette_production', $values);

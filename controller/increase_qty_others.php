@@ -32,7 +32,7 @@
 <!-- display items with same invoice number -->
 
 <?php 
-    include "wholesale_details.php";           
+    include "other_sales_details.php";           
         }else{
         //update quantity
         $update = new Update_table();
@@ -47,8 +47,6 @@
             $unit_price = $show->price;
         }
         //get cost price from inventory
-        $get_cost = new selects();
-       //get cost price from inventory
         $get_cost = new selects();
         $costs = $get_cost->fetch_details_2cond('prices', 'store', 'item_id', $item, $store);
         if(is_array($costs)){
@@ -67,7 +65,7 @@
 <!-- display items with same invoice number -->
 
 <?php
-    include "wholesale_details.php";           
+    include "other_sales_details.php";           
             }            
         }
     }

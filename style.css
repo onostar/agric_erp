@@ -3227,10 +3227,11 @@ x
 .add_bill a{
     padding:5px 8px;
     margin:5px;
-    border-radius: 10px;
-    box-shadow: 2px 2px 2px #222;
+    border-radius: 15px;
+    box-shadow: 1px 1px 1px #222;
     color:#fff;
     background:green;
+    border:1px solid #fff;
 }
 .fund_account{
     width:80%;

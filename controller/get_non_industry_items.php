@@ -19,7 +19,7 @@
         $prs = $get_item->fetch_details_2cond('prices', 'item', 'store', $row->item_id, $store);
         if(is_array($prs)){
             foreach($prs as $pr){
-                $price = $pr->sales_price;
+                $price = $pr->other_price;
             }
         }else{
             $price = 0;
@@ -28,13 +28,13 @@
     ?>
     <?php if($row->item_name == "CONCENTRATE"){?>
     <div class="results">
-        <a href="javascript:void(0)" onclick="addWholeSales('<?php echo $row->item_id?>', 'add_wholesale.php')"><?php echo $row->item_name." (Price => ₦".$price.", Quantity => ".$row->quantity."Ltr)"?></a>
+        <a href="javascript:void(0)" onclick="addWholeSales('<?php echo $row->item_id?>', 'add_other_sales.php')"><?php echo $row->item_name." (Price => ₦".$price.", Quantity => ".$row->quantity."Ltr)"?></a>
     </div>
 <?php
     }else{
 ?>
     <div class="results">
-        <a href="javascript:void(0)" onclick="addWholeSales('<?php echo $row->item_id?>', 'add_wholesale.php')"><?php echo $row->item_name." (Price => ₦".$price.", Quantity => ".$row->quantity."kg)"?></a>
+        <a href="javascript:void(0)" onclick="addWholeSales('<?php echo $row->item_id?>', 'add_other_sales.php')"><?php echo $row->item_name." (Price => ₦".$price.", Quantity => ".$row->quantity."kg)"?></a>
     </div>
 <?php
      }

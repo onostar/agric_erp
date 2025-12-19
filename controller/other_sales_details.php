@@ -41,9 +41,9 @@
                     <?php } else{ ?>
                     <span style="font-size:1.1rem; margin:0 2px"><?php echo $detail->quantity?>kg</span>
                     <?php } ?>
-                    <a style="color:#fff; background:green;border-radius:5px;padding:4px 8px;" href="javascript:void(0)" title="increase quantity" onclick="increaseQtyWholesale('<?php echo $detail->sales_id?>', '<?php echo $detail->item?>')"><i class="fas fa-arrow-up"></i></a>
-                    <a style="color:#fff; background:var(--primaryColor);border-radius:5px;padding:4px 8px;" href="javascript:void(0)" title="decrease quantity" onclick="reduceQtyWholesale('<?php echo $detail->sales_id?>')"><i class="fas fa-arrow-down"></i></a>
-                    <a style="color:#fff; background:var(--otherColor);border-radius:5px;padding:4px 8px;" href="javascript:void(0)" title="show more options" onclick="showMoreWholesale('<?php echo $detail->sales_id?>')"><i class="fas fa-pen"></i></a>
+                    <a style="color:#fff; background:green;border-radius:5px;padding:4px 8px;" href="javascript:void(0)" title="increase quantity" onclick="increaseQtyOther('<?php echo $detail->sales_id?>', '<?php echo $detail->item?>')"><i class="fas fa-arrow-up"></i></a>
+                    <a style="color:#fff; background:var(--primaryColor);border-radius:5px;padding:4px 8px;" href="javascript:void(0)" title="decrease quantity" onclick="reduceQtyOther('<?php echo $detail->sales_id?>')"><i class="fas fa-arrow-down"></i></a>
+                    <a style="color:#fff; background:var(--otherColor);border-radius:5px;padding:4px 8px;" href="javascript:void(0)" title="show more options" onclick="showMoreOther('<?php echo $detail->sales_id?>')"><i class="fas fa-pen"></i></a>
                     <!-- <a style="color:#fff; background:var(--secondaryColor);border-radius:4px;padding:5px 8px;" href="javascript:void(0)" title="sell item in pack" onclick="getWholesalePack('<?php echo $detail->sales_id?>')"><i class="fas fa-box"></i> pack</a> -->
                 </td>
                 <td>
@@ -57,7 +57,7 @@
                     ?>
                 </td>
                 <td>
-                    <a style="color:red; font-size:1rem" href="javascript:void(0) "title="delete item" onclick="deleteWholesale('<?php echo $detail->sales_id?>', '<?php echo $detail->item?>')"><i class="fas fa-trash"></i></a>
+                    <a style="color:red; font-size:1rem" href="javascript:void(0) "title="delete item" onclick="deleteOthers('<?php echo $detail->sales_id?>', '<?php echo $detail->item?>')"><i class="fas fa-trash"></i></a>
                 </td>
                 
             </tr>
@@ -103,10 +103,10 @@
                         <option value="Cash">CASH</option>
                         <option value="POS">POS</option>
                         <option value="Transfer">TRANSFER</option>
-                        <option value="Credit">CREDIT</option>
+                        <!-- <option value="Credit">CREDIT</option> -->
                         <option value="Multiple">MULTIPLE PAYMENT</option>
                         <option value="Wallet">WALLET</option>
-                        <option value="Deposit">DEPOSIT</option>
+                        <!-- <option value="Deposit">DEPOSIT</option> -->
                     </select>
                 </div>
                 <div class="inputs" id="multiples">
@@ -176,7 +176,7 @@
                     </select>
                 </div>
                 <div class="data">
-                    <button onclick="postWholesale('post_wholesale.php')" style="background:green; padding:8px; border-radius:5px;font-size:.9rem;">Save and Print <i class="fas fa-print"></i></button>
+                    <button onclick="postWholesale('post_other_sales.php')" style="background:green; padding:8px; border-radius:5px;font-size:.9rem;">Save and Print <i class="fas fa-print"></i></button>
                 </div>
             </div>
         </section>

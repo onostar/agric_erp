@@ -1557,7 +1557,7 @@ function getItemsOrder(item_name){
      
 }
 //get item for wholesale direct sales
-function getWholesaleItems(item_name){
+function getWholesaleItems(item_name, link){
      let item = item_name;
      let customer = document.getElementById("customer").value;
      // alert(check_room);
@@ -1566,7 +1566,7 @@ function getWholesaleItems(item_name){
           if(item){
                $.ajax({
                     type : "POST",
-                    url :"../controller/get_wholesale_items.php",
+                    url :"../controller/"+link,
                     beforeSend : function(){
                          $("#sales_item").html("<p>Searching...</p>");
                     },
@@ -1952,13 +1952,13 @@ function addSalesOrder(item_id){
      return false;
 }
 //add direct wholesales 
-function addWholeSales(item_id){
+function addWholeSales(item_id, link){
      let item = item_id;
      let customer = document.getElementById("customer").value;
      let invoice = document.getElementById("invoice").value;
      $.ajax({
           type : "GET",
-          url : "../controller/add_wholesale.php?sales_item="+item+"&customer="+customer+"&invoice="+invoice,
+          url : "../controller/"+link+"?sales_item="+item+"&customer="+customer+"&invoice="+invoice,
           success : function(response){
                $(".sales_order").html(response);
           }
@@ -2060,6 +2060,24 @@ function deleteWholesale(sales, item){
           return;
      }
 }
+//delete individual items from direct wholesale
+function deleteOthers(sales, item){
+     let confirmDel = confirm("Are you sure you want to remove this item?", "");
+     if(confirmDel){
+          
+          $.ajax({
+               type : "GET",
+               url : "../controller/delete_other_sales.php?sales_id="+sales+"&item_id="+item,
+               success : function(response){
+                    $(".sales_order").html(response);
+               }
+               
+          })
+          return false;
+     }else{
+          return;
+     }
+}
 //delete individual items from direct wholesale updates
 function deleteUpdate(sales, item){
      let confirmDel = confirm("Are you sure you want to remove this item?", "");
@@ -2117,6 +2135,19 @@ function increaseQtyWholesale(sales, item){
      })
      return false;
 }
+//increase quantity for other sales
+function increaseQtyOther(sales, item){
+     // alert(sales);
+     $.ajax({
+          type : "GET",
+          url : "../controller/increase_qty_others.php?sales_id="+sales+"&item_id="+item,
+          success : function(response){
+               $(".sales_order").html(response);
+          }
+          
+     })
+     return false;
+}
 //increase quantity during update of invoice
 function increaseQtyUpdate(sales, item){
      // alert(sales);
@@ -2159,6 +2190,18 @@ function reduceQtyWholesale(sales){
      $.ajax({
           type : "GET",
           url : "../controller/decrease_qty_wholesale.php?item="+sales,
+          success : function(response){
+               $(".sales_order").html(response);
+          }
+          
+     })
+     return false;
+}
+//decrease quantity for direct other sales item
+function reduceQtyOther(sales){
+     $.ajax({
+          type : "GET",
+          url : "../controller/decrease_qty_other.php?item="+sales,
           success : function(response){
                $(".sales_order").html(response);
           }
@@ -2210,6 +2253,20 @@ function showMoreWholesale(sales){
      $.ajax({
           type : "GET",
           url : "../controller/edit_price_qty_wholesale.php?item="+sales,
+          success : function(response){
+               $(".show_more").html(response);
+               window.scrollTo(0, 0);
+
+          }
+          
+     })
+     return false;
+}
+//show more options for sales item to edit price and quantity
+function showMoreOther(sales){
+     $.ajax({
+          type : "GET",
+          url : "../controller/edit_price_qty_other.php?item="+sales,
           success : function(response){
                $(".show_more").html(response);
                window.scrollTo(0, 0);
@@ -2346,6 +2403,47 @@ function updatePriceQtyWh(){
           $.ajax({
                type: "POST",
                url: "../controller/update_price_qty_who.php",
+               data: {sales_id:sales_id, qty:qty, price:price},
+               success: function(response){
+               $(".sales_order").html(response);
+               }
+          });
+
+     }
+     $(".show_more").html('');
+     return false;
+}
+//update sales quantity and price for wholesale
+function updatePriceQtyOther(){
+     let sales_id = document.getElementById("sales_id").value;
+     let qty = document.getElementById("qty").value;
+     let price = document.getElementById("price").value;
+     // let inv_qty = document.getElementById("inv_qty").value;
+     /* authentication */
+     if(qty.length == 0 || qty.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input quantity!");
+          $("#qty").focus();
+          return;
+     }else if(price.length == 0 || price.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input unit price!");
+          $("#price").focus();
+          return;
+     }else if(qty < 1){
+          alert("Qauntity cannot be zero or negative!");
+          $("#qty").focus();
+          return;
+     }else if(price < 1){
+          alert("Price cannot be zero or negative!");
+          $("#price").focus();
+          return;
+     /* }else if(qty > inv_qty){
+          alert("Available quantity is less than required!");
+          $("#qty").focus();
+          return; */
+     }else{
+          $.ajax({
+               type: "POST",
+               url: "../controller/update_price_qty_other.php",
                data: {sales_id:sales_id, qty:qty, price:price},
                success: function(response){
                $(".sales_order").html(response);
@@ -2978,17 +3076,10 @@ function printReceipt(invoice){
 // prinit sales receipt for direct sales
 function printSalesReceipt(invoice){
      window.open("../controller/sales_receipt.php?receipt="+invoice);
-     // alert(item_id);
-     /* $.ajax({
-          type : "GET",
-          url : "../controller/sales_receipt.php?receipt="+invoice,
-          success : function(response){
-               $("#direct_sales").html(response);
-          }
-     }) */
-     setTimeout(function(){
+    
+    /*  setTimeout(function(){
           $("#direct_sales").load("wholesale.php #direct_sales");
-     }, 100);
+     }, 100); */
      return false;
  
  }
@@ -3745,6 +3836,9 @@ function getSalesRep(input){
                     type : "POST",
                     url : "../controller/get_sales_rep.php",
                     data : {customer:customer, invoice:invoice},
+                    beforeSend : function(){
+                         $("#search_results").html("<p>Searching....</p>");
+                    },
                     success : function(response){
                          $("#search_results").html(response);
                     }

@@ -1,6 +1,7 @@
 
 <div class='receipt_logo'><img src="../images/icon.png" title="logo"></div>
-    <h2><?php echo $_SESSION['company'];?></h2>
+    <!-- <h2><?php echo $_SESSION['company'];?></h2> -->
+    <h2><?php echo $store_name;?></h2>
     <p><?php echo $address?></p>
     <p>Tel: <?php echo $phone?></p>
     <!-- get sales type -->

@@ -25,7 +25,7 @@
 <!-- display items with same invoice number -->
 
 <?php
-    include "wholesale_details.php";
+    include "other_sales_details.php";
         }else{
         
         //update quantity
@@ -59,7 +59,7 @@
 <!-- display items with same invoice number -->
     
 <?php
-    include "wholesale_details.php";
+    include "other_sales_details.php";
             }            
         }
     }
