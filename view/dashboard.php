@@ -1,7 +1,9 @@
 <div id="general_dashboard">
 <div class="dashboard_all">
+    <?php if($role !== "Staff"){?>
     <h3><i class="fas fa-home"></i> Dashboard for <span style="color:var(--secondaryColor);font-size:1rem"><?php echo $store?></span></h3>
     <?php 
+    }
         $get_prds = new selects();
         if($role === "Admin" || $role === "Accountant"){
     ?>
@@ -170,7 +172,7 @@
     <?php
         }else{
     ?>
-    <div id="dashboard">
+    <!-- <div id="dashboard">
     <div class="cards" id="card0">
             <a href="javascript:void(0)" class="page_navs">
                 <div class="infos">
@@ -253,7 +255,7 @@
             </a>
         </div> 
             
-    </div>
+    </div> -->
     <?php }?>
 </div>
 <?php 

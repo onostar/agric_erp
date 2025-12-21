@@ -12,6 +12,7 @@
         'username' => $username,
         'user_role' => $role,
         'store' => $store,
+        'staff_id' => $staff_id,
         'user_password' => $password,
         'reg_date' => $date
     );

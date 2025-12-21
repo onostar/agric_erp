@@ -16,6 +16,17 @@ date_default_timezone_set("Africa/Lagos");
             $user_id = $user->user_id;
             $store_id = $user->store;
         }
+        //check if user is a staff and get details
+        $stfs = $fetch_user->fetch_details_cond('staffs', 'user_id', $user_id);
+        if(is_array($stfs) || is_object($stfs)){
+            foreach($stfs as $stf){
+                $staff_id = $stf->staff_id;
+
+            }
+
+        }else{
+            $staff_id = 0;
+        }
         $_SESSION['user_id'] = $user_id;
         $_SESSION['role'] = $role;
 
@@ -43,7 +54,16 @@ date_default_timezone_set("Africa/Lagos");
         $_SESSION['store'] = $store;
         $_SESSION['address'] = $store_address;
         $_SESSION['phone'] = $phone;
-        
+        function greeting($staff_name){
+            $hour = date('H'); // Get the current hour in 24-hour format (00 to 23)
+            if ($hour >= 0 && $hour < 12) {
+                return "Good morning! <span style='font-weight:bold'>$staff_name</span>";
+            } elseif ($hour >= 12 && $hour < 18) {
+                return "Good afternoon! <span style='font-weight:bold'>$staff_name</span>";
+            } else {
+                return "Good evening! <span style='font-weight:bold'>$staff_name</span>";
+            }
+        }
     
         
 ?>
@@ -123,31 +143,9 @@ date_default_timezone_set("Africa/Lagos");
                 <!-- quick links -->
                 <div id="quickLinks">
                     <div class="quick_links">
-                        
                         <div class="links page_navs" onclick="showPage('wholesale.php')" title="Make a sales order">
                             <i class="fas fa-pen-alt"></i>
                             <!-- <p>Direct sales</p> -->
-                        </div>
-                        
-                        <div class="links page_navs" onclick="showPage('expire_soon.php')" title="Soon to expire">
-                            <i class="fas fa-chart-line" style="color:green"></i>
-                            <p>
-                                <?php
-                                    $get_soon_expired = new selects();
-                                    $soon_expired = $get_soon_expired->fetch_expire_soon('inventory', 'expiration_date', 'quantity', 'store', $store_id);
-                                    echo $soon_expired;
-                                ?>
-                            </p>
-                        </div>
-                        <div class="links page_navs" onclick="showPage('expired_items.php')" title="Expired items">
-                            <i class="fas fa-calendar-times" style="color:red"></i>
-                            <p style="color:red">
-                                <?php
-                                    $get_expired = new selects();
-                                    $expired = $get_expired->fetch_expired('inventory', 'expiration_date', 'quantity', 'store', $store_id);
-                                    echo $expired;
-                                ?>
-                            </p>
                         </div>
                         <div class="links page_navs" onclick="showPage('reached_reorder.php')" title="Reached reorder level">
                             <i class="fas fa-sort-amount-down"></i>
@@ -169,6 +167,33 @@ date_default_timezone_set("Africa/Lagos");
                                 ?>
                             </p>
                         </div>
+                        <div class="greetings">
+                            <p>
+                                <?php
+                                    echo greeting($fullname);
+                                ?>
+                            </p>
+                        </div>
+                        <!-- check if user has checked in for the day -->
+                        <?php
+                            if($username != "Sysadmin"){
+                                $check_attendance = $fetch_user->check_attendance($staff_id);
+                                if($check_attendance == 0){
+                            
+                        ?>
+                        <div class="attendance_alert">
+                            <p><i class="fas fa-exclamation-triangle"></i> You have not marked your attendance for today. <button onclick="markAttendance(<?php echo $staff_id?>)">Start Work</button></p>
+                        </div>
+                        <?php }
+                        if($check_attendance == 1){
+                            //check if user has checked out
+                            $check_checkout = $fetch_user->check_checkout($staff_id);
+                            if($check_checkout == 0){ 
+                        ?>
+                            <div class="attendance_alert">
+                            <button style="background:brown" onclick="closeWork('<?php echo $staff_id?>')">Close Work</button>
+                        </div>
+                        <?php }}}?>
                     </div>
                     <?php
                         if($role == "Admin" || $role == "Inventory Officer" || $role == "Accountant"){
@@ -193,7 +218,7 @@ date_default_timezone_set("Africa/Lagos");
                     </div>
                     <?php }?>
                 </div>
-
+                
                 <div class="contents">
 
                     <?php

@@ -394,7 +394,7 @@
         }
         //fetch attendance report for current day
         public function fetch_attendance($store){
-            $get_user = $this->connectdb()->prepare("SELECT s.staff_id, s.last_name, s.other_names, s.staff_number, s.department, s.designation, a.time_in, a.time_out, a.marked_by, a.checked_out_by, a.marked_date, a.checked_out, a.attendance_status, CASE WHEN a.time_in IS NOT NULL AND a.time_out IS NULL THEN 'Still Present' WHEN a.time_in IS NOT NULL AND a.time_out IS NOT NULL THEN 'Present' WHEN l.leave_status = 1 THEN 'On Leave' ELSE 'Absent' END AS status FROM staffs s LEFT JOIN attendance a  ON s.staff_id = a.staff AND DATE(a.attendance_date) = CURDATE()LEFT JOIN leaves l ON s.staff_id = l.employee AND l.leave_status = 1 AND CURDATE() BETWEEN l.start_date AND l.end_date WHERE s.store = :store ORDER BY s.last_name ASC;");
+            $get_user = $this->connectdb()->prepare("SELECT s.staff_id, s.last_name, s.other_names, s.staff_number, s.department, s.designation, a.time_in, a.time_out, a.marked_by, a.checked_out_by, a.marked_date, a.checked_out, a.attendance_status, a.location, a.longitude, a.latitude, CASE WHEN a.time_in IS NOT NULL AND a.time_out IS NULL THEN 'Still Present' WHEN a.time_in IS NOT NULL AND a.time_out IS NOT NULL THEN 'Present' WHEN l.leave_status = 1 THEN 'On Leave' ELSE 'Absent' END AS status FROM staffs s LEFT JOIN attendance a  ON s.staff_id = a.staff AND DATE(a.attendance_date) = CURDATE()LEFT JOIN leaves l ON s.staff_id = l.employee AND l.leave_status = 1 AND CURDATE() BETWEEN l.start_date AND l.end_date WHERE s.store = :store ORDER BY s.last_name ASC;");
             $get_user->bindValue("store", $store);
             $get_user->execute();
             if($get_user->rowCount() > 0){
@@ -407,7 +407,7 @@
         }
         //fetch attendance report by date
         public function fetch_attendance_date($from, $to, $store){
-            $sql = "SELECT s.staff_id, s.last_name, s.other_names, s.staff_number, s.department, s.designation, a.time_in, a.time_out, a.marked_by, a.checked_out_by, a.marked_date, a.checked_out, a.attendance_status, a.attendance_date, CASE WHEN a.time_in IS NOT NULL AND a.time_out IS NULL THEN 'Still Present' WHEN a.time_in IS NOT NULL AND a.time_out IS NOT NULL THEN 'Present' WHEN l.leave_status = 1 THEN 'On Leave' ELSE 'Absent' END AS status FROM staffs s LEFT JOIN attendance a  ON s.staff_id = a.staff AND DATE(a.attendance_date) BETWEEN :from AND :to LEFT JOIN leaves l ON s.staff_id = l.employee AND l.leave_status = 1 AND (l.start_date BETWEEN :from AND :to OR l.end_date BETWEEN :from AND :to OR (:from BETWEEN l.start_date AND l.end_date)) WHERE s.store = :store ORDER BY s.last_name ASC";
+            $sql = "SELECT s.staff_id, s.last_name, s.other_names, s.staff_number, s.department, s.designation, a.time_in, a.time_out, a.marked_by, a.checked_out_by, a.marked_date, a.checked_out, a.attendance_status, a.attendance_date, a.location, a.latitude, a.longitude, CASE WHEN a.time_in IS NOT NULL AND a.time_out IS NULL THEN 'Still Present' WHEN a.time_in IS NOT NULL AND a.time_out IS NOT NULL THEN 'Present' WHEN l.leave_status = 1 THEN 'On Leave' ELSE 'Absent' END AS status FROM staffs s LEFT JOIN attendance a  ON s.staff_id = a.staff AND DATE(a.attendance_date) BETWEEN :from AND :to LEFT JOIN leaves l ON s.staff_id = l.employee AND l.leave_status = 1 AND (l.start_date BETWEEN :from AND :to OR l.end_date BETWEEN :from AND :to OR (:from BETWEEN l.start_date AND l.end_date)) WHERE s.store = :store ORDER BY s.last_name ASC";
             $stmt = $this->connectdb()->prepare($sql);
             $stmt->bindValue(":store", $store);
             $stmt->bindValue(":from", $from);
@@ -453,6 +453,28 @@
             }else{
                 $rows = "No records found";
                 return $rows;
+            }
+        }
+        //check if staff already marked attendance for the day
+        public function check_attendance($staff){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM attendance WHERE staff = :staff AND DATE(attendance_date) = CURDATE()");
+            $get_user->bindValue("staff", $staff);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                return $get_user->rowCount();
+            }else{
+                return 0;
+            }
+        }
+        //check if staff has checked out already for the day
+        public function chEck_checkout($staff){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM attendance WHERE staff = :staff AND DATE(attendance_date) = CURDATE() AND time_out IS NOT NULL");
+            $get_user->bindValue("staff", $staff);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                return $get_user->rowCount();
+            }else{
+                return 0;
             }
         }
         //fetch salary structure

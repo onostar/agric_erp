@@ -42,7 +42,11 @@
                         <img src="../images/logo.png" alt="logo">
                     </a>
                 </h1> -->
-                <h3 class="mobile_company"><?php echo $row->company?></h3>
+                <div class="company_logo">
+                    <img src="<?php echo '../images/'.$row->logo?>" alt="<?php echo $row->company?>">
+                </div>
+                <!-- <h2>Welcome User!</h2> -->
+                <p style="#222"><?php echo $row->company?></p>
                 <h2>Change your password</h2>
                 <p></p>
                 <?php
@@ -76,20 +80,20 @@
                         $username = $_SESSION['user'];
                 ?>
                 <form action="../controller/reset_password.php" method="POST">
-                    <div class="data">
+                    <div class="data" style="margin:5px 0!Important">
                         <label for="username">Username</label>
                         <input type="text" name="username" id="username" required value="<?php echo $username?>" readonly>
                         <!-- <input type="hidden" name="current_password" value="123"> -->
                         
                     </div>
-                    <div class="data">
+                    <div class="data" style="margin:5px 0!Important">
                         <label for="new_password">Enter new Password</label>
                         <input type="password" name="new_password" id="password" class="password" placeholder="*******" required>
                         <div class="show_password">
                             <a href="javascript:void(0)" onclick="togglePassword()"><span class="icon"><i class="fas fa-eye"></i></span> <span class="icon_txt">Show password</span></a>
                         </div>
                     </div>
-                    <div class="data">
+                    <div class="data" style="margin:5px 0!Important">
                         <label for="password">Confirm Password</label>
                         <input type="password" name="retype_password" id="retype_password" class="password" placeholder="*******" required>
                         <div class="show_password">
@@ -105,7 +109,7 @@
                 <?php 
                 
                     }else{
-                        header("Location: ../index.php");
+                        header("Location../index.php");
                     }
                 
                 ?>

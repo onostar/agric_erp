@@ -411,44 +411,7 @@ function addStore(){
      $("#store").focus();
      return false;    
 }
-// add staffs 
-function addStaff(){
-     let staff_name = document.getElementById("staff_name").value;
-     let phone_number = document.getElementById("phone_number").value;
-     let home_address = document.getElementById("home_address").value;
-     if(staff_name.length == 0 || staff_name.replace(/^\s+|\s+$/g, "").length == 0){
-          alert("Please input staff name!");
-          $("#staff_name").focus();
-          return;
-     }else if(home_address.length == 0 || home_address.replace(/^\s+|\s+$/g, "").length == 0){
-          alert("Please input staff residential address");
-          $("#home_address").focus();
-          return;
-     }else if(phone_number.length == 0 || phone_number.replace(/^\s+|\s+$/g, "").length == 0){
-          alert("Please input staff phone number");
-          $("#phone_number").focus();
-          return;
-     }else if(phone_number.length < 11){
-          alert("Phone number is too short");
-          $("#phone_number").focus();
-          return;
-     }else{
-          $.ajax({
-               type : "POST",
-               url : "../controller/add_staff.php",
-               data : {staff_name:staff_name, phone_number:phone_number, home_address:home_address},
-               success : function(response){
-               $(".info").html(response);
-               }
-          })
-     }
-     // $("#room_category").val('');
-     $("#staff_name").val('');
-     $("#phone_number").val('');
-     $("#home_address").val('');
-     $("#staff_name").focus();
-     return false;    
-}
+
 // add suppliers 
 function addSupplier(){
      let supplier = document.getElementById("supplier").value;
@@ -7779,6 +7742,7 @@ function addStaffDepartment(){
      $("#department").focus();
      return false;
 }
+//check marital status to show spouse info
 
 // Add new staff
 function addStaff(){
@@ -7790,6 +7754,8 @@ function addStaff(){
      let title = document.getElementById("title").value;
      let gender = document.getElementById("gender").value;
      let marital_status = document.getElementById("marital_status").value;
+     let spouse_name = document.getElementById("spouse_name")?.value || '';
+     let spouse_phone = document.getElementById("spouse_phone")?.value || '';
      let religion = document.getElementById("religion").value;
      let employed = document.getElementById("employed").value;
      let address = document.getElementById("address").value;
@@ -7807,6 +7773,18 @@ function addStaff(){
      let pension = document.getElementById("pension").value;
      let pension_num = document.getElementById("pension_num").value;
      let todayDate = new Date();
+     if(marital_status === "Married"){
+          if(spouse_name.length == 0 || spouse_name.replace(/^\s+|\s+$/g, "").length == 0){
+               alert("Please input spouse name!");
+               $("#spouse_name").focus();
+               return;
+          }
+          if(spouse_phone.length == 0 || spouse_phone.replace(/^\s+|\s+$/g, "").length == 0){
+               alert("Please input spouse phone number!");
+               $("#spouse_phone").focus();
+               return;
+          }
+     }
      if(last_name.length == 0 || last_name.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please enter last name!");
           $("#last_name").focus();
@@ -7904,7 +7882,7 @@ function addStaff(){
           $.ajax({
                type : "POST",
                url : "../controller/add_staff.php",
-               data : {other_names:other_names, last_name:last_name, phone_number:phone_number, email:email, address:address, dob:dob, staff_id:staff_id, title:title, gender:gender, marital_status:marital_status, religion:religion, nok:nok, staff_group:staff_group,nok_phone:nok_phone, nok_relation:nok_relation, staff_category:staff_category, discipline:discipline, designation:designation, bank:bank, account_num:account_num, pension:pension, pension_num:pension_num, employed:employed, department:department},
+               data : {other_names:other_names, last_name:last_name, phone_number:phone_number, email:email, address:address, dob:dob, staff_id:staff_id, title:title, gender:gender, marital_status:marital_status, religion:religion, nok:nok, staff_group:staff_group,nok_phone:nok_phone, nok_relation:nok_relation, staff_category:staff_category, discipline:discipline, designation:designation, bank:bank, account_num:account_num, pension:pension, pension_num:pension_num, employed:employed, department:department,spouse_name:spouse_name, spouse_phone:spouse_phone},
                beforeSend : function(){
                     $("#add_staff").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -7912,16 +7890,10 @@ function addStaff(){
                     $("#add_staff").html(response);
                }
           })
-          /* $("#last_name").val('');
-          $("#other_names").val('');
-          $("#email").val('');
-          $("#address").val('');
-          $("#dob").val('');
-          $("#phone_number").val('');
-          $("#last_name").focus(); */
-          setTimeout(function(){
+          
+         /*  setTimeout(function(){
                $("#add_staff").load("add_staff.php");
-          }, 1500);
+          }, 1500); */
           return false;   
      }
       
@@ -7954,7 +7926,21 @@ function updateStaff(){
      let account_num = document.getElementById("account_num").value;
      let pension = document.getElementById("pension").value;
      let pension_num = document.getElementById("pension_num").value;
+     let spouse_name = document.getElementById("spouse_name")?.value || '';
+     let spouse_phone = document.getElementById("spouse_phone")?.value || '';
      let todayDate = new Date();
+     if(marital_status === "Married"){
+          if(spouse_name.length == 0 || spouse_name.replace(/^\s+|\s+$/g, "").length == 0){
+               alert("Please input spouse name!");
+               $("#spouse_name").focus();
+               return;
+          }
+          if(spouse_phone.length == 0 || spouse_phone.replace(/^\s+|\s+$/g, "").length == 0){
+               alert("Please input spouse phone number!");
+               $("#spouse_phone").focus();
+               return;
+          }
+     }
      if(last_name.length == 0 || last_name.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please enter last name!");
           $("#last_name").focus();
@@ -8052,7 +8038,7 @@ function updateStaff(){
           $.ajax({
                type : "POST",
                url : "../controller/update_staff.php",
-               data : {other_names:other_names, last_name:last_name, phone_number:phone_number, email:email, address:address, dob:dob, staff_id:staff_id, staff_num:staff_num, title:title, gender:gender, marital_status:marital_status, religion:religion, nok:nok, staff_group:staff_group,nok_phone:nok_phone, nok_relation:nok_relation, staff_category:staff_category, discipline:discipline, designation:designation, bank:bank, account_num:account_num, pension:pension, pension_num:pension_num, employed:employed, department:department},
+               data : {other_names:other_names, last_name:last_name, phone_number:phone_number, email:email, address:address, dob:dob, staff_id:staff_id, staff_num:staff_num, title:title, gender:gender, marital_status:marital_status, religion:religion, nok:nok, staff_group:staff_group,nok_phone:nok_phone, nok_relation:nok_relation, staff_category:staff_category, discipline:discipline, designation:designation, bank:bank, account_num:account_num, pension:pension, pension_num:pension_num, employed:employed, department:department, spouse_name:spouse_name, spouse_phone:spouse_phone},
                beforeSend : function(){
                     $("#edit_customer").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -9956,5 +9942,140 @@ function makeBriquette(){
           }else{
                return;
           }
+     }
+}
+
+//add staff beneficiaries
+function addBeneficiary(){
+     let staff = document.getElementById("staff").value;
+     let beneficiary = document.getElementById("beneficiary").value;
+     let relationship = document.getElementById("relationship").value;
+     let gender = document.getElementById("gender").value;
+     let phone_number = document.getElementById("phone_number").value;
+     let address = document.getElementById("address").value;
+     let entitlement = document.getElementById("entitlement").value;
+     if(beneficiary.length == 0 || beneficiary.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter beneficiary name!");
+          $("#beneficiary").focus();
+          return;
+     }else if(relationship.length == 0 || relationship.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter relationship with beneficiary!");
+          $("#relationship").focus();
+          return;
+     }else if(!gender){
+          alert("Please select gender!");
+          $("#gender").focus();
+          return;
+     }else if(phone_number.length == 0 || phone_number.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter phone number!");
+          $("#phone_number").focus();
+          return;
+     }else if(address.length == 0 || address.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter address!");
+          $("#address").focus();
+          return;
+     }else if(entitlement.length == 0 || entitlement.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter entitlement percentage!");
+          $("#entitlement").focus();
+          return;
+     }else if(parseFloat(entitlement) <= 0 || parseFloat(entitlement) > 100){
+          alert("Entitlement percentage must be greater than 0 and less than or equal to 100!");
+          $("#entitlement").focus();
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/add_beneficiary.php",
+               data : {staff:staff, beneficiary:beneficiary, relationship:relationship, gender:gender, phone_number:phone_number, address:address, entitlement:entitlement},
+               beforeSend: function(){
+                    $(".info").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $(".info").html(response);
+                    
+               }
+          });
+          $("#beneficiary").val('');
+          $("#relationship").val('');
+          $("#gender").val('');
+          $("#phone_number").val('');
+          $("#address").val('');
+          $("#entitlement").val('');
+     }
+}
+
+//mark attendance by clicking on start work button
+function markAttendance(staff){
+    if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        function(position){
+            let latitude = position.coords.latitude;
+            let longitude = position.coords.longitude;
+            let accuracy = position.coords.accuracy;
+
+            $.ajax({
+                type : "POST",
+                url : "../controller/mark_attendance.php",
+                data : {
+                    staff: staff,
+                    latitude: latitude,
+                    longitude: longitude,
+                    accuracy: accuracy
+                },
+                beforeSend: function(){
+                    $(".attendance_alert").html("<div class='processing'><div class='loader'></div></div>");
+                },
+                success : function(response){
+                    $(".attendance_alert").html(response);
+                    setTimeout(function(){
+                        window.location.reload();
+                    }, 2000);
+                }
+            });
+        },
+        function(error){
+          let msg = "Please enable your location to start work.";
+
+          if (error.code === error.PERMISSION_DENIED) {
+               msg = "Location access denied. Please allow location permission.";
+          } else if (error.code === error.POSITION_UNAVAILABLE) {
+               msg = "Location unavailable. Turn on GPS.";
+          } else if (error.code === error.TIMEOUT) {
+               msg = "Location request timed out. Try again.";
+          }
+
+          alert(msg);
+          },
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+        }
+    );
+}
+
+//close work for the day
+function closeWork(staff){
+     let confirmClose = confirm("Are you sure you want to close work for today?", "");
+     if(confirmClose){
+          $.ajax({
+               type : "POST",
+               url : "../controller/close_work.php",
+               data : {staff:staff},
+               beforeSend: function(){
+                    $(".attendance_alert").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $(".attendance_alert").html(response);
+                    setTimeout(function(){
+                         window.location.reload();
+                    }, 2000);
+               }
+          });
+     }else{
+          return;
      }
 }

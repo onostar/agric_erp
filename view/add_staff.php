@@ -9,7 +9,7 @@
         <h3 style="background:var(--tertiaryColor);text-transform:uppercase">Add Staff Information</h3>
         <!-- <form method="POST" id="addUserForm"> -->
         <section class="addUserForm">
-            <div class="inputs" style="gap:.9rem;">
+            <div class="inputs" style="gap:.9rem; justify-content:left">
                 
                 <div class="data" style="width:23%">
                     <label for="title">Title</label>
@@ -57,6 +57,16 @@
                         <option value="Divorced">Divorced</option>
                         <option value="Widowed">Widowed</option>
                     </select>
+                </div>
+                <div class="data" style="width:23%">
+                    <label for="spouse_name">Spouse Name </label>
+                    <input type="text" name="spouse_name" id="spouse_name">
+
+                </div>
+                <div class="data" style="width:23%" class="spouse_info">
+                    <label for="spouse_phone">Spouse Phone Number </label>
+                    <input type="tel" name="spouse_phone" id="spouse_phone">
+
                 </div>
                 <div class="data" style="width:23%">
                     <label for="religion">Religion <span class="important">*</span></label>
@@ -191,7 +201,7 @@
                     <label for="pension_num">Pension Number</label>
                     <input type="text" name="pension_num" id="pension_num">
                 </div>
-                <div class="data" style="width:23%">
+                <div class="data" style="width:auto">
                     <button type="submit" id="add_staff" name="add_staff" onclick="addStaff()">Add Staff <i class="fas fa-plus"></i></button>
                 </div>
             </div>

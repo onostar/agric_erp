@@ -80,6 +80,16 @@
                         <option value="Widowed">Widowed</option>
                     </select>
                 </div>
+                <div class="data" style="width:23%">
+                    <label for="spouse_name">Spouse Name </label>
+                    <input type="text" name="spouse_name" id="spouse_name" value="<?php echo $row->spouse?>">
+
+                </div>
+                <div class="data" style="width:23%" class="spouse_info">
+                    <label for="spouse_phone">Spouse Phone Number </label>
+                    <input type="tel" name="spouse_phone" id="spouse_phone" value="<?php echo $row->spouse_phone?>">
+
+                </div>
                 <div class="data" style="width:24%">
                     <label for="religion">Religion <span class="important">*</span></label>
                     <select name="religion" id="religion">

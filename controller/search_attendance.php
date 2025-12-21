@@ -24,13 +24,14 @@
 		        <td>S/N</td>
                 <td>Date</td>
                 <td>Full Name</td>
-                <td>Staff ID</td>
+                <!-- <td>Staff ID</td> -->
                 <td>Department</td>
                 <td>Designation</td>
                 <td>Time in</td>
+                <td>Location</td>
                 <td>Marked By</td>
                 <td>Time out</td>
-                <td>marked By</td>
+                <td>Done By</td>
                 <td>Status</td>
                 
             </tr>
@@ -45,7 +46,7 @@
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
                 <td style="color:var(--moreColor)"><?php echo date("d-M-Y", strtotime($detail->attendance_date))?></td>
                  <td><?php echo $detail->last_name." ".$detail->other_names?></td>
-                <td><?php echo $detail->staff_id?></td>
+                <!-- <td><?php echo $detail->staff_id?></td> -->
                 <td>
                     <?php
                         //get department
@@ -85,6 +86,11 @@
                         }
                     ?>
                 </td>
+                <?php if($detail->location == "Head Office"){?>
+                <td><?php echo $detail->location?></td>
+                <?php }else{?>
+                <td><a href="https://www.google.com/maps?q=<?php echo $detail->latitude?>,<?php echo $detail->longitude?>" target="_blank"><?php echo $detail->location?></a></td>
+                <?php }?>
                 <td style="color:var(--secondaryColor)">
                     <?php 
                         if($detail->time_out != NULL){

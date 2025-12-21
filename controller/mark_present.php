@@ -31,6 +31,7 @@
                 'attendance_date' => $currentDay,
                 'time_in' => $time,
                 'remark' => $remark,
+                'location' => 'Head Office',
                 'marked_date' => $date,
                 'marked_by' => $user,
                 'store' => $store

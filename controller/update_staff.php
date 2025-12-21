@@ -30,6 +30,8 @@
     $pension = htmlspecialchars(stripslashes($_POST['pension']));
     $pension_num = htmlspecialchars(stripslashes($_POST['pension_num']));
     $employed = htmlspecialchars(stripslashes($_POST['employed']));
+    $spouse = strtoupper(htmlspecialchars(stripslashes($_POST['spouse_name'])));
+    $spouse_phone = htmlspecialchars(stripslashes($_POST['spouse_phone']));
     $date = date("Y-m-d H:i:s");
     $todays_date = date("dmyh");
     
@@ -52,6 +54,8 @@
         'discipline' => $discipline,
         'religion' => $religion,
         'marital_status' => $marital_status,
+        'spouse' => $spouse,
+        'spouse_phone' => $spouse_phone,
         'nok' => $nok,
         'staff_group' => $group,
         'nok_phone' => $nok_phone,
@@ -68,10 +72,10 @@
        $update = new Update_table();
        $update->updateAny('staffs', $data, 'staff_id', $staff_id);
        if($update){
-        //checkif staff have user account and update name
+        //check if staff have user account and update name
         $get_details = new selects();
         $checks = $get_details->fetch_details_negCond('staffs', 'user_id', 0, 'staff_id', $staff_id);
-        if(!empty($checks)){
+        if(is_array($checks)){
             foreach($checks as $check){
                 $user_id = $check->user_id;
             }

@@ -3633,6 +3633,13 @@ color: rgb(231, 226, 226);
 #complete_invest{
     display:none;
 }
+#spouse_info{
+    display:none;
+    width:auto;
+}
+.attendance_alert button{
+    font-size:.8rem;
+}
 @media screen and (max-width: 800px){
     #topHeader{
         justify-content: space-between;

@@ -92,6 +92,16 @@
                     <label for="category">Marital Status:</label>
                     <input type="text" value="<?php echo $row->marital_status?>" readonly>
                 </div>
+                <?php if($row->marital_status == "Married"){ ?>
+                <div class="data">
+                    <label for="category">Spouse Name:</label>
+                    <input type="text" value="<?php echo $row->spouse?>" readonly>
+                </div>
+                <div class="data">
+                    <label for="category">Spouse Phone:</label>
+                    <input type="text" value="<?php echo $row->spouse_phone?>" readonly>
+                </div>
+                <?php } ?>
                 <div class="data">
                     <label for="category">Religion:</label>
                     <input type="text" value="<?php echo $row->religion?>" readonly>
@@ -200,6 +210,55 @@
                     </div>
                     
                 </div>
+                
+            </div>
+        </section>
+        <section id="main_consult">
+            <h3 style="background:var(--tertiaryColor); text-align:left">Beneficiaries</h3>
+            <div class="displays allResults new_data" style="width:100%!important;margin:0!important">
+                <table id="data_table" class="searchTable">
+                    <thead>
+                        <tr style="background:var(--otherColor)">
+                            <td>S/N</td>
+                            <td>Beneficiary</td>
+                            <td>Gender</td>
+                            <td>Relationship</td>
+                            <td>Phone</td>
+                            <td>Address</td>
+                            <td>Entitlement</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                            $n = 1;
+                            $bens = $get_customer->fetch_details_Cond('beneficiaries', 'staff',  $customer);
+                            if(gettype($bens) === 'array'){
+                            foreach($bens as $ben):
+                        ?>
+                        <tr>
+                            <td style="text-align:center; color:red;"><?php echo $n?></td>
+                            
+                            <td>
+                                <?php
+                                    echo $ben->beneficiary;
+                                ?>
+                                </td>
+                            <td><?php echo $ben->gender;?></td>
+                            <td><?php echo $ben->relation;?></td>
+                            <td><?php echo $ben->phone;?></td>
+                            <td><?php echo $ben->address;?></td>
+                            <td><?php echo $ben->entitlement;?></td>
+                               
+                            
+                        </tr>
+                        <?php $n++; endforeach;}?>
+                    </tbody>
+                </table>
+                <?php
+                    if(gettype($bens) == 'string'){
+                        echo "<p class='not_result'; style='text-align:center;font-size:.9rem;'>$bens</p>";
+                    }
+                ?>
                 
             </div>
         </section>

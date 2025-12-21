@@ -29,6 +29,8 @@
     $pension = htmlspecialchars(stripslashes($_POST['pension']));
     $pension_num = htmlspecialchars(stripslashes($_POST['pension_num']));
     $employed = htmlspecialchars(stripslashes($_POST['employed']));
+    $spouse = strtoupper(htmlspecialchars(stripslashes($_POST['spouse_name'])));
+    $spouse_phone = htmlspecialchars(stripslashes($_POST['spouse_phone']));
     $date = date("Y-m-d H:i:s");
     $todays_date = date("dmyh");
     /* if($service != ""){
@@ -50,6 +52,8 @@
         'discipline' => $discipline,
         'religion' => $religion,
         'marital_status' => $marital_status,
+        'spouse' => $spouse,
+        'spouse_phone' => $spouse_phone,
         'nok' => $nok,
         'staff_group' => $group,
         'nok_phone' => $nok_phone,
@@ -80,13 +84,79 @@
    if($results > 0 || $results2 > 0){
        echo "<p class='exist' style='background:red;color#fff;'><span>$last_name $other_names</span> already exists!</p>";
    }else{
-       //create patient
+       //create staff record
        $add_data = new add_data('staffs', $data);
        $add_data->create_data();
        if($add_data){
-        echo "<div class='success'><p><span>$last_name $other_names</span> added successfully!</p></div>";
+        //get last inserted id and add into users table
+        $ids = $check->fetch_lastInserted('staffs', 'staff_id');
+        $staff_id = $ids->staff_id;
+        
+        $user_data = array(
+            'full_name' => $last_name." ".$other_names,
+            'username' => $phone,
+            'user_password' => 123,
+            'user_role' => 'Staff',
+            'staff_id' => $staff_id,
+            'store' => $store,
+            'posted_by' => $user,
+            'reg_date' => $date
+        );
+        $add_user = new add_data('users', $user_data);
+        $add_user->create_data();
+        //update staff record with user id
+        $user_ids = $check->fetch_lastInserted('users', 'user_id');
+        $user_id = $user_ids->user_id;
+        
+        $update_user = new Update_table();
+        $update_user->update('staffs', 'user_id', 'staff_id', $user_id, $staff_id);
+        echo "<div class='success'><p><span>$last_name $other_names</span> added as a staff  successfully!</p></div>";
                 
+        //display beneficiaries form
+        ?>
+        <div class="info"></div>
+    <div class="add_user_form" style="width:80%">
+        <h3 style="background:var(--tertiaryColor);text-transform:uppercase">Add Staff Beneficiary</h3>
+        <!-- <form method="POST" id="addUserForm"> -->
+        <form>
+            <div class="inputs" style="gap:.9rem; justify-content:left">
+                <input type="hidden" name="staff" id="staff" value="<?php echo $staff_id?>">
+                <div class="data" style="width:23%">
+                    <label for="beneficiary">Beneficiary Full Name</label>
+                    <input type="text" name="beneficiary" id="beneficiary" placeholder="Enter beneficiary full name">
+                </div>
+                <div class="data" style="width:23%">
+                    <label for="customer">Gender <span class="important">*</span></label>
+                    <select name="gender" id="gender">
+                        <option value="" selected disabled>Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+                <div class="data" style="width:23%">
+                    <label for="relationship">Relationship <span class="important">*</span></label>
+                    <input type="text" name="relationship" id="relationship" placeholder="Enter relationship">
+                </div>
+                <div class="data" style="width:23%">
+                    <label for="phone_number">Phone Number <span class="important">*</span></label>
+                    <input type="text" name="phone_number" id="phone_number" placeholder="Enter phone number">
+                </div>
+                <div class="data" style="width:23%">
+                    <label for="address">Residential Address <span class="important">*</span></label>
+                    <input type="text" name="address" id="address" placeholder="Enter address">
+                </div>
+                <div class="data" style="width:23%">
+                    <label for="entitlement">Entitlement (%) <span class="important">*</span></label>
+                    <input type="number" name="entitlement" id="entitlement" placeholder="Enter entitlement percentage">
+                </div>
+                <div class="data" style="width:auto">
+                    <button type="button" id="add_staff" name="add_staff" onclick="addBeneficiary()">Add Staff <i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+        </form>    
+    </div>
 
+<?php
        }
        
    }

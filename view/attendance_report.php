@@ -40,13 +40,14 @@
             <tr style="background:var(--moreColor)">
                 <td>S/N</td>
                 <td>Full Name</td>
-                <td>Staff ID</td>
+                <!-- <td>Staff ID</td> -->
                 <td>Department</td>
                 <td>Designation</td>
                 <td>Time in</td>
                 <td>Marked By</td>
+                <td>Location</td>
                 <td>Time out</td>
-                <td>marked By</td>
+                <td>Done By</td>
                 <td>Status</td>
                 
             </tr>
@@ -63,7 +64,7 @@
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
                 <td><?php echo $detail->last_name." ".$detail->other_names?></td>
-                <td><?php echo $detail->staff_id?></td>
+                <!-- <td><?php echo $detail->staff_id?></td> -->
                 <td>
                     <?php
                         //get department
@@ -103,6 +104,11 @@
                         }
                     ?>
                 </td>
+                <?php if($detail->location == "Head Office"){?>
+                <td><?php echo $detail->location?></td>
+                <?php }else{?>
+                <td><a href="https://www.google.com/maps?q=<?php echo $detail->latitude?>,<?php echo $detail->longitude?>" target="_blank"><?php echo $detail->location?></a></td>
+                <?php }?>
                 <td style="color:var(--secondaryColor)">
                     <?php 
                         if($detail->time_out != NULL){
@@ -125,7 +131,7 @@
                         if($detail->status == "Present"){
                             echo "<span style='color:green'>$detail->status</span>";
                         }elseif($detail->status == "Still Present"){
-                            echo "<span style='color:var(--tertiaryColor)'>$detail->status</span>";
+                            echo "<span style='color:var(--tertiaryColor)'>At Work</span>";
                         }elseif($detail->status == "Absent"){
                             echo "<span style='color:red'>$detail->status</span>";
                         }elseif($detail->status == "On Leave"){
