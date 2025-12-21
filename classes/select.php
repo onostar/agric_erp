@@ -802,7 +802,7 @@ public function fetch_suspension_days($staff){
 
 
         // fetch total working days (all calendar days) for current month
-        public function fetch_total_working_days(){
+        /* public function fetch_total_working_days(){
             $query = "SELECT DAY(LAST_DAY(CURDATE())) AS working_days
             ";
             $stmt = $this->connectdb()->prepare($query);
@@ -821,9 +821,58 @@ public function fetch_suspension_days($staff){
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             
             return $row ? $row['working_days'] : 0;
-        }
+        } */
 
-        
+        // fetch total working days (Mon-Fri) for current month
+public function fetch_total_working_days(){
+    $query = "
+        SELECT COUNT(*) AS working_days
+        FROM (
+            SELECT DATE_ADD(DATE_SUB(CURDATE(), INTERVAL DAY(CURDATE())-1 DAY), INTERVAL t.i DAY) AS day
+            FROM (
+                SELECT 0 AS i UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+                UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+                UNION ALL SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL SELECT 14
+                UNION ALL SELECT 15 UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19
+                UNION ALL SELECT 20 UNION ALL SELECT 21 UNION ALL SELECT 22 UNION ALL SELECT 23 UNION ALL SELECT 24
+                UNION ALL SELECT 25 UNION ALL SELECT 26 UNION ALL SELECT 27 UNION ALL SELECT 28 UNION ALL SELECT 29
+                UNION ALL SELECT 30
+            ) t
+        ) d
+        WHERE MONTH(d.day) = MONTH(CURDATE()) AND DAYOFWEEK(d.day) NOT IN (1,7)
+    ";
+    $stmt = $this->connectdb()->prepare($query);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    return $row ? $row['working_days'] : 0;
+}
+
+// fetch total working days (Mon-Fri) for selected month
+public function fetch_total_working_days_month($date){
+    $query = "
+        SELECT COUNT(*) AS working_days
+        FROM (
+            SELECT DATE_ADD(DATE_SUB(:search_date, INTERVAL DAY(:search_date)-1 DAY), INTERVAL t.i DAY) AS day
+            FROM (
+                SELECT 0 AS i UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4
+                UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9
+                UNION ALL SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL SELECT 14
+                UNION ALL SELECT 15 UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19
+                UNION ALL SELECT 20 UNION ALL SELECT 21 UNION ALL SELECT 22 UNION ALL SELECT 23 UNION ALL SELECT 24
+                UNION ALL SELECT 25 UNION ALL SELECT 26 UNION ALL SELECT 27 UNION ALL SELECT 28 UNION ALL SELECT 29
+                UNION ALL SELECT 30
+            ) t
+        ) d
+        WHERE MONTH(d.day) = MONTH(:search_date) AND DAYOFWEEK(d.day) NOT IN (1,7)
+    ";
+    $stmt = $this->connectdb()->prepare($query);
+    $stmt->bindValue(":search_date", $date);
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    
+    return $row ? $row['working_days'] : 0;
+}
         //fetch count 2 condition
         public function fetch_count_2cond($table, $column1, $condition1, $column2, $condition2){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column1 = :$column1 AND $column2 = :$column2");
