@@ -723,7 +723,7 @@ public function fetch_generate_payrollpermonth($store, $payroll_date){
         }
 
         //fetch employee leave days for current month
-        public function fetch_leave_days($staff){
+        /* public function fetch_leave_days($staff){
             $query = "SELECT SUM(DATEDIFF(LEAST(COALESCE(l.returned, l.end_date, CURDATE()), LAST_DAY(CURDATE())), GREATEST(l.start_date, DATE_FORMAT(CURDATE(), '%Y-%m-01'))) + 1) AS leave_days FROM leaves l
                 WHERE 
                     l.employee = :staff_id
@@ -739,9 +739,50 @@ public function fetch_generate_payrollpermonth($store, $payroll_date){
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             
             return $row && $row['leave_days'] ? $row['leave_days'] : 0;
+        } */
+       // fetch employee leave days for current month (Mon–Fri only)
+        public function fetch_leave_days($staff){
+            $query = "
+                SELECT SUM(
+                    (
+                        DATEDIFF(
+                            LEAST(COALESCE(l.returned, l.end_date, CURDATE()), LAST_DAY(CURDATE())),
+                            GREATEST(l.start_date, DATE_FORMAT(CURDATE(), '%Y-%m-01'))
+                        ) + 1
+                    )
+                    -
+                    (
+                        FLOOR(
+                            (
+                                DATEDIFF(
+                                    LEAST(COALESCE(l.returned, l.end_date, CURDATE()), LAST_DAY(CURDATE())),
+                                    GREATEST(l.start_date, DATE_FORMAT(CURDATE(), '%Y-%m-01'))
+                                )
+                                + DAYOFWEEK(GREATEST(l.start_date, DATE_FORMAT(CURDATE(), '%Y-%m-01')))
+                            ) / 7
+                        ) * 2
+                    )
+                ) AS leave_days
+                FROM leaves l
+                WHERE 
+                    l.employee = :staff_id
+                    AND (l.leave_status = 1 OR l.leave_status = 2)
+                    AND (
+                        MONTH(l.start_date) = MONTH(CURDATE())
+                        OR MONTH(COALESCE(l.returned, l.end_date)) = MONTH(CURDATE())
+                    )
+            ";
+
+            $stmt = $this->connectdb()->prepare($query);
+            $stmt->bindValue(":staff_id", $staff);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $row && $row['leave_days'] ? (int)$row['leave_days'] : 0;
         }
+
         //fetch employee leave days for specific month
-        public function fetch_leave_days_month($staff, $date){
+       /*  public function fetch_leave_days_month($staff, $date){
             $query = "SELECT SUM(DATEDIFF(LEAST(COALESCE(l.returned, l.end_date, LAST_DAY(:leave_date)), LAST_DAY(:leave_date)), GREATEST(l.start_date, DATE_FORMAT(:leave_date, '%Y-%m-01'))) + 1) AS leave_days FROM leaves l WHERE l.employee = :staff_id AND (l.leave_status = 1 OR l.leave_status = 2) AND (MONTH(l.start_date) = MONTH(:leave_date) OR MONTH(COALESCE(l.returned, l.end_date)) = MONTH(:leave_date))";
             $stmt = $this->connectdb()->prepare($query);
             $stmt->bindValue(":staff_id", $staff);
@@ -751,43 +792,123 @@ public function fetch_generate_payrollpermonth($store, $payroll_date){
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             
             return $row && $row['leave_days'] ? (int)$row['leave_days'] : 0;
+        } */
+            // fetch employee leave days for specific month (Mon–Fri only)
+        public function fetch_leave_days_month($staff, $date){
+            $query = "
+                SELECT SUM(
+                    (
+                        DATEDIFF(
+                            LEAST(COALESCE(l.returned, l.end_date, LAST_DAY(:leave_date)), LAST_DAY(:leave_date)),
+                            GREATEST(l.start_date, DATE_FORMAT(:leave_date, '%Y-%m-01'))
+                        ) + 1
+                    )
+                    -
+                    (
+                        FLOOR(
+                            (
+                                DATEDIFF(
+                                    LEAST(COALESCE(l.returned, l.end_date, LAST_DAY(:leave_date)), LAST_DAY(:leave_date)),
+                                    GREATEST(l.start_date, DATE_FORMAT(:leave_date, '%Y-%m-01'))
+                                )
+                                + DAYOFWEEK(GREATEST(l.start_date, DATE_FORMAT(:leave_date, '%Y-%m-01')))
+                            ) / 7
+                        ) * 2
+                    )
+                ) AS leave_days
+                FROM leaves l
+                WHERE 
+                    l.employee = :staff_id
+                    AND (l.leave_status = 1 OR l.leave_status = 2)
+                    AND (
+                        MONTH(l.start_date) = MONTH(:leave_date)
+                        OR MONTH(COALESCE(l.returned, l.end_date)) = MONTH(:leave_date)
+                    )
+            ";
+
+            $stmt = $this->connectdb()->prepare($query);
+            $stmt->bindValue(":staff_id", $staff);
+            $stmt->bindValue(":leave_date", $date);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $row && $row['leave_days'] ? (int)$row['leave_days'] : 0;
         }
 
         // Fetch employee suspension days for current month
-public function fetch_suspension_days($staff){
-    $query = "SELECT 
-            SUM(
-                DATEDIFF(
-                    LEAST(
-                        COALESCE(s.recall_date, LAST_DAY(CURDATE())),
-                        LAST_DAY(CURDATE())
-                    ),
-                    GREATEST(
-                        s.suspension_date,
-                        DATE_FORMAT(CURDATE(), '%Y-%m-01')
+/*         public function fetch_suspension_days($staff){
+            $query = "SELECT 
+                    SUM(
+                        DATEDIFF(
+                            LEAST(
+                                COALESCE(s.recall_date, LAST_DAY(CURDATE())),
+                                LAST_DAY(CURDATE())
+                            ),
+                            GREATEST(
+                                s.suspension_date,
+                                DATE_FORMAT(CURDATE(), '%Y-%m-01')
+                            )
+                        ) + 1
+                    ) AS suspension_days
+                FROM suspensions s
+                WHERE 
+                    s.staff = :staff_id
+                    AND (
+                        (MONTH(s.suspension_date) = MONTH(CURDATE()) AND YEAR(s.suspension_date) = YEAR(CURDATE()))
+                        OR (MONTH(COALESCE(s.recall_date, s.suspension_date)) = MONTH(CURDATE()) AND YEAR(COALESCE(s.recall_date, s.suspension_date)) = YEAR(CURDATE()))
                     )
-                ) + 1
-            ) AS suspension_days
-        FROM suspensions s
-        WHERE 
-            s.staff = :staff_id
-            AND (
-                (MONTH(s.suspension_date) = MONTH(CURDATE()) AND YEAR(s.suspension_date) = YEAR(CURDATE()))
-                OR (MONTH(COALESCE(s.recall_date, s.suspension_date)) = MONTH(CURDATE()) AND YEAR(COALESCE(s.recall_date, s.suspension_date)) = YEAR(CURDATE()))
-            )
-    ";
+            ";
 
-    $stmt = $this->connectdb()->prepare($query);
-    $stmt->bindValue(":staff_id", $staff);
-    $stmt->execute();
+            $stmt = $this->connectdb()->prepare($query);
+            $stmt->bindValue(":staff_id", $staff);
+            $stmt->execute();
 
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    return $row && $row['suspension_days'] ? $row['suspension_days'] : 0;
-}
+            return $row && $row['suspension_days'] ? $row['suspension_days'] : 0;
+        } */
+        // Fetch employee suspension days for current month (Mon–Fri only)
+        public function fetch_suspension_days($staff){
+            $query = "
+                SELECT SUM(
+                    (
+                        DATEDIFF(
+                            LEAST(COALESCE(s.recall_date, LAST_DAY(CURDATE())), LAST_DAY(CURDATE())),
+                            GREATEST(s.suspension_date, DATE_FORMAT(CURDATE(), '%Y-%m-01'))
+                        ) + 1
+                    )
+                    -
+                    (
+                        FLOOR(
+                            (
+                                DATEDIFF(
+                                    LEAST(COALESCE(s.recall_date, LAST_DAY(CURDATE())), LAST_DAY(CURDATE())),
+                                    GREATEST(s.suspension_date, DATE_FORMAT(CURDATE(), '%Y-%m-01'))
+                                )
+                                + DAYOFWEEK(GREATEST(s.suspension_date, DATE_FORMAT(CURDATE(), '%Y-%m-01')))
+                            ) / 7
+                        ) * 2
+                    )
+                ) AS suspension_days
+                FROM suspensions s
+                WHERE 
+                    s.staff = :staff_id
+                    AND (
+                        (MONTH(s.suspension_date) = MONTH(CURDATE()) AND YEAR(s.suspension_date) = YEAR(CURDATE()))
+                        OR (MONTH(COALESCE(s.recall_date, s.suspension_date)) = MONTH(CURDATE()) AND YEAR(COALESCE(s.recall_date, s.suspension_date)) = YEAR(CURDATE()))
+                    )
+            ";
+
+            $stmt = $this->connectdb()->prepare($query);
+            $stmt->bindValue(":staff_id", $staff);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $row && $row['suspension_days'] ? (int)$row['suspension_days'] : 0;
+        }
 
         // Fetch employee suspension days for specific month
-        public function fetch_suspension_days_month($staff, $date){
+        /* public function fetch_suspension_days_month($staff, $date){
             $query = "SELECT SUM(DATEDIFF(LEAST(COALESCE(s.recall_date, LAST_DAY(:search_date)),  LAST_DAY(:search_date)), GREATEST(s.suspension_date, DATE_FORMAT(:search_date, '%Y-%m-01'))) + 1) AS suspension_days FROM suspensions s WHERE s.staff = :staff_id AND ((MONTH(s.suspension_date) = MONTH(:search_date) AND YEAR(s.suspension_date) = YEAR(:search_date))OR (MONTH(COALESCE(s.recall_date, s.suspension_date)) = MONTH(:search_date) AND YEAR(COALESCE(s.recall_date, s.suspension_date)) = YEAR(:search_date)))";
 
             $stmt = $this->connectdb()->prepare($query);
@@ -798,8 +919,48 @@ public function fetch_suspension_days($staff){
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
             return $row && $row['suspension_days'] ? $row['suspension_days'] : 0;
-        }
+        } */
 
+        // Fetch employee suspension days for specific month (Mon–Fri only)
+        public function fetch_suspension_days_month($staff, $date){
+            $query = "
+                SELECT SUM(
+                    (
+                        DATEDIFF(
+                            LEAST(COALESCE(s.recall_date, LAST_DAY(:search_date)), LAST_DAY(:search_date)),
+                            GREATEST(s.suspension_date, DATE_FORMAT(:search_date, '%Y-%m-01'))
+                        ) + 1
+                    )
+                    -
+                    (
+                        FLOOR(
+                            (
+                                DATEDIFF(
+                                    LEAST(COALESCE(s.recall_date, LAST_DAY(:search_date)), LAST_DAY(:search_date)),
+                                    GREATEST(s.suspension_date, DATE_FORMAT(:search_date, '%Y-%m-01'))
+                                )
+                                + DAYOFWEEK(GREATEST(s.suspension_date, DATE_FORMAT(:search_date, '%Y-%m-01')))
+                            ) / 7
+                        ) * 2
+                    )
+                ) AS suspension_days
+                FROM suspensions s
+                WHERE 
+                    s.staff = :staff_id
+                    AND (
+                        (MONTH(s.suspension_date) = MONTH(:search_date) AND YEAR(s.suspension_date) = YEAR(:search_date))
+                        OR (MONTH(COALESCE(s.recall_date, s.suspension_date)) = MONTH(:search_date) AND YEAR(COALESCE(s.recall_date, s.suspension_date)) = YEAR(:search_date))
+                    )
+            ";
+
+            $stmt = $this->connectdb()->prepare($query);
+            $stmt->bindValue(":staff_id", $staff);
+            $stmt->bindValue(":search_date", $date);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            return $row && $row['suspension_days'] ? (int)$row['suspension_days'] : 0;
+        }
 
         // fetch total working days (all calendar days) for current month
         /* public function fetch_total_working_days(){

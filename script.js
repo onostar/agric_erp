@@ -8341,7 +8341,7 @@ function selectLeave(id, leave_name){
      })
 }
 
-// Check maximum days while applying for leave
+/* // Check maximum days while applying for leave
 function checkMaxDays() {
      let max_days = parseInt(document.getElementById("max_days")?.value || 0);
      let start_date = document.getElementById("start_date").value;
@@ -8393,7 +8393,70 @@ function checkMaxDays() {
      }else{
           document.getElementById("total_days").value = diffDays;
      }
+} */
+// Check maximum days while applying for leave (weekdays only)
+function checkMaxDays() {
+    let max_days = parseInt(document.getElementById("max_days")?.value || 0);
+    let start_date = document.getElementById("start_date").value;
+    let end_date = document.getElementById("end_date").value;
+
+    // Convert to Date objects
+    let todayDate = new Date();
+    let startDate = new Date(start_date);
+    let endDate = new Date(end_date);
+
+    // Normalize to midnight
+    todayDate.setHours(0, 0, 0, 0);
+    startDate.setHours(0, 0, 0, 0);
+    endDate.setHours(0, 0, 0, 0);
+
+    // Validations
+    if(!max_days){
+        alert("Please select leave type to get maximum days!");
+        $("#end_date").val("");
+        $("#leave_type").focus();
+        return;
+    } else if(!start_date) {
+        alert("Please input leave start date!");
+        $("#end_date").val('');
+        $("#start_date").focus();
+        return;
+    } else if(startDate < todayDate) {
+        alert("Start date cannot be less than current day!");
+        $("#end_date").val("");
+        $("#start_date").focus();
+        return;
+    } else if(!end_date) {
+        alert("Please select leave end date!");
+        return;
+    }
+
+    // Calculate difference excluding weekends
+    let totalDays = 0;
+    let currentDate = new Date(startDate);
+
+    while(currentDate <= endDate){
+        let dayOfWeek = currentDate.getDay(); // 0 = Sunday, 6 = Saturday
+        if(dayOfWeek !== 0 && dayOfWeek !== 6){ // count only Mon-Fri
+            totalDays++;
+        }
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    // Validate against maximum allowed days
+    if(totalDays > max_days){
+        alert("You are not allowed more than " + max_days + " weekday(s) for the selected leave type");
+        $("#end_date").val("");
+        $("#end_date").focus();
+    } else if(totalDays < 1){
+        alert("End date must be greater than or equal to start date!");
+        $("#end_date").val("");
+        $("#end_date").focus();
+    } else {
+        document.getElementById("total_days").value = totalDays;
+    }
 }
+
 //apply for leave
 function applyLeave(){
      let staff = document.getElementById("staff").value;
@@ -8452,12 +8515,12 @@ function approveLeave(leave_id){
                },
                success : function(response){
                     $("#leave_details").html(response);
+                    setTimeout(function(){
+                         showPage("approve_leave.php");
+                    }, 2000);
                }
           })
-          setTimeout(function(){
-               showPage("approve_leave.php");
-          }, 2000);
-          return false;
+         
      }
 }
 // decline leave
@@ -8472,12 +8535,13 @@ function declineLeave(leave_id){
                },
                success : function(response){
                     $("#leave_details").html(response);
+                    setTimeout(function(){
+                         showPage("approve_leave.php");
+
+                    }, 2000);
                }
           })
-          setTimeout(function(){
-               showPage("approve_leave.php");
-
-          }, 2000);
+          
           return false;
      }
 }
