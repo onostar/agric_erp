@@ -60,6 +60,8 @@
                 $details = $get_users->fetch_details_date2Cond('sales', 'date(post_date)', 'sales_status', 2, 'store', $store);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
+                     $names = $get_users->fetch_details_group('items', 'item_name', 'item_id', $detail->item);
+                        $item_name =  $names->item_name;
             ?>
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
@@ -72,11 +74,14 @@
                 </td>
                 <td>
 		            <?php
-                        $names = $get_users->fetch_details_group('items', 'item_name', 'item_id', $detail->item);
-                        echo $names->item_name;
+                       echo $item_name;
                     ?>
 		        </td>
-		        <td style="color:green; text-align:center"><?php echo $detail->quantity?></td>
+                <?php if($item_name == "CONCENTRATE"){?>
+		        <td style="color:green; text-align:center"><?php echo $detail->quantity?> ltr</td>
+                <?php }else{?>
+		        <td style="color:green; text-align:center"><?php echo $detail->quantity?> kg</td>
+                <?php }?>
                 <td style="color:var(--otherColor)">
                     <?php echo "₦".number_format($detail->price, 2);?>
                 </td>

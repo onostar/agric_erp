@@ -21,12 +21,16 @@ if(isset($_GET['receipt'])){
         $pay_mode = $pay->payment_mode;
         $paid_date = $pay->trx_date;
         $post_date = $pay->post_date;
-        $amount = $pay->amount;
+        // $amount = $pay->amount;
         $assigned_id = $pay->assigned_id;
         $store = $pay->store;
         $field = $pay->field;
     }
-
+     //get total amount paid
+    $amts = $get_details->fetch_sum_single('documentation_fees','amount', 'invoice', $invoice);
+    foreach($amts as $amt){
+        $amount = $amt->total;
+    }
     /* -------------------------------------------------
         Fetch customer details
     ------------------------------------------------- */

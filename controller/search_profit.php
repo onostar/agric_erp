@@ -11,7 +11,7 @@
     $get_store = new selects();
     $str = $get_store->fetch_details_group('stores', 'store', 'store_id', $store);
     $store_name = $str->store;
-    
+    $get_revenue = new selects();
 ?>
 <!-- <hr> -->
 <div class="search">
@@ -35,7 +35,6 @@
                 <td>
                     <?php
                         // get accounts
-                        $get_revenue = new selects();
                         $rows = $get_revenue->fetch_sum_2date2Cond('sales', 'total_amount', 'date(post_date)', 'store', 'sales_status', $from, $to, $store, 2);
                         foreach($rows as $row){
                             $revenue = $row->total;
@@ -49,8 +48,7 @@
                 <td>
                     <?php
                         // get accounts
-                        $get_revenue = new selects();
-                        $rows = $get_revenue->fetch_sum_2dateCond('other_income', 'amount', 'activity', 'date(post_date)', $from, $to, 'gain');
+                        $rows = $get_revenue->fetch_sum_2date2Cond('other_income', 'amount', 'date(post_date)', 'activity', 'store', $from, $to, 'gain', $store);
                         foreach($rows as $row){
                             $other_revenue = $row->total;
                         }
@@ -68,8 +66,7 @@
                            $cost = $costs->total;
                        } */
                         //get cost of sales
-                       $get_purchase = new selects();
-                       $costss = $get_purchase->fetch_sum_2dateCond('cost_of_sales', 'amount', 'store', 'date(post_date)',$from, $to, $store);
+                       $costss = $get_revenue->fetch_sum_2dateCond('cost_of_sales', 'amount', 'store', 'date(post_date)',$from, $to, $store);
                        foreach($costss as $costs){
                            $cost = $costs->total;
                        }
@@ -101,15 +98,13 @@
                 <td>
                     <?php    
                         //get expense
-                        $get_exp = new selects();
-                        $exps = $get_exp->fetch_sum_2dateCond('expenses', 'amount', 'store', 'date(post_date)', $from, $to, $store);
+                        $exps = $get_revenue->fetch_sum_2dateCond('expenses', 'amount', 'store', 'date(post_date)', $from, $to, $store);
                         foreach($exps as $exp){
                             $expense = $exp->total;
                         }
                         // echo number_format($expense, 2)
                         //get bank charges
-                        $get_cha = new selects();
-                        $char = $get_exp->fetch_sum_2date2Cond('finance_cost', 'amount', 'date(post_date)', 'store', 'trans_type', $from, $to, $store, 'Bank Charges');
+                        $char = $get_revenue->fetch_sum_2date2Cond('finance_cost', 'amount', 'date(post_date)', 'store', 'trans_type', $from, $to, $store, 'Bank Charges');
                         foreach($char as $cha){
                             $charges = $cha->total;
                         }
@@ -124,8 +119,7 @@
                 <td>
                     <?php    
                         //get waybill
-                        $get_waybill = new selects();
-                        $bills = $get_waybill->fetch_sum_2date('waybills', 'waybill', 'date(post_date)', $from, $to);
+                        $bills = $get_revenue->fetch_sum_2dateCond('waybills', 'waybill', 'store', 'date(post_date)', $from, $to, $store);
                         foreach($bills as $bill){
                             $logistic = $bill->total;
                         }
@@ -138,8 +132,7 @@
                 <td>
                     <?php    
                         //get expense
-                        $get_cha = new selects();
-                        $char = $get_exp->fetch_sum_2date2Cond('finance_cost', 'amount', 'date(post_date)', 'store', 'trans_type', $from, $to, $store, 'Bank Charges');
+                        $char = $get_revenue->fetch_sum_2date2Cond('finance_cost', 'amount', 'date(post_date)', 'store', 'trans_type', $from, $to, $store, 'Bank Charges');
                         foreach($char as $cha){
                             $charges = $cha->total;
                         }
@@ -152,8 +145,7 @@
                 <td>
                     <?php    
                         //get expense
-                        $get_oth = new selects();
-                        $others = $get_oth->fetch_sum_2dateCond('other_income', 'amount', 'activity', 'date(post_date)', $from, $to, 'loss');
+                        $others = $get_revenue->fetch_sum_2date2Cond('other_income', 'amount', 'date(post_date)', 'activity', 'store', $from, $to, 'loss', $store);
                         foreach($others as $oth){
                             $loss = $oth->total;
                         }
@@ -166,8 +158,7 @@
                 <td>
                     <?php    
                         //get expense
-                        $get_oth = new selects();
-                        $others = $get_oth->fetch_sum_2date2Cond('finance_cost', 'amount', 'date(post_date)', 'store', 'trans_type', $from, $to, $store, 'Loan Fee');
+                        $others = $get_revenue->fetch_sum_2date2Cond('finance_cost', 'amount', 'date(post_date)', 'store', 'trans_type', $from, $to, $store, 'Loan Fee');
                         foreach($others as $oth){
                             $finance_cost = $oth->total;
                         }
@@ -180,8 +171,7 @@
                 <td>
                     <?php    
                         //get depreciation
-                        $get_oth = new selects();
-                        $others = $get_oth->fetch_sum_2date('depreciation', 'amount', 'date(post_date)', $from, $to);
+                        $others = $get_revenue->fetch_sum_2dateCond('depreciation', 'amount', 'store', 'date(post_date)', $from, $to,$store);
                         foreach($others as $oth){
                             $depreciation = $oth->total;
                         }
@@ -212,8 +202,7 @@
                 <td>
                     <?php    
                         //get expense
-                        $get_oth = new selects();
-                        $others = $get_oth->fetch_sum_2date2Cond('finance_cost', 'amount', 'date(post_date)', 'store', 'trans_type', $from, $to, $store, 'Tax');
+                        $others = $get_revenue->fetch_sum_2date2Cond('finance_cost', 'amount', 'date(post_date)', 'store', 'trans_type', $from, $to, $store, 'Tax');
                         foreach($others as $oth){
                             $tax = $oth->total;
                         }

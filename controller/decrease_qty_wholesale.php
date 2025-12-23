@@ -39,10 +39,11 @@
                 $new_qty = $show->quantity;
                 $unit_price = $show->price;
                 $item_id = $show->item;
+                $store = $show->store;
                 
             }
             //get cost price from inventory
-            $costs = $get_invoice->fetch_details_2cond('prices', 'store', 'item_id', $item, $store);
+            $costs = $get_invoice->fetch_details_2cond('prices', 'store', 'item', $item, $store);
             if(is_array($costs)){
                 foreach($costs as $cos){
                     $cost_price = $cos->cost;

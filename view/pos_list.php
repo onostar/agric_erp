@@ -34,6 +34,7 @@
                 <td>S/N</td>
                 <td>Customer</td>
                 <td>Invoice</td>
+                <td>Details</td>
                 <td>Amount</td>
                 <td>Bank</td>
                 <td>Trans. date</td>
@@ -60,6 +61,7 @@
                     ?>
                 </td>
                 <td><a style="color:green" href="javascript:void(0)" title="View payment details"><?php echo $detail->invoice?></a></td>
+                <td><?php echo $detail->details?></td>
                 <td><?php echo "₦".number_format($detail->amount, 2)?></td>
                 <td>
                     <?php 

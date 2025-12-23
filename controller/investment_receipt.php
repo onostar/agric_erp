@@ -21,13 +21,17 @@ if(isset($_GET['receipt'])){
         $pay_mode = $pay->payment_mode;
         $paid_date = $pay->trx_date;
         $post_date = $pay->post_date;
-        $amount = $pay->amount;
+        // $amount = $pay->amount;
         $amount_naira = $pay->amount_in_naira;
         $investment = $pay->investment;
         $store = $pay->store;
         $posted_by = $pay->posted_by;
     }
-
+    //get total amount paid
+    $amts = $get_details->fetch_sum_single('investment_payments','amount', 'invoice', $invoice);
+    foreach($amts as $amt){
+        $amount = $amt->total;
+    }
     /* -------------------------------------------------
         Fetch customer details
     ------------------------------------------------- */

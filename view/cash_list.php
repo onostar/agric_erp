@@ -34,6 +34,7 @@
                 <td>S/N</td>
                 <td>Customer</td>
                 <td>Invoice</td>
+                <td>Details</td>
                 <td>Amount</td>
                 <td>Trans. Date</td>
                 <td>Post Time</td>
@@ -57,7 +58,8 @@
                         echo $row->customer;
                     ?>
                 </td>
-                <td><a style="color:green" href="javascript:void(0)" title="View invoice details"><?php echo $detail->invoice?></a></td>
+                <td><a style="color:green" href="javascript:void(0)"><?php echo $detail->invoice?></a></td>
+                <td><?php echo $detail->details?></td>
                 <td><?php echo "₦".number_format($detail->amount, 2)?></td>
                 <!-- <td><?php echo $detail->payment_mode?></td> -->
                 <td style="color:var(--moreColor)"><?php echo date("d-m-Y", strtotime($detail->trans_date));?></td>

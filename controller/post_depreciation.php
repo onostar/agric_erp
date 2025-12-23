@@ -1,4 +1,5 @@
 <?php
+    session_start();
     date_default_timezone_set("Africa/Lagos");
     $user = htmlspecialchars(stripslashes($_POST['posted']));
     $store = htmlspecialchars(stripslashes($_POST['store']));
@@ -9,6 +10,7 @@
     $asset = htmlspecialchars(stripslashes($_POST['asset']));
     $details = ucwords(htmlspecialchars(stripslashes($_POST['details'])));
     $date = date("Y-m-d H:i:s");
+    $store = $_SESSION['store_id'];
      //generate transaction number
     //get current date
     $todays_date = date("dmyhis");
@@ -60,7 +62,8 @@
         'amount' => $dep_amount,
         'details' => $details,
         'post_date' => $date,
-        'trx_number' => $trx_num
+        'trx_number' => $trx_num,
+        'store' => $store
     );
     //get ledger account numbers and account type
     $get_exp = new selects();

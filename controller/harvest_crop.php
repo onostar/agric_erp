@@ -118,9 +118,10 @@
     //insert into audit trail
     $inser_trail = new add_data('audit_trail', $audit_data);
     $inser_trail->create_data();
-    //update crop cost in item table
+    //update crop cost in price table
     $update_item = new Update_table();
-    $update_item->update('items', 'cost_price', 'item_id', $unit_cost, $crop);
+    // $update_item->update('items', 'cost_price', 'item_id', $unit_cost, $crop);
+    $update_item->update2cond('prices', 'cost', 'item', 'store',  $unit_cost, $crop, $farm);
     //stockin item
     //data to stockin into harvest
     $harvest_data = array(

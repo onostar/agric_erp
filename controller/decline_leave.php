@@ -61,10 +61,10 @@ if(isset($_GET['id'])){
             <p>Your leave application has been <strong>declined</strong> by management.</p>
             <p><strong>Leave Details:</strong></p>
             <ul>
-                <li>Leave Type: {$leave_type}</li>
-                <li>Start Date: {$start}</li>
-                <li>End Date: {$end}</li>
-                <li>Total Days: {$total_days}</li>
+                <li>Leave Type: $leave_type</li>
+                <li>Start Date: $start</li>
+                <li>End Date: $end</li>
+                <li>Total Days: $total_days</li>
             </ul>
             <p>Thank you for your dedication and contribution to $company.</p>
             <br><p>Best regards,<br><strong>$company HR Team</strong></p>

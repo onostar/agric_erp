@@ -8,6 +8,7 @@
     $get_store = new selects();
     $str = $get_store->fetch_details_group('stores', 'store', 'store_id', $store);
     $store_name = $str->store;
+    $get_account = new selects();
 ?>
 <div id="revenueReport" class="displays management" style="width:70%!important;margin:20px!important">
     <div class="select_date">
@@ -47,7 +48,7 @@
                 <td>
                     <?php
                         // get accounts
-                        $get_account = new selects();
+                        
                         $rows = $get_account->fetch_sum_curdate2Con('sales', 'total_amount', 'date(post_date)', 'store', $store, 'sales_status', 2);
                         foreach($rows as $row){
                             $revenue = $row->total;
@@ -62,8 +63,7 @@
                 <td>
                     <?php
                         // get accounts
-                        $get_account = new selects();
-                        $rows = $get_account->fetch_sum_curdateCon('other_income', 'amount', 'date(post_date)', 'activity', 'gain');
+                        $rows = $get_account->fetch_sum_curdate2Con('other_income', 'amount', 'post_date', 'activity', 'gain', 'store', $store);
                         foreach($rows as $row){
                             $other_revenue = $row->total;
                             // $cost = $row->total_cost;
@@ -79,8 +79,7 @@
                         
 
                         //get cost of sales
-                        $get_purchase = new selects();
-                        $costss = $get_purchase->fetch_sum_curdateCon('cost_of_sales', 'amount', 'date(post_date)', 'store', $store);
+                        $costss = $get_account->fetch_sum_curdateCon('cost_of_sales', 'amount', 'date(post_date)', 'store', $store);
                         foreach($costss as $costs){
                             $cost = $costs->total;
                         }
@@ -112,8 +111,7 @@
                 <td>
                     <?php    
                         //get waybill
-                        $get_waybill = new selects();
-                        $bills = $get_waybill->fetch_sum_curdate('waybills', 'waybill', 'date(post_date)');
+                        $bills = $get_account->fetch_sum_curdateCon('waybills', 'waybill', 'date(post_date)', 'store', $store);
                         foreach($bills as $bill){
                             $logistic = $bill->total;
                         }
@@ -127,16 +125,14 @@
                 <td>
                     <?php    
                         //get expense
-                        $get_exp = new selects();
-                        $exps = $get_exp->fetch_sum_curdateCon('expenses', 'amount', 'date(post_date)', 'store', $store);
+                        $exps = $get_account->fetch_sum_curdateCon('expenses', 'amount', 'date(post_date)', 'store', $store);
                         foreach($exps as $exp){
                             $expense = $exp->total;
                         }
                         // echo number_format($expense, 2);
 
                         //get bank charges
-                        $get_cha = new selects();
-                        $char = $get_exp->fetch_sum_curdate2Con('finance_cost', 'amount', 'date(post_date)', 'store', $store, 'trans_type', 'Bank Charges');
+                        $char = $get_account->fetch_sum_curdate2Con('finance_cost', 'amount', 'date(post_date)', 'store', $store, 'trans_type', 'Bank Charges');
                         foreach($char as $cha){
                             $charges = $cha->total;
                         }
@@ -151,8 +147,7 @@
                 <td>
                     <?php    
                         //get expense
-                        $get_cha = new selects();
-                        $char = $get_exp->fetch_sum_curdate2Con('finance_cost', 'amount', 'date(post_date)', 'store', $store, 'trans_type', 'Bank Charges');
+                        $char = $get_account->fetch_sum_curdate2Con('finance_cost', 'amount', 'date(post_date)', 'store', $store, 'trans_type', 'Bank Charges');
                         foreach($char as $cha){
                             $charges = $cha->total;
                         }
@@ -165,8 +160,7 @@
                 <td>
                     <?php    
                         //get expense
-                        $get_oth = new selects();
-                        $other_loss = $get_oth->fetch_sum_curdateCon('other_income', 'amount', 'date(post_date)', 'activity', 'loss');
+                        $other_loss = $get_account->fetch_sum_curdate2Con('other_income', 'amount', 'post_date', 'activity', 'loss', 'store', $store);
                         foreach($other_loss as $row){
                             $loss = $row->total;
                             // $cost = $row->total_cost;
@@ -180,8 +174,7 @@
                 <td>
                     <?php    
                         //get expense
-                        $get_oth = new selects();
-                        $others = $get_oth->fetch_sum_curdate2Con('finance_cost', 'amount', 'date(post_date)', 'store', $store, 'trans_type', 'Loan Fee');
+                        $others = $get_account->fetch_sum_curdate2Con('finance_cost', 'amount', 'date(post_date)', 'store', $store, 'trans_type', 'Loan Fee');
                         foreach($others as $oth){
                             $finance_cost = $oth->total;
                         }
@@ -194,8 +187,7 @@
                 <td>
                     <?php    
                         //get depreciation
-                        $get_oth = new selects();
-                        $others = $get_oth->fetch_sum_curdate('depreciation', 'amount', 'date(post_date)');
+                        $others = $get_account->fetch_sum_curdateCon('depreciation', 'amount', 'date(post_date)', 'store', $store);
                         foreach($others as $oth){
                             $depreciation = $oth->total;
                         }
@@ -226,8 +218,7 @@
                 <td>
                     <?php    
                         //get expense
-                        $get_oth = new selects();
-                        $others = $get_oth->fetch_sum_curdate2Con('finance_cost', 'amount', 'date(post_date)', 'store', $store, 'trans_type', 'Tax');
+                        $others = $get_account->fetch_sum_curdate2Con('finance_cost', 'amount', 'date(post_date)', 'store', $store, 'trans_type', 'Tax');
                         foreach($others as $oth){
                             $tax = $oth->total;
                         }

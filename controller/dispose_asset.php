@@ -3,6 +3,7 @@ date_default_timezone_set("Africa/Lagos");
 
     session_start();
     $user = $_SESSION['user_id'];
+    $store = $_SESSION['store_id'];
     $id = htmlspecialchars(stripslashes($_POST['asset_id']));
     $quantity = htmlspecialchars(stripslashes($_POST['quantity']));
     $contra = htmlspecialchars(stripslashes($_POST['contra']));
@@ -42,6 +43,7 @@ date_default_timezone_set("Africa/Lagos");
         'quantity' => $quantity,
         'disposed_date' => $date,
         'disposed_by' => $user,
+        'store' => $store,
         'trx_number' => $trx_num
     );
     //get asset ledger
@@ -86,7 +88,8 @@ date_default_timezone_set("Africa/Lagos");
                 'details' => 'Disposal of Asset',
                 'trx_number' => $trx_num,
                 'post_date' => $date,
-                'posted_by' => $user
+                'posted_by' => $user,
+                'store' => $store
             );
             $add_expense = new add_data('other_income', $expense_data);
             $add_expense->create_data();
@@ -99,7 +102,8 @@ date_default_timezone_set("Africa/Lagos");
                 'details' => 'Disposal of Asset',
                 'trx_number' => $trx_num,
                 'post_date' => $date,
-                'posted_by' => $user
+                'posted_by' => $user,
+                'store' => $store
             );
             $add_expense = new add_data('other_income', $expense_data);
             $add_expense->create_data();
@@ -113,7 +117,8 @@ date_default_timezone_set("Africa/Lagos");
             'details' => 'Disposal of Asset',
             'trx_number' => $trx_num,
             'post_date' => $date,
-            'posted_by' => $user
+            'posted_by' => $user,
+            'store' => $store
         );
         $add_expense = new add_data('other_income', $expense_data);
         $add_expense->create_data();
@@ -178,7 +183,8 @@ date_default_timezone_set("Africa/Lagos");
                     'post_date' => $date,
                     'posted_by' => $user,
                     'trx_number' => $trx_num,
-                    'trans_date' => $date
+                    'trans_date' => $date,
+                    'store' => $store
                 );
                 //add debit
                 $add_debit = new add_data('transactions', $debit_data);
@@ -194,7 +200,9 @@ date_default_timezone_set("Africa/Lagos");
                     'post_date' => $date,
                     'posted_by' => $user,
                     'trx_number' => $trx_num,
-                    'trans_date' => $date
+                    'trans_date' => $date,
+                    'store' => $store
+
 
                 );
                  //add credit
@@ -212,7 +220,9 @@ date_default_timezone_set("Africa/Lagos");
                         'post_date' => $date,
                         'posted_by' => $user,
                         'trx_number' => $trx_num,
-                        'trans_date' => $date
+                        'trans_date' => $date,
+                        'store' => $store
+
 
                     );
                     $add_debit2 = new add_data('transactions', $debit_data2);
@@ -229,7 +239,9 @@ date_default_timezone_set("Africa/Lagos");
                         'post_date' => $date,
                         'posted_by' => $user,
                         'trx_number' => $trx_num,
-                        'trans_date' => $date
+                        'trans_date' => $date,
+                        'store' => $store
+
 
                     );
                      //add credit
@@ -247,7 +259,8 @@ date_default_timezone_set("Africa/Lagos");
                         'post_date' => $date,
                         'posted_by' => $user,
                         'trx_number' => $trx_num,
-                        'trans_date' => $date
+                        'trans_date' => $date,
+                        'store' => $store
                     );
                      //add credit
                      $add_credit = new add_data('transactions', $debit_profit);
@@ -262,7 +275,8 @@ date_default_timezone_set("Africa/Lagos");
                     'trans_type' => 'inflow',
                     'activity' => 'investing',
                     'post_date' => $date,
-                    'posted_by' => $user
+                    'posted_by' => $user,
+                    'store' => $store
                 );
                 $add_flow = new add_data('cash_flows', $flow_data);
                 $add_flow->create_data();
@@ -279,7 +293,8 @@ date_default_timezone_set("Africa/Lagos");
                     'post_date' => $date,
                     'posted_by' => $user,
                     'trx_number' => $trx_num,
-                    'trans_date' => $date
+                    'trans_date' => $date,
+                    'store' => $store
 
                 );
                  //add credit
@@ -296,7 +311,8 @@ date_default_timezone_set("Africa/Lagos");
                     'post_date' => $date,
                     'posted_by' => $user,
                     'trx_number' => $trx_num,
-                    'trans_date' => $date
+                    'trans_date' => $date,
+                    'store' => $store
 
                 );
                 //add debit
@@ -314,7 +330,8 @@ date_default_timezone_set("Africa/Lagos");
                         'post_date' => $date,
                         'posted_by' => $user,
                         'trx_number' => $trx_num,
-                        'trans_date' => $date
+                        'trans_date' => $date,
+                        'store' => $store
 
                     );
                     $add_debit2 = new add_data('transactions', $debit_data2);

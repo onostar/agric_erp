@@ -48,7 +48,7 @@
         }
         //get cost price from inventory
         $get_cost = new selects();
-        $costs = $get_cost->fetch_details_2cond('prices', 'store', 'item_id', $item, $store);
+        $costs = $get_cost->fetch_details_2cond('prices', 'store', 'item', $item, $store);
         if(is_array($costs)){
             foreach($costs as $cos){
                 $cost_price = $cos->cost;
