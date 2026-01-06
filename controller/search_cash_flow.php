@@ -39,8 +39,8 @@
                         <?php
                             //get all cash flow from customers
                             $get_inflow = new selects();
-                            $rows = $get_inflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'trans_type',
-                            $from, $to, 'operating',  'inflow');
+                            $rows = $get_inflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'trans_type', 'store', 
+                            $from, $to, 'operating',  'inflow', $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $income = $row->total;
@@ -70,8 +70,8 @@
                         <?php 
                             //get all cash flow from customers
                             $get_inflow = new selects();
-                            $rows = $get_inflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details',
-                            $from, $to, 'operating',  'inventory purchase');
+                            $rows = $get_inflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details', 'store',
+                            $from, $to, 'operating',  'inventory purchase', $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $purchase = $row->total;
@@ -94,8 +94,8 @@
                         <?php 
                             //get all cash flow from customers
                             $get_inflow = new selects();
-                            $rows = $get_inflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details',
-                            $from, $to, 'operating',  'Labour Cost');
+                            $rows = $get_inflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details', 'store',
+                            $from, $to, 'operating',  'Labour Cost', $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $purchase = $row->total;
@@ -118,8 +118,8 @@
                         <?php 
                             //get all cash flow from expense
                             $get_inflow = new selects();
-                            $rows = $get_inflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details',
-                            $from, $to, 'operating',  'expense');
+                            $rows = $get_inflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details', 'store',
+                            $from, $to, 'operating',  'expense', $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $expense = $row->total;
@@ -140,8 +140,8 @@
                         <?php 
                             //get all cash flow from expense
                             $get_inflow = new selects();
-                            $rows = $get_inflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details',
-                            $from, $to, 'operating',  'bank charges');
+                            $rows = $get_inflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details', 'store',
+                            $from, $to, 'operating',  'bank charges', $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $expense = $row->total;
@@ -162,8 +162,8 @@
                         <?php 
                             //get all cash flow from expense
                             $get_inflow = new selects();
-                            $rows = $get_inflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details',
-                            $from, $to, 'operating',  'tax payments');
+                            $rows = $get_inflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details', 'store',
+                            $from, $to, 'operating',  'tax payments', $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $expense = $row->total;
@@ -182,8 +182,8 @@
                         <?php
                             //fetch total for inflow 
                             $get_inflow = new selects();
-                            $rows = $get_inflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'trans_type',
-                            $from, $to, 'operating',  'inflow');
+                            $rows = $get_inflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'trans_type', 'store',
+                            $from, $to, 'operating',  'inflow', $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $inflows = $row->total;
@@ -194,8 +194,8 @@
                             }
                             //fetch total for inflow 
                             $get_outflow = new selects();
-                            $rowsss = $get_outflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'trans_type',
-                            $from, $to, 'operating',  'outflow');
+                            $rowsss = $get_outflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'trans_type', 'store',
+                            $from, $to, 'operating',  'outflow', $store);
                             if(gettype($rowsss) == 'array'){
                                 foreach($rowsss as $rowss){
                                     $outflow = $rowss->total;
@@ -212,7 +212,7 @@
                 </tr>
                 
             
-                <tr style="background:var(--primaryColor)">
+                <tr style="background:var(--primaryColor)!important">
                     <td style="color:#fff;text-align:left;text-transform:uppercase;font-weight:bold">Cash flow from Investing Activities</td>
                     <td style="color:#fff;text-align:left;text-transform:uppercase;font-weight:bold">Amount(₦)</td>
                 </tr>
@@ -229,8 +229,8 @@
                         <?php 
                             //get all cash flow from customers
                             $get_inflow = new selects();
-                            $rows = $get_inflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details',
-                            $from, $to, 'investing',  'asset sales');
+                            $rows = $get_inflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details', 'store',
+                            $from, $to, 'investing',  'asset sales', $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $purchase = $row->total;
@@ -261,8 +261,8 @@
                         <?php 
                             //get all cash flow from customers
                             $get_inflow = new selects();
-                            $rows = $get_inflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details',
-                            $from, $to, 'investing',  'asset purchase');
+                            $rows = $get_inflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details', 'store',
+                            $from, $to, 'investing',  'asset purchase', $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $purchase = $row->total;
@@ -289,8 +289,8 @@
                         <?php
                             //fetch total for inflow 
                             $get_inflow = new selects();
-                            $rows = $get_inflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'trans_type',
-                            $from, $to, 'investing',  'inflow');
+                            $rows = $get_inflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'trans_type', 'store',
+                            $from, $to, 'investing',  'inflow', $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $inflows = $row->total;
@@ -301,8 +301,8 @@
                             }
                             //fetch total for inflow 
                             $get_outflow = new selects();
-                            $rowsss = $get_outflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'trans_type',
-                            $from, $to, 'investing',  'outflow');
+                            $rowsss = $get_outflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'trans_type', 'store',
+                            $from, $to, 'investing',  'outflow', $store);
                             if(gettype($rowsss) == 'array'){
                                 foreach($rowsss as $rowss){
                                     $outflow = $rowss->total;
@@ -340,8 +340,8 @@
                         <?php 
                             //get all cash flow from customers
                             $get_inflow = new selects();
-                            $rows = $get_inflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details',
-                            $from, $to, 'financing',  'Loan Received');
+                            $rows = $get_inflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details', 'store',
+                            $from, $to, 'financing',  'Loan Received', $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $purchase = $row->total;
@@ -362,8 +362,8 @@
                         <?php 
                             //get all cash flow from customers
                             $get_inflow = new selects();
-                            $rows = $get_inflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details',
-                            $from, $to, 'financing',  'Director Contribution');
+                            $rows = $get_inflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details', 'store',
+                            $from, $to, 'financing',  'Director Contribution', $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $purchase = $row->total;
@@ -392,8 +392,8 @@
                         <?php 
                             //get all cash flow from customers
                             $get_inflow = new selects();
-                            $rows = $get_inflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details',
-                            $from, $to, 'financing',  'Loan Payment');
+                            $rows = $get_inflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details', 'store',
+                            $from, $to, 'financing',  'Loan Payment', $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $purchase = $row->total;
@@ -414,8 +414,8 @@
                         <?php 
                             //get all cash flow from customers
                             $get_inflow = new selects();
-                            $rows = $get_inflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details',
-                            $from, $to, 'financing',  'Director Remuneration');
+                            $rows = $get_inflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details', 'store',
+                            $from, $to, 'financing',  'Director Remuneration', $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $purchase = $row->total;
@@ -436,8 +436,8 @@
                         <?php 
                             //get all cash flow from customers
                             $get_inflow = new selects();
-                            $rows = $get_inflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details',
-                            $from, $to, 'financing',  'finance cost');
+                            $rows = $get_inflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'details', 'store',
+                            $from, $to, 'financing',  'finance cost', $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $purchase = $row->total;
@@ -459,7 +459,8 @@
                         <?php
                             //fetch total for inflow 
                             $get_inflow = new selects();
-                            $rows = $get_inflow->fetch_sum_curdate2Con('cash_flows', 'amount', 'date(post_date)', 'activity', 'financing', 'trans_type', 'inflow');
+                            $rows = $get_inflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'trans_type', 'store',
+                            $from, $to, 'financing', 'inflow cost', $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $inflows = $row->total;
@@ -470,7 +471,8 @@
                             }
                             //fetch total for inflow 
                             $get_outflow = new selects();
-                            $rowsss = $get_outflow->fetch_sum_curdate2Con('cash_flows', 'amount', 'date(post_date)', 'activity', 'financing', 'trans_type', 'outflow');
+                            $rowsss = $get_outflow->fetch_sum_2date3Cond('cash_flows', 'amount', 'date(post_date)', 'activity', 'trans_type', 'store',
+                            $from, $to, 'financing',  'outflow', $store);
                             if(gettype($rowsss) == 'array'){
                                 foreach($rowsss as $rowss){
                                     $outflow = $rowss->total;
@@ -495,7 +497,7 @@
     <?php
         //get total  inflow
         $get_total_inflow = new selects();
-        $tinfs = $get_total_inflow->fetch_sum_2dateCond('cash_flows', 'amount', 'trans_type', 'date(post_date)', $from, $to, 'inflow');
+        $tinfs = $get_total_inflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)','trans_type', 'store', $from, $to, 'inflow', $store);
         if(gettype($tinfs) == 'array'){
             foreach($tinfs as $tinf){
                 $total_inflows = $tinf->total;
@@ -503,8 +505,8 @@
         }
         //get total outflow
         $get_total_outflow = new selects();
-        $touts = $get_total_outflow->fetch_sum_2dateCond('cash_flows', 'amount', 'trans_type', 'date(post_date)', $from, $to, 'outflow');
-        if(gettype($tinfs) == 'array'){
+        $touts = $get_total_outflow->fetch_sum_2date2Cond('cash_flows', 'amount', 'date(post_date)','trans_type', 'store', $from, $to, 'outflow', $store);
+        if(gettype($touts) == 'array'){
             foreach($touts as $tout){
                 $total_outflows = $tout->total;
             }

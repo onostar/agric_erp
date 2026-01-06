@@ -6,7 +6,7 @@
 
 
 ?>
-<div id="revenueReport" class="displays management">
+<div id="revenueReport" class="displays management" style="width:100%!important">
     <div class="select_date">
         <!-- <form method="POST"> -->
         <section>    
@@ -19,7 +19,7 @@
                 <input type="date" name="to_date" id="to_date"><br>
             </div>
             <button type="submit" name="search_date" id="search_date" onclick="search('search_credit.php')">Search <i class="fas fa-search"></i></button>
-</section>
+        </section>
     </div>
 <div class="displays allResults new_data" id="revenue_report">
     <h2>Credit Sales Report for today</h2>

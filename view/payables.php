@@ -1,6 +1,7 @@
 <div id="post_debt">
 <?php
-
+    session_start();
+    $store = $_SESSION['store_id'];
     include "../classes/dbh.php";
     include "../classes/select.php";
 
@@ -27,7 +28,7 @@
             <?php
                 $n = 1;
                 $get_details = new selects();
-                $details = $get_details->fetch_payables();
+                $details = $get_details->fetch_payables($store);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>

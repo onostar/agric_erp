@@ -30,7 +30,7 @@
                 $n = 1;
                 $get_users = new selects();
                 /* $details = $get_users->fetch_details_lessthan('customers', 'wallet_balance', 0); */
-                $details = $get_users->fetch_details_condGroup('debtors', 'debt_status', 0, 'customer');
+                $details = $get_users->fetch_details_2condGroup('debtors', 'debt_status', 'store', 0, $store, 'customer');
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
@@ -75,7 +75,7 @@
             echo "<p class='total_amount' style='color:green'>Total: ₦".number_format($amount->total * -1, 2)."</p>";
         } */
         $get_total = new selects();
-        $amounts = $get_total->fetch_sum_single('debtors', 'amount', 'debt_status', 0);
+        $amounts = $get_total->fetch_sum_double('debtors', 'amount', 'debt_status', 0, 'store', $store);
         foreach($amounts as $amount){
             echo "<p class='total_amount' style='color:red'>Total Due: ₦".number_format($amount->total, 2)."</p>";
         }

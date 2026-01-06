@@ -6,7 +6,7 @@
 
 
 ?>
-<div id="debt_paymentReport" class="displays management">
+<div id="debt_paymentReport" class="displays management" style="width: 100%!important;">
     <div class="select_date">
         <!-- <form method="POST"> -->
         <section>    

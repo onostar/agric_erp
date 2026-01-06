@@ -1,6 +1,7 @@
 <?php
     session_start();
     $year = htmlspecialchars(stripslashes($_POST['dep_year']));
+    $store = htmlspecialchars(stripslashes($_POST['dep_store']));
     include "../classes/dbh.php";
     include "../classes/select.php";
     $full_date = date("Y-m-d", strtotime($year));
@@ -30,7 +31,7 @@
             <?php
                 $n = 1;
                 $get_users = new selects();
-                $details = $get_users->fetch_details_specYearGro('depreciation', $full_date, 'asset');
+                $details = $get_users->fetch_details_specYearGro('depreciation', $full_date, $store,'asset');
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
                     $get_asset = new selects();

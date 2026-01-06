@@ -2446,6 +2446,20 @@ public function fetch_total_working_days_month($date){
                 return $rows;
             }
         }
+        //fetch sum between two dates and condition grouped by
+        public function fetch_sum_2date2CondGr($table, $column1, $column2, $col3, $condition1, $value1, $value2, $value3, $val4, $group){
+            $get_user = $this->connectdb()->prepare("SELECT SUM(amount) AS total FROM (SELECT MAX($column1) AS amount FROM $table WHERE $column2 = :$column2 AND $col3 = :$col3 AND DATE($condition1) BETWEEN '$value1' AND '$value2' GROUP BY $group) AS unique_invoices;");
+            $get_user->bindValue("$column2", $value3);
+            $get_user->bindValue("$col3", $val4);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch details with negative condition
         public function fetch_details_negCond1($table, $column1, $value1){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column1 != :$column1");
@@ -2625,9 +2639,9 @@ public function fetch_total_working_days_month($date){
             }
         }
         // fetch daily trial balance
-        public function fetch_trial_balance(){
-            $get_daily = $this->connectdb()->prepare("SELECT SUM(debit) AS debits, SUM(credit) AS credits, post_date, account, account_type FROM transactions WHERE date(post_date) = CURDATE() AND trx_status = 0 GROUP BY account DESC");
-            // $get_daily->bindValue('store', $store);
+        public function fetch_trial_balance($store){
+            $get_daily = $this->connectdb()->prepare("SELECT SUM(debit) AS debits, SUM(credit) AS credits, post_date, account, account_type FROM transactions WHERE date(post_date) = CURDATE() AND trx_status = 0 AND store = :store GROUP BY account DESC");
+            $get_daily->bindValue('store', $store);
             $get_daily->execute();
             if($get_daily->rowCount() > 0){
                 $rows = $get_daily->fetchAll();
@@ -2639,9 +2653,9 @@ public function fetch_total_working_days_month($date){
             }
         }
         // fetch trial balance by date range
-        public function fetch_trial_balanceDate($from, $to){
-            $get_daily = $this->connectdb()->prepare("SELECT SUM(debit) AS debits, SUM(credit) AS credits, post_date, account, account_type FROM transactions WHERE date(post_date) BETWEEN '$from' AND '$to' AND trx_status = 0 GROUP BY account DESC");
-            // $get_daily->bindValue('store', $store);
+        public function fetch_trial_balanceDate($from, $to, $store){
+            $get_daily = $this->connectdb()->prepare("SELECT SUM(debit) AS debits, SUM(credit) AS credits, post_date, account, account_type FROM transactions WHERE date(post_date) BETWEEN '$from' AND '$to' AND trx_status = 0 AND store = :store GROUP BY account DESC");
+            $get_daily->bindValue('store', $store);
             $get_daily->execute();
             if($get_daily->rowCount() > 0){
                 $rows = $get_daily->fetchAll();
@@ -2653,10 +2667,9 @@ public function fetch_total_working_days_month($date){
             }
         }
         //fetch with yearly condition group by
-        public function fetch_details_yearlyGroup($table, $condition1, $group){
-            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE YEAR($condition1) = YEAR(CURDATE())GROUP BY $group");
-            // $get_user->bindValue("$condition1", $value1);
-            // $get_user->bindValue("$condition2", $value2);
+        public function fetch_details_yearlyGroup($table, $condition1, $store, $group){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE YEAR($condition1) = YEAR(CURDATE()) AND store = :store GROUP BY $group");
+            $get_user->bindValue('store', $store);
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 $rows = $get_user->fetchAll();
@@ -2667,9 +2680,9 @@ public function fetch_total_working_days_month($date){
             }
         }
         //fetch with a specific selected year group
-        public function fetch_details_specYearGro($table, $full_date, $group){
-            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE YEAR(post_date) = YEAR('$full_date') GROUP BY $group");
-           
+        public function fetch_details_specYearGro($table, $full_date, $store, $group){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE YEAR(post_date) = YEAR('$full_date') AND store = :store GROUP BY $group");
+            $get_user->bindValue('store', $store);
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 $rows = $get_user->fetchAll();
@@ -2758,9 +2771,10 @@ public function fetch_total_working_days_month($date){
         }
         
         //fetch monthly financial position
-        public function fetch_monthly_pos($cond, $value, $month, $year){
-            $get_user = $this->connectdb()->prepare("SELECT SUM(debit) AS debits, SUM(credit) AS credits FROM transactions WHERE MONTH(post_date) = $month AND YEAR(post_date) = $year AND $cond = :$cond");
+        public function fetch_monthly_pos($cond, $value, $month, $year, $store){
+            $get_user = $this->connectdb()->prepare("SELECT SUM(debit) AS debits, SUM(credit) AS credits FROM transactions WHERE MONTH(post_date) = $month AND YEAR(post_date) = $year AND $cond = :$cond AND store = :store");
             $get_user->bindValue("$cond", $value);
+            $get_user->bindValue("store", $store);
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 $rows = $get_user->fetchAll();
@@ -2771,9 +2785,10 @@ public function fetch_total_working_days_month($date){
             }
         }
         //fetch yearly financial position
-        public function fetch_yearly_pos($cond, $value, $year){
-            $get_user = $this->connectdb()->prepare("SELECT SUM(debit) AS debits, SUM(credit) AS credits FROM transactions WHERE YEAR(post_date) = $year AND $cond = :$cond");
+        public function fetch_yearly_pos($cond, $value, $year, $store){
+            $get_user = $this->connectdb()->prepare("SELECT SUM(debit) AS debits, SUM(credit) AS credits FROM transactions WHERE YEAR(post_date) = $year AND $cond = :$cond AND store = :store");
             $get_user->bindValue("$cond", $value);
+            $get_user->bindValue("store", $store);
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 $rows = $get_user->fetchAll();
@@ -2787,6 +2802,21 @@ public function fetch_total_working_days_month($date){
          public function fetch_sum_monthYearCond($table, $column1, $column2, $month, $year, $con, $value){
             $get_user = $this->connectdb()->prepare("SELECT SUM($column1) as total FROM $table WHERE MONTH($column2) = $month AND YEAR($column2) = $year AND $con = :$con");
             $get_user->bindValue("$con", $value);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        
+        //fetch sum for a specific month and year and a condition
+         public function fetch_sum_monthYear2Cond($table, $column1, $column2, $month, $year, $con, $value, $con2, $val2){
+            $get_user = $this->connectdb()->prepare("SELECT SUM($column1) as total FROM $table WHERE MONTH($column2) = $month AND YEAR($column2) = $year AND $con = :$con AND $con2 = :$con2");
+            $get_user->bindValue("$con", $value);
+            $get_user->bindValue("$con2", $val2);
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 $rows = $get_user->fetchAll();
@@ -2837,9 +2867,10 @@ public function fetch_total_working_days_month($date){
             }
         }
          //fetch monthly account statement
-         public function fetch_monthlyStatement($account, $month, $year){
-            $get_user = $this->connectdb()->prepare("SELECT * FROM transactions WHERE MONTH(post_date) = $month AND YEAR(post_date) =  $year AND account = :account /* GROUP BY trx_number */ ORDER BY post_date");
+         public function fetch_monthlyStatement($account, $month, $year, $store){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM transactions WHERE MONTH(post_date) = $month AND YEAR(post_date) =  $year AND account = :account AND store = :store /* GROUP BY trx_number */ ORDER BY post_date");
             $get_user->bindValue("account", $account);
+            $get_user->bindValue("store", $store);
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 $rows = $get_user->fetchAll();
@@ -2850,9 +2881,10 @@ public function fetch_total_working_days_month($date){
             }
         }
         //fetch yearly account statement
-        public function fetch_yearlyStatement($account, $year){
-            $get_user = $this->connectdb()->prepare("SELECT * FROM transactions WHERE YEAR(post_date) =  $year AND account = :account /* GROUP BY trx_number */ ORDER BY post_date");
+        public function fetch_yearlyStatement($account, $year, $store){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM transactions WHERE YEAR(post_date) =  $year AND account = :account AND store = :store /* GROUP BY trx_number */ ORDER BY post_date");
             $get_user->bindValue("account", $account);
+            $get_user->bindValue("store", $store);
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 $rows = $get_user->fetchAll();
@@ -2903,6 +2935,20 @@ public function fetch_total_working_days_month($date){
                 return $rows;
             }
         }
+        //fetch between two dates and Condition order
+        public function fetch_details_2date2ConOrder($table, $column, $col2, $condition1, $value1, $value2, $column_value, $col_val2, $order){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column AND $col2 = :$col2 AND $condition1 BETWEEN '$value1' AND '$value2' ORDER BY $order");
+            $get_user->bindValue("$column", $column_value);
+            $get_user->bindValue("$col2", $col_val2);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch sum between two dates and  2 condition with 1 negative
         public function fetch_sum_2date2Cond1neg($table, $column1, $column2, $condition1, $condition2, $value1, $value2, $value3, $value4){
             $get_user = $this->connectdb()->prepare("SELECT SUM($column1) as total FROM $table WHERE $condition1 = :$condition1 AND $condition2 != :$condition2 AND $column2 BETWEEN '$value1' AND '$value2'");
@@ -2918,8 +2964,9 @@ public function fetch_total_working_days_month($date){
             }
         }
         //fetch payables
-        public function fetch_payables(){
-            $get_user = $this->connectdb()->prepare("SELECT COALESCE(SUM(debit), 0) - COALESCE(SUM(credit), 0) AS total_due, account FROM transactions WHERE class = 7 GROUP BY account HAVING total_due > 0");
+        public function fetch_payables($store){
+            $get_user = $this->connectdb()->prepare("SELECT COALESCE(SUM(debit), 0) - COALESCE(SUM(credit), 0) AS total_due, account FROM transactions WHERE class = 7 AND store = :store GROUP BY account HAVING total_due > 0");
+            $get_user->bindValue("store", $store);
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 $rows = $get_user->fetchAll();

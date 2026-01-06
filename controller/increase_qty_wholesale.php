@@ -46,8 +46,6 @@
             $new_qty = $show->quantity;
             $unit_price = $show->price;
         }
-        //get cost price from inventory
-        $get_cost = new selects();
        //get cost price from inventory
         $get_cost = new selects();
         $costs = $get_cost->fetch_details_2cond('prices', 'store', 'item', $item, $store);

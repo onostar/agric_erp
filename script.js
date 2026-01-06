@@ -2367,6 +2367,9 @@ function updatePriceQtyWh(){
                type: "POST",
                url: "../controller/update_price_qty_who.php",
                data: {sales_id:sales_id, qty:qty, price:price},
+               beforeSend : function(){
+                    $(".sales_order").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success: function(response){
                $(".sales_order").html(response);
                }
@@ -2408,6 +2411,9 @@ function updatePriceQtyOther(){
                type: "POST",
                url: "../controller/update_price_qty_other.php",
                data: {sales_id:sales_id, qty:qty, price:price},
+               beforeSend : function(){
+                    $(".sales_order").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success: function(response){
                $(".sales_order").html(response);
                }
@@ -6431,13 +6437,14 @@ function postDepreciation(){
 }
 
 //get depreciation by year
-function getDepreciationYear(year){
+function getDepreciationYear(year, store){
      let dep_year = year;
+     let dep_store = store;
      if(dep_year){
          $.ajax({
              type : "POST",
              url : "../controller/get_yearly_depreciation.php",
-             data: {dep_year:dep_year},
+             data: {dep_year:dep_year, dep_store:dep_store},
              success : function(response){
                  $(".new_data").html(response);
              }

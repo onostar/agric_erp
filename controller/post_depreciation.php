@@ -102,7 +102,8 @@
             'post_date' => $date,
             'posted_by' => $user,
             'trx_number' => $trx_num,
-            'trans_date' => $trans_date
+            'trans_date' => $trans_date,
+            'store' => $store
 
         );
         $credit_data = array(
@@ -115,7 +116,8 @@
             'post_date' => $date,
             'posted_by' => $user,
             'trx_number' => $trx_num,
-            'trans_date' => $trans_date
+            'trans_date' => $trans_date,
+            'store' => $store
 
         );
         //add debit

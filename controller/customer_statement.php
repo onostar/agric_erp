@@ -91,7 +91,7 @@
                     <?php
                         //get transaction history
                         $get_transactions = new selects();
-                        $details = $get_transactions->fetch_details_dateGro1con('payments', 'date(post_date)', $from, $to, 'customer', $customer, 'invoice');
+                        $details = $get_transactions->fetch_details_dateGro2con('payments', 'date(post_date)', $from, $to, 'customer', $customer, 'store', $store, 'invoice');
                         $n = 1;
                         if(gettype($details) === 'array'){
                         foreach($details as $detail){
@@ -133,7 +133,7 @@
                 }
                 // get sum
                 $get_total = new selects();
-                $amounts = $get_total->fetch_sum_2date2Cond('sales', 'total_amount', 'date(post_date)', 'sales_status', 'customer', $from, $to, 2, $customer);
+                $amounts = $get_total->fetch_sum_2date3Cond('sales', 'total_amount', 'date(post_date)', 'sales_status', 'customer', 'store', $from, $to, 2, $customer, $store);
                 foreach($amounts as $amount){
                     $paid_amount = $amount->total;
                 }
@@ -142,16 +142,16 @@
         </div>
         <div class="all_credit allResults" style="border-left:1px solid #cdcdcd">
             <div class="deposit_log" style="background:var(--otherColor); display:flex;justify-content:space-between">
-                <h3 style="background:var(--otherColor); color:#fff">Deposits transactions</h3>
-                <a href="javascript:void" style="background:var(--moreColor); box-shadow:1px 1px 1px #fff; border:1px 1px 1px #222; margin:5px" title="post customer payments" onclick="showPage('../controller/fund_account.php?customer=<?php echo $customer?>')"><i class="fas fa-cash-register"></i> Deposit <i class="fas fa-plus"></i></a>
+                <h3 style="background:var(--otherColor); color:#fff">Other transactions</h3>
+                <!-- <a href="javascript:void" style="background:var(--moreColor); box-shadow:1px 1px 1px #fff; border:1px 1px 1px #222; margin:5px" title="post customer payments" onclick="showPage('../controller/fund_account.php?customer=<?php echo $customer?>')"><i class="fas fa-cash-register"></i> Deposit <i class="fas fa-plus"></i></a> -->
             </div>
             <table id="data_table" class="searchTable">
                 <thead>
                 <tr style="background:var(--primaryColor)">
                         <td>S/N</td>
                         <td>Date</td>
-                        <td>Mode</td>
-                        <!-- <td>Items</td> -->
+                        <td>Details</td>
+                        <!-- <td>Mode</td> -->
                         <td>Amount</td>
                     </tr>
                 </thead>
@@ -159,7 +159,7 @@
                     <?php
                         //get deposit history
                         $get_transactions = new selects();
-                        $details = $get_transactions->fetch_details_2dateCon('deposits', 'customer', 'date(post_date)', $from, $to, $customer );
+                        $details = $get_transactions->fetch_details_2date2Con('deposits', 'date(post_date)', $from, $to, 'customer', $customer, 'store', $store);
                         $n = 1;
                         if(gettype($details) === 'array'){
                         foreach($details as $detail){
@@ -167,7 +167,7 @@
                     <tr>
                         <td style="text-align:center; color:red;"><?php echo $n?></td>
                         <td style="color:var(--moreColor)"><?php echo date("d-m-Y", strtotime($detail->post_date));?></td>
-                        <td><?php echo $detail->payment_mode?></td>  
+                        <td><?php echo $detail->trx_type?></td>  
                         <td>
                             <?php echo "₦".number_format($detail->amount, 2);
 
@@ -183,11 +183,11 @@
                     echo "<p class='no_result'>'$details'</p>";
                 }
                 // get sum of deposits
-                $get_credits = new selects();
-                $credits = $get_credits->fetch_sum_single('deposits', 'amount', 'customer', $customer);
-                foreach($credits as $credit){
+                // $get_credits = new selects();
+                // $credits = $get_credits->fetch_sum_double('deposits', 'amount', 'customer', $customer, 'store', $store);
+                /* foreach($credits as $credit){
                     $deposits = $credit->total;
-                }
+                } */
                 /* // get sum of deposit
                 $get_deposits = new selects();
                 $debits = $get_total->fetch_sum_2date2Cond('customer_trail', 'amount', 'date(post_date)', 'customer', 'description', $from, $to, $customer, 'deposit');
@@ -196,7 +196,7 @@
                 } */
                 /* $total_due = $debt;
                     if($total_due > 0){ */
-                        echo "<p class='total_amount' style='color:green;font-size:.9rem;'>Total Deposits: ₦".number_format($deposits, 2)."</p>";    
+                        // echo "<p class='total_amount' style='color:green;font-size:.9rem;'>Total Deposits: ₦".number_format($deposits, 2)."</p>";    
                     // }else{
                         if($wallet > 0){
                         echo "<p class='total_amount' style='color:red;font-size:1rem;'>Amount due: ₦".number_format($wallet, 2)."</p>";

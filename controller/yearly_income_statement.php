@@ -62,7 +62,7 @@
                     <?php
                         // get accounts
                         $get_account = new selects();
-                        $rows = $get_account->fetch_sum_YearCond('other_income', 'amount', 'post_date', $year, 'activity', 'gain');
+                        $rows = $get_account->fetch_sum_Year2Cond('other_income', 'amount', 'post_date', $year, 'activity', 'gain', 'store', $store);
                         foreach($rows as $row){
                             $other_revenue = $row->total;
                             // $cost = $row->total_cost;
@@ -74,7 +74,7 @@
                     <?php
                         // get accounts
                         $get_account = new selects();
-                        $rows = $get_account->fetch_sum_YearCond('other_income', 'amount', 'post_date', $prev_year, 'activity', 'gain');
+                        $rows = $get_account->fetch_sum_Year2Cond('other_income', 'amount', 'post_date', $prev_year, 'activity', 'gain', 'store', $store);
                         foreach($rows as $row){
                             $pre_other_revenue = $row->total;
                             // $cost = $row->total_cost;
@@ -150,7 +150,7 @@
                     <?php    
                         //get waybill
                         $get_waybill = new selects();
-                        $bills = $get_waybill->fetch_sum_Year('waybills', 'waybill', 'post_date', $year);
+                        $bills = $get_waybill->fetch_sum_YearCond('waybills', 'waybill', 'post_date', $year, 'store', $store);
                         foreach($bills as $bill){
                             $logistic = $bill->total;
                         }
@@ -162,7 +162,7 @@
                     <?php    
                         //get waybill
                         $get_waybill = new selects();
-                        $bills = $get_waybill->fetch_sum_Year('waybills', 'waybill', 'post_date', $prev_year);
+                        $bills = $get_waybill->fetch_sum_YearCond('waybills', 'waybill', 'post_date', $prev_year, 'store', $store);
                         foreach($bills as $bill){
                             $prev_logistic = $bill->total;
                         }
@@ -292,7 +292,7 @@
                     <?php    
                         //get removal
                         $get_remove = new selects();
-                        $remove = $get_remove->fetch_sum_Year('remove_items', 'total_amount', 'removed_date', $year);
+                        $remove = $get_remove->fetch_sum_YearCond('remove_items', 'total_amount', 'removed_date', $year, 'store', $store);
                         foreach($remove as $rem){
                             $removal = $rem->total;
                         }
@@ -304,7 +304,7 @@
                     <?php    
                         //get removal
                         $get_remove = new selects();
-                        $remove = $get_remove->fetch_sum_Year('remove_items', 'total_amount', 'removed_date',$prev_year);
+                        $remove = $get_remove->fetch_sum_YearCond('remove_items', 'total_amount', 'removed_date', $prev_year, 'store', $store);
                         foreach($remove as $rem){
                             $prev_removal = $rem->total;
                         }
@@ -319,7 +319,7 @@
                     <?php    
                         //get expense
                         $get_oth = new selects();
-                        $other_loss = $get_oth->fetch_sum_YearCond('other_income', 'amount', 'post_date', $year, 'activity', 'loss');
+                        $other_loss = $get_oth->fetch_sum_Year2Cond('other_income', 'amount', 'post_date', $year, 'activity', 'loss', 'store', $store);
                         foreach($other_loss as $row){
                             $loss = $row->total;
                             // $cost = $row->total_cost;
@@ -331,7 +331,7 @@
                     <?php    
                         //get expense
                         $get_oth = new selects();
-                        $other_loss = $get_oth->fetch_sum_YearCond('other_income', 'amount', 'post_date', $prev_year, 'activity', 'loss');
+                        $other_loss = $get_oth->fetch_sum_Year2Cond('other_income', 'amount', 'post_date', $prev_year, 'activity', 'loss', 'store', $store);
                         foreach($other_loss as $row){
                             $prev_loss = $row->total;
                             // $cost = $row->total_cost;
@@ -371,7 +371,7 @@
                     <?php    
                         //get depreciation
                         $get_oth = new selects();
-                        $others = $get_oth->fetch_sum_Year('depreciation', 'amount', 'post_date', $year);
+                        $others = $get_oth->fetch_sum_YearCond('depreciation', 'amount', 'post_date', $year, 'store', $store);
                         foreach($others as $oth){
                             $depreciation = $oth->total;
                         }
@@ -382,7 +382,7 @@
                     <?php    
                         //get depreciation
                         $get_oth = new selects();
-                        $others = $get_oth->fetch_sum_Year('depreciation', 'amount', 'post_date', $prev_year);
+                        $others = $get_oth->fetch_sum_YearCond('depreciation', 'amount', 'post_date', $prev_year, 'store', $store);
                         foreach($others as $oth){
                             $prev_depreciation = $oth->total;
                         }
@@ -473,6 +473,6 @@
             /* $total_profit = ($revenue + $other_revenue) - ($cost + $logistic + $total_expense  + $finance_cost + $loss + $depreciation); */
             $total_profit = $net_earnings;
             // $total_profit = $revenue - $expense;
-            echo "<p class='total_amount' style='background:red; color:#fff; text-decoration:none; padding:10px; width:auto; float:right'>$year Net Profit: ₦".number_format($total_profit, 2)."</p>";
+            // echo "<p class='total_amount' style='background:red; color:#fff; text-decoration:none; padding:10px; width:auto; float:right'>$year Net Profit: ₦".number_format($total_profit, 2)."</p>";
         
     ?>

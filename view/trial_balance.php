@@ -42,7 +42,7 @@
             <?php
                 $n = 1;
                 $get_users = new selects();
-                $details = $get_users->fetch_trial_balance();
+                $details = $get_users->fetch_trial_balance($store);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
@@ -80,7 +80,7 @@
     <?php
         // get total debits
         $get_total = new selects();
-        $amounts = $get_total->fetch_sum_curdateCon('transactions', 'debit', 'post_date', 'trx_status', 0);
+        $amounts = $get_total->fetch_sum_curdate2Con('transactions', 'debit', 'post_date', 'trx_status', 0,'store', $store);
         foreach($amounts as $amount){
             $paid_amount = $amount->total;
         }
@@ -88,7 +88,7 @@
             echo "<p class='total_amount' style='color:green'>Total Debits: ₦".number_format($paid_amount, 2)."</p>";
         // get total credits
         $get_credit = new selects();
-        $amounts = $get_credit->fetch_sum_curdateCon('transactions', 'credit', 'post_date', 'trx_status', 0);
+        $amounts = $get_credit->fetch_sum_curdate2Con('transactions', 'credit', 'post_date', 'trx_status', 0,'store', $store);
         foreach($amounts as $amount){
             $credit_amount = $amount->total;
         }

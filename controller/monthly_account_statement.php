@@ -45,7 +45,7 @@
                 //get opening balance
                 //get previous debit
                 $get_prev_debit = new selects();
-                $prevs = $get_prev_debit->fetch_sum_monthYearCond('transactions', 'debit', 'post_date', $prev_month, $year, 'account', $customer);
+                $prevs = $get_prev_debit->fetch_sum_monthYear2Cond('transactions', 'debit', 'post_date', $prev_month, $year, 'account', $customer, 'store', $store);
                 if(gettype($prevs) == 'array'){
                     foreach($prevs as $prev){
                         $prev_debits = $prev->total;
@@ -56,7 +56,7 @@
                 }
                 //get previous credit
                 $get_prev_credit = new selects();
-                $prevsss = $get_prev_credit->fetch_sum_monthYearCond('transactions', 'credit', 'post_date', $prev_month, $year, 'account', $customer);
+                $prevsss = $get_prev_credit->fetch_sum_monthYear2Cond('transactions', 'credit', 'post_date', $prev_month, $year, 'account', $customer, 'store', $store);
                 if(gettype($prevsss) == 'array'){
                     foreach($prevsss as $prevss){
                         $prev_credits = $prevss->total;
@@ -111,7 +111,7 @@
                     <?php
                         //get transaction history
                         $get_transactions = new selects();
-                        $details = $get_transactions->fetch_monthlyStatement($customer, $month, $year);
+                        $details = $get_transactions->fetch_monthlyStatement($customer, $month, $year, $store);
                         $n = 1;
                         if(gettype($details) === 'array'){
                         foreach($details as $detail){
@@ -160,7 +160,7 @@
                             <?php
                                 //get total debit
                                 $get_totals = new selects();
-                                $totals = $get_totals->fetch_sum_monthYearCond('transactions', 'debit', 'post_date', $month, $year, 'account', $customer);
+                                $totals = $get_totals->fetch_sum_monthYear2Cond('transactions', 'debit', 'post_date', $month, $year, 'account', $customer, 'store', $store);
                                 if(gettype($totals) == 'array'){
                                     foreach($totals as $tot){
                                         echo number_format($tot->total, 2);
@@ -174,7 +174,7 @@
                             <?php
                                 //get total credit
                                 $get_totals = new selects();
-                                $totals = $get_totals->fetch_sum_monthYearCond('transactions', 'credit', 'post_date', $month, $year, 'account', $customer);
+                                $totals = $get_totals->fetch_sum_monthYear2Cond('transactions', 'credit', 'post_date', $month, $year, 'account', $customer, 'store', $store);
                                 if(gettype($totals) == 'array'){
                                     foreach($totals as $tot){
                                         echo number_format($tot->total, 2);

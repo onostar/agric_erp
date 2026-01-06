@@ -18,10 +18,10 @@
                     <label for="fin_year">Financial Year</label>
                     <select name="fin_year" id="fin_year">
                         <option value="">Select year</option>
-                        <option value="2021">2021</option>
+                        <!-- <option value="2021">2021</option>
                         <option value="2022">2022</option>
                         <option value="2023">2023</option>
-                        <option value="2024">2024</option>
+                        <option value="2024">2024</option> -->
                         <option value="2025">2025</option>
                         <option value="2026">2026</option>
                         <option value="2027">2027</option>

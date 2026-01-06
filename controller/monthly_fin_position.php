@@ -58,7 +58,7 @@
                             //fetch total for current month by sub group
                             $sub_group = 2;
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $month, $year,$store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -77,7 +77,7 @@
                         <?php
                             //fetch total for previous month by su group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $prev_month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $prev_month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -113,7 +113,7 @@
                         <?php
                             //fetch selected month financial position
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -132,7 +132,7 @@
                         <?php
                             //fetch previous month financial position
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $prev_month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $prev_month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -157,7 +157,7 @@
                         <?php
                             //fetch total for current month by sub group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -176,7 +176,7 @@
                         <?php
                             //fetch total for previous month by su group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $prev_month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $prev_month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -209,7 +209,7 @@
                                 $total = 0;
                                 foreach($cashs as $csh){
                                     $get_psts = new selects();
-                                    $psts = $get_psts->fetch_monthly_pos('account', $csh->acn, $month, $year);
+                                    $psts = $get_psts->fetch_monthly_pos('account', $csh->acn, $month, $year, $store);
                                     if(gettype($psts) == 'array'){
                                         foreach($psts as $pst){
                                             $debits = $pst->debits;
@@ -237,7 +237,7 @@
                                 $total = 0;
                                 foreach($cashs as $csh){
                                     $get_psts = new selects();
-                                    $psts = $get_psts->fetch_monthly_pos('account', $csh->acn, $prev_month, $year);
+                                    $psts = $get_psts->fetch_monthly_pos('account', $csh->acn, $prev_month, $year, $store);
                                     if(gettype($psts) == 'array'){
                                         foreach($psts as $pst){
                                             $debits = $pst->debits;
@@ -274,7 +274,7 @@
                         <?php
                             //fetch selected month financial position
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -293,7 +293,7 @@
                         <?php
                             //fetch previous month financial position
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $prev_month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $prev_month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -323,7 +323,7 @@
                                 $total = 0;
                                 foreach($recs as $rec){
                                     $get_psts = new selects();
-                                    $psts = $get_psts->fetch_monthly_pos('account', $rec->acn, $month, $year);
+                                    $psts = $get_psts->fetch_monthly_pos('account', $rec->acn, $month, $year, $store);
                                     if(gettype($psts) == 'array'){
                                         foreach($psts as $pst){
                                             $debits = $pst->debits;
@@ -351,7 +351,7 @@
                                 $total = 0;
                                 foreach($recs as $rec){
                                     $get_psts = new selects();
-                                    $psts = $get_psts->fetch_monthly_pos('account', $rec->acn, $prev_month, $year);
+                                    $psts = $get_psts->fetch_monthly_pos('account', $rec->acn, $prev_month, $year, $store);
                                     if(gettype($psts) == 'array'){
                                         foreach($psts as $pst){
                                             $debits = $pst->debits;
@@ -388,7 +388,7 @@
                         <?php
                             //fetch selected month financial position
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -407,7 +407,7 @@
                         <?php
                             //fetch previous month financial position
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $prev_month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $prev_month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -442,7 +442,7 @@
                         <?php
                             //fetch selected month financial position
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -461,7 +461,7 @@
                         <?php
                             //fetch previous month financial position
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $prev_month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $prev_month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -487,7 +487,7 @@
                         <?php
                             //fetch total for current month by sub group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -506,7 +506,7 @@
                         <?php
                             //fetch total for previous month by su group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $prev_month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $prev_month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -529,7 +529,7 @@
                         <?php
                             //fetch total for current month by sub group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account_type', $group, $month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account_type', $group, $month, $year,$store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -548,7 +548,7 @@
                         <?php
                             //fetch total for previous month by su group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account_type', $group, $prev_month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account_type', $group, $prev_month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -596,7 +596,7 @@
                         <?php
                             //fetch selected month financial position
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -616,7 +616,7 @@
                         <?php
                             //fetch previous month financial position
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $prev_month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $prev_month, $year,$store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -642,7 +642,7 @@
                         <?php
                             //fetch total for current month by sub group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -662,7 +662,7 @@
                         <?php
                             //fetch total for previous month by su group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $prev_month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $prev_month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -691,7 +691,7 @@
                             $sub_group = 3;
                             //fetch total for current month by sub group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -712,7 +712,7 @@
                             //fetch total for previous month by su group
                             $sub_group = 3;
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $prev_month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $prev_month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -747,7 +747,7 @@
                         <?php
                             //fetch selected month financial position
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -767,7 +767,7 @@
                         <?php
                             //fetch previous month financial position
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $prev_month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $prev_month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -793,7 +793,7 @@
                         <?php
                             //fetch total for current month by sub group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -813,7 +813,7 @@
                         <?php
                             //fetch total for previous month by su group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $prev_month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $prev_month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -841,7 +841,7 @@
                             //fetch total for current month by sub group
                             $sub_group = 4;
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -861,7 +861,7 @@
                         <?php
                             //fetch total for previous month by su group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $prev_month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $prev_month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -896,7 +896,7 @@
                         <?php
                             //fetch selected month financial position
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -916,7 +916,7 @@
                         <?php
                             //fetch previous month financial position
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $prev_month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account', $detail->acn, $prev_month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -942,7 +942,7 @@
                         <?php
                             //fetch total for current month by sub group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -962,7 +962,7 @@
                         <?php
                             //fetch total for previous month by su group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $prev_month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('sub_group', $sub_group, $prev_month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -985,7 +985,7 @@
                         <?php
                             //fetch total for current month by sub group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account_type', $group, $month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account_type', $group, $month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -1009,7 +1009,7 @@
                         <?php
                             //fetch total for current month by sub group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account_type', $group, $prev_month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account_type', $group, $prev_month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -1035,7 +1035,7 @@
                         <?php
                             //fetch total for current month by sub group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account_type', $group, $month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account_type', $group, $month, $year, $store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -1052,7 +1052,7 @@
                             }
                             //fetch total for current month by sub group
                             $get_eqs = new selects();
-                            $eqs = $get_eqs->fetch_monthly_pos('account_type', $group2, $month, $year);
+                            $eqs = $get_eqs->fetch_monthly_pos('account_type', $group2, $month, $year, $store);
                             if(gettype($eqs) == 'array'){
                                 foreach($eqs as $eq){
                                     $eq_debit = $eq->debits;
@@ -1074,7 +1074,7 @@
                         <?php
                             //fetch total for current month by sub group
                             $get_pos = new selects();
-                            $rows = $get_pos->fetch_monthly_pos('account_type', $group, $prev_month, $year);
+                            $rows = $get_pos->fetch_monthly_pos('account_type', $group, $prev_month, $year,$store);
                             if(gettype($rows) == 'array'){
                                 foreach($rows as $row){
                                     $debit = $row->debits;
@@ -1091,7 +1091,7 @@
                             }
                             //fetch total for current month by sub group
                             $get_eqs = new selects();
-                            $eqs = $get_eqs->fetch_monthly_pos('account_type', $group2, $prev_month, $year);
+                            $eqs = $get_eqs->fetch_monthly_pos('account_type', $group2, $prev_month, $year, $store);
                             if(gettype($eqs) == 'array'){
                                 foreach($eqs as $eq){
                                     $eq_debit = $eq->debits;

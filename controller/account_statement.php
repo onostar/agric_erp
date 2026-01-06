@@ -77,7 +77,7 @@
                     <?php
                         //get transaction history
                         $get_transactions = new selects();
-                        $details = $get_transactions->fetch_details_2dateCon('transactions', 'account', 'date(post_date)', $from, $to,  $customer);
+                        $details = $get_transactions->fetch_details_2date2Con('transactions', 'date(post_date)', $from, $to, 'account', $customer,'store', $store);
                         $n = 1;
                         if(gettype($details) === 'array'){
                         foreach($details as $detail){
@@ -124,7 +124,7 @@
                             <?php
                                 //get total debit
                                 $get_totals = new selects();
-                                $totals = $get_totals->fetch_sum_2dateCond('transactions', 'debit', 'account', 'date(post_date)', $from, $to, $customer);
+                                $totals = $get_totals->fetch_sum_2date2Cond('transactions', 'debit', 'date(post_date)','account', 'store', $from, $to, $customer, $store);
                                 foreach($totals as $tot){
                                     echo number_format($tot->total, 2);
                                 }
@@ -134,7 +134,7 @@
                             <?php
                                 //get total credit
                                 $get_totals = new selects();
-                                $totals = $get_totals->fetch_sum_2dateCond('transactions', 'credit', 'account', 'date(post_date)', $from, $to, $customer);
+                                $totals = $get_totals->fetch_sum_2date2Cond('transactions', 'credit', 'date(post_date)','account', 'store', $from, $to, $customer, $store);
                                 foreach($totals as $tot){
                                     echo number_format($tot->total, 2);
                                 }

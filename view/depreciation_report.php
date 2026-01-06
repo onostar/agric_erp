@@ -13,7 +13,7 @@
             <!-- <form method="POST"> -->
             <section>
                 <label for="">Filter by Year</label><br>
-                <select name="dep_year" id="dep_year" required onchange="getDepreciationYear(this.value)">
+                <select name="dep_year" id="dep_year" required onchange="getDepreciationYear(this.value, '<?php echo $store?>')">
                     <option value="">Select Year</option>
                     <!-- get stores -->
                     <?php
@@ -67,7 +67,7 @@
             <?php
                 $n = 1;
                 $get_users = new selects();
-                $details = $get_users->fetch_details_yearlyGroup('depreciation', 'post_date', 'asset');
+                $details = $get_users->fetch_details_yearlyGroup('depreciation', 'post_date', $store,'asset');
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
                     $get_asset = new selects();

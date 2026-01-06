@@ -78,7 +78,7 @@
                 <tbody>
                     <?php
                         //get transaction history
-                        $details = $get_details->fetch_details_dateGro1con('purchases', 'date(post_date)', $from, $to, 'vendor', $customer, 'invoice');
+                        $details = $get_details->fetch_details_dateGro2con('purchases', 'date(post_date)', $from, $to, 'vendor', $customer, 'store', $store, 'invoice');
                         $n = 1;
                         if(gettype($details) === 'array'){
                         foreach($details as $detail){
@@ -116,7 +116,7 @@
                     echo "<p class='no_result'>'$details'</p>";
                 }
                 // get sum
-                $amounts = $get_details->fetch_sum_2col2date1con('purchases', 'quantity', 'cost_price', 'date(post_date)', $from, $to, 'vendor', $customer);
+                $amounts = $get_details->fetch_sum_2col2date2con('purchases', 'quantity', 'cost_price', 'date(post_date)', $from, $to, 'vendor', $customer, 'store', $store);
                 foreach($amounts as $amount){
                     $paid_amount = $amount->total;
                 }
@@ -125,11 +125,11 @@
                     
                 //get total logistics
                 $get_log = new selects();
-                $logs = $get_log->fetch_sum_2date1CondGr('purchases', 'waybill', 'vendor', 'date(post_date)', $from, $to, $customer, 'invoice');
+                $logs = $get_log->fetch_sum_2date2CondGr('purchases', 'waybill', 'vendor', 'store', 'date(post_date)', $from, $to, $customer, $store, 'invoice');
                 foreach($logs as $log){
                     $logistics = $log->total;
                 }
-                echo "<p class='total_amount' style='color:#222'>Total Logistics: ₦".number_format($logistics, 2)."</p>";
+                // echo "<p class='total_amount' style='color:#222'>Total Logistics: ₦".number_format($logistics, 2)."</p>";
             ?>
         </div>
         <div class="all_credit allResults"style="border-left:1px solid #cdcdcd;">
@@ -147,7 +147,7 @@
                 <tbody>
                     <?php
                          //get deposit history
-                        $details = $get_details->fetch_details_2dateConOrder('vendor_payments', 'vendor', 'date(post_date)', $from, $to,  $customer, 'post_date');
+                        $details = $get_details->fetch_details_2date2ConOrder('vendor_payments', 'vendor', 'store', 'date(post_date)', $from, $to,  $customer, $store, 'post_date');
                         $n = 1;
                         if(gettype($details) === 'array'){
                         foreach($details as $detail){
@@ -172,7 +172,7 @@
                     echo "<p class='no_result'>'$details'</p>";
                 }
                  // get sum of deposits
-                $credits = $get_details->fetch_sum_single('vendor_payments', 'amount', 'vendor', $customer);
+                $credits = $get_details->fetch_sum_double('vendor_payments', 'amount', 'vendor', $customer, 'store', $store);
                 foreach($credits as $credit){
                     $deposits = $credit->total;
                 }

@@ -2,7 +2,7 @@
 session_start();
     include "../classes/dbh.php";
     include "../classes/select.php";
-   
+    $store = $_SESSION['store_id'];
 
     //get user
     if(isset($_SESSION['user'])){
@@ -37,7 +37,7 @@ session_start();
             <?php
                 $n = 1;
                 $get_items = new selects();
-                $details = $get_items->fetch_details_cond('loans', 'trans_type', 'receiving');
+                $details = $get_items->fetch_details_2cond('loans', 'trans_type', 'store', 'receiving', $store);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
