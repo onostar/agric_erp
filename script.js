@@ -10150,3 +10150,57 @@ function closeWork(staff){
           return;
      }
 }
+
+//upload document
+function uploadDocument(){
+     let customer_id = document.getElementById("customer_id").value;
+     let doc_type = document.getElementById("doc_type").value;
+     let title = document.getElementById("title").value;
+     let document_upload = document.getElementById("document_upload").value;
+     if(doc_type.length == 0 || doc_type.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select document type!");
+          $("#doc_type").focus();
+          return;
+     }else if(title.length == 0 || title.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input document name or title");
+          $("#title").focus();
+          return;
+     }else if(document_upload.length == 0 || document_upload.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please upload document");
+          $("#document_upload").focus();
+          return;
+     
+     }else{
+          var fd = new FormData();
+          var files = $('#document_upload')[0].files[0];
+          fd.append('document_upload', files);
+          fd.append('customer_id', customer_id);
+          fd.append('doc_type', doc_type);
+          fd.append('title', title);
+          
+          $.ajax({
+               url: '../controller/upload_document.php',
+               type: 'post',
+               data: fd,
+               contentType: false,
+               processData: false,
+               beforeSend : function(){
+                    $(".info").html("<div class='processing'><div class='loader'></div></div>");
+
+               },
+               success: function(response){
+                    if(response != 0){
+                    $(".info").html(response); 
+                    document.qyerySelector(".info").scrollIntoView({behavior: "smooth"});
+                    }else{
+                         alert('file not uploaded');
+                         return
+                    }
+               },
+          });
+     }
+     $("#document_upload").val('');
+     $("#doc_type").val('');
+     $("#title").val('');
+     $("#doc_type").focus();
+}

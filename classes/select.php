@@ -2717,6 +2717,19 @@ public function fetch_total_working_days_month($date){
                 return $rows;
             }
         }
+        //fetch monthly briquette production
+        public function fetch_monthly_briquette($store){
+            $get_user = $this->connectdb()->prepare(" SELECT COALESCE(SUM(total_leave_cost), 0) +COALESCE(SUM(total_peel_cost), 0) +COALESCE(SUM(total_crown_cost), 0) AS total FROM briquette_production WHERE store = :store AND MONTH(date_produced) = MONTH(CURDATE()) AND YEAR(date_produced) = YEAR(CURDATE())");
+            $get_user->bindValue("store", $store);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch sum with current month and 1 negative condition
         public function fetch_sum_curMonth1con1neg($table, $column1, $column2, $con, $value, $negCon, $negValue){
             $get_user = $this->connectdb()->prepare("SELECT SUM($column1) AS total FROM $table WHERE $con = :$con AND $negCon != :$negCon AND MONTH($column2) = MONTH(CURDATE()) AND YEAR($column2) = YEAR(CURDATE())");
@@ -2811,7 +2824,7 @@ public function fetch_total_working_days_month($date){
                 return $rows;
             }
         }
-        
+
         //fetch sum for a specific month and year and a condition
          public function fetch_sum_monthYear2Cond($table, $column1, $column2, $month, $year, $con, $value, $con2, $val2){
             $get_user = $this->connectdb()->prepare("SELECT SUM($column1) as total FROM $table WHERE MONTH($column2) = $month AND YEAR($column2) = $year AND $con = :$con AND $con2 = :$con2");

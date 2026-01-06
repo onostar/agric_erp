@@ -61,20 +61,29 @@
                                 $inputs_total = 0;
                             }
                             $farm_production = $labour_total + $inputs_total;
-                            $prds = $get_prds->fetch_sum_2colCurDate1Con('production', 'raw_quantity', 'unit_cost', 'date(post_date)', 'store', $store_id);
+                            /* $prds = $get_prds->fetch_sum_2colCurDate1Con('production', 'raw_quantity', 'unit_cost', 'date(post_date)', 'store', $store_id);
                             if(is_array($prds)){
                                 foreach($prds as $prd){
                                     $production = $prd->total;
                                 }
                             }else{
                                 $production = 0;
-                            }
-                            $total_production = $farm_production + $production;
-                            echo "₦".number_format($total_production, 2);
+                            } */
+                            // $total_production = $farm_production + $production;
+                            echo "₦".number_format($farm_production, 2);
                            
+                        }else if($store_id == "10"){
+                            $prds = $get_prds->fetch_sum_curMonth1con('concentrate_production', 'total_pineapple_cost', 'date_produced', 'store', $store_id);
+                            if(gettype($prds) === 'array'){
+                                foreach($prds as $prd){
+                                    echo "₦".number_format($prd->total, 2);
+                                }
+                            }
+                            if(gettype($prds) == "string"){
+                                echo "₦0.00";
+                            }
                         }else{
-                            $get_prds = new selects();
-                            $prds = $get_prds->fetch_sum_2colCurDate1Con('production', 'raw_quantity', 'unit_cost', 'date(post_date)', 'store', $store_id);
+                            $prds = $get_prds->fetch_monthly_briquette($store_id);
                             if(gettype($prds) === 'array'){
                                 foreach($prds as $prd){
                                     echo "₦".number_format($prd->total, 2);
