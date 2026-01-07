@@ -179,19 +179,89 @@
         
     </div>
     <?php
-        }else{
+        }else if($designation === "HR MANAGER"){
     ?>
-    <!-- <div id="dashboard">
-    <div class="cards" id="card0">
-            <a href="javascript:void(0)" class="page_navs">
+    <div id="dashboard">
+        <div class="cards" id="card1">
+            <a href="javascript:void(0)" onclick="showPage('attendance_report.php')" class="page_navs">
                 <div class="infos">
-                    <p><i class="fas fa-users"></i> Customers</p>
+                    <p><i class="fas fa-users"></i> Staff Present</p>
                     <p>
                     <?php
                         //get total customers
                        $get_cus = new selects();
-                       $customers =  $get_cus->fetch_count_2condDateGro('sales', 'sales_status', 2, 'posted_by', $user_id, 'post_date', 'invoice');
-                       echo $customers;
+                        $staffs =  $get_cus->fetch_staff_present($store_id);
+                        //get total staff
+                        $all_staff = $get_cus->fetch_count_2cond('staffs', 'store', $store_id, 'staff_status', 0);
+                        echo $staffs." / ". $all_staff;
+                    ?>
+                    </p>
+                </div>
+            </a>
+        </div> 
+        <div class="cards" id="card4">
+            <a href="javascript:void(0)" >
+                <div class="infos">
+                    <p><i class="fas fa-user-xmark"></i> Absent Today</p>
+                    <p>
+                    <?php
+                         //get total customers
+                       $get_cus = new selects();
+                        $staffs =  $get_cus->fetch_staff_present($store_id);
+                        //get total staff
+                        $all_staff = $get_cus->fetch_count_2cond('staffs', 'store', $store_id, 'staff_status', 0);
+                        $absent = $all_staff - $staffs;
+                        echo $absent;
+                    ?>
+                    </p>
+                </div>
+            </a>
+        </div> 
+        <div class="cards" id="card0">
+            <a href="javascript:void(0)" onclick="showPage('approve_leave.php')">
+                <div class="infos">
+                    <p><i class="fas fa-calendar-minus"></i> Leave Request</p>
+                    <p>
+                    <?php
+                        $get_sales = new selects();
+                        $leaves = $get_sales->fetch_count_2cond('leaves', 'store', $store_id, 'leave_status', 0);
+                        echo $leaves." Pending";
+                    ?>
+                    </p>
+                </div>
+            </a>
+        </div> 
+        
+        <div class="cards" id="card2" style="background: var(--moreColor)">
+        <a href="javascript:void(0)" onclick="showPage('attendance_report.php')"class="page_navs">
+                <div class="infos">
+                    <p><i class="fas fa-money-check"></i> Late arrivals</p>
+                    <p>
+                    <?php
+                        $get_sales = new selects();
+                        $late = $get_sales->fetch_late_arrivals($store_id);
+                        echo $late." today";
+                    ?>
+                    </p>
+                </div>
+            </a>
+        </div> 
+            
+    </div>
+    <?php
+        }else{
+    ?>
+    <div id="dashboard">
+    <div class="cards" id="card1">
+            <a href="javascript:void(0)" class="page_navs">
+                <div class="infos">
+                    <p><i class="fas fa-briefcase"></i> Days at Work</p>
+                    <p>
+                    <?php
+                        //get total customers
+                       $get_cus = new selects();
+                       $workdays =  $get_cus->fetch_staff_work_days($staff_id);
+                       echo $workdays." day(s)";
                     ?>
                     </p>
                 </div>
@@ -200,19 +270,23 @@
         <div class="cards" id="card4">
             <a href="javascript:void(0)" onclick="showPage('raw_material_balance.php')">
                 <div class="infos">
-                    <p><i class="fas fa-coins"></i> Raw materials</p>
+                    <p><i class="fas fa-calendar-minus"></i> Leave Request</p>
                     <p>
                     <?php
                         $get_sales = new selects();
-                        $rows = $get_sales->fetch_sum_double('inventory', 'quantity', 'store', $store_id, 'item_type', 'Raw material');
-                        if(gettype($rows) == 'array'){
+                        $rows = $get_sales->fetch_details_cond('leaves', 'employee', $staff_id);
+                        if(is_array($rows)){
                             foreach($rows as $row){
-                            echo $row->total."kg";
-
+                                if($row->leave_status == 0 && $row->returned == NULL){
+                                    echo "Pending";
+                                }else if($row->leave_status == 1 && $row->returned == NULL){
+                                    echo "Approved";
+                                }else if($row->leave_status == -1 && $row->returned == NULL){
+                                    echo "Declined";
+                                }
                             }
-                        }
-                        if(gettype($rows) == 'string'){
-                            echo "0kg";
+                        }else{
+                            echo "No request";
                         }
                     ?>
                     </p>
@@ -264,7 +338,7 @@
             </a>
         </div> 
             
-    </div> -->
+    </div>
     <?php }?>
 </div>
 <?php 
@@ -383,7 +457,7 @@
     <hr>
     <div class="displays allResults" id="check_out_guest">
        
-        <h3 style="background:var(--otherColor)">My Daily transactions</h3>
+        <h3 style="background:var(--otherColor)">My Daily Tasks</h3>
         <table id="check_out_table" class="searchTable" style="width:100%;">
             <thead>
                 <tr style="background:var(--moreColor)">

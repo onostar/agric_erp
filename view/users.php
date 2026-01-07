@@ -21,11 +21,14 @@ date_default_timezone_set("Africa/Lagos");
         if(is_array($stfs) || is_object($stfs)){
             foreach($stfs as $stf){
                 $staff_id = $stf->staff_id;
-
+                $design = $stf->designation;
             }
-
+            //get designation
+            $desig = $fetch_user->fetch_details_group('designations', 'designation', 'designation_id', $design);
+            $designation = $desig->designation;
         }else{
             $staff_id = 0;
+            $designation = $role;
         }
         $_SESSION['user_id'] = $user_id;
         $_SESSION['role'] = $role;
@@ -115,13 +118,13 @@ date_default_timezone_set("Africa/Lagos");
             </h1>
             <h2 style="margin-left:50px!important"><?php echo $store?></h2>
             <!-- <div class="other_menu">
-                <a href="#" title="Our Gallery"><?php echo ucwords($role);?></a>
+                <a href="#" title="Our Gallery"><?php echo ucwords($designation);?></a>
             </div> -->
             <!-- <a href="#" title="current store" class="other_menu"><?php echo ucwords($store);?></a> -->
 
             <div class="login">
                 
-                <button id="loginDiv"><i class="far fa-user"></i> <?php echo ucwords($fullname);?> <i class="fas fa-chevron-down"></i><br><p><?php echo ucwords($role);?></p></button>
+                <button id="loginDiv"><i class="far fa-user"></i> <?php echo ucwords($fullname);?> <i class="fas fa-chevron-down"></i><br><p><?php echo ucwords($designation);?></p></button>
                 
                 <div class="login_option">
                     <div>

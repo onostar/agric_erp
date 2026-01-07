@@ -455,6 +455,31 @@
                 return $rows;
             }
         }
+        //fetch total staffs present at work
+        public function fetch_staff_present($store){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM attendance WHERE store = :store AND DATE(attendance_date) = CURDATE()");
+            $get_user->bindValue("store", $store);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                return $get_user->rowCount();
+            }else{
+                
+                return 0;
+            }
+        }
+        //fetch total staffs late at work
+        public function fetch_late_arrivals($store){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM attendance WHERE store = :store AND DATE(attendance_date) = CURDATE() AND time_in > '8:05:00'");
+            $get_user->bindValue("store", $store);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                return $get_user->rowCount();
+            }else{
+                
+                return 0;
+            }
+        }
+       
         //check if staff already marked attendance for the day
         public function check_attendance($staff){
             $get_user = $this->connectdb()->prepare("SELECT * FROM attendance WHERE staff = :staff AND DATE(attendance_date) = CURDATE()");
