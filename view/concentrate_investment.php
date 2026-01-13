@@ -62,28 +62,38 @@
                 <div class="data" style="width:48%">
                     <label for="payment_duration">Currency</label>
                     <select name="currency" id="currency" onchange="showInvestment()">
-                        <option value="" selected disabled>Select Currency</option>
-                        <option value="Dollar">Dollar ($)</option>
+                        <
+                        <option value="Dollar" selected>Dollar ($)</option>
                         <option value="Naira">Naira (₦)</option>
                         
                     </select>
                 </div>
-            </div>
+            <!-- </div> -->
             
-            <div class="inputs" id="complete_invest">
+            <!-- <div class="inputs" id="complete_invest"> -->
                 <div class="data" style="width:48%">
-                    <input type="hidden" name="rate" id="rate" value="<?php echo $rate?>">
-                    <label for="">Exchange Rate</label>
-                    <input type="text" id="exchange_rate" name="exchange_rate" readonly style="background:#fdfdfd; color:#222">
+                    <label for="">Rate per Unit ($)</label>
+                    <input type="text" id="rate" name="rate" style="background:#fdfdfd; color:#222" value="2000.00" readonly>
                 </div>
+                <div class="data" style="width:48%" id="exchange">
+                    <label for="">Exchange Rate</label>
+                    <input type="text" id="exchange_rate" name="exchange_rate" style="background:#fdfdfd; color:#222" value="0.00">
+                </div>
+                
                 <div class="data" style="width:48%">
-                    <label for="amount" id="amount_currency">Amount</label>
-                    <input type="number" id="amount" name="amount" value="0.00" required oninput="getTotalRate()">
+                    
+                    <label for="">Units</label>
+                    <input type="number" id="units" name="units" value="1" style="background:#fdfdfd; color:#222" oninput="getTotalRate()">
+                </div>
+               
+                <div class="data" style="width:48%">
+                    <label for="amount" id="amount_currency">Amount in Dollars ($)</label>
+                    <input type="number" id="amount" name="amount" value="2000.00" required readonly>
                 </div>
                 <div class="data" style="width:48%; margin:5px 0">
-                    <label for="total_in_naira">Total Amount in Naira (₦)</label>
-                    <input type="text" id="total_in_naira" name="total_in_naira" style="background:#fff; color:green" value="0.00" readonly>
-                    <input type="hidden" id="total_naira" name="total_naira">
+                    <label for="total_in_dollar">Value in Dollars ($)</label>
+                    <input type="text" id="total_in_dollar" name="total_in_dollar" style="background:#fff; color:green" value="2,000.00" readonly>
+                    <input type="hidden" id="total_dollar" name="total_dollar" value="2000.00">
                 </div>
                 <div class="data" style="width:auto; margin:5px 0">
                     <button type="button" style="background:var(--tertiaryColor)" id="change_price" name="change_price" onclick="invest()">Save Investment <i class="fas fa-save"></i></button>

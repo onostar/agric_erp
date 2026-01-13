@@ -10,21 +10,23 @@ $customer = htmlspecialchars(stripslashes($_POST['customer']));
 $duration = htmlspecialchars(stripslashes($_POST['duration']));
 $amount = htmlspecialchars(stripslashes($_POST['amount']));
 $currency = htmlspecialchars(stripslashes($_POST['currency']));
-$total_naira = htmlspecialchars(stripslashes($_POST['total_naira']));
-$rate = htmlspecialchars(stripslashes($_POST['rate']));
-if($currency == "Dollar"){
+$total_dollar = htmlspecialchars(stripslashes($_POST['total_dollar']));
+$exchange_rate = htmlspecialchars(stripslashes($_POST['exchange_rate']));
+$units = htmlspecialchars(stripslashes($_POST['units']));
+/* if($currency == "Dollar"){
     $exchange_rate = $rate;
 }else{
     $exchange_rate = 0;
-}
+} */
 
 $data = array(
     'customer' => $customer,
     'duration' => $duration,
     'currency' => $currency,
     'amount' => $amount,
-    'total_in_naira' => $total_naira,
-    'exchange_rate' => $rate,
+    'total_in_dollar' => $total_dollar,
+    'exchange_rate' => $exchange_rate,
+    'units' => $units,
     'posted_by' => $user,
     'post_date' => $date,
     'store' => $store
@@ -42,7 +44,7 @@ $get_details = new selects();
 //check if there is an exisitng unpaid investment
 $checks = $get_details->fetch_count_2cond('investments', 'customer', $customer, 'contract_status', 0);
 if($checks > 0){
-    echo "<script>The selected Client has a pending investment yet to be activated! Kindly make proceed to payment in order to activate the pending investment before proceeding to start a new investment</script>";
+    echo "<script>The selected Client has a pending investment yet to be activated! Kindly proceed to payment in order to activate the pending investment before proceeding to start a new investment</script>";
     echo "<div class='success'><p style='background:red'>The selected Client has a pending investment yet to be activated! Kindly make proceed to payment in order to activate the pending investment before proceeding to start a new investment! <i class='fas fa-thumbs-down'></i></p></div>";
     exit;
 }else{
@@ -63,8 +65,8 @@ if($currency == "Dollar"){
 
     // formatting
     $amount_fmt = number_format($amount, 2);
-    $rate_fmt = number_format($rate, 2);
-    $due_fmt = number_format($total_naira, 2);
+    $rate_fmt = number_format($exchange_rate, 2);
+    $due_fmt = number_format($total_dollar, 2);
 
     // build  message
     $message = "<p>Dear $client,</p>
@@ -73,8 +75,9 @@ if($currency == "Dollar"){
 
     <h3 style='color:green;'>Investment Summary</h3>
     <ul>
-        <li><strong>Investment Amount:</strong> $icon$amount_fmt</li>
-        <li><strong>Total Value in Naira:</strong> ₦$due_fmt</li>
+        <li><strong>Investment Units:</strong> $units unit(s)</li>
+        <li><strong>Investment Value:</strong> $icon$amount_fmt</li>
+        <li><strong>Total Value in Dollar:</strong> ₦$due_fmt</li>
         <li><strong>Contract Duration:</strong> $duration Years</li>
     </ul>
 
@@ -116,13 +119,13 @@ if($currency == "Dollar"){
         $mail->IsSMTP();
         $mail->SMTPAuth = true; 
         $mail->SMTPSecure = 'ssl'; 
-        $mail->Host = 'www.dorthprosuite.com';
+        $mail->Host = 'www.davidorlahfarms.com';
         $mail->Port = 465; 
-        $mail->Username = 'admin@dorthprosuite.com';
-        $mail->Password = 'yMcmb@her0123!';   
+        $mail->Username = 'info@davidorlahfarms.com';
+        $mail->Password = 'Ínfo@Dfarms@1125';   
 
         $mail->IsHTML(true);
-        $mail->From="admin@dorthprosuite.com";
+        $mail->From="info@davidorlahfarms.com";
         $mail->FromName=$from_name;
         $mail->Sender=$from;
         $mail->AddReplyTo($from, $from_name);
@@ -138,7 +141,7 @@ if($currency == "Dollar"){
     }
 
     $to = $customer_email;
-    $from = 'admin@dorthprosuite.com';
+    $from = 'info@davidorlahfarms.com';
     $from_name = "Davidorlah Nigeria Limited";
     $subj = 'Your Concentrate Investment Contract Has Been Created';
     $msg = "<div>$message</div>";

@@ -8856,7 +8856,7 @@ function addTaxRule(){
           alert("Maximum income must be greater than minimum income");
           $("#max_income").focus();
           return;
-     }else if(parseFloat(min_income) <= 0 || parseFloat(max_income) <= 0 || parseFloat(tax_rate) <= 0){
+     }else if(parseFloat(min_income) < 0 || parseFloat(max_income) <= 0 || parseFloat(tax_rate) < 0){
           alert("Values cannot be less than or equal to zero");
           $("#max_income").focus();
           return;
@@ -8904,7 +8904,7 @@ function editTaxRule(){
           alert("Maximum income must be greater than minimum income");
           $("#max_income").focus();
           return;
-     }else if(parseFloat(min_income) <= 0 || parseFloat(max_income) <= 0 || parseFloat(tax_rate) <= 0){
+     }else if(parseFloat(min_income) < 0 || parseFloat(max_income) <= 0 || parseFloat(tax_rate) < 0){
           alert("Values cannot be less than or equal to zero");
           $("#max_income").focus();
           return;
@@ -9498,9 +9498,7 @@ function showInvestment(){
      let duration = document.getElementById("duration").value;
      let customer = document.getElementById("customer").value;
      let label = document.getElementById("amount_currency");
-     let complete_invest = document.getElementById("complete_invest");
-     let exchange_rate = document.getElementById("exchange_rate");
-     let rate = document.getElementById("rate").value;
+     let exchange = document.getElementById("exchange");
      if(!customer){
           alert("Please select an investor");
           $("#item").focus();
@@ -9511,20 +9509,28 @@ function showInvestment(){
           $("#duration").focus();
           $("#currency").val('');
           return;
+    
      }else{
           let icon;
           if(currency == "Dollar"){
                icon = "$";
-               exchange_rate.value = "₦"+rate.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+"/$1.00";
+               $("#amount").val("2000");
+               $("#total_dollar").val("2000");
+               $("#total_in_dollar").val("2,000");
+               label.innerText = "Amount in "+currency+" ("+icon+")";
+               exchange.style.display = "none";
+               $("#units").val(1);
           }else{
                icon = "₦"
-               exchange_rate.value = 0;
+               label.innerText = "Amount in "+currency+" ("+icon+")";
+               $("#amount").val("0");
+               $("#total_dollar").val("0");
+               $("#total_in_dollar").val("0");
+               $("#units").val(0);
+               exchange.style.display = "block";
+
           }
-          complete_invest.style.display = "flex";
-          label.innerText = "Amount in "+currency+" ("+icon+")";
-          $("#amount").val("0");
-          $("#total_naira").val("0");
-          $("#total_in_naira").val("0");
+          
      }
 }
 
@@ -9593,26 +9599,33 @@ function editExchangeRate(){
 //get total due based on exchange rate and amount entered
 function getTotalRate(){
      let currency = document.getElementById("currency").value;
-     let rate = document.getElementById("rate").value;
-     let amount = parseFloat(document.getElementById("amount")?.value || 0);
-     let total_naira = document.getElementById("total_naira");
-     let total_in_naira = document.getElementById("total_in_naira");
+     let units = document.getElementById("units").value;
+     let rate = parseFloat(document.getElementById("rate").value);
+     let exchange_rate = document.getElementById("exchange_rate").value;
+     let amount = document.getElementById("amount");
+     let total_dollar = document.getElementById("total_dollar");
+     let total_in_dollar = document.getElementById("total_in_dollar");
      if(!currency){
           alert("Please Select Currency");
           $("#currency").focus();
           return;
-     }else if(currency == "Dollar" && rate == 0){
-          alert("No dollar exchange rate found! Please set-up exchange rate before proceeding");
+     }else if(currency == "Naira" && exchange_rate == 0){
+          alert("Please set exchange rate for Naira transaction");
+          $("#exchange_rate").focus();
           return;
      }else{
           let total = 0;
-          if(currency == "Dollar"){
-               total = rate * amount;
+          if(currency == "Naira"){
+
+               let rate_total = exchange_rate * rate;
+               total = rate_total * units;
+               amount.value = total;
           }else{
-               total = amount;
+               total = rate * units;
+               amount.value = total;
           }
-          total_naira.value = total;
-          total_in_naira.value = total.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          total_dollar.value = rate * units;
+          total_in_dollar.value = rate * units.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
      }
 }
 
@@ -9621,9 +9634,10 @@ function invest(){
      let customer = document.getElementById("customer").value;
      let duration = document.getElementById("duration").value;
      let currency = document.getElementById("currency").value;
-     let rate = document.getElementById("rate")?.value || 0;
+     let exchange_rate = document.getElementById("exchange_rate")?.value || 0;
      let amount = document.getElementById("amount").value;
-     let total_naira = document.getElementById("total_naira").value;
+     let total_dollar = document.getElementById("total_dollar").value;
+     let units = document.getElementById("units").value;
      if(customer.length == 0 || customer.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please select client!");
           $("#item").focus();
@@ -9641,13 +9655,17 @@ function invest(){
           alert("Please input amount invested!");
           $("#amount").focus();
           return;
+     }else if(!units || parseFloat(units) <= 0){
+          alert("Please input amount invested!");
+          $("#amount").focus();
+          return;
      }else{
           let confirm_inv = confirm("Are you sure you want to start this investment?", "");
           if(confirm_inv){
                $.ajax({
                     type : "POST",
                     url : "../controller/start_investment.php",
-                    data : {customer:customer, duration:duration, rate:rate, amount:amount, total_naira:total_naira,currency:currency},
+                    data : {customer:customer, duration:duration, exchange_rate:exchange_rate, amount:amount, total_dollar:total_dollar,currency:currency,units:units},
                     beforeSend: function(){
                          $("#concentrates").html("<div class='processing'><div class='loader'></div></div>");
                     },

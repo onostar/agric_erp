@@ -268,7 +268,7 @@
             </a>
         </div> 
         <div class="cards" id="card4">
-            <a href="javascript:void(0)" onclick="showPage('raw_material_balance.php')">
+            <a href="javascript:void(0)" >
                 <div class="infos">
                     <p><i class="fas fa-calendar-minus"></i> Leave Request</p>
                     <p>
@@ -294,7 +294,7 @@
             </a>
         </div> 
         <div class="cards" id="card3">
-            <a href="javascript:void(0)" onclick="showPage('raw_material_balance.php')"class="page_navs">
+            <a href="javascript:void(0)" class="page_navs">
                 <div class="infos">
                     <p><i class="fas fa-money-check"></i> Products</p>
                     <p>
@@ -316,7 +316,7 @@
             </a>
         </div> 
         <div class="cards" id="card2" style="background: var(--moreColor)">
-        <a href="javascript:void(0)" onclick="showPage('raw_material_balance.php')"class="page_navs">
+        <a href="javascript:void(0)" class="page_navs">
                 <div class="infos">
                     <p><i class="fas fa-money-check"></i> Consumables</p>
                     <p>
