@@ -32,9 +32,9 @@
                 <td>Investment No.</td>
                 <td>Currency</td>
                 <td>Amount</td>
-                <td>Value in Naira (NGN)</td>
-                <td>Amount Paid (NGN)</td>
-                <td>Amount Due (NGN)</td>
+                <td>Value in USD ($)</td>
+                <td>Amount Paid</td>
+                <td>Amount Due</td>
                 <td></td>
             </tr>
         </thead>
@@ -42,7 +42,7 @@
             <?php
                 $n = 1;
                 $get_details = new selects();
-                $details = $get_details->fetch_details_condOrder('investments', 'contract_status', 0, 'post_date');
+                $details = $get_details->fetch_pending_investment('investments', 'contract_status', 0, 'post_date');
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
@@ -68,11 +68,11 @@
                 <?php }else{?>
                 <td style="color:var(--otherColor)"><?php echo "₦".number_format($detail->amount, 2);?></td>
                 <?php }?>
-                <td style="color:var(--otherColor)"><?php echo "₦".number_format($detail->total_in_naira, 2);?></td>
+                <td style="color:var(--otherColor)"><?php echo "₦".number_format($detail->total_in_dollar, 2);?></td>
                 <td style="color:green">
                     <?php
                          //total paid
-                       $paids = $get_details->fetch_sum_single('investment_payments', 'amount_in_naira', 'investment', $detail->investment_id);
+                       $paids = $get_details->fetch_sum_single('investment_payments', 'amount', 'investment', $detail->investment_id);
                        if(is_array($paids)){
                            foreach($paids as $paid){
                                $total_paid = $paid->total;
@@ -80,14 +80,22 @@
                         }else{
                             $total_paid = 0;
                         }
-                        echo "₦".number_format($total_paid, 2);
+                        if($detail->currency == "Dollar"){
+                            echo "$".number_format($total_paid, 2);
+                        }else{
+                            echo "₦".number_format($total_paid, 2);
+                        }
                     ?>
                 </td>
                 <td style="color:red">
                     <?php 
                        
-                        $debt = $detail->total_in_naira - $total_paid;
-                        echo "₦".number_format($debt, 2);
+                         $debt = $detail->amount - $total_paid;
+                        if($detail->currency == "Dollar"){
+                            echo "$".number_format($debt, 2);
+                        }else{
+                            echo "₦".number_format($debt, 2);
+                        }
                     ?>
                 </td>
                 

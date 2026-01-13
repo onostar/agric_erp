@@ -38,10 +38,11 @@
         //get  investment details
         $lns = $get_details->fetch_details_cond('investments', 'investment_id', $investment);
         foreach($lns as $lns){
-            $amount_due = $lns->total_in_naira;
+            $amount_due = $lns->amount;
+            $currency = $lns->currency;
         }
        //get total paid
-       $ttls = $get_details->fetch_sum_single('investment_payments', 'amount_in_naira', 'investment', $investment);
+       $ttls = $get_details->fetch_sum_single('investment_payments', 'amount', 'investment', $investment);
        if(gettype($ttls) == 'array'){
             foreach($ttls as $ttl){
                 $total_paid = $ttl->total;
@@ -78,7 +79,11 @@
                         <input type="date" name="trans_date" id="trans_date" value="<?php echo date('Y-m-d')?>">
                     </div>
                     <div class="data" style="width:50%; margin:5px 0">
-                        <label for="amount"> Amount paid (NGN)</label>
+                        <?php if($currency == "Dollar"){?>
+                        <label for="amount"> Amount paid in USD</label>
+                        <?php }else{?>
+                        <label for="amount"> Amount paid in Naira</label>
+                        <?php }?>
                         <input type="text" name="amount" id="amount" required placeholder="0.00">
                     </div>
                     <div class="data" style="width:45%">
@@ -121,6 +126,14 @@
                         <label for="customer_name"><span class="ledger" style="color:#fff">Cr. Ledger</span> (Client):</label>
                         <input type="text" value="<?php echo $customer?>">
                     </div>
+                     <div class="data">
+                        <label for="balance">Payment Due:</label>
+                        <?php if($currency == "Dollar"){?>
+                        <input type="text" value="<?php echo "$".number_format($debt, 2)?>" style="color:red;">
+                        <?php }else{?>
+                        <input type="text" value="<?php echo "₦".number_format($debt, 2)?>" style="color:red;">
+                        <?php }?>
+                    </div>
                     <?php if($balance >= 0){?>
                     <div class="data">
                         <label for="balance">Account balance:</label>
@@ -132,10 +145,7 @@
                         <input type="text" value="<?php echo "₦".number_format(0, 2)?>" style="color:green;">
                     </div>
                     <?php }?>
-                    <div class="data">
-                        <label for="balance">Payment Due:</label>
-                        <input type="text" value="<?php echo "₦".number_format($debt, 2)?>" style="color:red;">
-                    </div>
+                   
                 </div>
             </section> 
         </div>

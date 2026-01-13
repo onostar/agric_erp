@@ -21,8 +21,9 @@ if(isset($_GET['receipt'])){
         $pay_mode = $pay->payment_mode;
         $paid_date = $pay->trx_date;
         $post_date = $pay->post_date;
-        // $amount = $pay->amount;
-        $amount_naira = $pay->amount_in_naira;
+        $amount_paid = $pay->amount;
+        // $currency = $pay->currency;
+        // $amount_naira = $pay->amount_in_naira;
         $investment = $pay->investment;
         $store = $pay->store;
         $posted_by = $pay->posted_by;
@@ -59,20 +60,23 @@ if(isset($_GET['receipt'])){
         $invest_amount = $asf->amount;
         $currency = $asf->currency;
         $exchange_rate = $asf->exchange_rate;
-        $total_in_naira = $asf->total_in_naira;
+        $total_in_dollar = $asf->total_in_dollar;
+        $units = $asf->units;
+        $started = $asf->start_date;
+        $duration = $asf->duration;
     }
 
     /* -------------------------------------------------
         Total Paid So Far (up to this date)
     ------------------------------------------------- */
-    $total_paid_query = $get_details->fetch_sum_date_range('investment_payments', 'amount_in_naira','investment', $investment, 'post_date', $post_date);
+    $total_paid_query = $get_details->fetch_sum_date_range('investment_payments', 'amount','investment', $investment, 'post_date', $post_date);
 
     $total_paid = (is_array($total_paid_query)) ? $total_paid_query[0]->total : 0;
 
     /* -------------------------------------------------
         Calculate Outstanding Balance
     ------------------------------------------------- */
-    $balance = $total_in_naira - $total_paid;
+    $balance = $invest_amount - $total_paid;
 ?>
 
 <div class="sales_receipt">
@@ -103,44 +107,43 @@ if(isset($_GET['receipt'])){
     <p><strong>Name:</strong> <?php echo $customer_name; ?></p>
     <p><strong>Account No:</strong> <?php echo $account; ?></p>
 </div>
-
+<?php
+    $icon = ($currency == "Dollar") ? "$" : "₦";
+?>
 <div class="receipt_section">
     <h4>Investment Information</h4>
     <p><strong>Investment ID:</strong> DAV/CON/<?php echo $investment; ?></p>
-    <p><strong>Investment Amount:</strong> <?php echo $currency . " " . number_format($invest_amount); ?></p>
-    <?php if($currency == "Dollar"){?>
+    <p><strong>Duration:</strong> <?php echo $duration; ?> years</p>
+    <p><strong>Investment Units:</strong> <?php echo $units . " unit(s)"; ?></p>
+    <p><strong>Investment Value:</strong> <?php echo $icon . number_format($invest_amount); ?></p>
+    <?php if($currency == "Naira"){?>
     <p><strong>Exchange Rate:</strong> ₦<?php echo number_format($exchange_rate); ?>/$1.00</p>
     <?php }?>
-    <p><strong>Total Value in Naira:</strong> ₦<?php echo number_format($total_in_naira); ?></p>
+    <p><strong>Total Value in USD:</strong> $<?php echo number_format($total_in_dollar); ?></p>
+    <p><strong>Started:</strong> <?php echo date("jS M, Y", strtotime($started)); ?></p>
+
 </div>
 
 <table id="postsales_table" class="searchTable">
     <thead>
         <tr style="background:var(--moreColor)">
             <td>Description</td>
-            <td>Amount (₦)</td>
+            <td>Amount</td>
         </tr>
     </thead>
     <tbody>
-        <?php
-            if($currency == "Dollar"){
-                $icon = "$";
-            }else{
-                $icon = "₦";
-            }
-        ?>
         <tr>
-            <td>Deposit for Investment (<?php echo $icon. number_format($invest_amount); ?>)</td>
-            <td><?php echo number_format($amount_naira); ?></td>
+            <td>Deposit for concentrate Investment of <?php echo $icon. number_format($invest_amount); ?></td>
+            <td><?php echo $icon.number_format($amount_paid); ?></td>
         </tr>
     </tbody>
 </table>
 
 <div class="receipt_section">
     <h4>Payment Summary</h4>
-    <p><strong>Amount Paid Now:</strong> ₦<?php echo number_format($amount_naira); ?></p>
-    <p><strong>Total Paid So Far:</strong> ₦<?php echo number_format($total_paid); ?></p>
-    <p><strong>Outstanding Balance:</strong> ₦<?php echo number_format($balance); ?></p>
+    <p><strong>Amount Paid Now:</strong> <?php echo $icon.number_format($amount_paid); ?></p>
+    <p><strong>Total Paid So Far:</strong> <?php echo $icon.number_format($total_paid); ?></p>
+    <p><strong>Outstanding Balance:</strong> <?php echo $icon.number_format($balance); ?></p>
 </div>
 
 <div class="receipt_section">

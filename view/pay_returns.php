@@ -53,27 +53,38 @@
                             <input type="text" value="<?php echo $row->duration?> Years" readonly>
                        </div>
                         <div class="data" style="width:24%;">
-                            <label for="amount" style="text-align:left!important;">Currency</label>
-                            <input type="text" value="<?php echo $row->currency?>" readonly style="color:green">
+                            <label for="amount" style="text-align:left!important;">Units</label>
+                            <input type="text" value="<?php echo $row->units?> unit(s)" readonly>
                         </div>
                         <div class="data" style="width:24%;">
-                            <label for="amount" style="text-align:left!important;">Amount Invested</label>
+                            <label for="amount" style="text-align:left!important;">Rate</label>
+                            <input type="text" value="$2,000/unit" readonly style="color:green">
+                        </div>
+                        <div class="data" style="width:24%;">
+                            <label for="amount" style="text-align:left!important;">Currency</label>
+                            <input type="text" value="<?php echo $row->currency?>" readonly >
+                        </div>
+                        <div class="data" style="width:24%;">
+                            <label for="amount" style="text-align:left!important;">Total Amount</label>
                             <?php if($row->currency == "Dollar"){?>
                             <input type="text" value="<?php echo '$'.number_format($row->amount, 2)?>" readonly>
                             <?php }else{?>
                             <input type="text" value="<?php echo '₦'.number_format($row->amount, 2)?>" readonly>
                             <?php }?>
                         </div>
+                        <?php if($row->currency == "Naira"){?>
                         <div class="data" style="width:24%;">
                             <label for="amount" style="text-align:left!important;">Exchange rate</label>
                             <input type="text" value="<?php echo '₦'.number_format($row->exchange_rate, 2)?>/$1.00" readonly style="color:green">
                            
                         </div>
+                        
                         <div class="data" style="width:24%;">
-                            <label for="amount" style="text-align:left!important;">Value In Naira</label>
+                            <label for="amount" style="text-align:left!important;">Value In Dollar</label>
                             <input type="text" value="<?php echo '₦'.number_format($row->total_in_naira, 2)?>" readonly style="color:green">
                            
                         </div>
+                        <?php }?>
                         <div class="data" style="width:24%;">
                             <label for="amount" style="text-align:left!important;">Expected Returns</label>
                             <?php
@@ -86,8 +97,15 @@
                                 }else{
                                     $expected_returns = 0;
                                 }
+                                $icon = "";
+                                if($row->currency ==  "Dollar"){
+                                    $icon = "$";
+                                }else{
+                                    $icon = "₦";
+                                }
                             ?>
-                            <input type="text" value="<?php echo '₦'.number_format($expected_returns, 2)?>" readonly style="color:var(--primaryColor)">
+                            
+                            <input type="text" value="<?php echo $icon.number_format($expected_returns, 2)?>" readonly style="color:var(--primaryColor)">
                            
                         </div>
                         
@@ -128,6 +146,11 @@
                     </thead>
                     <tbody id="result">
                         <?php
+                            if($row->currency == "Dollar"){
+                                $icon = "$";
+                            }else{
+                                $icon = "₦";
+                            }
                             $n = 1;
                             $repays = $get_details->fetch_details_cond('investment_returns', 'investment_id', $investment);
                             if(is_array($repays)){
@@ -137,8 +160,8 @@
                         <tr>
                             <td style="text-align:center; color:red;"><?php echo $n?></td>
                             <td><?php echo date("d-M-Y", strtotime($repay->due_date))?></td>
-                            <td style="color:var(--secondaryColor)"><?php echo "₦".number_format($repay->amount_due, 2)?></td>
-                            <td><?php echo "₦".number_format($repay->amount_paid, 2)?></td>
+                            <td style="color:var(--secondaryColor)"><?php echo $icon.number_format($repay->amount_due, 2)?></td>
+                            <td><?php echo $icon.number_format($repay->amount_paid, 2)?></td>
                             <td>
                                 <?php
                                     $date_due = new DateTime($repay->due_date);
@@ -182,8 +205,8 @@
                 ?>
                     <div class="totals" style="display:flex; gap:1rem; justify-content:right">
                         <?php
-                        echo "<p class='total_amount' style='background:green; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:1rem;'>Total Paid: ₦".number_format($total_paid, 2)."</p>";
-                        echo "<p class='total_amount' style='background:red; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:1rem;'>Total Due: ₦".number_format($balance, 2)."</p>";
+                        echo "<p class='total_amount' style='background:green; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:1rem;'>Total Paid: $icon".number_format($total_paid, 2)."</p>";
+                        echo "<p class='total_amount' style='background:red; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:1rem;'>Total Due: $icon".number_format($balance, 2)."</p>";
                     ?>
                     </div>
                 

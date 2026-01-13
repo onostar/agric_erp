@@ -9694,7 +9694,7 @@ function postInvestment(){
      let investment = document.getElementById("investment").value;
      let amount = document.getElementById("amount").value;
      let payment_mode = document.getElementById("payment_mode").value;
-     let payment_id = document.getElementById("payment_id")?.value || 0;
+     // let payment_id = document.getElementById("payment_id")?.value || 0;
      let details = document.getElementById("details").value;
      let bank = document.getElementById("bank").value;
      let todayDate = new Date();

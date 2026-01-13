@@ -73,7 +73,13 @@ date_default_timezone_set("Africa/Lagos");
     <link rel="stylesheet" href="../select2.min.css">
 </head>
 <body>
-   
+   <style>
+    @media screen and (max-width: 800px){
+        table td{
+            font-size: .8rem!important;
+        }
+    }
+</style>
     <main>
         <!-- show package soon to expire -->
     <?php

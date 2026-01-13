@@ -89,6 +89,7 @@ if($currency == "Dollar"){
     </ul>
 
     <p>Your investment has now been logged and is awaiting payment to fully activate the contract. Once payment is confirmed, the countdown toward your first 12-month return begins.</p>
+    <p>You are expected to complete payment within 30 days.</p>
 
     <p>You may log in to your <strong><a href='https://davidorlah.dorthprosuite.com/client_portal/' target='_blank'>Investor Portal</a></strong> to view your investment status, expected returns, and payment history at any time.</p>
 

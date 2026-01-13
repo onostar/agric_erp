@@ -32,9 +32,9 @@
                 <td>Investment No.</td>
                 <td>Currency</td>
                 <td>Amount</td>
-                <td>Value in Naira (NGN)</td>
-                <td>Total Returns (NGN)</td>
-                <td>Total Paid (NGN)</td>
+                <td>Value in Dollar</td>
+                <td>Total Returns</td>
+                <td>Total Paid</td>
                 <td></td>
             </tr>
         </thead>
@@ -68,7 +68,7 @@
                 <?php }else{?>
                 <td style="color:var(--otherColor)"><?php echo "₦".number_format($detail->amount, 2);?></td>
                 <?php }?>
-                <td style="color:var(--otherColor)"><?php echo "₦".number_format($detail->total_in_naira, 2);?></td>
+                <td style="color:var(--otherColor)"><?php echo "$".number_format($detail->total_in_dollar, 2);?></td>
                 <td style="color:green">
                     <?php
                         //total retunrs
@@ -80,7 +80,11 @@
                         }else{
                             $total_returns = 0;
                         }
-                        echo "₦".number_format($total_returns, 2);
+                        if($detail->currency == "Dollar"){
+                            echo "$".number_format($total_returns, 2);
+                        }else{
+                            echo "₦".number_format($total_returns, 2);
+                        }
                     ?>
                 </td>
                 <td style="color:red">
@@ -94,7 +98,11 @@
                         }else{
                             $total_paid = 0;
                         }
-                        echo "₦".number_format($total_paid, 2);
+                        if($detail->currency == "Dollar"){
+                            echo "$".number_format($total_paid, 2);
+                        }else{
+                            echo "₦".number_format($total_paid, 2);
+                        }
                     ?>
                 </td>
                 

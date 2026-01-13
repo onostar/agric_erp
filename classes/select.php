@@ -630,6 +630,20 @@ public function fetch_generate_payrollpermonth($store, $payroll_date){
                 return $rows;
             }
         }
+         //fetch pending investment payments
+        public function fetch_pending_investment(){
+            $sql = "SELECT i.investment_id, i.currency, i.customer, i.amount, i.total_in_dollar, COALESCE(SUM(p.amount), 0) AS amount_paid FROM investments i LEFT JOIN investment_payments p ON i.investment_id = p.investment GROUP BY i.investment_id, i.currency,i.customer, i.amount, i.total_in_dollar HAVING amount_paid < i.amount ORDER BY i.post_date ASC";
+
+            $get_user = $this->connectdb()->prepare($sql);
+            $get_user->execute();
+
+            if($get_user->rowCount() > 0){
+                return $get_user->fetchAll();
+            }else{
+                return "No records found";
+            }
+        }
+
         //fetch details count without condition
         public function fetch_count($table){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table");

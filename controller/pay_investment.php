@@ -75,15 +75,92 @@ foreach($inv as $loan){
     $invest_amount = $loan->amount;
     $currency = $loan->currency;
     $duration = $loan->duration;
-    $total_in_naira = $loan->total_in_naira;
+    $total_in_dollar = $loan->total_in_dollar;
+    $exchange_rate = $loan->exchange_rate;
+    $units = $loan->units;
 }
 
+
+/* Calculate remaining balance */
+$new_balance = $balance - $amount;
+$return_schedule_html = "";
+//check if there has been payment before
+$check = $get->fetch_count_cond('investment_payments', 'investment', $investment);
+if($check == 0){
+    /* First payment = generate schedule */
+    $upd = new Update_table();
+    $upd->update_double('investments', 'contract_status', 1, 'start_date', $date, 'investment_id', $investment);
+    $return_schedule_html .= "<h3>Your Returns Schedule</h3><ul>";
+
+    $start = new DateTime($date);
+    $first_due = (clone $start)->modify('+12 months');
+
+    /* First return = 30% */
+    $ret1 = 0.30 * $amount;
+    $returns_data = array(
+        'investment_id'=>$investment,
+        'customer'=>$customer,
+        'due_date'=>$first_due->format('Y-m-d'),
+        'percentage'=>'30',
+        'amount_due'=>$ret1,
+        'store'=>$store,
+        'posted_by'=>$user,
+        'post_date'=>$date
+    );
+    $ins = new add_data('investment_returns', $returns_data);
+    $ins->create_data();
+
+    // $return_schedule_html .= "<li>₦".number_format($ret1,2)." due on ".$first_due->format('jS F, Y')."</li>";
+
+    /* every 6 months after */
+    $installments = ($duration - 1) * 2;
+
+    $current = clone $first_due;
+
+    for($i = 1; $i <= $installments; $i++){
+        $current = (clone $current)->modify('+6 months');
+        $ret = 0.15 * $amount;
+
+        $data_ret = array(
+            'investment_id'=>$investment,
+            'customer'=>$customer,
+            'due_date'=>$current->format('Y-m-d'),
+            'percentage'=>'15',
+            'amount_due'=>$ret,
+            'store'=>$store,
+            'posted_by'=>$user,
+            'post_date'=>$date
+        );
+        $ins2 = new add_data('investment_returns', $data_ret);
+        $ins2->create_data();
+
+        /* $return_schedule_html .= "<li>₦".number_format($ret,2)." due on ".$current->format('jS F, Y')."</li>"; */
+    }
+    // $return_schedule_html .= "</ul>";
+}
+$return_schedule_html = "<h3>Your Returns Schedule</h3>";
+//fetch investment returns details for email
+$invest_returns = $get->fetch_details_cond('investment_returns', 'investment_id', $investment);
+foreach($invest_returns as $ir){
+    $due_date = date("jS F, Y", strtotime($ir->due_date));
+    $percentage = $ir->percentage;
+    $return = number_format($ir->amount_due, 2);
+    $return_schedule_html .= "<li>₦".$return." due on ".$due_date."</li>";
+}
+$return_schedule_html .= "</ul>";
+
 /* Insert into investment payments */
+//get amount in dollar
+if($currency == "Dollar"){
+    $amount_in_dollar = $amount;
+}else{
+    $amount_in_dollar = $amount / $exchange_rate;
+}
 $inv_data = array(
     'investment'  => $investment,
     'customer'    => $customer,
     'amount'      => $amount,
-    'amount_in_naira'=> $amount,
+    'amount_in_dollar'=> $amount_in_dollar,
     'currency'    => $currency,
     'trx_date'    => $trans_date,
     'trx_number'  => $trx_num,
@@ -96,7 +173,6 @@ $inv_data = array(
 );
 $add_inv = new add_data('investment_payments', $inv_data);
 $add_inv->create_data();
-
 /* Get customer details */
 $cust = $get->fetch_details_cond('customers', 'customer_id', $customer);
 foreach($cust as $bal){
@@ -128,7 +204,11 @@ foreach($invs as $iv){
     $dr_group  = $iv->sub_group;
     $dr_class  = $iv->class;
 }
-
+if($currency == "Dollar"){
+    $amount = $amount * $exchange_rate;
+}else{
+    $amount = $amount;
+}
 /* Debit entry */
 $debit_data = array(
     'account'   => $dr_ledger,
@@ -178,79 +258,20 @@ $flow_data = array(
 $add_flow = new add_data('cash_flows', $flow_data);
 $add_flow->create_data();
 
-/* Calculate remaining balance */
-$new_balance = $balance - $amount;
-
-/* FULL PAYMENT = generate schedule */
-$return_schedule_html = "";
-
-if($new_balance <= 0){
-    $upd = new Update_table();
-    $upd->update_double('investments', 'contract_status', 1, 'start_date', $date, 'investment_id', $investment);
-
-    $return_schedule_html .= "<h3>Your Returns Schedule</h3><ul>";
-
-    $start = new DateTime($date);
-    $first_due = (clone $start)->modify('+12 months');
-
-    /* First return = 30% */
-    $ret1 = 0.30 * $total_in_naira;
-    $returns_data = array(
-        'investment_id'=>$investment,
-        'customer'=>$customer,
-        'due_date'=>$first_due->format('Y-m-d'),
-        'percentage'=>'30',
-        'amount_due'=>$ret1,
-        'store'=>$store,
-        'posted_by'=>$user,
-        'post_date'=>$date
-    );
-    $ins = new add_data('investment_returns', $returns_data);
-    $ins->create_data();
-
-    $return_schedule_html .= "<li>₦".number_format($ret1,2)." due on ".$first_due->format('jS F, Y')."</li>";
-
-    /* every 6 months after */
-    $installments = ($duration - 1) * 2;
-
-    $current = clone $first_due;
-
-    for($i = 1; $i <= $installments; $i++){
-        $current = (clone $current)->modify('+6 months');
-        $ret = 0.15 * $total_in_naira;
-
-        $data_ret = array(
-            'investment_id'=>$investment,
-            'customer'=>$customer,
-            'due_date'=>$current->format('Y-m-d'),
-            'percentage'=>'15',
-            'amount_due'=>$ret,
-            'store'=>$store,
-            'posted_by'=>$user,
-            'post_date'=>$date
-        );
-        $ins2 = new add_data('investment_returns', $data_ret);
-        $ins2->create_data();
-
-        $return_schedule_html .= "<li>₦".number_format($ret,2)." due on ".$current->format('jS F, Y')."</li>";
-    }
-
-    $return_schedule_html .= "</ul>";
-}
 
 /* SUM total paid */
-$sum = $get->fetch_sum_single('investment_payments','amount_in_naira','investment',$investment);
+$sum = $get->fetch_sum_single('investment_payments','amount','investment',$investment);
 $total_paid = $sum[0]->total ?? 0;
 
 $fmt_total_cost  = number_format($invest_amount, 2);
 $fmt_total_paid  = number_format($total_paid, 2);
-$fmt_total_naira = number_format($total_in_naira, 2);
-$fmt_remaining   = number_format($total_in_naira - $total_paid, 2);
+$fmt_total_dollar = number_format($total_in_dollar, 2);
+$fmt_remaining   = number_format($invest_amount - $total_paid, 2);
 
 $icon = ($currency == "Dollar") ? "$" : "₦";
 
 /* BUILD EMAIL */
-if($total_paid >= $total_in_naira){
+if($total_paid >= $invest_amount){
      // FULL PAYMENT NOTIFICATION
     $notif_data = array(
         'client' => $customer,
@@ -267,8 +288,9 @@ if($total_paid >= $total_in_naira){
         <ul>
             <li><strong>Duration:</strong> $duration years</li>
             <li><strong>Currency:</strong> $currency</li>
+            <li><strong>Units:</strong> $units unit(s)</li>
             <li><strong>Total Investment:</strong> $icon$fmt_total_cost</li>
-            <li><strong>Naira Value:</strong> ₦$fmt_total_naira</li>
+            <li><strong>USD Value:</strong> ₦$fmt_total_dollar</li>
         </ul>
 
         $return_schedule_html
@@ -290,10 +312,14 @@ if($total_paid >= $total_in_naira){
         <p>Your investment payment has been received.</p>
 
         <ul>
+            <li><strong>Units:</strong> $units unit(s)</li>
             <li><strong>Total Investment:</strong> $icon$fmt_total_cost</li>
             <li><strong>Total Paid:</strong> ₦$fmt_total_paid</li>
             <li><strong>Balance Remaining:</strong> ₦$fmt_remaining</li>
         </ul>
+        $return_schedule_html
+
+        <p>Thank you for trusting <strong>Davidorlah Nigeria Ltd</strong>.</p>
     ";
 }
 

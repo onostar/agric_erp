@@ -26,8 +26,9 @@
                 <td>Client</td>
                 <td>Inv. No.</td>
                 <td>Currency</td>
+                <td>Units</td>
                 <td>Amount</td>
-                <td>Value in Naira</td>
+                <td>Value in USD</td>
                 <td>Amount Paid</td>
                 <td>Amount Due</td>
                 <td>Status</td>
@@ -59,6 +60,7 @@
                         echo $detail->currency;
                     ?>
                 </td>
+                <td><?php echo $detail->units?> unit(s)</td>
                 <?php
                     if($detail->currency == "Dollar"){
                 ?>
@@ -66,11 +68,11 @@
                 <?php }else{?>
                 <td style="color:var(--otherColor)"><?php echo "₦".number_format($detail->amount, 2);?></td>
                 <?php }?>
-                <td style="color:var(--otherColor)"><?php echo "₦".number_format($detail->total_in_naira, 2);?></td>
+                <td style="color:var(--otherColor)"><?php echo "$".number_format($detail->total_in_dollar, 2);?></td>
                 <td style="color:green">
                     <?php
                          //total paid
-                       $paids = $get_revenue->fetch_sum_single('investment_payments', 'amount_in_naira', 'investment', $detail->investment_id);
+                       $paids = $get_revenue->fetch_sum_single('investment_payments', 'amount', 'investment', $detail->investment_id);
                        if(is_array($paids)){
                            foreach($paids as $paid){
                                $total_paid = $paid->total;
@@ -78,14 +80,22 @@
                         }else{
                             $total_paid = 0;
                         }
-                        echo "₦".number_format($total_paid, 2);
+                         if($detail->currency == "Dollar"){
+                            echo "$".number_format($total_paid, 2);
+                        }else{
+                            echo "₦".number_format($total_paid, 2);
+                        }
                     ?>
                 </td>
                 <td style="color:red">
                     <?php 
                        
-                        $debt = $detail->total_in_naira - $total_paid;
-                        echo "₦".number_format($debt, 2);
+                         $debt = $detail->amount - $total_paid;
+                        if($detail->currency == "Dollar"){
+                            echo "$".number_format($debt, 2);
+                        }else{
+                            echo "₦".number_format($debt, 2);
+                        }
                     ?>
                 </td>
                 <td>
@@ -112,7 +122,7 @@
         echo "<p class='no_result'>'$details'</p>";
     }
     //get total cos of payments today
-    $ttls = $get_revenue->fetch_sum_2dateCond('investments', 'total_in_naira', 'store', 'date(post_date)', $from, $to,  $store);
+    $ttls = $get_revenue->fetch_sum_2dateCond('investments', 'total_in_dollar', 'store', 'date(post_date)', $from, $to,  $store);
     if(gettype($ttls) === 'array'){
         foreach($ttls as $ttl){
             echo "<p class='total_amount' style='color:green; text-align:center;'>Total: ₦".number_format($ttl->total, 2)."</p>";

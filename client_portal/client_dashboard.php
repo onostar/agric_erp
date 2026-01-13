@@ -1,3 +1,10 @@
+<style>
+    @media screen and (max-width: 800px){
+        table td{
+            font-size: .8rem!important;
+        }
+    }
+</style>
 <div id="general_dashboard">
 <div class="dashboard_all">
     <h3><i class="fas fa-home"></i> My <span style="color:var(--secondaryColor);font-size:1rem">Dashboard</h3>
@@ -24,7 +31,7 @@
                     <p><i class="fas fa-briefcase"></i> Active Investments</p>
                     <p>
                     <?php
-                        $invests = $get_info->fetch_sum_double('investments', 'total_in_naira', 'customer', $user_id, 'contract_status', 1);
+                        $invests = $get_info->fetch_sum_double('investments', 'total_in_dollar', 'customer', $user_id, 'contract_status', 1);
                         if(is_array($invests)){
                             foreach($invests as $invest){
                                 $total_investment = $invest->total;
@@ -41,7 +48,7 @@
         <div class="cards" id="card5" style="background: var(--moreColor)">
             <a href="javascript:void(0)">
                 <div class="infos">
-                    <p><i class="fas fa-piggy-bank"></i> Payables</p>
+                    <p><i class="fas fa-piggy-bank"></i> Land Payables </p>
                     <p>
                     <?php
                        //balance
@@ -63,29 +70,9 @@
                             $amount_paid = 0;
                         }
                         $debt = $balance_due - $amount_paid;
-                        //get investment due
-                        $inves = $get_info->fetch_sum_double('investments', 'total_in_naira', 'contract_status', 0, 'customer', $user_id);
-                        if(is_array($inves)){
-                            foreach($inves as $inve){
-                                $investment_due = $inve->total;
-                            }
-                        }else{
-                            $investment_due = 0;
-                        }
-                        //get payment
-                        $inves_pay = $get_info->fetch_sum_single('investment_payments', 'amount_in_naira', 'customer', $user_id);
-                        if(is_array($inves_pay)){
-                            foreach($inves_pay as $inve_pay){
-                                $investment_paid = $inve_pay->total;
-                            }
-                        }else{
-                            $investment_paid = 0;
-                        }
-                        //investment debt
-                        $investment_debt = $investment_due - $investment_paid;
+                        
                         //total due
-                        $total_debt = $debt + $investment_debt;
-                        echo "₦".number_format($total_debt, 2);
+                        echo "₦".number_format($debt, 2);
                     ?>
                     </p>
                 </div>
@@ -95,52 +82,31 @@
             
             <a href="javascript:void(0)" class="page_navs">
                 <div class="infos">
-                    <p><i class="fas fa-hand-holding-dollar"></i> Receivables</p>
+                    <p><i class="fas fa-hand-holding-dollar"></i> Investment Payables</p>
                     <p>
                     <?php
-                       //balance
-                       $oweds = $get_info->fetch_sum_double('rent_schedule', 'amount_due', 'payment_status', 0, 'customer', $user_id);
-                       if(is_array($oweds)){
-                           foreach($oweds as $owed){
-                               $balance_due = $owed->total;
-                           }
-                        }else{
-                            $balance_due = 0;
-                        }
-                        //get total paid amount
-                        $paid = $get_info->fetch_sum_double('rent_schedule', 'amount_paid', 'payment_status', 0, 'customer', $user_id);
-                        if(is_array($paid)){
-                            foreach($paid as $pay){
-                                $amount_paid = $pay->total;
+                       
+                        //get investment due
+                        $inves = $get_info->fetch_sum_single('investments', 'total_in_dollar',  'customer', $user_id);
+                        if(is_array($inves)){
+                            foreach($inves as $inve){
+                                $investment_due = $inve->total;
                             }
                         }else{
-                            $amount_paid = 0;
+                            $investment_due = 0;
                         }
-                        //total rent 
-                        $rent = $balance_due - $amount_paid;
-                       //returns schedule
-                       $returns_owe = $get_info->fetch_sum_double('investment_returns', 'amount_due', 'payment_status', 0, 'customer', $user_id);
-                       if(is_array($returns_owe)){
-                           foreach($returns_owe as $return_owe){
-                               $returns_due = $return_owe->total;
-                           }
-                        }else{
-                            $returns_due = 0;
-                        }
-                        //get total paid amount
-                        $returns_paids = $get_info->fetch_sum_double('investment_returns', 'amount_paid', 'payment_status', 0, 'customer', $user_id);
-                        if(is_array($returns_paids)){
-                            foreach($returns_paids as $returns_pay){
-                                $returns_paid = $returns_pay->total;
+                        //get payment
+                        $inves_pay = $get_info->fetch_sum_single('investment_payments', 'amount_in_dollar', 'customer', $user_id);
+                        if(is_array($inves_pay)){
+                            foreach($inves_pay as $inve_pay){
+                                $investment_paid = $inve_pay->total;
                             }
                         }else{
-                            $returns_paid = 0;
+                            $investment_paid = 0;
                         }
-                        //total returns
-                        $total_returns = $returns_due - $returns_paid;
-                        $receviebles = $rent + $total_returns;
-                        echo "₦".number_format($receviebles, 2);
-                        
+                        //investment debt
+                        $investment_debt = $investment_due - $investment_paid;
+                        echo "$".number_format($investment_debt, 2);
                     ?>
                     </p>
                 </div>
@@ -157,7 +123,7 @@
     <hr>
     <div class="daily_monthly" style="margin:0!important;padding:0!important">
         <!-- daily revenue summary -->
-        <div class="daily_report allResults" style="margin:0!important;padding:0!important">
+        <!-- <div class="daily_report allResults" style="margin:0!important;padding:0!important">
             <h3 style="background:var(--otherColor); font-family:Poppins">Scheduled Land/Field Payments</h3>
             <table id="item_list_table" class="searchTable">
                 <thead>
@@ -219,12 +185,12 @@
                     echo "<p class='no_result'>'$loans'</p>";
                 }
             ?>
-        </div>
+        </div> -->
         <!-- rent schedule -->
         <div class="monthly_report allResults" style="margin:0!important;padding:0!important">
             
             <div class="monthly_encounter" style="margin:0 0 20px; width:100%!important">
-                <h3 style="background:rgb(117, 32, 12)!important; font-family:Poppins">Rent Schedule</h3>
+                <h3 style="background:var(--otherColor)!important; font-family:Poppins">Rent Schedule</h3>
                 
                 <table>
                     <thead>
@@ -304,6 +270,7 @@
                         <tr>
                             <td>S/N</td>
                             <td>Date</td>
+                            <td>Inv. No.</td>
                             <td>Amount</td>
                             <td>Details</td>
                         </tr>
@@ -318,12 +285,22 @@
                             if(is_array($repays)){
                             $allow_next = true; // True until first unpaid schedule is found
                             foreach($repays as $repay){
-                        
+                                $icon = "";
+                                //get investment currency
+                                $cur = $get_info->fetch_details_group('investments', 'currency', 'investment_id', $repay->investment_id);
+                                $currency = $cur->currency;
+                                if($currency == "Dollar"){
+                                    $icon = "$";
+                                }else{
+                                    $icon = "₦";
+                                }
+
                     ?>
                     <tr>
                         <td style="text-align:center; color:red;"><?php echo $n?></td>
                         <td><?php echo date("d-M-Y", strtotime($repay->due_date))?></td>
-                        <td style="color:var(--secondaryColor)"><?php  echo "₦".number_format(($repay->amount_due - $repay->amount_paid), 2)?></td>
+                        <td><?php echo "00$repay->investment_id"?></td>
+                        <td style="color:var(--secondaryColor)"><?php  echo $icon.number_format(($repay->amount_due - $repay->amount_paid), 2)?></td>
                         <td>
                             <?php
                                 $date_due = new DateTime($repay->due_date);
@@ -349,8 +326,32 @@
                             ?>
                         </td>
                     </tr>
+                    <?php $n++; };}?>
                     
-                    <?php $n++; };}}?>
+                    <tr>
+                        <td><?php echo $n?></td>
+                        <?php
+                            //get returns
+                            $princ = $get_info->fetch_details_cond('investments', 'investment_id', $repay->investment_id);
+                            foreach($princ as $prin){
+                            
+                    ?>
+                        <td>
+                            <?php 
+                                //get last due date
+                                $last = $get_info->fetch_details_condLimitDesc('investment_returns', 'investment_id', $repay->investment_id, 1, 'date(due_date)');
+                                foreach($last as $las){
+                                echo date("d-M-Y", strtotime($las->due_date));
+                                }
+                            ?>
+                        </td>
+                        <td><?php echo "00".$prin->investment_id?></td>
+                        <td style="color:var(--secondaryColor)"><?php echo $icon.number_format($prin->amount, 2)?></td>
+                        <td>Principal Return</td>
+                        <?php }?>
+                    </tr>
+                    
+                    <?php }?>
                 </tbody>
             </table>
             <?php
