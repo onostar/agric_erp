@@ -46,7 +46,7 @@
                     <input type="text" name="field" id="field" value="<?php echo $row->field_name?>">
                 </div>
                 <div class="data" style="width:31%">
-                    <label for="sales_price">Field Size (Hec)
+                    <label for="sales_price">Field Size (Plot)
                     <input type="text" name="field_size" id="field_size" value="<?php echo $row->field_size?>">
                 </div>
                 <div class="data" style="width:31%">

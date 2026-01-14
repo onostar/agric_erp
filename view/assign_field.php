@@ -36,7 +36,8 @@
             <?php
                 $n = 1;
                 $get_details = new selects();
-                $details = $get_details->fetch_fields();
+                // $details = $get_details->fetch_fields();
+                $details = $get_details->fetch_details_cond('fields', 'customer', 0);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>

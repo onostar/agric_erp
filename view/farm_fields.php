@@ -17,7 +17,7 @@
     <hr>
     <div class="search">
         <input type="search" id="searchStaff" placeholder="Enter keyword" onkeyup="searchData(this.value)">
-        <!-- <a style="background:brown; color:#fff; padding:4px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222;" href="javascript:void(0)" onclick="showPage('add_field.php')" title="Add Farm Field">Add Field <i class="fas fa-seedling"></i></a> -->
+        <a style="background:brown; color:#fff; padding:4px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222;" href="javascript:void(0)" onclick="showPage('add_field.php')" title="Add Farm Field">Add Field <i class="fas fa-seedling"></i></a>
     </div>
     <table id="room_list_table" class="searchTable">
         <thead>
@@ -25,7 +25,7 @@
                 <td>S/N</td>
                 <td>Field</td>
                 <td>Owned By</td>
-                <td>Field Size (Hec)</td>
+                <td>Field Size (Plot)</td>
                 <td>Soil Type</td>
                 <td>Soil PH</td>
                 <td>Topography</td>
@@ -63,7 +63,7 @@
                 <td>
                     <?php 
                         //convert to square meters
-                        $sqm = $detail->field_size * 7500;
+                        $sqm = $detail->field_size * 500;
                         echo $detail->field_size." (".number_format($sqm)." m&sup2;)";
                     ?>
                 </td>

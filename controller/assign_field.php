@@ -148,12 +148,11 @@ if($update){
         <li><strong>Documentation Fee:</strong> ₦$doc_fmt</li>
         <li><strong>Contract Duration:</strong> $duration year(s)</li>
         <li><strong>Annual Rent/Return:</strong> ₦$annual_rent_fmt ($rent_percentage%)</li>
-        <li><strong>Installment Amount:</strong> ₦$install_amount_fmt</li>
-        <li><strong>First Installment Date:</strong> $first_repayment_date</li>
-        <li><strong>Final Installment Date:</strong> $last_repayment_date</li>
+        
+        <li><strong>Due Date:</strong> $last_repayment_date</li>
     </ul>
 
-    <p>Once all installments are completed, your contract will be marked as <strong>fully purchased</strong> and you will begin to receive your <strong>annual rent/returns</strong> according to the agreed rate and contract duration.</p>
+    <p>Once payment is completed, your contract will be marked as <strong>fully purchased</strong> and you will begin to receive your <strong>annual rent/returns</strong> according to the agreed rate and contract duration.</p>
 
     <p>You can log in to your <strong><a href='davidorlah.dorthprosuite.com/client_portal'>Customer Portal</a></strong> anytime to track your payments, field details, and rent status.</p>
 

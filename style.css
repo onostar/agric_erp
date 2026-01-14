@@ -3643,6 +3643,9 @@ color: rgb(231, 226, 226);
 .attendance_alert button{
     font-size:.8rem;
 }
+#land_div{
+    display:none;
+}
 @media screen and (max-width: 800px){
     #topHeader{
         justify-content: space-between;

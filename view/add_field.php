@@ -3,7 +3,7 @@
     include "../classes/select.php";
 ?>
 
-<div id="add_room" class="displays">
+<div id="add_field" class="displays">
         <a style="background:brown; color:#fff; padding:5px 8px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222;" href="javascript:void(0)" onclick="showPage('farm_fields.php')" title="Return fot farm fields">Return <i class="fas fa-angle-double-left"></i></a>
 
     <div class="info" style="width:35%; margin:20px"></div>
@@ -17,7 +17,7 @@
                     <input type="text" name="field" id="field" required placeholder="Input item name">
                 </div>
                 <div class="data" style="width:48%;">
-                   <label for="field_size"> Field Size (Hec)</label>
+                   <label for="field_size"> Field Size (Plot)</label>
                    <input type="number" name="field_size" id="field_size" required placeholder="Input field size in hectares">
                 </div>
                 <div class="data" style="width:48%;">
@@ -45,10 +45,10 @@
                    <input type="number" name="longitude" id="longitude" value=0>
                 </div>
                
-                <div class="data" style="width:48%;">
+                <!-- <div class="data" style="width:48%;">
                    <label for="purchase_cost"> Purchase Cost (NGN)</label>
                    <input type="number" name="purchase_cost" id="purchase_cost" value=0>
-                </div>
+                </div> -->
                 <div class="data">
                     <button type="button" id="add_item" name="add_item" onclick="addField()">Save record <i class="fas fa-save"></i></button>
                 </div>

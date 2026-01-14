@@ -86,7 +86,7 @@
                         </div>
                         
                         <div class="data" style="width:24%;">
-                            <label for="purpose" style="text-align:left!important;">Due Date:</label>
+                            <label for="purpose" style="text-align:left!important;">Payment Due Date:</label>
                             <input type="text" value="<?php echo date("d-M-Y", strtotime($row->due_date))?>" readonly>
                         </div>
                         
@@ -95,7 +95,7 @@
             </div>
         </section>
         <section style="width:100%">
-             <h3 style="background:var(--labColor); text-align:center; color:#fff; font-size:.9rem;padding:5px;">Payment Schedule</h3>
+            <!--  <h3 style="background:var(--labColor); text-align:center; color:#fff; font-size:.9rem;padding:5px;">Payment Schedule</h3>
             <div class="displays allResults" style="width:100%!important; margin:0!important">
                 <table id="item_list_table" class="searchTable">
                     <thead>
@@ -147,7 +147,7 @@
                         </tr>
                         <?php $n++; }; }?>
                     </tbody>
-                </table>
+                </table> -->
                 <?php
                     //get total due
                     $tls = $get_details->fetch_sum_single('field_payment_schedule', 'amount_due', 'assigned_id', $row->assigned_id);

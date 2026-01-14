@@ -81,12 +81,13 @@
                         
                     </select>
                 </div>
+                <input type="hidden" id="installment_amount" name="installment_amount">
                 
-                <div class="data" style="width:31%">
+               <!--  <div class="data" style="width:31%">
                     <label for="installments">Installment Amount (NGN)</label>
                     <input type="text" id="install" name="install" style="background:#fff; color:green" value="0.00" readonly>
                     <input type="hidden" id="installment_amount" name="installment_amount">
-                </div>
+                </div> -->
                 <div class="data" style="width:31%">
                     <label for="rent_percentage">Rent Percentage (%)</label>
                     <select name="rent_percentage" id="rent_percentage" onchange="calculateRent()">

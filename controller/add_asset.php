@@ -10,6 +10,7 @@ date_default_timezone_set("Africa/Lagos");
     $useful_life = htmlspecialchars(stripslashes($_POST['useful_life']));
     $deploy = htmlspecialchars(stripslashes($_POST['deployment']));
     $quantity = htmlspecialchars(stripslashes($_POST['quantity']));
+    $size = htmlspecialchars(stripslashes($_POST['size']));
     $location = htmlspecialchars(stripslashes($_POST['location']));
     $ledger = htmlspecialchars(stripslashes($_POST['ledger']));
     $spec = ucwords(htmlspecialchars(stripslashes($_POST['specification'])));
@@ -45,6 +46,7 @@ date_default_timezone_set("Africa/Lagos");
         'supplier' => $supplier,
         'cost' => $cost,
         'quantity' => $quantity,
+        'size' => $size,
         'book_value' => $cost,
         'useful_life' => $useful_life,
         'salvage_value' => $salvage,
@@ -78,17 +80,18 @@ date_default_timezone_set("Africa/Lagos");
             $update_asset->update('assets', 'asset_no', 'asset_id', $new_asset_no, $asset_id);
             
             //check if asset is a land asset and also add to field table.
-            if($ledger_name == "LAND AND BUILDING"){
+           /*  if($ledger_name == "LAND AND BUILDING"){
                 $field_data = array(
                     'asset_id' => $asset_id,
                     'field_name' => $asset,
                     'purchase_cost' => $cost,
+                    'field_size' => $size,
                     'created_by' => $user,
                     'created_at' => $date
                 );
                 $add_field = new add_data('fields', $field_data);
                 $add_field->create_data();
-            }
+            } */
 
             echo "<div class='success'><p>$asset added successfully <i class='fas fa-thumbs-up'></i></p></div>";
         }

@@ -44,7 +44,7 @@
             <?php
                 $n = 1;
                 $get_users = new selects();
-                $details = $get_users->fetch_due_payments('field_payment_schedule', $store);
+                $details = $get_users->fetch_due_payments('field_payment_schedule', 'due_date',$store);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>

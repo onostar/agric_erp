@@ -6024,13 +6024,27 @@ function addLocation(){
      $("#location").focus();
      return false;
 }
+//check if asset is land and display size
+function checkAssetType(mode){
+     let type = mode;
+     let land_div = document.getElementById("land_div");
+     let qty_div = document.getElementById("qty_div");
+     if(type == "1020524"){
+          land_div.style.display = "block";
+          qty_div.style.display = "none";
+     }else{
+          land_div.style.display = "none";
+          qty_div.style.display = "block";
+     }
+}
 //add asset
 function addAsset(){
      let asset = document.getElementById("asset").value;
      let supplier = document.getElementById("supplier").value;
      let purchase_date = document.getElementById("purchase_date").value;
      let cost = document.getElementById("cost").value;
-     let quantity = document.getElementById("quantity").value;
+     let quantity = document.getElementById("quantity")?.value || 1;
+     let size = document.getElementById("size")?.value || 1;
      let salvage_value = document.getElementById("salvage_value").value;
      let useful_life = document.getElementById("useful_life").value;
      let deployment = document.getElementById("deployment").value;
@@ -6038,6 +6052,13 @@ function addAsset(){
      let ledger = document.getElementById("ledger").value;
      todayDate = new Date();
      let specification = document.getElementById("specification").value;
+     if(ledger == "1020524"){
+          if(!size || size <= 0){
+               alert("Please input land size!");
+               $("#size").focus();
+               return;
+          }
+     }
      if(asset.length == 0 || asset.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input asset name!");
           $("#asset").focus();
@@ -6102,7 +6123,7 @@ function addAsset(){
           $.ajax({
                type : "POST",
                url : "../controller/add_asset.php",
-               data : {asset:asset, supplier:supplier, purchase_date:purchase_date, cost:cost, salvage_value:salvage_value, useful_life:useful_life, deployment:deployment, location:location, ledger:ledger, specification:specification, quantity:quantity},
+               data : {asset:asset, supplier:supplier, purchase_date:purchase_date, cost:cost, salvage_value:salvage_value, useful_life:useful_life, deployment:deployment, location:location, ledger:ledger, specification:specification, quantity:quantity,size:size},
                beforeSend: function(){
                     $("#assets").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -6535,7 +6556,7 @@ function addField(){
      let latitude = document.getElementById("latitude").value;
      let longitude = document.getElementById("longitude").value;
      let location = document.getElementById("location").value;
-     let purchase_cost = document.getElementById("purchase_cost").value;
+     // let purchase_cost = document.getElementById("purchase_cost").value;
      if(field.length == 0 || field.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input field name!");
           $("#field").focus();
@@ -6560,10 +6581,10 @@ function addField(){
           alert("Please input field longitude!");
           $("#longitude").focus();
           return;
-     }else if(!purchase_cost){
+    /*  }else if(!purchase_cost){
           alert("Please input field purchase cost!");
           $("#purchase_cost").focus();
-          return;
+          return; */
      }else if(!location){
           alert("Please input field location!");
           $("#location").focus();
@@ -6572,24 +6593,24 @@ function addField(){
           alert("Latitude or longitude values cannot be less than or equals to zero!");
           $("#latitude").focus();
           return;
-     }else if(parseFloat(purchase_cost) <= 0){
+    /*  }else if(parseFloat(purchase_cost) <= 0){
           alert("Field purchase cost cannot be less than or equal to zero!");
           $("#purchase_cost").focus();
-          return;
+          return; */
      }else{
           $.ajax({
                type : "POST",
                url : "../controller/add_field.php",
-               data : {field:field, field_size:field_size, soil_type:soil_type, soil_ph:soil_ph, topography:topography, purchase_cost:purchase_cost, latitude:latitude, longitude:longitude, location:location},
+               data : {field:field, field_size:field_size, soil_type:soil_type, soil_ph:soil_ph, topography:topography, /* purchase_cost:purchase_cost, */ latitude:latitude, longitude:longitude, location:location},
                beforeSend: function(){
-                    $(".info").html("<div class='processing'><div class='loader'></div></div>");
+                    $("#add_field").html("<div class='processing'><div class='loader'></div></div>");
                },
                success : function(response){
-               $(".info").html(response);
+                    $("#add_field").html(response);
                }
           })
      }
-     $("#field").val('');
+     /* $("#field").val('');
      $("#field_size").val('');
      $("#soil_type").val('');
      $("#soil_ph").val('');
@@ -6599,7 +6620,7 @@ function addField(){
      $("#latitude").val('0');
      $("#longitude").val('0');
      $("#field").focus();
-     return false;    
+     return false;     */
 }
 
 // create a crop cycle
@@ -7164,10 +7185,10 @@ function assignField(){
           alert("Please input contract start date!");
           $("#start_date").focus();
           return;
-     }else if(start < today){
+     /* }else if(start < today){
           alert("Start date cannot be less than current date!");
           $("#start_date").focus();
-          return;
+          return; */
      }else{
           $.ajax({
                type : "POST",
@@ -9138,7 +9159,7 @@ function calculateInstallments(){
      // let purchase_cost = parseFloat(document.getElementById("purchase_cost").value);
      let total_due = parseFloat(document.getElementById("total_due").value);
   
-     let install = document.getElementById("install");
+     // let install = document.getElementById("install");
      let installment_amount = document.getElementById("installment_amount");
      if(!payment_duration){
           alert("Please select purchase payment duration");
@@ -9167,7 +9188,7 @@ function calculateInstallments(){
           let installment_pay = total_due /installments;
         
           installment_amount.value = installment_pay;
-          install.value = installment_pay.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });;
+          // install.value = installment_pay.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });;
      }
 }
 //calculate total due based on purchase cost and discount
