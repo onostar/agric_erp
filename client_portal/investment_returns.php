@@ -4,7 +4,7 @@
     include "../classes/dbh.php";
     include "../classes/select.php";
     if(isset($_SESSION['user_id'])){
-        $store = $_SESSION['store_id'];
+        $customer = $_SESSION['user_id'];
     
 
 ?>
@@ -27,24 +27,23 @@
                 <label>Select to Date</label><br>
                 <input type="date" name="to_date" id="to_date"><br>
             </div>
-            <button type="submit" name="search_date" id="search_date" onclick="search('search_returns_report.php')">Search <i class="fas fa-search"></i></button>
+            <button type="submit" name="search_date" id="search_date" onclick="search('search_client_returns_report.php')">Search <i class="fas fa-search"></i></button>
         </section>
     </div>
 <div class="displays allResults new_data" id="revenue_report">
-    <h2>Concentrate Investment Returns paid Today</h2>
+    <h2>Investment Returns Received Today</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchRoom" placeholder="Enter keyword" onkeyup="searchData(this.value)">
-        <a class="download_excel" href="javascript:void(0)" onclick="convertToExcel('data_table', 'Todays Investment returns Payments')"title="Download to excel"><i class="fas fa-file-excel"></i></a>
+        <a class="download_excel" href="javascript:void(0)" onclick="convertToExcel('data_table', 'Todays Investment returns Received')"title="Download to excel"><i class="fas fa-file-excel"></i></a>
     </div>
     <table id="data_table" class="searchTable">
         <thead>
             <tr style="background:var(--tertiaryColor)">
                 <td>S/N</td>
-                <td>Client</td>
                 <td>Investment No.</td>
                 <td>Receipt No.</td>
-                <td>Amount Paid</td>
+                <td>Amount Received</td>
                 <td>Mode</td>
                 <td>Trx Date</td>
                 <td>Time</td>
@@ -55,19 +54,13 @@
             <?php
                 $n = 1;
                 $get_details = new selects();
-                $details = $get_details->fetch_details_curdateCon('return_payments', 'post_date', 'store', $store);
+                $details = $get_details->fetch_details_curdateCon('return_payments', 'post_date', 'customer', $customer);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
-                <td>
-                    <?php
-                        //get client name
-                        $client = $get_details->fetch_details_group('customers', 'customer', 'customer_id', $detail->customer);
-                        echo $client->customer;
-                    ?>  
-                </td>
+                
                 <td><?php echo "DAV/CON/00$detail->investment"?></td>
                 <td style="color:var(--primaryColor)"><?php echo $detail->invoice;?></td>
                 <?php if($detail->currency == "Dollar"){?>
@@ -100,7 +93,7 @@
             echo "<p class='no_result'>'$details'</p>";
         }
         //get total cos of payments today
-        $ttls = $get_details->fetch_sum_curdateCon('return_payments', 'amount_in_dollar', 'date(post_date)', 'store', $store);
+        $ttls = $get_details->fetch_sum_curdateCon('return_payments', 'amount_in_dollar', 'date(post_date)', 'customer', $customer);
         if(gettype($ttls) === 'array'){
             foreach($ttls as $ttl){
                 echo "<p class='total_amount' style='color:green; text-align:center;'>Total in USD: $".number_format($ttl->total, 2)."</p>";

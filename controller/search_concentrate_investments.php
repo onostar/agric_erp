@@ -109,7 +109,7 @@
                         }
                     ?>
                     <?php if($detail->contract_status != 0){?>
-                    <a href="javascript:void(0)"  onclick="showPage('view_client_investment.php?investment=<?php echo $detail->investment_id?>&customer=<?php echo $detail->customer?>')" style="color:#fff; background:var(--tertiaryColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #222; border-radius:15px;" title="View details">View <i class="fas fa-eye"></i></a>
+                    <a href="javascript:void(0)"  onclick="showPage('view_client_investment.php?investment=<?php echo $detail->investment_id?>&customer=<?php echo $detail->customer?>')" style="color:#fff; background:var(--tertiaryColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #222; border-radius:15px;" title="View details"><i class="fas fa-eye"></i></a>
                     <?php }?>
                 </td>
                 
@@ -125,7 +125,7 @@
     $ttls = $get_revenue->fetch_sum_2dateCond('investments', 'total_in_dollar', 'store', 'date(post_date)', $from, $to,  $store);
     if(gettype($ttls) === 'array'){
         foreach($ttls as $ttl){
-            echo "<p class='total_amount' style='color:green; text-align:center;'>Total: ₦".number_format($ttl->total, 2)."</p>";
+            echo "<p class='total_amount' style='color:green; text-align:center;'>Total in USD: $".number_format($ttl->total, 2)."</p>";
         }
     }
 ?>

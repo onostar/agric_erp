@@ -96,8 +96,8 @@
             }
         }
         //fetch with current date less than condition and 2 condition 
-        public function fetch_due_payments($table, $store){
-            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE date(CURDATE()) >= date(due_date) AND store = :store AND payment_status = 0");
+        public function fetch_due_payments($table, $date, $store){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE date(CURDATE()) >= date($date) AND store = :store AND payment_status = 0");
             $get_user->bindValue(":store", $store);
             $get_user->execute();
             if($get_user->rowCount() > 0){
@@ -643,6 +643,18 @@ public function fetch_generate_payrollpermonth($store, $payroll_date){
                 return "No records found";
             }
         }
+         public function fetch_overdue_investment(){
+            $sql = "SELECT i.investment_id, i.currency, i.customer, i.amount, i.units, i.total_in_dollar, i.start_date, i.contract_status, i.post_date, COALESCE(SUM(p.amount), 0) AS amount_paid, DATE_ADD(i.start_date, INTERVAL 30 DAY) AS due_date FROM investments i LEFT JOIN investment_payments p ON i.investment_id = p.investment GROUP BY i.investment_id, i.currency, i.customer, i.amount, i.total_in_dollar, i.start_date HAVING amount_paid < i.amount AND CURDATE() > DATE_ADD(i.start_date, INTERVAL 30 DAY) ORDER BY i.post_date ASC";
+            $get_user = $this->connectdb()->prepare($sql);
+            $get_user->execute();
+
+            if($get_user->rowCount() > 0){
+                return $get_user->fetchAll();
+            }else{
+                return "No records found";
+            }
+        }
+
 
         //fetch details count without condition
         public function fetch_count($table){

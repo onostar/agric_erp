@@ -81,8 +81,9 @@
             $invested_amount = $loan->amount;
             $duration = $loan->duration;
             $currency = $loan->currency;
-            $total_naira = $loan->total_in_naira;
+            // $total_naira = $loan->total_in_naira;
             $rate = $loan->exchange_rate;
+            $units = $loan->units;
             // $total_payable = $loan->total_repayment;
         }
        
@@ -106,17 +107,23 @@
             $update = new Update_table();
             $update->update('investment_returns', 'amount_paid', 'schedule_id', $total_paid, $schedule);
         }
-        
+        if($currency == "Dollar"){
+            $amount_in_dollar = $amount;
+        }else{
+            $amount_in_dollar = $amount / $rate;
+        }
         //add into payment table
         $repayment_data = array(
             'customer' => $customer,
             'store' => $store,
             'investment' => $investment,
             'amount' => $amount_received,
+            'amount_in_dollar' => $amount_in_dollar,
             'schedule' => $schedule,
             'payment_mode' => $mode,
             'details' => $details,
             'invoice' => $receipt,
+            'currency' => $currency,
             'bank' => $bank,
             'posted_by' => $user,
             'post_date' => $date,
@@ -127,51 +134,7 @@
         $add_repayment = new add_data('return_payments', $repayment_data);
         $add_repayment->create_data();
         
-        //handle excess payment
-        /* if($new_balance < 0) {
-            $overpaid = -$new_balance;
-            $schedules = $get_details->fetch_details_2condOrder('investment_returns', 'payment_status', 'investment_id', 0, $investment, 'due_date');
-            if (is_array($schedules)) {
-                foreach ($schedules as $next) {
-                    if ($overpaid <= 0) break;
-
-                    $next_balance = $next->amount_due - $next->amount_paid;
-                    $to_pay = min($overpaid, $next_balance);
-                    // Proportional interest and fee for this overpaid portion
-                    $next_interest = ($to_pay * $interest_portion) / $total_payable;
-                    $next_fee = ($to_pay * $processing_portion) / $total_payable;
-                    $new_paid = $next->amount_paid + $to_pay;
-
-                    if($new_paid >= $next->amount_due) {
-                        $update->update_double('field_payment_schedule', 'amount_paid', $next->amount_due, 'payment_status', 1, 'repayment_id', $next->repayment_id);
-                    }else{
-                        $update->update('field_payment_schedule', 'amount_paid', 'repayment_id', $new_paid, $next->repayment_id);
-                    }
-
-                    $extra_data = $repayment_data;
-                    $extra_data['schedule'] = $next->repayment_id;
-                    $extra_data['amount'] = $to_pay;
-                    $extra_data['interest'] = $next_interest;
-                    $extra_data['processing_fee'] = $next_fee;
-                    $extra_data['details'] = 'Excess from previous';
-                    (new add_data('field_payments', $extra_data))->create_data();
-
-                    $overpaid -= $to_pay;
-                }
-            }
-            if ($overpaid > 0) {
-                $cust = $get_details->fetch_details_cond('customers', 'customer_id', $customer)[0];
-                $new_wallet = $cust->wallet_balance + $overpaid;
-                $update->update('customers', 'wallet_balance', 'customer_id', $new_wallet, $customer);
-            }
-        } */
-        //accounting entries
-        // Accounting entries are done once per total amount paid,
-        // not per repayment schedule. Even if the amount affects multiple schedules,
-        // we post one consolidated debit and credit here for the full amount.
-         // Proportional interest and fee for this payment
-       /*  $interest_income = round(($amount * $interest_portion) / $total_payable, 2);
-        $processing_fee_income = round(($amount * $processing_portion) / $total_payable, 2); */
+        
         //get customer details
         $bals = $get_details->fetch_details_cond('customers', 'customer_id', $customer);
         foreach($bals as $bal){
@@ -204,6 +167,12 @@
             $dr_type = $inv->account_group;
             $dr_group = $inv->sub_group;
             $dr_class = $inv->class;
+        }
+        //transaction amount in naira
+        if($currency == "Dollar"){
+            $amount = $amount * $rate;
+        }else{
+            $amount = $amount;
         }
         //cash or bank
         $credit_data = array(
@@ -287,7 +256,7 @@
     <p>Dear $client,</p>
 
     <p>We are pleased to inform you that your investment return of 
-    <strong>₦$fmt_return</strong> (representing <strong>$percentage%</strong> of your 
+    <strong>$icon$fmt_return</strong> (representing <strong>$percentage%</strong> of your 
     investment of <strong>$icon$fmt_total_cost</strong>) which is due on <strong>$due_date</strong> has been successfully paid.</p>
 
     <p>
@@ -305,7 +274,7 @@
         $notif_data = array(
             'client' => $customer,
             'subject' => 'Investment Return Payment Confirmation',
-            'message' => "Dear $client, your investment return of ₦$fmt_return has been successfully paid.
+            'message' => "Dear $client, your investment return of $icon$fmt_return has been successfully paid.
 
         Payment Date: $date
         Transaction ID: $receipt

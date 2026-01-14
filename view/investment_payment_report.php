@@ -58,6 +58,7 @@
                 $details = $get_details->fetch_details_curdateCon('investment_payments', 'post_date', 'store', $store);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
+
             ?>
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
@@ -71,7 +72,11 @@
                 <td><?php echo "DAV/CON/00$detail->investment"?></td>
                 
                 <td style="color:var(--primaryColor)"><?php echo $detail->invoice;?></td>
+                <?php if($detail->currency == "Dollar"){?>
+                <td><?php echo "$".number_format($detail->amount, 2)?></td>
+                <?php }else{?>
                 <td><?php echo "₦".number_format($detail->amount, 2)?></td>
+                <?php }?>
                 <td><?php echo $detail->payment_mode;?></td>
                 <td style="color:var(--moreColor)"><?php echo date("d-M-Y", strtotime($detail->trx_date))?></td>
                 <td>
@@ -93,10 +98,10 @@
             echo "<p class='no_result'>'$details'</p>";
         }
         //get total cos of payments today
-        $ttls = $get_details->fetch_sum_curdateCon('investment_payments', 'amount', 'date(post_date)', 'store', $store);
+        $ttls = $get_details->fetch_sum_curdateCon('investment_payments', 'amount_in_dollar', 'date(post_date)', 'store', $store);
         if(gettype($ttls) === 'array'){
             foreach($ttls as $ttl){
-                echo "<p class='total_amount' style='color:green; text-align:center;'>Total: ₦".number_format($ttl->total, 2)."</p>";
+                echo "<p class='total_amount' style='color:green; text-align:center;'>Total: $".number_format($ttl->total, 2)."</p>";
             }
         }
     ?>

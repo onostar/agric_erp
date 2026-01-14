@@ -51,7 +51,11 @@
                 <td><?php echo "DAV/CON/00$detail->investment"?></td>
 
                 <td style="color:var(--primaryColor)"><?php echo $detail->invoice;?></td>
+                 <?php if($detail->currency == "Dollar"){?>
+                <td><?php echo "$".number_format($detail->amount, 2)?></td>
+                <?php }else{?>
                 <td><?php echo "₦".number_format($detail->amount, 2)?></td>
+                <?php }?>
                 <td><?php echo $detail->payment_mode;?></td>
                 <td style="color:var(--moreColor)"><?php echo date("d-M-Y", strtotime($detail->trx_date))?></td>
                 <td>
@@ -71,7 +75,7 @@
         echo "<p class='no_result'>'$details'</p>";
     }
     //get total cos of payments today
-    $ttls = $get_revenue->fetch_sum_2dateCond('investment_payments', 'amount', 'store', 'date(post_date)', $from, $to,  $store);
+    $ttls = $get_revenue->fetch_sum_2dateCond('investment_payments', 'amount_in_dollar', 'store', 'date(post_date)', $from, $to,  $store);
     if(gettype($ttls) === 'array'){
         foreach($ttls as $ttl){
             echo "<p class='total_amount' style='color:green; text-align:center;'>Total: ₦".number_format($ttl->total, 2)."</p>";

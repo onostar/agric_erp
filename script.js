@@ -10222,3 +10222,27 @@ function uploadDocument(){
      $("#title").val('');
      $("#doc_type").focus();
 }
+
+//generate new returns schedule
+function generateReturnSchedule(investment, customer){
+     let confirmpost = confirm("Are you sure you want to generate a new returns schedule for this investment?", "");
+     if(confirmpost){
+          $.ajax({
+               type : "POST",
+               url : "../controller/generate_returns_schedule.php",
+               data : {investment:investment, customer:customer},
+               beforeSend : function(){
+                    $("#package").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#package").html(response);
+                    setTimeout(function(){
+                         showPage("view_overdue_investment.php?customer="+customer+"&investment="+investment);
+                    }, 2000);
+                   
+               }
+          })
+     }else{
+          return;
+     }
+}

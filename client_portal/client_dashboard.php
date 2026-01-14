@@ -39,7 +39,7 @@
                         }else{
                             $total_investment = 0;
                         }
-                        echo "₦".number_format($total_investment, 2);
+                        echo "$".number_format($total_investment, 2);
                     ?>
                     </p>
                 </div>
