@@ -96,7 +96,7 @@ if($check == 0){
     $first_due = (clone $start)->modify('+12 months');
 
     /* First return = 30% */
-    $ret1 = 0.30 * $amount;
+    $ret1 = 0.30 * $invest_amount;
     $returns_data = array(
         'investment_id'=>$investment,
         'customer'=>$customer,
@@ -119,7 +119,7 @@ if($check == 0){
 
     for($i = 1; $i <= $installments; $i++){
         $current = (clone $current)->modify('+6 months');
-        $ret = 0.15 * $amount;
+        $ret = 0.15 * $invest_amount;
 
         $data_ret = array(
             'investment_id'=>$investment,
