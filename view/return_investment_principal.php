@@ -41,7 +41,7 @@
             $amount_invested = $lns->amount;
             $currency = $lns->currency;
             $start_date = $lns->start_date;
-            $total_in_naira = $lns->total_in_naira;
+            // $total_in_naira = $lns->total_in_naira;
         }
         if($currency == "Dollar"){
             $icon = "$";
@@ -70,9 +70,18 @@
                     <input type="hidden" name="store" id="store" value="<?php echo $store?>">
                     <input type="hidden" name="investment" id="investment" value="<?php echo $investment?>">
                     
-                    <div class="data" style="width:48%; margin:5px 0">
+                    <div class="data" style="width:100%; margin:5px 0">
                         <label for="amount"> Transaction Date</label>
                         <input type="date" name="trans_date" id="trans_date" value="<?php echo date('Y-m-d')?>">
+                    </div>
+                    <div class="data" style="width:48%; margin:5px 0">
+                        <?php if($currency == "Dollar"){?>
+                        <label for="amount"> Amount in USD</label>
+                        <?php }else{?>
+                        <label for="amount"> Amount in Naira</label>
+                        <?php }?>
+                        <input type="text" readonly value="<?php echo $icon.number_format($amount_invested, 2)?>">
+                        <input type="hidden" id="amount" name="amount" value="<?php echo $amount_invested?>">
                     </div>
                     <div class="data" style="width:48%">
                         <label for="Payment_mode"><span class="ledger">Dr. Ledger</span> (Cash/Bank)</label>
@@ -83,16 +92,7 @@
                             <option value="Transfer">Transfer</option>
                         </select>
                     </div>
-                    <div class="data" style="width:48%; margin:5px 0">
-                        <label for="amount"> Amount</label>
-                        <input type="text" readonly value="<?php echo $icon.number_format($amount_invested, 2)?>">
-                        <input type="hidden" id="amount" name="amount" value="<?php echo $amount_invested?>">
-                    </div>
-                    <div class="data" style="width:48%; margin:5px 0">
-                        <label for="amount"> Value in Naira</label>
-                        <input type="text" readonly value="<?php echo "₦".number_format($total_in_naira, 2)?>">
-                        <input type="hidden" name="amount_in_naira" id="amount_in_naira" value="<?php echo $total_in_naira?>">
-                    </div>
+                    
                     
                     <div class="data" id="selectBank"  style="width:100%!important">
                         <select name="bank" id="bank">

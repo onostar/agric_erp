@@ -9829,7 +9829,7 @@ function returnPrincipal(){
      let store = document.getElementById("store").value;
      let investment = document.getElementById("investment").value;
      let amount = document.getElementById("amount").value;
-     let amount_in_naira = document.getElementById("amount_in_naira").value;
+     // let amount_in_naira = document.getElementById("amount_in_naira").value;
      let payment_mode = document.getElementById("payment_mode").value;
      
      let details = document.getElementById("details").value;
@@ -9872,7 +9872,7 @@ function returnPrincipal(){
                $.ajax({
                     type : "POST",
                     url : "../controller/return_principal.php",
-                    data : {posted:posted, customer:customer, investment:investment, payment_mode:payment_mode, amount:amount, amount_in_naira:amount_in_naira, details:details, store:store, invoice:invoice, bank:bank, trans_date:trans_date, balance:balance},
+                    data : {posted:posted, customer:customer, investment:investment, payment_mode:payment_mode, amount:amount,/*  amount_in_naira:amount_in_naira,  */details:details, store:store, invoice:invoice, bank:bank, trans_date:trans_date, balance:balance},
                     beforeSend : function(){
                          $("#fund_account").html("<div class='processing'><div class='loader'></div></div>");
                     },

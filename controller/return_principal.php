@@ -10,7 +10,7 @@ $store = htmlspecialchars(stripslashes($_POST['store'] ?? ''));
 $mode = htmlspecialchars(stripslashes($_POST['payment_mode'] ?? ''));
 $balance = htmlspecialchars(stripslashes($_POST['balance'] ?? 0));
 $amount = htmlspecialchars(stripslashes($_POST['amount'] ?? 0)); // principal in original currency
-$amount_in_naira = htmlspecialchars(stripslashes($_POST['amount_in_naira'] ?? 0)); // converted naira value
+// $amount_in_naira = htmlspecialchars(stripslashes($_POST['amount_in_naira'] ?? 0)); // converted naira value
 $investment = htmlspecialchars(stripslashes($_POST['investment'] ?? ''));
 $bank = htmlspecialchars(stripslashes($_POST['bank'] ?? ''));
 $trans_date = htmlspecialchars(stripslashes($_POST['trans_date'] ?? date("Y-m-d")));
@@ -27,21 +27,7 @@ for ($i = 0; $i < 3; $i++) {
 }
 $trx_num = "TR" . $ran_num . $todays_date;
 
-// --- prepare deposit record (amount_in_naira is the numeric amount posted) ---
-$data = array(
-    'posted_by' => $user,
-    'customer' => $customer,
-    'payment_mode' => $mode,
-    'amount' => $amount_in_naira,
-    'details' => 'Principal Return',
-    'invoice' => $receipt,
-    'store' => $store,
-    'bank' => $bank,
-    'trx_type' => $trans_type,
-    'trans_date' => $trans_date,
-    'post_date' => $date,
-    'trx_number' => $trx_num
-);
+
 
 // --- includes / classes ---
 include "../classes/dbh.php";
@@ -54,7 +40,38 @@ require "../PHPMailer/class.phpmailer.php";
 require "../PHPMailer/class.smtp.php";
 
 $get_details = new selects();
-
+// --- fetch investment details (for email summary) ---
+$inv_rows = $get_details->fetch_details_cond('investments', 'investment_id', $investment);
+$currency = '';
+$duration = '';
+$rate = 0;
+$invest_ref = "DAV/CON/00" . $investment;
+foreach ($inv_rows as $inv_row) {
+    $currency = $inv_row->currency ?? '';
+    $duration = $inv_row->duration ?? '';
+    $rate = $inv_row->exchange_rate ?? '';
+    // optionally fetch more fields if available (e.g., investment_reference)
+}
+/* if($currency == "Dollar"){
+    $amount_in_naira = $amount * $rate; // convert to naira
+}else{
+    $amount_in_naira = $amount;
+} */
+// --- prepare deposit record (amount_in_naira is the numeric amount posted) ---
+$data = array(
+    'posted_by' => $user,
+    'customer' => $customer,
+    'payment_mode' => $mode,
+    'amount' => $amount, // original currency principal
+    'details' => 'Principal Return',
+    'invoice' => $receipt,
+    'store' => $store,
+    'bank' => $bank,
+    'trx_type' => $trans_type,
+    'trans_date' => $trans_date,
+    'post_date' => $date,
+    'trx_number' => $trx_num
+);
 // --- insert deposit record ---
 $add_deposit = new add_data('deposits', $data);
 $add_deposit->create_data();
@@ -65,30 +82,24 @@ if ($add_deposit) {
         'customer' => $customer,
         'store' => $store,
         'description' => $trans_type,
-        'amount' => $amount_in_naira,
+        'amount' => $amount,
         'posted_by' => $user,
         'trx_number' => $trx_num,
         'post_date' => $date
     );
-    (new add_data('customer_trail', $trail_data))->create_data();
+    $add_trail = new add_data('customer_trail', $trail_data);
+    $add_trail->create_data();
 
-    // --- fetch investment details (for email summary) ---
-    $inv_rows = $get_details->fetch_details_cond('investments', 'investment_id', $investment);
-    $currency = '';
-    $duration = '';
-    $invest_ref = "DAV/CON/00" . $investment;
-    foreach ($inv_rows as $inv_row) {
-        $currency = $inv_row->currency ?? '';
-        $duration = $inv_row->duration ?? '';
-        // optionally fetch more fields if available (e.g., investment_reference)
-    }
+    
 
     // --- insert principal return record ---
+    
     $principal_data = array(
         'investment' => $investment,
         'client' => $customer,
+        'currency' => $currency,
         'amount' => $amount, // original currency principal
-        'value_in_naira' => $amount_in_naira, // naira equivalent
+        'value_in_naira' => $amount, // naira equivalent
         'trx_date' => $trans_date,
         'trx_number' => $trx_num,
         'invoice' => $receipt,
@@ -98,7 +109,8 @@ if ($add_deposit) {
         'posted_by' => $user,
         'store' => $store
     );
-    (new add_data('principal_returns', $principal_data))->create_data();
+    $add_principal = new add_data('principal_returns', $principal_data);
+    $add_principal->create_data();
 
     // --- update principal status on investment ---
     (new Update_table())->update('investments', 'principal', 'investment_id', 1, $investment);
@@ -148,7 +160,7 @@ if ($add_deposit) {
         'sub_group' => $ledger_group,
         'class' => $ledger_class,
         'details' => 'Investment Principal Return',
-        'debit' => $amount_in_naira,
+        'debit' => $amount,
         'post_date' => $date,
         'posted_by' => $user,
         'trx_number' => $trx_num,
@@ -161,7 +173,7 @@ if ($add_deposit) {
         'sub_group' => $dr_group,
         'class' => $dr_class,
         'details' => 'Investment Principal Return',
-        'credit' => $amount_in_naira,
+        'credit' => $amount,
         'post_date' => $date,
         'posted_by' => $user,
         'trx_number' => $trx_num,
@@ -169,22 +181,24 @@ if ($add_deposit) {
         'store' => $store
     );
 
-    (new add_data('transactions', $debit_data))->create_data();
-    (new add_data('transactions', $credit_data))->create_data();
+    $add_debit = new add_data('transactions', $debit_data);
+    $add_credit = new add_data('transactions', $credit_data);
+    $add_credit->create_data();
 
     // --- cash flow entry (financing outflow) ---
     $flow_data = array(
         'account' => $dr_ledger,
         'details' => 'Investment Principal Return',
         'trx_number' => $trx_num,
-        'amount' => $amount_in_naira,
+        'amount' => $amount,
         'trans_type' => 'outflow',
         'activity' => 'financing',
         'post_date' => $date,
         'posted_by' => $user,
         'store' => $store
     );
-    (new add_data('cash_flows', $flow_data))->create_data();
+    $add_flow = new add_data('cash_flows', $flow_data);
+    $add_flow->create_data();
 
     // --- formatting for email ---
     $fmt_principal = number_format((float)$amount, 2);
@@ -192,6 +206,11 @@ if ($add_deposit) {
     $trx_date_formatted = date("jS F Y, h:ia", strtotime($trans_date));
 
     // --- Option B: Detailed Investment Summary (email body) ---
+    if($currency == "Dollar"){
+        $icon = "$";
+    }else{
+        $icon = "₦";
+    }
     $email_message = "
         <p>Dear {$client_name},</p>
 
@@ -200,9 +219,8 @@ if ($add_deposit) {
         <h3>Investment Principal Return Summary</h3>
         <ul>
             <li><strong>Investment ID:</strong> {$invest_ref}</li>
-            <li><strong>Principal Amount:</strong> {$currency} {$fmt_principal}</li>
-            <li><strong>Value (₦):</strong> ₦{$fmt_naira}</li>
-            <li><strong>Contract Duration:</strong> " . htmlspecialchars($duration) . "</li>
+            <li><strong>Principal Amount:</strong> {$icon} {$fmt_principal}</li>
+            <li><strong>Contract Duration:</strong> " . htmlspecialchars($duration) . " Years</li>
             <li><strong>Transaction Date:</strong> {$trx_date_formatted}</li>
             <li><strong>Transaction ID:</strong> {$receipt}</li>
         </ul>
@@ -216,7 +234,7 @@ if ($add_deposit) {
     ";
 
     // --- notification record (consistent text) ---
-    $notif_message = "Dear {$client_name}, Your investment principal of {$currency} {$fmt_principal} (₦{$fmt_naira}) has been returned on {$trx_date_formatted}. Transaction ID: {$receipt}. Thank you for investing with {$company}.";
+    $notif_message = "Dear {$client_name}, Your investment principal of {$icon} {$fmt_principal} has been returned on {$trx_date_formatted}. Transaction ID: {$receipt}. Thank you for investing with {$company}.";
 
     $notif_data = array(
         'client' => $customer,

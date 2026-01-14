@@ -18,7 +18,7 @@
 <div id="revenueReport" class="displays management" style="margin:0!important;width:100%!important">
     
 <div class="displays allResults new_data" id="revenue_report">
-    <h2>My Current Concentrate Investments</h2>
+    <h2>My Concentrate Investments</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchRoom" placeholder="Enter keyword" onkeyup="searchData(this.value)">

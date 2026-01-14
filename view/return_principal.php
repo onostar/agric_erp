@@ -32,10 +32,11 @@
                 <td>Inv. No.</td>
                 <td>Start Date</td>
                 <td>Currency</td>
+                <td>Units</td>
                 <td>Principal</td>
-                <td>Value in Naira (NGN)</td>
-                <td>Total ROI (NGN)</td>
-                <td>Total Paid (NGN)</td>
+                <td>Value in USD</td>
+                <td>Total ROI</td>
+                <td>Total Paid</td>
                 <td></td>
             </tr>
         </thead>
@@ -63,6 +64,7 @@
                         echo $detail->currency;
                     ?>
                 </td>
+                <td><?php echo $detail->units?> unit(s)</td>
                 <?php
                     if($detail->currency == "Dollar"){
                 ?>
@@ -70,7 +72,7 @@
                 <?php }else{?>
                 <td style="color:var(--otherColor)"><?php echo "₦".number_format($detail->amount, 2);?></td>
                 <?php }?>
-                <td style="color:var(--otherColor)"><?php echo "₦".number_format($detail->total_in_naira, 2);?></td>
+                <td style="color:var(--otherColor)"><?php echo "₦".number_format($detail->total_in_dollar, 2);?></td>
                 <td style="color:green">
                     <?php
                         //total retunrs
@@ -82,7 +84,11 @@
                         }else{
                             $total_returns = 0;
                         }
-                        echo "₦".number_format($total_returns, 2);
+                        if($detail->currency == "Dollar"){
+                            echo "$".number_format($total_returns, 2);
+                        }else{
+                            echo "₦".number_format($total_returns, 2);
+                        }
                     ?>
                 </td>
                 <td style="color:red">
@@ -96,7 +102,11 @@
                         }else{
                             $total_paid = 0;
                         }
-                        echo "₦".number_format($total_paid, 2);
+                        if($detail->currency == "Dollar"){
+                            echo "$".number_format($total_paid, 2);
+                        }else{
+                            echo "₦".number_format($total_paid, 2);
+                        }
                     ?>
                 </td>
                 

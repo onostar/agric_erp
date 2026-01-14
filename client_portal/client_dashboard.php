@@ -256,10 +256,7 @@
            
         </div>
         <!-- investment returns schedule -->
-        <?php 
-            $invs = $get_info->fetch_details_2cond('investments', 'customer', 'contract_status', $user_id, 1);
-            if(is_array($invs)){
-        ?>
+       
         <div class="monthly_report allResults" style="margin:0!important;padding:0!important">
             
             <div class="monthly_encounter" style="margin:0 0 20px; width:100%!important">
@@ -279,7 +276,8 @@
                 <tbody id="result">
                     <?php
                         $n = 1;
-                        
+                        $invs = $get_info->fetch_details_2cond('investments', 'customer', 'contract_status', $user_id, 1);
+                        if(is_array($invs)){
                         foreach($invs as $inv){
                             $repays = $get_info->fetch_details_2cond('investment_returns', 'investment_id', 'payment_status', $inv->investment_id, 0);
                             if(is_array($repays)){
@@ -320,7 +318,7 @@
                                         }
                                         $allow_next = false; // After showing Add Payment for one, others must wait
                                     } else {
-                                        echo "<span style='color:#999;'>Waiting for previous payment <i class='fas fa-lock'></i></span>";
+                                        echo "<span style='color:#999;'>Previous Payment Pending <i class='fas fa-lock'></i></span>";
                                     }
                                 }
                             ?>
@@ -351,17 +349,16 @@
                         <?php }?>
                     </tr>
                     
-                    <?php }?>
+                    <?php }}?>
                 </tbody>
             </table>
             <?php
-                if(gettype($repays) == "string"){
-                    echo "<p class='no_result'>'$repays'</p>";
+                if(gettype($invs) == "string"){
+                    echo "<p class='no_result'>'$invs'</p>";
                 }
-            ?>
+                ?>
             </div>
            
         </div>
-        <?php }?>
     </div>
 </div>
