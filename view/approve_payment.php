@@ -99,7 +99,7 @@
                         </div>
                         
                         <div class="data" style="width:24%;">
-                            <label for="purpose" style="text-align:left!important;">Due Date:</label>
+                            <label for="purpose" style="text-align:left!important;">Payment Due Date:</label>
                             <input type="text" value="<?php echo date("d-M-Y", strtotime($row->due_date))?>" readonly>
                         </div>
                         

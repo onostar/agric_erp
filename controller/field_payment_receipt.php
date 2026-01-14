@@ -36,7 +36,7 @@ if(isset($_GET['receipt'])){
     $customers = $get_details->fetch_details_cond('customers', 'customer_id', $customer);
     foreach($customers as $cust){
         $account = $cust->acn;
-        $customer_name = $cust->customer_name ?? $cust->full_name ?? "Customer";
+        $customer_name = $cust->customer;
     }
 
     /* -------------------------------------------------
@@ -56,6 +56,8 @@ if(isset($_GET['receipt'])){
     foreach($assigned as $asf){
         $field = $asf->field;
         $purchase_cost = $asf->total_due;
+        $documentation = $asf->documentation;
+        
     }
 
     /* -------------------------------------------------
@@ -114,9 +116,10 @@ if(isset($_GET['receipt'])){
     <div class="receipt_section">
         <h4>Field / Land Information</h4>
         <p><strong>Field Name:</strong> <?php echo $field_name; ?></p>
-        <p><strong>Field Size:</strong> <?php echo $size; ?>Hectares</p>
+        <p><strong>Field Size:</strong> <?php echo $size; ?> Plot (<?php echo $size * 500?>m&sup2)</p>
         <p><strong>Location:</strong> <?php echo $location; ?></p>
-        <p><strong>Total Purchase Cost:</strong> ₦<?php echo number_format($purchase_cost); ?></p>
+        <p><strong>Total Purchase Cost:</strong> ₦<?php echo number_format($purchase_cost, 2); ?></p>
+        <p><strong>Documentation Fee:</strong> ₦<?php echo number_format($documentation, 2); ?></p>
     </div>
 
     <table id="postsales_table" class="searchTable">

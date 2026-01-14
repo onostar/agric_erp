@@ -1503,6 +1503,19 @@ public function fetch_total_working_days_month($date){
                 return $rows;
             }
         }
+        //fetch between two dates and 2 Condition grouped by 
+        public function fetch_details_2date2ConGr($table, $col, $value1, $value2, $con, $con_value, $group){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE  $col BETWEEN '$value1' AND '$value2' AND $con = :$con GROUP BY $group");
+            $get_user->bindValue("$con", $con_value);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
         //fetch with current date
         public function fetch_details_curdate($table, $column){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE date($column) = CURDATE()");

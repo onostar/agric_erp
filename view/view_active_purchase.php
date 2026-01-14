@@ -70,10 +70,10 @@
                             ?>
                             <input type="text" value="<?php echo $pay_duration?> " readonly>
                         </div>
-                        <div class="data" style="width:24%;">
+                        <!-- <div class="data" style="width:24%;">
                             <label for=""> Installment:</label>
                             <input type="text" value="<?php echo '₦'.number_format($row->installment, 2)?>" readonly style="color:var(--otherColor)">
-                        </div>
+                        </div> -->
                         <div class="data" style="width:24%;">
                             <label for="repayment" style="text-align:left!important;">Rent Contract Duration</label>
                             <input type="text" value="<?php echo $row->contract_duration?> Years" readonly>
@@ -160,8 +160,17 @@
                         $total_paid = $paid->total;
                     }
                     $balance = $total_due - $total_paid;
+                    //get latest schedule
+                    $sches = $get_details->fetch_details_2cond('field_payment_schedule', 'assigned_id', 'payment_status', $row->assigned_id, 0);
+                    if(is_array($sches)){
+                        foreach($sches as $sche){
+                            $schedule = $sche->repayment_id;
+                        }
+                    }
                 ?>
-                    <div class="totals" style="display:flex; gap:1rem; justify-content:right">
+                    
+                    <div class="totals" style="display:flex; gap:1rem; justify-content:flex-end; align-items:center; padding:10px;">
+                        <a href="javascript:void(0)" title="Generate New Schedule" onclick="showPage('field_payment.php?schedule=<?php echo $schedule?>&customer=<?php echo $customer_id?>')" style="background:var(--tertiaryColor); color:#fff; padding:5px 10px; border-radius:15px; box-shadow:1px 1px 1px #222; border:1px solid #fff;">Post Payment <i class="fas fa-hand-holding-dollar"></i></a>
                         <?php
                         echo "<p class='total_amount' style='background:green; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:1rem;'>Total Paid: ₦".number_format($total_paid, 2)."</p>";
                         echo "<p class='total_amount' style='background:red; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:1rem;'>Total Due: ₦".number_format($balance, 2)."</p>";

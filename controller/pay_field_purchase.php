@@ -118,7 +118,32 @@
             $update = new Update_table();
             $update->update('field_payment_schedule', 'amount_paid', 'repayment_id', $total_paid, $schedule);
         }
-        
+        //check if there has been payment before
+        $check = $get_details->fetch_count_cond('field_payments', 'loan', $loan_id);
+        if($check == 0){
+            //now generate rent payment schedule for the field
+            $installments = $duration; //yearly
+            
+            $start_date = new DateTime($date);
+            for($i = 1; $i <= $installments; $i++){
+                $due_date = clone $start_date;$due_date->modify("+$i year");
+                
+                $rent_data = array(
+                    'field' => $field_id,
+                    'assigned_id' => $loan_id,
+                    'customer' => $customer,
+                    'due_date' => $due_date->format('Y-m-d'),
+                    'amount_due' => $annual_rent,
+                    'store' => $store,
+                    'posted_by' => $user,
+                    'post_date' => $date
+                );
+
+                $insert_repayment = new add_data('rent_schedule', $rent_data);
+                $insert_repayment->create_data();
+               
+            }
+        }
         //add into payment table
         $repayment_data = array(
             'customer' => $customer,
@@ -263,54 +288,7 @@
         //add credit
         $add_credit = new add_data('transactions', $credit_data);
         $add_credit->create_data();
-        //credit interest ledger
-        //get interest ledger details
-        /* $ints = $get_details->fetch_details_cond('ledgers', 'ledger', 'INTEREST INCOME');
-        foreach($ints as $int){
-            $int_ledger = $int->acn;
-            $int_type = $int->account_group;
-            $int_group = $int->sub_group;
-            $int_class = $int->class;
-        }
-        $interest_data = array(
-            'account' => $int_ledger,
-            'account_type' => $int_type,
-            'sub_group' => $int_group,
-            'class' => $int_class,
-            'details' => 'Interest from Loan Repayment',
-            'credit' => $interest_income,
-            'post_date' => $date,
-            'posted_by' => $user,
-            'trx_number' => $trx_num,
-            'trans_date' => $trans_date
-
-        );
-        $add_int = new add_data('transactions', $interest_data);
-        $add_int->create_data(); */
-        //credit processing ledger
-        //get processing fee ledger details
-        /* $proc = $get_details->fetch_details_cond('ledgers', 'ledger', 'PROCESSING FEE INCOME');
-        foreach($proc as $pro){
-            $pro_ledger = $pro->acn;
-            $pro_type = $pro->account_group;
-            $pro_group = $pro->sub_group;
-            $pro_class = $pro->class;
-        }
-        $process_data = array(
-            'account' => $pro_ledger,
-            'account_type' => $pro_type,
-            'sub_group' => $pro_group,
-            'class' => $pro_class,
-            'details' => 'Processing fee from Loan Repayment',
-            'credit' => $processing_fee_income,
-            'post_date' => $date,
-            'posted_by' => $user,
-            'trx_number' => $trx_num,
-            'trans_date' => $trans_date
-
-        );
-        $add_pro = new add_data('transactions', $process_data);
-        $add_pro->create_data(); */
+        
         //cash flow data
         $flow_data = array(
             'account' => $dr_ledger,
@@ -325,32 +303,7 @@
         );
         $add_flow = new add_data('cash_flows', $flow_data);
         $add_flow->create_data();
-        //add to other income table
-        /* //add inerest first
-        $interest_income_data = array(
-            'income_head' => $loan_id,
-            'amount' => $interest_income,
-            'activity' => 'gain',
-            'details' => 'Interest from Loan Repayment',
-            'trx_number' => $trx_num,
-            'post_date' => $date,
-            'posted_by' => $user
-        );
-        $add_interest_income = new add_data('other_income', $interest_income_data);
-        $add_interest_income->create_data();
-        //add processingfee next
-        $process_data = array(
-            'income_head' => $loan_id,
-            'amount' => $processing_fee_income,
-            'activity' => 'gain',
-            'details' => 'Fees from Loan Repayment',
-            'trx_number' => $trx_num,
-            'post_date' => $date,
-            'posted_by' => $user
-        );
-        $add_processing_income = new add_data('other_income', $process_data);
-        $add_processing_income->create_data(); */
-        //check if all repayments have been paid and update loan status
+        
         
         $check_repayments = $get_details->fetch_sum_single('field_payment_schedule', 'amount_paid', 'assigned_id', $loan_id);
         foreach($check_repayments as $rep){
@@ -369,28 +322,14 @@
             //update loan status
             $update_loan = new Update_table();
             $update_loan->update('assigned_fields', 'contract_status', 'assigned_id', 2, $loan_id);
-
-            //now generate rent payment schedule for the field
-            $installments = $duration; //yearly
+            //build rent schedule text
             $rent_schedule_text = "<ul>";
-            $start_date = new DateTime($date);
-            for($i = 1; $i <= $installments; $i++){
-                $due_date = clone $start_date;$due_date->modify("+$i year");
-                
-                $rent_data = array(
-                    'field' => $field_id,
-                    'assigned_id' => $loan_id,
-                    'customer' => $customer,
-                    'due_date' => $due_date->format('Y-m-d'),
-                    'amount_due' => $annual_rent,
-                    'store' => $store,
-                    'posted_by' => $user,
-                    'post_date' => $date
-                );
-
-                $insert_repayment = new add_data('rent_schedule', $rent_data);
-                $insert_repayment->create_data();
-                $rent_schedule_text .= "<li>₦" . number_format($annual_rent, 2) . " due on " . $due_date->format('jS F, Y') . "</li>";
+            //fetch investment returns details for email
+            $rent_returns = $get_details->fetch_details_cond('rent_schedule', 'assigned_id', $loan_id);
+            foreach($rent_returns as $ir){
+                $due = date("jS F, Y", strtotime($ir->due_date));
+                $annual_rent = number_format($ir->amount_due, 2);
+               $rent_schedule_text .= "<li>₦" . $annual_rent . " due on " . $due . "</li>";
             }
             $rent_schedule_text .= "</ul>";
 
