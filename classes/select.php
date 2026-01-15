@@ -394,7 +394,7 @@
         }
         //fetch attendance report for current day
         public function fetch_attendance($store){
-            $get_user = $this->connectdb()->prepare("SELECT s.staff_id, s.last_name, s.other_names, s.staff_number, s.department, s.designation, a.time_in, a.time_out, a.marked_by, a.checked_out_by, a.marked_date, a.checked_out, a.attendance_status, a.location, a.longitude, a.latitude, CASE WHEN a.time_in IS NOT NULL AND a.time_out IS NULL THEN 'Still Present' WHEN a.time_in IS NOT NULL AND a.time_out IS NOT NULL THEN 'Present' WHEN l.leave_status = 1 THEN 'On Leave' ELSE 'Absent' END AS status FROM staffs s LEFT JOIN attendance a  ON s.staff_id = a.staff AND DATE(a.attendance_date) = CURDATE()LEFT JOIN leaves l ON s.staff_id = l.employee AND l.leave_status = 1 AND CURDATE() BETWEEN l.start_date AND l.end_date WHERE s.store = :store ORDER BY s.last_name ASC;");
+            $get_user = $this->connectdb()->prepare("SELECT s.staff_id, s.last_name, s.other_names, s.staff_number, s.department, s.designation, a.time_in, a.time_out, a.marked_by, a.checked_out_by, a.marked_date, a.checked_out, a.attendance_status, a.location, a.longitude, a.latitude, a.attendance_id, CASE WHEN a.time_in IS NOT NULL AND a.time_out IS NULL THEN 'Not Signed Out' WHEN a.time_in IS NOT NULL AND a.time_out IS NOT NULL THEN 'Present' WHEN l.leave_status = 1 THEN 'On Leave' ELSE 'Absent' END AS status FROM staffs s LEFT JOIN attendance a  ON s.staff_id = a.staff AND DATE(a.attendance_date) = CURDATE()LEFT JOIN leaves l ON s.staff_id = l.employee AND l.leave_status = 1 AND CURDATE() BETWEEN l.start_date AND l.end_date WHERE s.store = :store ORDER BY s.last_name ASC;");
             $get_user->bindValue("store", $store);
             $get_user->execute();
             if($get_user->rowCount() > 0){
@@ -406,8 +406,8 @@
             }
         }
         //fetch attendance report by date
-        public function fetch_attendance_date($from, $to, $store){
-            $sql = "SELECT s.staff_id, s.last_name, s.other_names, s.staff_number, s.department, s.designation, a.time_in, a.time_out, a.marked_by, a.checked_out_by, a.marked_date, a.checked_out, a.attendance_status, a.attendance_date, a.location, a.latitude, a.longitude, CASE WHEN a.time_in IS NOT NULL AND a.time_out IS NULL THEN 'Still Present' WHEN a.time_in IS NOT NULL AND a.time_out IS NOT NULL THEN 'Present' WHEN l.leave_status = 1 THEN 'On Leave' ELSE 'Absent' END AS status FROM staffs s LEFT JOIN attendance a  ON s.staff_id = a.staff AND DATE(a.attendance_date) BETWEEN :from AND :to LEFT JOIN leaves l ON s.staff_id = l.employee AND l.leave_status = 1 AND (l.start_date BETWEEN :from AND :to OR l.end_date BETWEEN :from AND :to OR (:from BETWEEN l.start_date AND l.end_date)) WHERE s.store = :store ORDER BY s.last_name ASC";
+        /* public function fetch_attendance_date($from, $to, $store){
+            $sql = "SELECT s.staff_id, s.last_name, s.other_names, s.staff_number, s.department, s.designation, a.time_in, a.time_out, a.marked_by, a.checked_out_by, a.marked_date, a.checked_out, a.attendance_status, a.attendance_date, a.location, a.latitude, a.longitude, CASE WHEN a.time_in IS NOT NULL AND a.time_out IS NULL THEN 'Not Signed Out' WHEN a.time_in IS NOT NULL AND a.time_out IS NOT NULL THEN 'Present' WHEN l.leave_status = 1 THEN 'On Leave' ELSE 'Absent' END AS status FROM staffs s LEFT JOIN attendance a  ON s.staff_id = a.staff AND DATE(a.attendance_date) BETWEEN :from AND :to LEFT JOIN leaves l ON s.staff_id = l.employee AND l.leave_status = 1 AND (l.start_date BETWEEN :from AND :to OR l.end_date BETWEEN :from AND :to OR (:from BETWEEN l.start_date AND l.end_date)) WHERE s.store = :store ORDER BY a.attendance_date ASC";
             $stmt = $this->connectdb()->prepare($sql);
             $stmt->bindValue(":store", $store);
             $stmt->bindValue(":from", $from);
@@ -419,8 +419,68 @@
             } else {
                 return "No records found";
             }
-        }
+        } */
+ public function fetch_attendance_date($from, $to, $store){
+    $sql = "
+    WITH RECURSIVE dates AS (
+        SELECT DATE(:from) AS report_date
+        UNION ALL
+        SELECT DATE_ADD(report_date, INTERVAL 1 DAY)
+        FROM dates
+        WHERE report_date < DATE(:to)
+    )
+    SELECT 
+        s.staff_id,
+        s.last_name,
+        s.other_names,
+        s.staff_number,
+        s.department,
+        s.designation,
 
+        d.report_date AS attendance_date,
+
+        a.time_in,
+        a.time_out,
+        a.marked_by,
+        a.checked_out_by,
+        a.marked_date,
+        a.checked_out,
+        a.location,
+        a.latitude,
+        a.longitude,
+
+        CASE
+            WHEN l.leave_status = 1 THEN 'On Leave'
+            WHEN a.time_in IS NOT NULL AND a.time_out IS NULL THEN 'Not Signed Out'
+            WHEN a.time_in IS NOT NULL AND a.time_out IS NOT NULL THEN 'Present'
+            ELSE 'Absent'
+        END AS attendance_status
+
+    FROM staffs s
+    CROSS JOIN dates d
+
+    LEFT JOIN attendance a 
+        ON a.staff = s.staff_id 
+       AND DATE(a.attendance_date) = d.report_date
+
+    LEFT JOIN leaves l 
+        ON l.employee = s.staff_id
+       AND l.leave_status = 1
+       AND d.report_date BETWEEN l.start_date AND l.end_date
+
+    WHERE s.store = :store
+
+    ORDER BY d.report_date ASC, s.last_name ASC
+    ";
+
+    $stmt = $this->connectdb()->prepare($sql);
+    $stmt->bindValue(':store', $store);
+    $stmt->bindValue(':from', $from);
+    $stmt->bindValue(':to', $to);
+    $stmt->execute();
+
+    return $stmt->rowCount() > 0 ? $stmt->fetchAll() : "No records found";
+}
         //fetch active staff for attendance
         public function fetch_staff_attendance($store){
             $get_user = $this->connectdb()->prepare("SELECT 
@@ -750,7 +810,7 @@ public function fetch_generate_payrollpermonth($store, $payroll_date){
         }
 
         //fetch employee attendance for the current month
-        public function fetch_staff_work_days($staff){
+        /* public function fetch_staff_work_days($staff){
             $query = "SELECT COUNT(DISTINCT DATE(time_in)) AS attendance_days FROM attendance WHERE staff = :staff_id AND MONTH(attendance_date) = MONTH(CURDATE()) AND YEAR(attendance_date) = YEAR(CURDATE())";
             $stmt = $this->connectdb()->prepare($query);
             $stmt->bindValue(":staff_id", $staff);
@@ -758,9 +818,27 @@ public function fetch_generate_payrollpermonth($store, $payroll_date){
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             
             return $row && $row['attendance_days'] ? (int)$row['attendance_days'] : 0;
-        }
+        } */
+        // fetch employee attendance for the current month
+public function fetch_staff_work_days($staff){
+    $query = "
+        SELECT COUNT(DISTINCT DATE(attendance_date)) AS attendance_days
+        FROM attendance
+        WHERE staff = :staff_id
+          AND attendance_date >= DATE_FORMAT(CURDATE(), '%Y-%m-01')
+          AND attendance_date <  DATE_ADD(DATE_FORMAT(CURDATE(), '%Y-%m-01'), INTERVAL 1 MONTH)
+          AND time_in IS NOT NULL
+    ";
 
-        //fetch employee attendance for a specific month
+    $stmt = $this->connectdb()->prepare($query);
+    $stmt->bindValue(":staff_id", $staff);
+    $stmt->execute();
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return (int)($row['attendance_days'] ?? 0);
+}
+
+        /* //fetch employee attendance for a specific month
         public function fetch_staff_work_days_month($staff, $date){
             $query = "SELECT COUNT(DISTINCT DATE(time_in)) AS attendance_days FROM attendance WHERE staff = :staff_id AND MONTH(attendance_date) = MONTH(:attend_date) AND YEAR(attendance_date) = YEAR(:attend_date)";
             $stmt = $this->connectdb()->prepare($query);
@@ -771,7 +849,26 @@ public function fetch_generate_payrollpermonth($store, $payroll_date){
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             
             return $row && $row['attendance_days'] ? (int)$row['attendance_days'] : 0;
-        }
+        } */
+// fetch employee attendance for a specific month
+public function fetch_staff_work_days_month($staff, $date){
+    $query = "
+        SELECT COUNT(DISTINCT DATE(attendance_date)) AS attendance_days
+        FROM attendance
+        WHERE staff = :staff_id
+          AND attendance_date >= DATE_FORMAT(:attend_date, '%Y-%m-01')
+          AND attendance_date <  DATE_ADD(DATE_FORMAT(:attend_date, '%Y-%m-01'), INTERVAL 1 MONTH)
+          AND time_in IS NOT NULL
+    ";
+
+    $stmt = $this->connectdb()->prepare($query);
+    $stmt->bindValue(":staff_id", $staff);
+    $stmt->bindValue(":attend_date", $date);
+    $stmt->execute();
+
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return (int)($row['attendance_days'] ?? 0);
+}
 
         //fetch employee leave days for current month
         /* public function fetch_leave_days($staff){

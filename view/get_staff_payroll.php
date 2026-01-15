@@ -180,10 +180,10 @@
                     <label for="absence">Absence Penalty (NGN)</label>
                     <input type="number" name="absence" id="absence" required value=<?php echo $absent_fee?> oninput="getNetPay()" readonly>
                 </div>
-                <div class="data" style="width:23%;">
+                <!-- <div class="data" style="width:23%;">
                     <label for="lateness">Lateness Penalty (NGN)</label>
                     <input type="number" name="lateness" id="lateness" required value=<?php echo $lateness_fee?> oninput="getNetPay()" readonly>
-                </div>
+                </div> -->
                 <div class="data" style="width:23%;">
                     <label for="lateness">Loan Repayment (NGN)</label>
                     <input type="number" name="loans" id="loans" required value=0 oninput="getNetPay()">

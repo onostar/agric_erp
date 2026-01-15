@@ -13,7 +13,7 @@
     }
     
 </style>
-<div id="revenueReport" class="displays management" style="margin:0!important;width:100%!important">
+<div id="attendanceReport" class="displays management" style="margin:0!important;width:100%!important">
     <div class="select_date">
         <!-- <form method="POST"> -->
         <section>    
@@ -104,10 +104,10 @@
                         }
                     ?>
                 </td>
-                <?php if($detail->location == "Head Office"){?>
+                <?php if($detail->location == "Head Office" || $detail->time_in == NULL){?>
                 <td><?php echo $detail->location?></td>
                 <?php }else{?>
-                <td><a href="https://www.google.com/maps?q=<?php echo $detail->latitude?>,<?php echo $detail->longitude?>" target="_blank"><?php echo $detail->location?></a></td>
+                <td><a href="https://www.google.com/maps?q=<?php echo $detail->latitude?>,<?php echo $detail->longitude?>" target="_blank"><?php echo $detail->location?></a> <a style="color:red" href="javascript:void(0)" onclick="flagAttendance('<?php echo $detail->attendance_id?>')"><i class="fas fa-close"></i></a></td>
                 <?php }?>
                 <td style="color:var(--secondaryColor)">
                     <?php 
@@ -130,7 +130,7 @@
                     <?php
                         if($detail->status == "Present"){
                             echo "<span style='color:green'>$detail->status</span>";
-                        }elseif($detail->status == "Still Present"){
+                        }elseif($detail->status == "Not Signed Out"){
                             echo "<span style='color:var(--tertiaryColor)'>At Work</span>";
                         }elseif($detail->status == "Absent"){
                             echo "<span style='color:red'>$detail->status</span>";

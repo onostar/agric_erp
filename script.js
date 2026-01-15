@@ -10267,3 +10267,27 @@ function generateReturnSchedule(investment, customer){
           return;
      }
 }
+
+//flag attendance
+function flagAttendance(id){
+     let attendance = id;
+     let confirmFlag = confirm("Are you sure you want to flag this attendance?", "");
+     if(confirmFlag){
+          $.ajax({
+               type : "POST",
+               url : "../controller/flag_attendance.php",
+               data : {attendance:attendance},
+               beforeSend : function(){
+                    $("#attendanceReport").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success :function(response){
+                    $("#attendanceReport").html(response);
+                    setTimeout(function(){
+                         showPage("attendance_report.php");
+                    }, 2000)
+               }
+          })
+     }else{
+          return;
+     }
+}

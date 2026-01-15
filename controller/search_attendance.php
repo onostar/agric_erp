@@ -110,14 +110,14 @@
                 </td>
                 <td>
                     <?php
-                        if($detail->status == "Present"){
-                            echo "<span style='color:green'>$detail->status</span>";
-                        }elseif($detail->status == "Still Present"){
-                            echo "<span style='color:var(--tertiaryColor)'>$detail->status</span>";
-                        }elseif($detail->status == "Absent"){
-                            echo "<span style='color:red'>$detail->status</span>";
-                        }elseif($detail->status == "On Leave"){
-                            echo "<span style='color:blue'>$detail->status</span>";
+                        if($detail->attendance_status == "Present"){
+                            echo "<span style='color:green'>$detail->attendance_status</span>";
+                        }elseif($detail->attendance_status == "Not Signed Out"){
+                            echo "<span style='color:var(--tertiaryColor)'>$detail->attendance_status</span>";
+                        }elseif($detail->attendance_status == "Absent"){
+                            echo "<span style='color:red'>$detail->attendance_status</span>";
+                        }elseif($detail->attendance_status == "On Leave"){
+                            echo "<span style='color:blue'>$detail->attendance_status</span>";
                         }
                     ?>
                 </td>
