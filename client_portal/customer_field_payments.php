@@ -54,7 +54,7 @@
             <?php
                 $n = 1;
                 $get_details = new selects();
-                $details = $get_details->fetch_details_curdateCon('field_payments', 'post_date', 'customer', $customer);
+                $details = $get_details->fetch_details_curdateGro1con('field_payments', 'post_date', 'customer', $customer, 'invoice');;
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
@@ -71,7 +71,15 @@
                     ?>
                 </td>
                 <td style="color:var(--primaryColor)"><?php echo $detail->invoice;?></td>
-                <td><?php echo "₦".number_format($detail->amount, 2)?></td>
+                <td>
+                    <?php
+                        //total paid
+                        $ttl = $get_details->fetch_sum_single('field_payments', 'amount', 'invoice', $detail->invoice);
+                        foreach($ttl as $tt){
+                            echo "₦".number_format($tt->total, 2);
+                        }
+                    ?>
+                </td>
                 <td><?php echo $detail->payment_mode;?></td>
                 <td style="color:var(--moreColor)"><?php echo date("d-M-Y", strtotime($detail->trx_date))?></td>
                 <td>

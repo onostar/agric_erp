@@ -41,9 +41,10 @@
             $assigned = $lns->assigned_id;
             $amount_due = $lns->amount_due;
             $payment_status = $lns->payment_status;
+            $amount_paid = $lns->amount_paid;
         }
        //get total paid
-       $ttls = $get_details->fetch_sum_single('rent_schedule', 'amount_paid', 'assigned_id', $assigned);
+      /*  $ttls = $get_details->fetch_sum_single('rent_schedule', 'amount_paid', 'assigned_id', $assigned);
        if(gettype($ttls) == 'array'){
             foreach($ttls as $ttl){
                 $total_paid = $ttl->total;
@@ -59,9 +60,10 @@
             }
         }else{
             $total_due = 0;
-        }
+        } */
         //
-        $debt = $total_due - $total_paid;
+        // $debt = $total_due - $total_paid;
+        $debt = $amount_due - $amount_paid;
 
 ?>
 <div class="back_invoice">

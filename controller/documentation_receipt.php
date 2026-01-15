@@ -114,7 +114,7 @@ if(isset($_GET['receipt'])){
     <div class="receipt_section">
         <h4>Field / Land Information</h4>
         <p><strong>Field Name:</strong> <?php echo $field_name; ?></p>
-        <p><strong>Field Size:</strong> <?php echo $size; ?>Hectares</p>
+        <p><strong>Field Size:</strong> <?php echo $size; ?>Plot (<?php echo $size * 500; ?>m²)</p>
         <p><strong>Location:</strong> <?php echo $location; ?></p>
         <p><strong>Total Purchase Cost:</strong> ₦<?php echo number_format($purchase_cost); ?></p>
         <p><strong>Documentation Fee:</strong> ₦<?php echo number_format($documentation); ?></p>

@@ -317,6 +317,7 @@
         $fmt_total_paid = number_format($total_paid, 2);
         $fmt_rent = number_format($annual_rent, 2);
         $fmt_remaining = number_format($purchase_cost - $total_paid, 2);
+         $sqm = $size * 500;
         if($total_loan_paid === $total_loan_due){
            
             //update loan status
@@ -341,7 +342,7 @@
             <ul>
                 <li><strong>Field:</strong> $field_name</li>
                 <li><strong>Location:</strong> $location</li>
-                <li><strong>Size:</strong> $size Hectares</li>
+                <li><strong>Size:</strong> $size Plot ($sqm m²)</li>
                 <li><strong>Contract Duration:</strong> $duration year(s)</li>
                 <li><strong>Total Purchase Cost:</strong> ₦$fmt_total_cost</li>
                 <li><strong>Total Paid:</strong> ₦$fmt_total_paid</li>
@@ -358,7 +359,7 @@
             $notif_data = array(
                 'client' => $customer,
                 'subject' => 'Field Purchase Completed - Annual Rent Activated',
-                'message' => 'Dear ' . $client . ', your field (' . $field_name . ' - ' . $size . ' hectares) has been fully paid. Your annual rent of ₦' . $fmt_rent . ' will commence now for the next ' . $duration . ' year(s).',
+                'message' => 'Dear ' . $client . ', your field (' . $field_name . ' - ' . $size . ' plot(' . $sqm . ' m²)) has been fully paid. Your annual rent of ₦' . $fmt_rent . ' will commence now for the next ' . $duration . ' year(s).',
                 'post_date' => $date,
             );
 
@@ -366,6 +367,7 @@
             $add_data->create_data();
         } else {
             // partial payment message
+           
             $email_message = "
             <p>Dear $client,</p>
             <p>Your recent payment has been received successfully for your field purchase.</p>
@@ -373,7 +375,7 @@
             <ul>
                 <li><strong>Field:</strong> $field_name</li>
                 <li><strong>Location:</strong> $location</li>
-                <li><strong>Size:</strong> $size Hectares</li>
+                <li><strong>Size:</strong> $size Plot ($sqm m²)</li>
                 <li><strong>Contract Duration:</strong> $duration year(s)</li>
                 <li><strong>Total Purchase Cost:</strong> ₦$fmt_total_cost</li>
                 <li><strong>Total Paid So Far:</strong> ₦$fmt_total_paid</li>
@@ -389,7 +391,7 @@
             $notif_data = array(
                 'client' => $customer,
                 'subject' => 'Field Purchase Payment Update',
-                'message' => 'Dear ' . $client . ', your payment for ' . $field_name . ' (' . $size . ' hectares) has been received. Total paid so far: ₦' . $fmt_total_paid . ', remaining balance: ₦' . $fmt_remaining . '. Once fully paid, your annual rent of ₦' . $fmt_rent . ' will begin.',
+                'message' => 'Dear ' . $client . ', your payment for ' . $field_name . ' (' . $size . ' plot (' . $sqm . ' m²)) has been received. Total paid so far: ₦' . $fmt_total_paid . ', remaining balance: ₦' . $fmt_remaining . '. Once fully paid, your annual rent of ₦' . $fmt_rent . ' will begin.',
                 'post_date' => $date,
             );
 

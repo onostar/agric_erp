@@ -362,6 +362,6 @@ Thank you for investing with Davidorlah Nigeria Ltd',
     </div> -->
 <?php
 
-        echo "<div class='success'><p style='color:green; margin:5px 50px'>Payment posted successfully! <i class='fas fa-thumbs-up'></i></p></div>";
+        echo "<div class='success'><p style=' margin:5px 50px'>Payment posted successfully! <i class='fas fa-thumbs-up'></i></p></div>";
     // }
 }

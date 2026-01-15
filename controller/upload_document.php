@@ -32,10 +32,19 @@
     include "../classes/dbh.php";
     include "../classes/select.php";
     include "../classes/inserts.php";
-    
+    require "../PHPMailer/PHPMailerAutoload.php";
+    require "../PHPMailer/class.phpmailer.php";
+    require "../PHPMailer/class.smtp.php";
+    $get = new selects();
+    //get customer details
+    $cus = $get->fetch_details_cond('customers', 'customer_id', $customer);
+    foreach($cus as $cu){
+        $client = $cu->customer;
+        $customer_email = $cu->customer_email;
+    }
     //add document
     if(in_array($file_ext, $allowed_ext)){
-        if($photo_size <= 2000000){
+        if($photo_size <= 5000000){
             // For images: compress and save
             if (in_array($file_ext, ['png', 'jpg', 'jpeg', 'webp'])) {
                 function compressImage($source, $destination, $quality) {
@@ -69,6 +78,74 @@
                 $add_doc = new add_data('document_uploads', $data);
                 $add_doc->create_data();
                 if($add_doc){
+                    // build  message
+                    $message = "
+                    <p>Dear $client,</p>
+
+                    <p>
+                    We are pleased to inform you that your <strong>$doc_type</strong> has been successfully uploaded to your account.
+                    </p>
+                    <p>Other details: $title</p>
+                    <p>
+                    You may log in to your <strong>
+                    <a href='https://davidorlah.dorthprosuite.com/client_portal/' target='_blank'>
+                    Investor Portal
+                    </a>
+                    </strong> to view and download this document at your convenience.
+                    </p>
+
+                    <p>
+                    If you have any questions or require further assistance, please do not hesitate to contact our support team.
+                    </p>
+
+                    <br>
+
+                    <p>
+                    Thank you for trusting <strong>Davidorlah Nigeria Limited</strong> with your investment.
+                    </p>
+
+                    <p>
+                    Warm regards,<br>
+                    <strong>Investment Management Team</strong><br>
+                    Davidorlah Nigeria Limited
+                    </p>
+                    ";
+
+                    /* send mail */
+                    function smtpmailer($to, $from, $from_name, $subject, $body, $photo_folder){
+                        $mail = new PHPMailer();
+                        $mail->IsSMTP();
+                        $mail->SMTPAuth = true; 
+                        $mail->SMTPSecure = 'ssl'; 
+                        $mail->Host = 'www.davidorlahfarms.com';
+                        $mail->Port = 465; 
+                        $mail->Username = 'info@davidorlahfarms.com';
+                        $mail->Password = 'Info_DFarms@2520';   
+
+                        $mail->IsHTML(true);
+                        $mail->From="info@davidorlahfarms.com";
+                        $mail->FromName=$from_name;
+                        $mail->Sender=$from;
+                        $mail->AddReplyTo($from, $from_name);
+                        $mail->Subject = $subject;
+                        $mail->Body = $body;
+                        $mail->AddAddress($to);
+                        $mail->AddAttachment($photo_folder);
+
+                        if(!$mail->Send()){
+                            return "Failed to send mail";
+                        } else {
+                            return "Message Sent Successfully";
+                        }
+                    }
+
+                    $to = $customer_email;
+                    $from = 'info@davidorlahfarms.com';
+                    $from_name = "Davidorlah Nigeria Limited";
+                    $subj = 'New Document Uploaded Successfully';
+                    $msg = "<div>$message</div>";
+
+                    smtpmailer($to, $from, $from_name, $subj, $msg, $photo_folder);
                     echo "<p><span>Document uploaded Successfully</p>";
                 }else{
                     echo "<p class='exist'>Failed to upload Document</p>";

@@ -9238,8 +9238,8 @@ function payRent(){
           alert("Please input transaction amount");
           $("#amount").focus();
           return;
-     }else if(parseFloat(amount) > parseFloat(balance)){
-          alert("The amount entered exceeds the balance due. Please enter an amount that is less than or equal to the balance.");
+     }else if(parseFloat(amount) != parseFloat(balance)){
+          alert("The amount entered must be equal to the balance due.");
           $("#balance").focus();
           return;
      }else if(trans_date.length == 0 || trans_date.replace(/^\s+|\s+$/g, "").length == 0){

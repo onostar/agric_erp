@@ -64,7 +64,7 @@
                     <?php 
                         //convert to square meters
                         $sqm = $detail->field_size * 500;
-                        echo $detail->field_size." (".number_format($sqm)." m&sup2;)";
+                        echo $detail->field_size." Plot (".number_format($sqm)." m&sup2;)";
                     ?>
                 </td>
                 <td><?php echo $detail->soil_type?></td>

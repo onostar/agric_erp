@@ -202,10 +202,12 @@
         $fmt_total_paid = number_format($total_paid, 2);
         // $fmt_rent = number_format($annual_rent, 2);
         $fmt_remaining = number_format($documentation - $total_paid, 2);
+        $sqm = $size * 500;
         if($total_paid === $documentation){
            
 
             // build email message for full payment
+            
             $email_message = "
             <p>Dear $client,</p>
             <p>Congratulations! You have successfully completed your field documentation payment.</p>
@@ -213,14 +215,14 @@
             <ul>
                 <li><strong>Field:</strong> $field_name</li>
                 <li><strong>Location:</strong> $location</li>
-                <li><strong>Size:</strong> $size Hectares</li>
+                <li><strong>Size:</strong> $size Plot ($sqm m²)</li>
                 <li><strong>Contract Duration:</strong> $duration year(s)</li>
                 <li><strong>Total DOcumentation Cost:</strong> ₦$fmt_total_cost</li>
                 <li><strong>Total Paid:</strong> ₦$fmt_total_paid</li>
                 <li><strong>Amount Remaining:</strong> ₦0.00 (Fully Paid)</li>
                 
             </ul>
-            
+            <p>Please note that your <strong>Farm Management Contract</strong> and <strong>Deed of Assignment</strong> will be available in two weeks from today. While your <strong>Survey Documents</strong> will be available after allocation.</p>
             <p>Thank you for your trust in <strong>Davidorlah Nigeria Limited</strong>. We look forward to building a fruitful partnership with you.</p>
             <br><p>Warm regards,<br><strong>Farm Management Team</strong><br>Davidorlah Nigeria Limited</p>";
 
@@ -228,7 +230,7 @@
             $notif_data = array(
                 'client' => $customer,
                 'subject' => 'Field Documentation payment Completed',
-                'message' => 'Dear ' . $client . ', Documentation for your field (' . $field_name . ' - ' . $size . ' hectares) has been fully paid. ',
+                'message' => 'Dear ' . $client . ', Documentation for your field (' . $field_name . ' - ' . $size . ' plot ('.$sqm.'m²)) has been fully paid. ',
                 'post_date' => $date,
             );
 
@@ -243,7 +245,7 @@
             <ul>
                 <li><strong>Field:</strong> $field_name</li>
                 <li><strong>Location:</strong> $location</li>
-                <li><strong>Size:</strong> $size Hectares</li>
+                <li><strong>Size:</strong> $size Plot ($sqm m²)</li>
                 <li><strong>Contract Duration:</strong> $duration year(s)</li>
                 <li><strong>Total Documentation Cost:</strong> ₦$fmt_total_cost</li>
                 <li><strong>Total Paid So Far:</strong> ₦$fmt_total_paid</li>
@@ -258,7 +260,7 @@
             $notif_data = array(
                 'client' => $customer,
                 'subject' => 'Field Documentation Payment Update',
-                'message' => 'Dear ' . $client . ', your documentation payment for ' . $field_name . ' (' . $size . ' hectares) has been received. Total paid so far: ₦' . $fmt_total_paid . ', remaining balance: ₦' . $fmt_remaining ,
+                'message' => 'Dear ' . $client . ', your documentation payment for ' . $field_name . ' (' . $size . ' plot ('.$sqm.'m²)) has been received. Total paid so far: ₦' . $fmt_total_paid . ', remaining balance: ₦' . $fmt_remaining ,
                 'post_date' => $date,
             );
 

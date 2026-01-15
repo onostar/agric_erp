@@ -26,6 +26,7 @@
                     <option value="Survey Plan">Survey Plan</option>
                     <option value="Deed of Assignment">Deed of Assignment</option>
                     <option value="Land Purchase Agreement">Land Purchase Agreement</option>
+                    <option value="Farm Management Contract">Farm Management Contract</option>
                     <option value="Investment Contract">Investment Contract</option>
                     <option value="Others">Others</option>
                    
@@ -36,7 +37,7 @@
                 <input type="text" name="title" id="title" required>
             </div>
             <div class="data" style="width:48%">
-                <label for="document_upload">Upload Document</label>
+                <label for="document_upload">Upload Document (Max 5MB)</label>
                 <input type="file" name="document_upload" id="document_upload" required>
             </div>
             <div class="data">

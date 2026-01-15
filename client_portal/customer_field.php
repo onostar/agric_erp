@@ -24,7 +24,7 @@
             <tr style="background:var(--moreColor)">
                 <td>S/N</td>
                 <td>Field</td>
-                <td>Field Size (Hec)</td>
+                <td>Field Size (Plot)</td>
                 <td>Soil Type</td>
                 <td>Soil PH</td>
                 <td>Topography</td>
@@ -45,7 +45,7 @@
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
                 <td><?php echo $detail->field_name?></td>
                 
-                <td style="color:var(--otherColor)"><?php echo $detail->field_size?></td>
+                <td style="color:var(--otherColor)"><?php echo $detail->field_size?> Plot (<?php echo $detail->field_size * 500?> m&sup2)</td>
                 <td><?php echo $detail->soil_type?></td>
                 <td><?php echo $detail->soil_ph?></td>
                 <td><?php echo $detail->topography?></td>

@@ -169,7 +169,7 @@
             <section class="addUserForm">
                 <div class="inputs" style="flex-wrap:wrap">
                     <input type="hidden" name="invoice" id="invoice" value="<?php echo $receipt_id?>">
-                    <input type="hidden" name="posted" id="posted" value="<?php echo $user_id?>">
+                    <input type="hidden" name="posted" id="posted" value="<?php echo $user?>">
                     <input type="hidden" name="customer" id="customer" value="<?php echo $customer_id?>">
                     <input type="hidden" name="payment_id" id="payment_id" value="<?php echo $payment_id?>">
                     <input type="hidden" name="balance" id="balance" value="<?php echo $debt?>">
@@ -208,7 +208,7 @@
                     </div>
                     <div class="data" style="width:100%; margin:5px 0">
                         <label for="details"> Description</label>
-                        <textarea name="details" id="details" cols="30" rows="5" placeholder="Enter a detailed description of the transaction"></textarea>
+                        <textarea name="details" id="details" cols="30" rows="5" placeholder="Enter a detailed description of the transaction">Deposit for Field Purchase</textarea>
                     </div>
                     <div class="data" style="width:50%; margin:5px 0">
                         <button type="submit" id="post_exp" name="post_exp" onclick="payField('package')">Post payment <i class="fas fa-cash-register"></i></button>

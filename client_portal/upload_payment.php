@@ -24,7 +24,7 @@
             <tr style="background:var(--tertiaryColor)">
                 <td>S/N</td>
                 <td>Field</td>
-                <td>Field Size (Hec)</td>
+                <td>Field Size (Plot)</td>
                 <td>Purchase Amount</td>
                 <td>Total Paid</td>
                 <td>Amount Due</td>
@@ -43,7 +43,7 @@
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
                 <td><?php echo $detail->field_name?></td>
                 
-                <td style="color:var(--otherColor)"><?php echo $detail->field_size?></td>
+                <td style="color:var(--otherColor)"><?php echo $detail->field_size?> plot (<?php echo $detail->field_size * 500?>m&sup2)</td>
                 <td><?php echo "₦".number_format($detail->total_due, 2)?></td>
                 <td style="color:green;">
                     <?php

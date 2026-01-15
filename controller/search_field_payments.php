@@ -10,7 +10,7 @@
     include "../classes/select.php";
 
     $get_revenue = new selects();
-    $details = $get_revenue->fetch_details_2dateConOrder('field_payments', 'customer', 'date(post_date)', $from, $to, $customer, 'post_date');
+    $details = $get_revenue->fetch_details_2date2ConGr('field_payments', 'date(post_date)', $from, $to, 'customer', $customer, 'invoice');
     $n = 1;
 ?>
 <h2>Field Payments between '<?php echo date("jS M, Y", strtotime($from)) . "' and '" . date("jS M, Y", strtotime($to))?>'</h2>
@@ -52,7 +52,15 @@
                     ?>
                 </td>
                 <td style="color:var(--primaryColor)"><?php echo $detail->invoice;?></td>
-                <td><?php echo "₦".number_format($detail->amount, 2)?></td>
+                <td>
+                    <?php
+                        //total paid
+                        $ttl = $get_revenue->fetch_sum_single('field_payments', 'amount', 'invoice', $detail->invoice);
+                        foreach($ttl as $tt){
+                            echo "₦".number_format($tt->total, 2);
+                        }
+                    ?>
+                </td>
                 <td><?php echo $detail->payment_mode;?></td>
                 <td style="color:var(--moreColor)"><?php echo date("d-M-Y", strtotime($detail->trx_date))?></td>
                 <td>
