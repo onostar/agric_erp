@@ -1,0 +1,78 @@
+<div class="displays allResults" id="payroll" style="margin:10px 50px!important; width:70%!important">
+<?php
+session_start();
+date_default_timezone_set("Africa/Lagos");
+    include "../classes/dbh.php";
+    include "../classes/select.php";
+    
+    //get user
+    if(isset($_SESSION['user'])){
+        $username = $_SESSION['user'];
+        //get user role
+        $get_role = new selects();
+        $roles = $get_role->fetch_details_group('users', 'user_role', 'username', $username);
+        $role = $roles->user_role;
+        $store = $_SESSION['store_id'];
+
+?>
+   <style>
+    table td{
+        font-size:.75rem!important;
+        /* padding:2px!important; */
+    }
+    
+</style>
+    
+    <div class="info" style="margin: 10px!important"></div>
+    <!-- showing staffs that are not resigned in selected store -->
+    <h2>Disburse Staff Salary </h2>
+    <hr>
+    <div class="search">
+        <input type="search" id="searchRoom" placeholder="Enter keyword" onkeyup="searchData(this.value)">
+        <a class="download_excel" href="javascript:void(0)" onclick="convertToExcel('item_list_table', 'Payroll for <?php echo date('F, Y')?>')"title="Download to excel"><i class="fas fa-file-excel"></i></a>
+    </div>
+    <table id="item_list_table" class="searchTable">
+        <thead>
+            <tr style="background:var(--moreColor)">
+                <td>S/N</td>
+                <td>Month</td>
+                <td>Staffs</td>
+                <td>Net Pay</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody id="result">
+        <?php
+                $n = 1;
+                $get_items = new selects();
+                $details = $get_items->fetch_salary($store);
+                if(gettype($details) === 'array'){
+                foreach($details as $detail):
+                    
+            ?>
+            <tr>
+                <td style="text-align:center; color:red;"><?php echo $n?></td>
+                <td style="color:var(--otherColor)"><?php echo date("M, Y", strtotime($detail->payroll_month))?></td>
+                <td stle="color:green;text-align:center"><?php echo $detail->total_staffs?></td>
+                
+                <td style="color:var(--tertiaryColor)"><?php echo "₦".number_format($detail->total_net_pay, 2)?></td>
+                <td><a style="background:var(--tertiaryColor); color:#fff; padding:4px; border:1px solid #fff; box-shadow:1px 1px 1px #222; border-radius:10px;" href="javascript:void(0);" title="Disburse salary" onclick="showPage('disburse_salary_payment.php?date=<?php echo $detail->payroll_date?>&amount=<?php echo $detail->total_net_pay?>')">Disburse <i class="fas fa-hand-holding-dollar"></i></a></td>
+            </tr>
+            
+            <?php $n++; endforeach;}?>
+        </tbody>
+    </table>
+    
+    <?php
+        
+        if(gettype($details) == "string"){
+            echo "<p class='no_result'>'$details'</p>";
+        }
+    
+    ?>
+<?php 
+    }else{
+        echo "Your session has expired! Please login again to continue";
+    }    
+?>
+</div>

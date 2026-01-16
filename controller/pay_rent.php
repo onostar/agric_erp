@@ -37,7 +37,6 @@
         'trans_date' => $trans_date,
         'post_date' => $date,
         'trx_number' => $trx_num,
-        'store' => $store
     );
     
     // instantiate class

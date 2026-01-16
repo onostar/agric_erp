@@ -100,6 +100,25 @@ date_default_timezone_set("Africa/Lagos");
             $update->bindValue("$condition2", $condition_value2);
             $update->execute();
         }
+        // update salary status for a specific month
+public function update_salary($store, $payroll_date, $date){
+    $sql = "
+        UPDATE payroll 
+        SET payroll_status = 2, 
+            disbursed = :disbursed
+        WHERE payroll_status = 1
+          AND store = :store
+          AND YEAR(payroll_date) = YEAR(:payroll_date)
+          AND MONTH(payroll_date) = MONTH(:payroll_date)
+    ";
+
+    $update = $this->connectdb()->prepare($sql);
+    $update->bindValue(':store', $store);
+    $update->bindValue(':payroll_date', $payroll_date);
+    $update->bindValue(':disbursed', $date);
+    $update->execute();
+}
+
         //update quadruple
         public function update_quadruple($table, $column1, $value1, $column2, $value2, $column3, $value3, $column4, $value4, $condition, $condition_value){
             $update = $this->connectdb()->prepare("UPDATE $table SET $column1 = :$column1, $column2 = :$column2, $column3 = :$column3, $column4 = :$column4 WHERE $condition = :$condition");

@@ -10296,3 +10296,70 @@ function flagAttendance(id){
           return;
      }
 }
+
+//disburse salary
+function disburseSalary(id){
+     let invoice = document.getElementById("invoice").value;
+     let posted = document.getElementById("posted").value;
+     let trans_date = document.getElementById("trans_date").value;
+     let store = document.getElementById("store").value;
+     let payroll_month = document.getElementById("payroll_month").value;
+     let amount = document.getElementById("amount").value;
+     let payment_mode = document.getElementById("payment_mode").value;
+     let details = document.getElementById("details").value;
+     let bank = document.getElementById("bank").value;
+     let todayDate = new Date();
+     if(payment_mode == "POS" || payment_mode == "Transfer"){
+          if(bank.length == 0 || bank.replace(/^\s+|\s+$/g, "").length == 0){
+               alert("Please select bank!");
+               $("#bank").focus();
+               return;
+          }    
+     }
+     if(payment_mode.length == 0 || payment_mode.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select payment_mode!");
+          $("#payment_mode").focus();
+          return;
+     }else if(amount.length == 0 || amount.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input transaction amount");
+          $("#amount").focus();
+          return;
+     }else if(parseFloat(amount) <= 0){
+          alert("The amount entered cnnot be less than or equal to 0.");
+          $("#balance").focus();
+          return;
+     }else if(trans_date.length == 0 || trans_date.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input transaction date");
+          $("#trans_date").focus();
+          return;
+     }else if(details.length == 0 || details.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter description of transaction");
+          $("#details").focus();
+          return;
+     }else if(new Date(trans_date) > todayDate){
+          alert("Transaction date cannot be futuristic!");
+          $("#trans_date").focus();
+          return;
+     }else{
+          let confirmPost = confirm("Are you sure you want to post this transaction?", "");
+          if(confirmPost){
+               $.ajax({
+                    type : "POST",
+                    url : "../controller/disburse_salary.php",
+                    data : {posted:posted,payroll_month:payroll_month, payment_mode:payment_mode, amount:amount, details:details, store:store, invoice:invoice, bank:bank, trans_date:trans_date},
+                    beforeSend : function(){
+                         $("#package").html("<div class='processing'><div class='loader'></div></div>");
+                    },
+                    success : function(response){
+                         $("#package").html(response);
+                         setTimeout(function(){
+                              showPage("disburse_salary.php");
+                         }, 2000)
+                    }
+               })
+               return false;   
+          }else{
+               return;
+          }
+     }
+}

@@ -1547,6 +1547,33 @@ public function fetch_total_working_days_month($date){
                 return $rows;
             }
         }
+        //fetch salary disbursement
+        public function fetch_salary($store){
+        $sql = "SELECT YEAR(payroll_date) AS pay_year, MONTH(payroll_date) AS pay_month, DATE_FORMAT(payroll_date, '%M %Y') AS payroll_month, payroll_date, SUM(net_pay) AS total_net_pay, COUNT(DISTINCT staff) AS total_staffs FROM payroll WHERE store = :store AND payroll_status = 1 GROUP BY YEAR(payroll_date), MONTH(payroll_date)ORDER BY YEAR(payroll_date) DESC, MONTH(payroll_date) DESC";
+        $stmt = $this->connectdb()->prepare($sql);
+        $stmt->bindValue(':store', $store);
+        $stmt->execute();
+        return $stmt->rowCount() ? $stmt->fetchAll() : "No records found";
+    }
+       // fetch salary for a specific month
+public function fetch_salary_month($store, $paymonth){
+    $sql = "SELECT SUM(net_pay) AS total_net_pay
+        FROM payroll
+        WHERE store = :store
+          AND payroll_status = 1
+          AND YEAR(payroll_date) = YEAR(:paymonth)
+          AND MONTH(payroll_date) = MONTH(:paymonth)
+    ";
+
+    $stmt = $this->connectdb()->prepare($sql);
+    $stmt->bindValue(':store', $store);
+    $stmt->bindValue(':paymonth', $paymonth);
+    $stmt->execute();
+
+    return $stmt->fetch(PDO::FETCH_ASSOC)['total_net_pay'] ?? 0;
+}
+
+
         //fetch between two dates and grouped order by
         public function fetch_details_dateGroOrder($table, $condition1, $value1, $value2, $group, $order){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $condition1 BETWEEN '$value1' AND '$value2' GROUP BY $group ORDER BY $order");
@@ -1957,6 +1984,21 @@ public function fetch_total_working_days_month($date){
             $get_user = $this->connectdb()->prepare("SELECT SUM($column1) AS total FROM $table WHERE $condition = :$condition AND $condition2 = :$condition2");
             $get_user->bindValue("$condition", $value);
             $get_user->bindValue("$condition2", $value2);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        //fetch sum with 3 condition
+        public function fetch_sum_tripple($table, $column1, $condition, $value, $condition2, $value2, $con3, $val3){
+            $get_user = $this->connectdb()->prepare("SELECT SUM($column1) AS total FROM $table WHERE $condition = :$condition AND $condition2 = :$condition2 AND $con3 = :con3");
+            $get_user->bindValue("$condition", $value);
+            $get_user->bindValue("$condition2", $value2);
+            $get_user->bindValue("con3", $val3);
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 $rows = $get_user->fetchAll();
