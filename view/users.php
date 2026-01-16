@@ -185,7 +185,7 @@ date_default_timezone_set("Africa/Lagos");
                             
                         ?>
                         <div class="attendance_alert">
-                            <p><i class="fas fa-exclamation-triangle"></i> You have not marked your attendance for today. <button onclick="markAttendance(<?php echo $staff_id?>)">Start Work</button></p>
+                            <p><i class="fas fa-exclamation-triangle"></i> You have not marked your attendance for today. <button onclick="markAttendance(<?php echo $staff_id?>)">Check in <i class="fas fa-briefcase"></i></button></p>
                         </div>
                         <?php }
                         if($check_attendance == 1){
@@ -194,7 +194,7 @@ date_default_timezone_set("Africa/Lagos");
                             if($check_checkout == 0){ 
                         ?>
                             <div class="attendance_alert">
-                            <button style="background:brown" onclick="closeWork('<?php echo $staff_id?>')">Close Work</button>
+                            <button style="background:brown" onclick="closeWork('<?php echo $staff_id?>')">Check out <i class="fas fa-door-open"></i></button>
                         </div>
                         <?php }}}?>
                     </div>

@@ -1274,6 +1274,17 @@ public function fetch_total_working_days_month($date){
                 return "0";
             }
         }
+        // select count with specific month, year and positive condition
+        public function fetch_count_specificMonth($table, $column, $date, $condition, $value){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE MONTH($column) = MONTH($date) AND YEAR($column) = YEAR($date) AND $condition = :$condition");
+            $get_user->bindValue("$condition", $value);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                return $get_user->rowCount();
+            }else{
+                return "0";
+            }
+        }
         // select count with month, year and positive condition and 2 of either condition
         public function fetch_count_curMonth2con($table, $column, $condition, $value, $con2, $val2, $val3){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE MONTH($column) = MONTH(CURDATE()) AND YEAR($column) = YEAR(CURDATE()) AND $condition = :$condition $con2 = :val2 OR $con2 = :val3");
