@@ -12,6 +12,7 @@
         $leave_days = htmlspecialchars(stripslashes($_POST['leave_days']));
         $absent_days = htmlspecialchars(stripslashes($_POST['absent_days']));
         $suspension_days = htmlspecialchars(stripslashes($_POST['suspension_days']));
+        $late_days = htmlspecialchars(stripslashes($_POST['late_days']));
         $basic_salary = htmlspecialchars(stripslashes($_POST['basic_salary']));
         $housing = htmlspecialchars(stripslashes($_POST['housing']));
         $medical = htmlspecialchars(stripslashes($_POST['medical']));
@@ -22,7 +23,7 @@
         $tax = htmlspecialchars(stripslashes($_POST['tax']));
         $pension = htmlspecialchars(stripslashes($_POST['pension']));
         $absence = htmlspecialchars(stripslashes($_POST['absence']));
-        $lateness = htmlspecialchars(stripslashes($_POST['lateness']));
+        // $lateness = htmlspecialchars(stripslashes($_POST['lateness']));
         $loans = htmlspecialchars(stripslashes($_POST['loans']));
         $taxable_income = htmlspecialchars(stripslashes($_POST['taxable_income']));
         $tax_rate = htmlspecialchars(stripslashes($_POST['tax_rate']));
@@ -30,6 +31,8 @@
         $others = htmlspecialchars(stripslashes($_POST['others']));
         $net_pay = htmlspecialchars(stripslashes($_POST['net_pay']));
         $pension_income = htmlspecialchars(stripslashes($_POST['pension_income']));
+        $daily_pay = htmlspecialchars(stripslashes($_POST['daily_pay']));
+        $net_after_tax = htmlspecialchars(stripslashes($_POST['net_after_tax']));
         $total_contribution = $pension + $employer_contribution;
 
         include "../classes/dbh.php";
@@ -57,6 +60,7 @@
                 'leave_days' => $leave_days,
                 'suspension_days' => $suspension_days,
                 'absent_days' => $absent_days,
+                'late_days' => $late_days,
                 'basic_salary' => $basic_salary,
                 'housing' => $housing,
                 'medical' => $medical,
@@ -69,9 +73,11 @@
                 'taxable_income' => $taxable_income,
                 'pension' => $pension,
                 'absence_penalty' => $absence,
-                'lateness_penalty' => $lateness,
+                // 'lateness_penalty' => $lateness,
                 'loan_repayment' => $loans,
                 'other_deductions' => $others,
+                'daily_pay' => $daily_pay,
+                'net_after_tax' => $net_after_tax,
                 'net_pay' => $net_pay,
                 'date_generated' => $date,
                 'prepared_by' => $user,

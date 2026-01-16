@@ -16,6 +16,7 @@
                 $days_at_work = $result->days_at_work;
                 $leave_days = $result->leave_days;
                 $suspension_days = $result->suspension_days;
+                $late_days = $result->late_days;
                 $total_absent_days = $result->absent_days;
                 $basic = $result->basic_salary;
                 $housing = $result->housing;
@@ -30,6 +31,8 @@
                 $pension = $result->pension;
                 $absent_fee = $result->absence_penalty;
                 $lateness_fee = $result->lateness_penalty;
+                $daily_pay = $result->daily_pay;
+                $net_after_tax = $result->net_after_tax;
                 $loan = $result->loan_repayment;
                 $other_deductions = $result->other_deductions;
                 $net_pay = $result->net_pay;
@@ -83,6 +86,11 @@
                     <input type="text" value="<?php echo $total_absent_days?> days" readonly>
                     <input type="hidden" id="absent_days" name="absent_days" value="<?php echo $absent_days?>" readonly>
                 </div>
+                <div class="data" style="width:23%">
+                    <label for="basic_salary">Total Late Days</label>
+                    <input type="text" value="<?php echo $late_days?> days" readonly>
+                  
+                </div>
             </div>
             <hr>
             <div class="inputs" style="gap:.8rem; align-items:flex_end; justify-content:left;">
@@ -132,12 +140,17 @@
                     <input type="text" name="pension" id="pension" required value=<?php echo number_format($pension, 2)?> readonly>
                 </div>
                 <div class="data" style="width:23%;">
-                    <label for="absence">Absence Penalty (NGN)</label>
-                    <input type="text" name="absence" id="absence" required value=<?php echo number_format($absent_fee, 2)?> readonly>
+                    <label for="pay_after_deductions">Net Pay after Deductions (NGN)</label>
+                    <input type="text"  value=<?php echo number_format($net_after_tax,2)?> style="background:#cdcdcd" readonly>
                 </div>
                 <div class="data" style="width:23%;">
-                    <label for="lateness">Lateness Penalty (NGN)</label>
-                    <input type="text" name="lateness" id="lateness" required value=<?php echo number_format($lateness_fee, 2)?> readonly>
+                    <label for="pay_after_deductions">Net Daily Pay (NGN)</label>
+                    <input type="text" value=<?php echo number_format($daily_pay, 2)?>  readonly>
+                   
+                </div>
+                <div class="data" style="width:23%;">
+                    <label for="absence">Absence Deductions (NGN)</label>
+                    <input type="text" name="absence" id="absence" required value=<?php echo number_format($absent_fee, 2)?> readonly>
                 </div>
                 <div class="data" style="width:23%;">
                     <label for="loans">Loan Repayment (NGN)</label>

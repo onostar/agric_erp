@@ -8778,16 +8778,18 @@ function updateSalary(){
 }
 // Calculate net pay after deductions
 function getNetPay() {
-    const gross = parseFloat(document.getElementById("gross")?.value) || 0;
+    /* const gross = parseFloat(document.getElementById("gross")?.value) || 0;
     const tax = parseFloat(document.getElementById("tax")?.value) || 0;
-    const pension = parseFloat(document.getElementById("pension")?.value) || 0;
+    const pension = parseFloat(document.getElementById("pension")?.value) || 0; */
+    const net_after_tax = parseFloat(document.getElementById("net_after_tax")?.value) || 0;
     const absence = parseFloat(document.getElementById("absence")?.value) || 0;
-    const lateness = parseFloat(document.getElementById("lateness")?.value) || 0;
+//     const lateness = parseFloat(document.getElementById("lateness")?.value) || 0;
     const others = parseFloat(document.getElementById("others")?.value) || 0;
     const loans = parseFloat(document.getElementById("loans")?.value) || 0;
 
-    const totalDeductions = tax + pension + absence + lateness + others + loans;
-    const netEarning = gross - totalDeductions;
+//     const totalDeductions = tax + pension + absence + lateness + others + loans;
+    const totalDeductions = absence + others + loans;
+    const netEarning = net_after_tax - totalDeductions;
 
     const net_pay = document.getElementById("net_pay");
     const net_salary = document.getElementById("net_salary");
@@ -8801,30 +8803,33 @@ function getNetPay() {
 function generatePayroll(){
      let payroll_date = document.getElementById("payroll_date").value;
      let staff = document.getElementById("staff").value;
-     let working_days = document.getElementById("working_days").value;
-     let days_at_work = document.getElementById("days_at_work").value;
-     let leave_days = document.getElementById("leave_days").value;
-     let suspension_days = document.getElementById("suspension_days").value;
-     let absent_days = document.getElementById("absent_days").value;
-     let basic_salary = document.getElementById("basic_salary").value;
-     let housing = document.getElementById("housing").value;
-     let medical = document.getElementById("medical").value;
-     let transport = document.getElementById("transport").value;
-     let utility = document.getElementById("utility").value;
-     let other_allow = document.getElementById("other_allow").value;
-     let gross = document.getElementById("gross").value;
-     let pension = document.getElementById("pension").value;
-     let pension_income = document.getElementById("pension_income").value;
-     let tax = document.getElementById("tax").value;
-     let absence = document.getElementById("absence").value;
-     let lateness = document.getElementById("lateness").value;
-     let loans = document.getElementById("loans").value;
-     let others = document.getElementById("others").value;
-     let net_pay = document.getElementById("net_pay").value;
-     let employer_contribution = document.getElementById("employer_contribution").value;
-     let taxable_income = document.getElementById("taxable_income").value;
-     let tax_rate = document.getElementById("tax_rate").value;
-     if(parseFloat(gross) < 0 || parseFloat(tax) < 0 || parseFloat(pension) < 0 || parseFloat(lateness) < 0 || parseFloat(absence) < 0 || parseFloat(loans) < 0 || parseFloat(others) < 0){
+     let working_days = parseFloat(document.getElementById("working_days").value);
+     let days_at_work = parseFloat(document.getElementById("days_at_work").value);
+     let leave_days = parseFloat(document.getElementById("leave_days").value);
+     let suspension_days = parseFloat(document.getElementById("suspension_days").value);
+     let absent_days = parseFloat(document.getElementById("absent_days").value);
+     let late_days = parseFloat(document.getElementById("late_days").value);
+     let basic_salary = parseFloat(document.getElementById("basic_salary").value);
+     let housing = parseFloat(document.getElementById("housing").value);
+     let medical = parseFloat(document.getElementById("medical").value);
+     let transport = parseFloat(document.getElementById("transport").value);
+     let utility = parseFloat(document.getElementById("utility").value);
+     let other_allow = parseFloat(document.getElementById("other_allow").value);
+     let gross = parseFloat(document.getElementById("gross").value);
+     let pension = parseFloat(document.getElementById("pension").value);
+     let pension_income = parseFloat(document.getElementById("pension_income").value);
+     let tax = parseFloat(document.getElementById("tax").value);
+     let net_after_tax = parseFloat(document.getElementById("net_after_tax").value);
+     let daily_pay = parseFloat(document.getElementById("daily_pay").value);
+     let absence = parseFloat(document.getElementById("absence").value);
+     // let lateness = document.getElementById("lateness").value;
+     let loans = parseFloat(document.getElementById("loans").value);
+     let others = parseFloat(document.getElementById("others").value);
+     let net_pay = parseFloat(document.getElementById("net_pay").value);
+     let employer_contribution = parseFloat(document.getElementById("employer_contribution").value);
+     let taxable_income = parseFloat(document.getElementById("taxable_income").value);
+     let tax_rate = parseFloat(document.getElementById("tax_rate").value);
+     if(gross < 0 || tax < 0 || pension < 0 || daily_pay < 0 || absence < 0 || loans < 0 || others < 0){
           alert("Values cannot be less than 0");
           $("#tax").focus();
           return;
@@ -8834,7 +8839,7 @@ function generatePayroll(){
                $.ajax({
                     type : "POST",
                     url : "../controller/generate_payroll.php",
-                    data : {staff:staff, payroll_date:payroll_date, absent_days:absent_days, suspension_days:suspension_days, leave_days:leave_days, days_at_work:days_at_work, working_days:working_days,basic_salary:basic_salary, housing:housing, medical:medical, transport:transport, utility:utility, other_allow:other_allow, gross:gross, tax:tax, pension:pension, absence:absence, lateness:lateness, others:others, loans:loans, net_pay:net_pay, employer_contribution:employer_contribution, taxable_income:taxable_income, tax_rate:tax_rate, pension_income:pension_income},
+                    data : {staff:staff, payroll_date:payroll_date, absent_days:absent_days, suspension_days:suspension_days, leave_days:leave_days, days_at_work:days_at_work, working_days:working_days,basic_salary:basic_salary, housing:housing, medical:medical, transport:transport, utility:utility, other_allow:other_allow, gross:gross, tax:tax, pension:pension, absence:absence, /* lateness:lateness, */ others:others, loans:loans, net_pay:net_pay, employer_contribution:employer_contribution, taxable_income:taxable_income, tax_rate:tax_rate, pension_income:pension_income, daily_pay:daily_pay, net_after_tax:net_after_tax, late_days:late_days},
                     beforeSend : function(){
                          $("#salary_structure").html("<div class='processing'><div class='loader'></div></div>");
                     },
