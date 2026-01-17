@@ -1,3 +1,4 @@
+<div id="issue">
 <?php
 session_start();
     $store = $_SESSION['store'];
@@ -7,8 +8,10 @@ session_start();
         $invoice = $_GET['invoice'];
     
 ?>
-<div class="displays allResults" id="stocked_items" style="width:80%!important;margin:10px 50px!important">
-    <h2 style="font-size:1rem; background:var(--otherColor); color:#fff; padding:5px">Items requested on invoice <?php echo $invoice?></h2>
+<a style="background:brown; color:#fff; padding:5px 8px; border-radius:15px; border:1px solid #fff; box-shadow:1px 1px 1px #222; margin:10px 50px" href="javascript:void(0)" onclick="showPage('issue_items.php')" title="Return to issue items">Return <i class="fas fa-angle-double-left"></i></a>
+<div class="displays allResults" id="stocked_items" style="width:60%!important;margin:10px 50px!important">
+    <h2 style="font-size:.9rem; background:var(--labColor); color:#fff; padding:5px; border-radius:10px 10px 0 0">Items requested on invoice <?php echo $invoice?></h2>
+    
     <table id="stock_items_table" class="searchTable">
         <thead>
             <tr style="background:var(--tertiaryColor)">
@@ -24,7 +27,7 @@ session_start();
             <?php
                 $n = 1;
                 $get_items = new selects();
-                $details = $get_items->fetch_details_cond('issue_items', 'invoice', $invoice);
+                $details = $get_items->fetch_details_2cond('issue_items', 'invoice', 'issue_status', $invoice, 1);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
                     $get_ind = new selects();
@@ -44,7 +47,7 @@ session_start();
                 <td style="text-align:center"><?php echo $detail->quantity?></td>
                 
                 <td>
-                    <a style="color:#fff; font-size:.8rem; background:green; padding:4px; border-radius:10px; box-shadow:1px 1px 1px #222; border:1px solid #fff;" href="javascript:void(0) "title="issue item" onclick="issueItem('<?php echo $detail->issue_id?>', <?php echo $detail->item?>)">Issue <i class="fas fa-upload"></i></a>
+                    <a style="color:#fff; font-size:.8rem; background:green; padding:4px; border-radius:10px; box-shadow:1px 1px 1px #222; border:1px solid #fff;" href="javascript:void(0) "title="issue item" onclick="issueItem('<?php echo $detail->issue_id?>', '<?php echo $detail->item?>', '<?php echo $invoice?>')">Issue <i class="fas fa-upload"></i></a>
                 </td>
                 
             </tr>
@@ -60,4 +63,5 @@ session_start();
         }
     }
         ?>
+</div>
 </div>

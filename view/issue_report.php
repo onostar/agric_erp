@@ -9,7 +9,7 @@
     $store_name = $strs->store;
 
 ?>
-<div id="transfer_report" class="displays management" style="width:80%!important;">
+<div id="transfer_report" class="displays management" style="width:100%!important;">
     <div class="select_date">
         <!-- <form method="POST"> -->
         <section>    
@@ -33,14 +33,16 @@
     </div>
     <table id="data_table" class="searchTable">
         <thead>
-            <tr style="background:var(--primaryColor)">
+            <tr style="background:var(--moreColor)">
                 <td>S/N</td>
-                <!-- <td>Invoice</td> -->
+                <td>Request No.</td>
+                <td>Requested By</td>
+                <td>Department</td>
                 <td>Item</td>
                 <td>Qty</td>
-                <!-- <td>Store</td> -->
-                <td>Post time</td>
-                <td>Posted by</td>
+                <td>Requested On</td>
+                <td>Issued time</td>
+                <td>Issued by</td>
                 <!-- <td></td> -->
                 
             </tr>
@@ -49,43 +51,46 @@
             <?php
                 $n = 1;
                 $get_users = new selects();
-                $details = $get_users->fetch_details_date2Cond('issue_items', 'date(post_date)', 'from_store', $store, 'issue_status', 1);
+                $details = $get_users->fetch_details_date2Cond('issue_items', 'date(post_date)', 'from_store', $store, 'issue_status', 2);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
-                <!-- <td style="color:var(--otherColor)"><?php echo $detail->invoice?></td> -->
+                <td style="color:var(--otherColor)"><?php echo $detail->invoice?></td>
                 <td>
                     <?php 
                         //get ITEM NAME
-                        $get_name = new selects();
-                        $name = $get_name->fetch_details_group('items', 'item_name', 'item_id', $detail->item);
+                        $staff = $get_users->fetch_details_group('users', 'full_name', 'user_id', $detail->posted_by);
+                        echo $staff->full_name;
+                    ?>
+                </td>
+                <td>
+                    <?php 
+                        //get department
+                        $dep = $get_users->fetch_details_group('staff_departments', 'department', 'department_id', $detail->department);
+                        echo $dep->department;
+                    ?>
+                </td>
+                <td>
+                    <?php 
+                        //get ITEM NAME
+                        $name = $get_users->fetch_details_group('items', 'item_name', 'item_id', $detail->item);
                         echo $name->item_name;
                     ?>
                 </td>
                 <td style="color:green; text-align:Center"><?php echo $detail->quantity?></td>
-                <!-- <td style="color:green;">
-                    <?php 
-                        //get store name
-                        $get_sum = new selects();
-                        $sums = $get_sum->fetch_details_group('stores', 'store', 'store_id', $detail->to_store);
-                        echo $sums->store;
-                    ?>
-                </td> -->
+                <td style="color:var(--moreColor)"><?php echo date("d-M-Y, H:ia", strtotime($detail->post_date));?></td>
                 
-                <td style="color:var(--moreColor)"><?php echo date("H:ia", strtotime($detail->post_date));?></td>
+                <td style="color:var(--moreColor)"><?php echo date("H:ia", strtotime($detail->date_issued));?></td>
                 <td>
                     <?php
                         //get posted by
-                        $get_posted_by = new selects();
-                        $checkedin_by = $get_posted_by->fetch_details_group('users', 'full_name', 'user_id', $detail->posted_by);
+                        $checkedin_by = $get_users->fetch_details_group('users', 'full_name', 'user_id', $detail->issued_by);
                         echo $checkedin_by->full_name;
                     ?>
                 </td>
-                <!-- <td>
-                    <a style="color:green; background:var(--otherColor); padding:5px; border-radius:5px; color:#fff" href="javascript:void(0)" title="View invoice details" onclick="showPage('transfer_details.php?invoice=<?php echo $detail->invoice?>')"> <i class="fas fa-eye"></i> View</a>
-                </td> -->
+               
                 
             </tr>
             <?php $n++; endforeach;}?>

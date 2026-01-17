@@ -19,10 +19,11 @@
         <thead>
             <tr style="background:var(--tertiaryColor)">
                 <td>S/N</td>
-                <td>Invoice</td>
+                <td>Request No.</td>
+                <td>Requested by</td>
+                <td>Department</td>
                 <td>Total items</td>
                 <td>Post Date</td>
-                <td>Requested by</td>
                 <td></td>
                 
             </tr>
@@ -38,23 +39,30 @@
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
                 <td style="color:var(--otherColor)"><?php echo $detail->invoice?></td>
+                <td>
+                    <?php
+                        //get posted by
+                        $checkedin_by = $get_users->fetch_details_group('users', 'full_name', 'user_id', $detail->posted_by);
+                        echo $checkedin_by->full_name;
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        //get posted by
+                        $checkedin_by = $get_users->fetch_details_group('staff_departments', 'department', 'department_id', $detail->department);
+                        echo $checkedin_by->department;
+                    ?>
+                </td>
                 <td style="color:green; text-align:Center">
                     <?php 
                         //get total items with that invoice
                         $get_sum = new selects();
-                        $sums = $get_sum->fetch_count_cond('issue_items', 'invoice', $detail->invoice);
+                        $sums = $get_sum->fetch_count_2cond('issue_items', 'invoice', $detail->invoice, 'issue_status', 1);
                         echo $sums;
                     ?>
                 </td>
                 <td style="color:var(--moreColor)"><?php echo date("jS M, Y", strtotime($detail->post_date));?></td>
-                <td>
-                    <?php
-                        //get posted by
-                        $get_posted_by = new selects();
-                        $checkedin_by = $get_posted_by->fetch_details_group('users', 'full_name', 'user_id', $detail->posted_by);
-                        echo $checkedin_by->full_name;
-                    ?>
-                </td>
+                
                 <td>
                     <a style="color:green; background:var(--otherColor); padding:5px; border-radius:5px; color:#fff" href="javascript:void(0)" title="View invoice details" onclick="showPage('view_requests.php?invoice=<?php echo $detail->invoice?>')">View <i class="fas fa-eye"></i></a>
                 </td>

@@ -3,7 +3,7 @@
     $store = $_SESSION['store_id'];
     $item = htmlspecialchars(stripslashes($_POST['item']));
     // $_SESSION['store_to'] = htmlspecialchars(stripslashes($_POST['store_to']));
-    // $_SESSION['issue_invoice'] = htmlspecialchars(stripslashes($_POST['invoice']));
+    $invoice = htmlspecialchars(stripslashes($_POST['invoice']));
 
     // instantiate class
     include "../classes/dbh.php";
@@ -16,7 +16,7 @@
             
     ?>
     <div class="results">
-        <a href="javascript:void(0)" onclick="addIssue('<?php echo $row->item_id?>')"><?php echo $row->item_name." (Quantity => ".round($row->quantity).")"?></a>
+        <a href="javascript:void(0)" onclick="addIssue('<?php echo $row->item_id?>', '<?php echo $invoice?>')"><?php echo $row->item_name." (Quantity => ".round($row->quantity).")"?></a>
     </div>
    
     
