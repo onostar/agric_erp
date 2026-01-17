@@ -3,12 +3,13 @@
     $store = $_SESSION['store_id'];
     include "../classes/dbh.php";
     include "../classes/select.php";
+    $user = $_SESSION['user_id'];
 
 
 ?>
 <div id="pendingIssued" class="displays management" style="width:70%!important;margin:10px 20px!important">
 <div class="displays allResults new_data" id="revenue_report">
-    <h2>Pending Issued items</h2>
+    <h2>Pending Item Requests</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchCheckout" placeholder="Enter keyword" onkeyup="searchData(this.value)">
@@ -16,12 +17,12 @@
     </div>
     <table id="data_table" class="searchTable">
         <thead>
-            <tr style="background:var(--primaryColor)">
+            <tr style="background:var(--moreColor)">
                 <td>S/N</td>
                 <td>Invoice</td>
                 <td>Total items</td>
                 <td>Post Date</td>
-                <td>Posted by</td>
+                <!-- <td>Requested by</td> -->
                 <td></td>
                 
             </tr>
@@ -30,7 +31,7 @@
             <?php
                 $n = 1;
                 $get_users = new selects();
-                $details = $get_users->fetch_details_2condGroup('issue_items', 'from_store', 'issue_status', $store, 0, 'invoice');
+                $details = $get_users->fetch_details_2condGroup('issue_items', 'posted_by', 'issue_status', $user, 0, 'invoice');
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
@@ -46,14 +47,14 @@
                     ?>
                 </td>
                 <td style="color:var(--moreColor)"><?php echo date("jS M, Y", strtotime($detail->post_date));?></td>
-                <td>
+                <!-- <td>
                     <?php
                         //get posted by
-                        $get_posted_by = new selects();
+                        /* $get_posted_by = new selects();
                         $checkedin_by = $get_posted_by->fetch_details_group('users', 'full_name', 'user_id', $detail->posted_by);
-                        echo $checkedin_by->full_name;
+                        echo $checkedin_by->full_name; */
                     ?>
-                </td>
+                </td> -->
                 <td>
                     <a style="color:green; background:var(--otherColor); padding:5px; border-radius:5px; color:#fff" href="javascript:void(0)" title="View invoice details" onclick="showPage('complete_issue.php?invoice=<?php echo $detail->invoice?>')"> <i class="fas fa-eye"></i> View</a>
                 </td>

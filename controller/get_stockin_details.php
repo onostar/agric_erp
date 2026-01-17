@@ -5,7 +5,7 @@
         $store = $_SESSION['store_id'];
         if(isset($_GET['item'])){
             $item = $_GET['item'];
-            $date = "05-09-2025";
+            $date = "05-09-2029";
     
     $invoice = $_SESSION['purchase_invoice'];
     $vendor = $_SESSION['vendor'];
@@ -42,6 +42,8 @@
                 <div class="data" style="width:30%; margin:5px;">
                     <?php if($row->item_name == "CONCENTRATE"){?>
                     <label for="quantity">Quantity(Ltr)</label>
+                    <?php }else if($row->item_type == "Consumable"){?>
+                    <label for="quantity">Quantity</label>
                     <?php }else{?>
                     <label for="quantity">Quantity(kg)</label>
                     <?php }?>

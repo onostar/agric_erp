@@ -365,8 +365,11 @@ function addItem(){
                type : "POST",
                url : "../controller/add_item.php",
                data : {department:department, item_category:item_category, item:item, item_type:item_type/* barcode:barcode */},
+               beforeSend : function(){
+                    $(".info").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success : function(response){
-               $(".info").html(response);
+                    $(".info").html(response);
                }
           })
      }
@@ -752,10 +755,10 @@ function addTransfer(item_id){
 //display transfer item form
 function addIssue(item_id){
      let item = item_id;
-          
+     let invoice = document.getElementById("invoice").value;   
           $.ajax({
                type : "GET",
-               url : "../controller/get_issue_details.php?item="+item,
+               url : "../controller/get_issue_details.php?item="+item+"&invoice="+invoice,
                success : function(response){
                     $(".info").html(response);
                }
@@ -1020,6 +1023,39 @@ function transfer(){
           /* $("#quantity").val('');
           $("#expiration_date").val('');
           $("#quantity").focus(); */
+          $(".info").html('');
+          return false; 
+     }
+}
+ //issue out items
+function requestItem(){
+     let posted_by = document.getElementById("posted_by").value;
+     let store_from = document.getElementById("store_from").value;
+     // let store_to = document.getElementById("store_to").value;
+     let invoice = document.getElementById("invoice").value;
+     let item_id = document.getElementById("item_id").value;
+     let quantity = document.getElementById("quantity").value;
+     if(quantity.length == 0 || quantity.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input quantity requested!");
+          $("#quantity").focus();
+          return;
+     }else if(quantity <= 0){
+          alert("Please input quantity transferred!");
+          $("#quantity").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/request_item.php",
+               data : {posted_by:posted_by,store_from:store_from, invoice:invoice, item_id:item_id, quantity:quantity},
+               success : function(response){
+               $(".stocked_in").html(response);
+               }
+          })
+          /* $("#quantity").val('');
+          $("#expiration_date").val('');
+          $("#quantity").focus(); */
+          $("#item").focus();
           $(".info").html('');
           return false; 
      }
@@ -3502,13 +3538,17 @@ function postIssued(invoice_number){
           $.ajax({
                method : "GET",
                url : "../controller/post_issued.php?invoice="+invoice,
+               beforeSend : function(){
+                    $("#stockin").html("<div class='processing'><div class='loader'></div></div>");
+               },
                success : function(response){
                     $("#stockin").html(response);
+                    setTimeout(function(){
+                         showPage('item_requisition.php');
+                    }, 1000);
                }
           })
-          setTimeout(function(){
-               $("#issue_items").load("issue_items.php #issue_items");
-          }, 1000);
+          
           return false;
      }else{
           return;

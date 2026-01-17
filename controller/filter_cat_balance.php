@@ -1,6 +1,6 @@
 <?php
     session_start();
-    $store =$_SESSION['store_id'];
+    $store = $_SESSION['store_id'];
     include "../classes/dbh.php";
     include "../classes/select.php";
 
@@ -37,22 +37,19 @@
                 
                 <td style="color:var(--otherColor)"><?php 
                     //get item name
-                    $get_name = new selects();
-                    $name = $get_name->fetch_details_group('items', 'item_name', 'item_id', $detail->item);
+                    $name = $get_items->fetch_details_group('items', 'item_name', 'item_id', $detail->item);
                     echo strtoupper($name->item_name);
                 ?></td>
                 <td style="text-align:center;color:green"><?php echo $detail->quantity?></td>
                 <td>
                     <?php 
-                        //get cost price 
-                        $get_cost = new selects();
-                        $cost_prices = $get_cost->fetch_details_group('items', 'cost_price', 'item_id', $detail->item);
-                        echo "₦".number_format($cost_prices->cost_price, 2);
+                        
+                        echo "₦".number_format($detail->cost_price, 2);
                     ?>
                 </td>
                 <td>
                     <?php 
-                        $total_cost = $cost_prices->cost_price * $detail->quantity;
+                        $total_cost = $detail->cost_price * $detail->quantity;
                         echo "₦".number_format($total_cost, 2);
                     ?>
                 </td>

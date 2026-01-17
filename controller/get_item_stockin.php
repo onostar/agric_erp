@@ -10,24 +10,18 @@
     $_SESSION['vendor'] = $vendor;
     $_SESSION['purchase_invoice'] = $invoice;
     $get_item = new selects();
-    // $rows = $get_item->fetch_details_likeNegCond('items', 'item_name', $item, 'item_type', 'Product');
-    $rows = $get_item->fetch_details_like('items', 'item_name', $item);
+    
+    $rows = $get_item->fetch_items_quantity($store, $item);
      if(gettype($rows) == 'array'){
         foreach($rows as $row):
-        //get item quantity from inventory
-        $get_qty = new selects();
-        $qtys = $get_qty->fetch_details_2cond('inventory', 'store', 'item', $store, $row->item_id);
-        if(gettype($qtys) == 'array'){
-            foreach($qtys as $qty){
-                $quantity = $qty->quantity;
-            }
-        }
-        if(gettype($qtys) == 'string'){
-            $quantity = 0;
-        }
+        
     ?>
     <div class="results">
-        <a href="javascript:void(0)" onclick="displayStockinForm('<?php echo $row->item_id?>')"><?php echo $row->item_name." (Quantity => ".$quantity."kg)"?></a>
+        <?php if($row->item_type == "Consumable"){?>
+        <a href="javascript:void(0)" onclick="displayStockinForm('<?php echo $row->item_id?>')"><?php echo $row->item_name." (Quantity => ".round($row->quantity).")"?></a>
+        <?php }else{?>
+        <a href="javascript:void(0)" onclick="displayStockinForm('<?php echo $row->item_id?>')"><?php echo $row->item_name." (Quantity => ".$row->quantity."kg)"?></a>
+        <?php }?>
     </div>
     
     

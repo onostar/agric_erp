@@ -15,7 +15,7 @@
             <!-- <div id="printBtn">
                 <button onclick="printTransferReceipt('<?php echo $invoice?>')">Print Receipt <i class="fas fa-print"></i></button>
             </div> -->
-            <div class="notify"><p><i class="fas fa-thumbs-up"></i> Items issued successfully!</p></div>
+            <div class="success"><p><i class="fas fa-thumbs-up"></i> Item Request posted successfully!</p></div>
 <?php
         }
     }

@@ -5,9 +5,9 @@
         $store_from = $_SESSION['store_id'];
         if(isset($_GET['item'])){
             $item = $_GET['item'];
-        
+            $issue_invoice = $_GET['invoice'];
     
-    $issue_invoice = $_SESSION['issue_invoice'];
+    // $issue_invoice = $_SESSION['issue_invoice'];
     // instantiate class
     include "../classes/dbh.php";
     include "../classes/select.php";
@@ -22,7 +22,8 @@
         foreach($rows as $row):
             //check item quanttity
             if($row->quantity == 0){
-                echo "<div class='notify' style='padding:4px!important'><p style='color:#fff!important'><span>$name</span> has zero quantity! Cannot proceed</p>";
+                echo "<div class='notify' style='padding:4px!important'><p style='color:#fff!important'><span>$name</span> has zero quantity! Cannot proceed</p></div>";
+                include "item_request_details.php";
             }else{
     ?>
     <div class="add_user_form" style="width:50%!important; margin:0!important">
@@ -41,7 +42,7 @@
                 </div>
                 
                 <div class="data" style="width:auto; margin:5px;">
-                    <button type="submit" id="stockin" name="stockin" title="stockin item" onclick="issueItem()"><i class="fas fa-plus"></i></button>
+                    <button type="submit" id="stockin" name="stockin" title="stockin item" onclick="requestItem()"><i class="fas fa-plus"></i></button>
                 </div>
             </div>
         </section>   

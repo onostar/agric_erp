@@ -12,7 +12,7 @@
         //get invoice
         if(isset($_GET['invoice'])){
             $invoice = $_GET['invoice'];
-            $_SESSION['issue_invoice'] = $invoice;
+            // $_SESSION['issue_invoice'] = $invoice;
             //get store
             /* $get_store = new selects();
             $strs = $get_store->fetch_details_group('transfers', 'to_store', 'invoice', $invoice);
@@ -51,7 +51,7 @@
     </div>
     <div class="info" style="width:100%; margin:0"></div>
     <div class="stocked_in">
-        <div class="displays allResults" id="stocked_items" style="width:60%!important;margin:10px!important">
+        <div class="displays allResults" id="stocked_items" style="width:100%!important;margin:10px!important">
         <h2>Items issued with invoice <?php echo $invoice?></h2>
         <table id="stock_items_table" class="searchTable">
             <thead>
@@ -59,7 +59,7 @@
                     <td>S/N</td>
                     <td>Item name</td>
                     <td>Quantity</td>
-                    <td>Unit cost</td>
+                    <!-- <td>Unit cost</td> -->
                     <!-- <td>Unit sales</td> -->
                     <td></td>
                 </tr>
@@ -86,11 +86,11 @@
                         ?>
                     </td>
                     <td style="text-align:center"><?php echo $detail->quantity?></td>
-                    <td>
+                    <!-- <td>
                         <?php 
                             echo "₦".number_format($detail->cost_price, 2);
                         ?>
-                    </td>
+                    </td> -->
                     <!-- <td>
                         <?php 
                             echo "₦".number_format($sales_price, 2);
@@ -111,14 +111,14 @@
             if(gettype($details) == "string"){
                 echo "<p class='no_result'>'$details'</p>";
             }
-            // get sum
+           /*  // get sum
             $get_total = new selects();
             $amounts = $get_total->fetch_sum_2con('issue_items', 'cost_price', 'quantity', 'from_store', 'invoice', $store, $invoice);
             foreach($amounts as $amount){
                 $total_amount = $amount->total;
             }
             // $total_worth = $total_amount * $total_qty;
-            echo "<p class='total_amount' style='color:red'>Total Cost: ₦".number_format($total_amount, 2)."</p>";
+            echo "<p class='total_amount' style='color:red'>Total Cost: ₦".number_format($total_amount, 2)."</p>"; */
         ?>
         <div class="close_stockin">
             <button onclick="postIssued('<?php echo $invoice?>')" style="background:green; padding:8px; border-radius:5px;">Post Items <i class="fas fa-upload"></i></button>

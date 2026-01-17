@@ -5,7 +5,7 @@
 
 <div id="add_room" class="displays">
     <div class="info"></div>
-    <div class="add_user_form" style="width:35%">
+    <div class="add_user_form" style="width:35%;margin:0;">
         <h3 style="background:var(--moreColor)">Create items</h3>
         <!-- <form method="POST" id="addUserForm"> -->
         <section class="addUserForm">
@@ -41,8 +41,7 @@
                     <select name="item_type" id="item_type">
                         <option value="" selected>Select type</option>
                         <option value="Farm Input">Farm Inputs</option>
-                        <option value="Crop">Crop</option>
-                        <option value="Livestock">Livestock</option>
+                        <option value="Product">Product</option>
                         <option value="Consumable">Consumables</option>
                     </select>
                 </div>

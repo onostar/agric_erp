@@ -281,7 +281,7 @@
         }
          //fetch item with quantity
         public function fetch_items_quantity($store, $item){
-           $get_user = $this->connectdb()->prepare("SELECT i.item_id, i.item_name, i.sales_price, IFNULL(SUM(inv.quantity), 0) AS quantity FROM items i LEFT JOIN inventory inv ON inv.item = i.item_id AND inv.store = :store WHERE i.item_name LIKE :item GROUP BY i.item_id ORDER BY i.item_name ASC LIMIT 30");
+           $get_user = $this->connectdb()->prepare("SELECT i.item_id, i.item_name, i.item_type, i.sales_price, IFNULL(SUM(inv.quantity), 0) AS quantity, inv.cost_price FROM items i LEFT JOIN inventory inv ON inv.item = i.item_id AND inv.store = :store WHERE i.item_name LIKE :item GROUP BY i.item_id ORDER BY i.item_name ASC LIMIT 30");
             $get_user->bindValue("store", $store);
             $get_user->bindValue("item", "%$item%");
             $get_user->execute();
@@ -293,6 +293,39 @@
                 return $rows;
             }
         }
+        //fetch all inventory balance
+       public function fetch_inventory_balance($store){
+    $sql = "SELECT 
+            i.item_id,
+            i.item_name,
+            i.item_type,
+            i.sales_price,
+            i.department,
+            COALESCE(SUM(inv.quantity), 0) AS quantity,
+            COALESCE(inv.cost_price, 0) AS cost_price
+        FROM items i
+        LEFT JOIN inventory inv 
+            ON inv.item = i.item_id 
+            AND inv.store = :store
+            AND quantity != 0
+        GROUP BY 
+            i.item_id,
+            i.item_name,
+            i.item_type,
+            i.sales_price,
+            i.department,
+            inv.cost_price
+            HAVING SUM(inv.quantity) > 0
+        ORDER BY i.item_name ASC
+    ";
+
+    $stmt = $this->connectdb()->prepare($sql);
+    $stmt->bindValue(":store", $store);
+    $stmt->execute();
+
+    return $stmt->rowCount() ? $stmt->fetchAll() : "No records found";
+}
+
          //fetch item price
         public function fetch_item_price($store){
            $get_user = $this->connectdb()->prepare("SELECT i.item_id, i.item_name, IFNULL(p.cost, 0) AS cost_price,  IFNULL(p.sales_price, 0) AS sales_price, IFNULL(p.other_price, 0) AS other_price FROM items i LEFT JOIN prices p ON p.item = i.item_id AND p.store = :store ORDER BY i.item_name");
