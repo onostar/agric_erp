@@ -25,7 +25,7 @@
         </section>
     </div>
 <div class="displays allResults new_data" id="revenue_report">
-    <h2>Items issued from <?php echo $store_name?> Today</h2>
+    <h2>Consumables issued from <?php echo $store_name?> Today</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchCheckout" placeholder="Enter keyword" onkeyup="searchData(this.value)">

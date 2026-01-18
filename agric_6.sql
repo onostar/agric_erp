@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 16, 2026 at 02:57 PM
+-- Generation Time: Jan 18, 2026 at 09:23 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -469,7 +469,14 @@ INSERT INTO `audit_trail` (`audit_id`, `store`, `item`, `transaction`, `previous
 (169, 10, 1, 'Production', 5700, 2000, 1, '2026-01-07 12:15:52'),
 (170, 10, 22, 'Production', 0, 200, 1, '2026-01-07 12:15:52'),
 (171, 10, 24, 'Production', 5730, 400, 1, '2026-01-07 12:15:52'),
-(172, 10, 23, 'Production', 4677, 400, 1, '2026-01-07 12:15:52');
+(172, 10, 23, 'Production', 4677, 400, 1, '2026-01-07 12:15:52'),
+(173, 1, 28, 'purchase', 0, 50, 1, '2026-01-17 05:29:45'),
+(174, 1, 27, 'purchase', 0, 4, 1, '2026-01-17 05:30:07'),
+(175, 1, 27, 'purchase', 4, 30, 1, '2026-01-17 06:03:45'),
+(176, 1, 27, 'issue', 34, 3, 1, '2026-01-17 14:21:13'),
+(177, 1, 27, 'issue', 34, 3, 1, '2026-01-17 14:21:51'),
+(178, 1, 28, 'issue', 50, 2, 1, '2026-01-17 14:24:29'),
+(179, 1, 27, 'issue', 31, 3, 1, '2026-01-17 14:35:14');
 
 -- --------------------------------------------------------
 
@@ -656,10 +663,8 @@ CREATE TABLE `categories` (
 
 INSERT INTO `categories` (`category_id`, `department`, `category`, `price`) VALUES
 (32, '13', 'CONSUMABLE', 0),
-(35, '11', 'FEEDS', 0),
-(37, '12', 'CROPS', 0),
-(40, '1', 'FERTILIZERS', 0),
-(41, '1', 'SEEDLINGS', 0);
+(37, '12', 'PRODUCT', 0),
+(40, '1', 'FARM INPUT', 0);
 
 -- --------------------------------------------------------
 
@@ -1096,7 +1101,13 @@ INSERT INTO `deposits` (`deposit_id`, `store`, `customer`, `amount`, `payment_mo
 (68, 1, 10, 100000.00, 'Cash', 0, 'LP150126081833200116', 'TR989150126081906', 'Field Documentation Payment', 'Documentation payment', '2026-01-15', '2026-01-15 08:19:06', 1),
 (69, 1, 10, 150000.00, 'Transfer', 2, 'LP150126083032202116', 'TR665150126083019', 'Field Documentation Payment', 'Documentation payment', '2026-01-15', '2026-01-15 08:30:19', 1),
 (70, 1, 9, 5000000.00, 'Transfer', 2, 'LP1501260842001031145', 'TR467150126084257', 'Loan Repayment', 'Rent Payment', '2026-01-15', '2026-01-15 08:42:57', 1),
-(71, 1, 10, 6000000.00, 'Cash', 0, 'LP1501261207213031158', 'TR287150126120716', 'Loan Repayment', 'Rent Payment', '2026-01-15', '2026-01-15 12:07:16', 1);
+(71, 1, 10, 6000000.00, 'Cash', 0, 'LP1501261207213031158', 'TR287150126120716', 'Loan Repayment', 'Rent Payment', '2026-01-15', '2026-01-15 12:07:16', 1),
+(72, 1, 10, 2000.00, 'Cash', 0, 'TR778180126082501', 'TR778180126082501', 'Investment Payment', 'Investment payment', '2026-01-13', '2026-01-18 08:25:01', 1),
+(73, 1, 10, 2000.00, 'Cash', 0, 'TR108180126083551', 'TR108180126083551', 'Investment Payment', 'Investment payment', '2026-01-07', '2026-01-18 08:35:51', 1),
+(74, 1, 10, 2000.00, 'Cash', 0, 'TR379180126083931', 'TR379180126083931', 'Investment Payment', 'Investment payment', '2026-01-13', '2026-01-18 08:39:31', 1),
+(75, 1, 10, 2000.00, 'Cash', 0, 'TR655180126090215', 'TR655180126090215', 'Investment Payment', 'Investment payment', '2026-01-12', '2026-01-18 09:02:15', 1),
+(76, 1, 10, 2000.00, 'Cash', 0, 'TR432180126090251', 'TR432180126090251', 'Investment Payment', 'Investment payment', '2026-01-13', '2026-01-18 09:02:51', 1),
+(77, 1, 10, 4000.00, 'Cash', 0, 'TR926180126091528', 'TR926180126091528', 'Investment Payment', 'Investment payment', '2026-01-07', '2026-01-18 09:15:28', 1);
 
 -- --------------------------------------------------------
 
@@ -1567,29 +1578,8 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`inventory_id`, `item`, `item_type`, `store`, `cost_price`, `quantity`, `batch_number`, `expiration_date`, `reorder_level`, `post_date`) VALUES
-(5, 18, 'Farm Input', 1, 900, 329.00, 0, NULL, 5, NULL),
-(6, 20, 'Farm Input', 1, 500, 2762.00, 0, NULL, 10, NULL),
-(7, 1, 'Crop', 1, 1200, 337.00, 0, NULL, 10, NULL),
-(8, 21, 'Crop', 1, 0, 30.00, 0, NULL, 10, NULL),
-(9, 1, 'Crop', 10, 4000, 3700.00, 0, NULL, 10, NULL),
-(10, 22, 'Crop', 10, 2000, 3999.00, 0, NULL, 10, '2025-12-17 18:24:47'),
-(11, 24, 'Crop', 10, 500, 6130.00, 0, NULL, 10, '2025-12-17 18:24:47'),
-(12, 23, 'Crop', 10, 500, 5077.00, 0, NULL, 10, '2025-12-17 18:24:47'),
-(13, 22, 'Crop', 10, 2000, 1999.00, 0, NULL, 10, '2025-12-17 18:26:56'),
-(14, 22, 'Crop', 10, 2000, 1999.00, 0, NULL, 10, '2025-12-17 18:28:14'),
-(15, 22, 'Crop', 10, 2000, 1499.00, 0, NULL, 10, '2025-12-18 09:41:15'),
-(16, 22, 'Crop', 10, 1495.83, 599.00, 0, NULL, 10, '2025-12-18 13:05:59'),
-(17, 22, 'Crop', 10, 1500, 399.00, 0, NULL, 10, '2025-12-18 13:07:46'),
-(18, 22, 'Crop', 10, 1525, 399.00, 0, NULL, 10, '2025-12-18 13:09:07'),
-(19, 23, 'Crop', 11, 1500, 17.00, 0, NULL, 10, NULL),
-(20, 21, 'Crop', 11, 800, 15.20, 0, NULL, 10, NULL),
-(21, 24, 'Crop', 11, 600, 10.00, 0, NULL, 10, NULL),
-(22, 25, 'Crop', 11, 290, 89.80, 0, NULL, 10, '2025-12-18 21:09:53'),
-(23, 25, 'Crop', 11, 290, 89.80, 0, NULL, 10, '2025-12-19 06:56:25'),
-(24, 25, 'Crop', 11, 290, 39.80, 0, NULL, 10, '2025-12-19 06:56:56'),
-(25, 22, 'Crop', 10, 9850, 2000.00, 0, NULL, 10, '2026-01-07 12:04:36'),
-(26, 26, 'Consumable', 10, 400, 50.00, 0, NULL, 10, NULL),
-(27, 22, 'Crop', 10, 38000, 200.00, 0, NULL, 10, '2026-01-07 12:15:52');
+(28, 28, 'Consumable', 1, 1300, 48.00, 0, NULL, 10, NULL),
+(29, 27, 'Consumable', 1, 3500, 28.00, 0, NULL, 10, NULL);
 
 -- --------------------------------------------------------
 
@@ -1621,7 +1611,7 @@ CREATE TABLE `investments` (
 --
 
 INSERT INTO `investments` (`investment_id`, `customer`, `store`, `duration`, `currency`, `units`, `amount`, `total_in_dollar`, `exchange_rate`, `contract_status`, `principal`, `posted_by`, `post_date`, `start_date`, `modified_by`, `date_modified`) VALUES
-(10, 10, 1, 3, 'Dollar', 1.85, 3700.00, 3700.00, 0.00, 2, 1, 1, '2026-01-13 09:56:59', '2025-12-13 13:54:40', 1, '2026-01-14 10:21:26');
+(17, 10, 1, 3, 'Dollar', 3, 6000.00, 6000.00, 0.00, 1, 0, 1, '2026-01-18 09:15:28', '2026-01-07 00:00:00', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -1655,7 +1645,12 @@ INSERT INTO `investment_payments` (`payment_id`, `investment`, `customer`, `invo
 (7, 10, 10, 'INV1301260318220110', 'Cash', 0, 'Dollar', 1000.00, 1000.00, 'TR562130126031848', '2026-01-13', 1, 1, '2026-01-13 15:18:48'),
 (8, 10, 10, 'INV1301260331020110', 'Cash', 0, 'Dollar', 500.00, 500.00, 'TR598130126033108', '2026-01-13', 1, 1, '2026-01-13 15:31:08'),
 (9, 10, 10, 'INV1301260334002110', 'Cash', 0, 'Dollar', 100.00, 100.00, 'TR885130126033456', '2026-01-13', 1, 1, '2026-01-13 15:34:56'),
-(10, 10, 10, 'INV1401260707231110', 'Cash', 0, 'Dollar', 100.00, 100.00, 'TR887140126070721', '2026-01-14', 1, 1, '2026-01-14 07:07:21');
+(10, 10, 10, 'INV1401260707231110', 'Cash', 0, 'Dollar', 100.00, 100.00, 'TR887140126070721', '2026-01-14', 1, 1, '2026-01-14 07:07:21'),
+(11, 12, 10, 'TR108180126083551', 'Cash', 0, 'Dollar', 2000.00, 2000.00, 'TR108180126083551', '2026-01-07', 1, 1, '2026-01-18 08:35:51'),
+(12, 13, 10, 'TR379180126083931', 'Cash', 0, 'Dollar', 2000.00, 2000.00, 'TR379180126083931', '2026-01-13', 1, 1, '2026-01-18 08:39:31'),
+(13, 14, 10, 'TR655180126090215', 'Cash', 0, 'Dollar', 2000.00, 2000.00, 'TR655180126090215', '2026-01-12', 1, 1, '2026-01-18 09:02:15'),
+(14, 15, 10, 'TR432180126090251', 'Cash', 0, 'Dollar', 2000.00, 2000.00, 'TR432180126090251', '2026-01-13', 1, 1, '2026-01-18 09:02:51'),
+(15, 17, 10, 'TR926180126091528', 'Cash', 0, 'Dollar', 4000.00, 4000.00, 'TR926180126091528', '2026-01-07', 1, 1, '2026-01-18 09:15:28');
 
 -- --------------------------------------------------------
 
@@ -1686,7 +1681,32 @@ INSERT INTO `investment_returns` (`schedule_id`, `investment_id`, `customer`, `d
 (38, 10, 10, '2027-06-13', 0, 15, 555.00, 0.00, 1, 1, '2026-01-14 10:21:26'),
 (39, 10, 10, '2027-12-13', 0, 15, 555.00, 0.00, 1, 1, '2026-01-14 10:21:26'),
 (40, 10, 10, '2028-06-13', 0, 15, 555.00, 0.00, 1, 1, '2026-01-14 10:21:26'),
-(41, 10, 10, '2028-12-13', 0, 15, 555.00, 0.00, 1, 1, '2026-01-14 10:21:26');
+(41, 10, 10, '2028-12-13', 0, 15, 555.00, 0.00, 1, 1, '2026-01-14 10:21:26'),
+(42, 12, 10, '2027-01-07', 0, 30, 600.00, 0.00, 1, 1, '2026-01-18 08:35:51'),
+(43, 12, 10, '2027-07-07', 0, 15, 0.00, 0.00, 1, 1, '2026-01-18 08:35:51'),
+(44, 12, 10, '2028-01-07', 0, 15, 0.00, 0.00, 1, 1, '2026-01-18 08:35:51'),
+(45, 12, 10, '2028-07-07', 0, 15, 0.00, 0.00, 1, 1, '2026-01-18 08:35:51'),
+(46, 12, 10, '2029-01-07', 0, 15, 0.00, 0.00, 1, 1, '2026-01-18 08:35:51'),
+(47, 13, 10, '2027-01-13', 0, 30, 600.00, 0.00, 1, 1, '2026-01-18 08:39:31'),
+(48, 13, 10, '2027-07-13', 0, 15, 0.00, 0.00, 1, 1, '2026-01-18 08:39:31'),
+(49, 13, 10, '2028-01-13', 0, 15, 0.00, 0.00, 1, 1, '2026-01-18 08:39:31'),
+(50, 13, 10, '2028-07-13', 0, 15, 0.00, 0.00, 1, 1, '2026-01-18 08:39:31'),
+(51, 13, 10, '2029-01-13', 0, 15, 0.00, 0.00, 1, 1, '2026-01-18 08:39:31'),
+(52, 14, 10, '2027-01-12', 0, 30, 600.00, 0.00, 1, 1, '2026-01-18 09:02:15'),
+(53, 14, 10, '2027-07-12', 0, 15, 300.00, 0.00, 1, 1, '2026-01-18 09:02:15'),
+(54, 14, 10, '2028-01-12', 0, 15, 300.00, 0.00, 1, 1, '2026-01-18 09:02:15'),
+(55, 14, 10, '2028-07-12', 0, 15, 300.00, 0.00, 1, 1, '2026-01-18 09:02:15'),
+(56, 14, 10, '2029-01-12', 0, 15, 300.00, 0.00, 1, 1, '2026-01-18 09:02:15'),
+(57, 15, 10, '2027-01-13', 0, 30, 600.00, 0.00, 1, 1, '2026-01-18 09:02:51'),
+(58, 15, 10, '2027-07-13', 0, 15, 300.00, 0.00, 1, 1, '2026-01-18 09:02:51'),
+(59, 15, 10, '2028-01-13', 0, 15, 300.00, 0.00, 1, 1, '2026-01-18 09:02:51'),
+(60, 15, 10, '2028-07-13', 0, 15, 300.00, 0.00, 1, 1, '2026-01-18 09:02:51'),
+(61, 15, 10, '2029-01-13', 0, 15, 300.00, 0.00, 1, 1, '2026-01-18 09:02:51'),
+(62, 17, 10, '2027-01-07', 0, 30, 1800.00, 0.00, 1, 1, '2026-01-18 09:15:28'),
+(63, 17, 10, '2027-07-07', 0, 15, 900.00, 0.00, 1, 1, '2026-01-18 09:15:28'),
+(64, 17, 10, '2028-01-07', 0, 15, 900.00, 0.00, 1, 1, '2026-01-18 09:15:28'),
+(65, 17, 10, '2028-07-07', 0, 15, 900.00, 0.00, 1, 1, '2026-01-18 09:15:28'),
+(66, 17, 10, '2029-01-07', 0, 15, 900.00, 0.00, 1, 1, '2026-01-18 09:15:28');
 
 -- --------------------------------------------------------
 
@@ -1702,9 +1722,21 @@ CREATE TABLE `issue_items` (
   `issue_status` int(11) NOT NULL,
   `invoice` varchar(50) NOT NULL,
   `cost_price` int(11) DEFAULT NULL,
+  `department` int(11) NOT NULL,
   `posted_by` int(11) NOT NULL,
-  `post_date` datetime DEFAULT NULL
+  `post_date` datetime DEFAULT NULL,
+  `issued_by` int(11) NOT NULL,
+  `date_issued` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `issue_items`
+--
+
+INSERT INTO `issue_items` (`issue_id`, `from_store`, `item`, `quantity`, `issue_status`, `invoice`, `cost_price`, `department`, `posted_by`, `post_date`, `issued_by`, `date_issued`) VALUES
+(21, 1, 27, 3, 2, 'ISS347117012607111', 3500, 3, 1, '2026-01-17 07:11:35', 1, '2026-01-17 14:21:51'),
+(22, 1, 28, 2, 2, 'ISS347117012607111', 1300, 3, 1, '2026-01-17 07:11:42', 1, '2026-01-17 14:24:29'),
+(24, 1, 27, 3, 2, 'ISS218117012602341', 3500, 3, 1, '2026-01-17 14:35:00', 1, '2026-01-17 14:35:14');
 
 -- --------------------------------------------------------
 
@@ -1737,13 +1769,15 @@ CREATE TABLE `items` (
 INSERT INTO `items` (`item_id`, `department`, `category`, `item_name`, `item_type`, `cost_price`, `sales_price`, `pack_size`, `pack_price`, `wholesale`, `wholesale_pack`, `reorder_level`, `barcode`, `item_status`, `date_created`) VALUES
 (1, '12', 37, 'PINEAPPLE', 'Crop', 3200, 5000, 0, 0, 0, 0, 10, '', 0, '2025-09-18 12:23:46'),
 (18, '1', 40, 'NPK FERTILIZER', 'Farm Input', 1000, 5000, 0, 0, 0, 0, 5, '', 0, '2025-09-18 15:04:22'),
-(20, '1', 41, 'SUCKER', 'Farm Input', 500, 0, 0, 0, 0, 0, 10, '', 0, '2025-11-10 07:01:16'),
+(20, '1', 40, 'SUCKER', 'Farm Input', 500, 0, 0, 0, 0, 0, 10, '', 0, '2025-11-10 07:01:16'),
 (21, '12', 37, 'LEAVES', 'Crop', 0, 0, 0, 0, 0, 0, 10, '', 0, '2025-11-19 07:49:08'),
 (22, '12', 37, 'CONCENTRATE', 'Crop', 473.333, 0, 0, 0, 0, 0, 10, '', 0, '2025-11-24 12:27:25'),
 (23, '12', 37, 'PINEAPPLE CROWN', 'Crop', 0, 0, 0, 0, 0, 0, 10, '', 0, '2025-12-17 18:21:07'),
 (24, '12', 37, 'PINEAPPLE PEEL', 'Crop', 0, 0, 0, 0, 0, 0, 10, '', 0, '2025-12-17 18:21:17'),
 (25, '12', 37, 'BRIQUETTE', 'Crop', 0, 0, 0, 0, 0, 0, 10, '', 0, '2025-12-18 21:09:19'),
-(26, '13', 32, 'GLOVES', 'Consumable', 0, 0, 0, 0, 0, 0, 10, '', 0, '2026-01-07 12:10:55');
+(26, '13', 32, 'GLOVES', 'Consumable', 0, 0, 0, 0, 0, 0, 10, '', 0, '2026-01-07 12:10:55'),
+(27, '13', 32, 'A4 PAPER', 'Consumable', 0, 0, 0, 0, 0, 0, 10, '', 0, '2026-01-17 05:15:57'),
+(28, '13', 32, 'TISSUE PAPER', 'Consumable', 0, 0, 0, 0, 0, 0, 10, '', 0, '2026-01-17 05:16:12');
 
 -- --------------------------------------------------------
 
@@ -2094,7 +2128,10 @@ INSERT INTO `notifications` (`notification_id`, `client`, `subject`, `message`, 
 (177, 10, 'Field Documentation payment Completed', 'Dear KELLY IKPEFUA, Documentation for your field (SONGOTEDO PINEAPLE FARM - 400.00 hectares) has been fully paid. ', 0, '2026-01-15 08:30:19'),
 (178, 10, 'Field Documentation Payment Confirmation', 'Dear KELLY IKPEFUA,\r\n            We confirm the receipt of your payment of ₦150,000.00 on 15th January 2026, 08:30am towards your Field documentaion.\r\n            Transaction ID: LP150126083032202116\r\n            Your account has been updated accordingly. Thank you for your commitment.\r\n            \r\n            If you have any questions or need a receipt, feel free to contact us\r\n\r\n            Warm regards,\r\n            Davidorlah Nigeria Limited\r\n            Customer Support', 0, '2026-01-15 08:30:19'),
 (179, 9, 'Rent Payment Confirmation', 'Dear JIMOH IBRAHIM, Your annual rent return of ₦5000000.00 has been paid for your field (LEKKIE GARDEN).\r\n\r\nPayment Date: 2026-01-15 08:42:57\r\n\r\nThank you for investing with Davidorlah Nigeria Ltd', 0, '2026-01-15 08:42:57'),
-(180, 10, 'Rent Payment Confirmation', 'Dear KELLY IKPEFUA, Your annual rent return of ₦6000000.00 has been paid for your field (MARYLAND FIELD).\r\n\r\nPayment Date: 2026-01-15 12:07:16\r\n\r\nThank you for investing with Davidorlah Nigeria Ltd', 0, '2026-01-15 12:07:16');
+(180, 10, 'Rent Payment Confirmation', 'Dear KELLY IKPEFUA, Your annual rent return of ₦6000000.00 has been paid for your field (MARYLAND FIELD).\r\n\r\nPayment Date: 2026-01-15 12:07:16\r\n\r\nThank you for investing with Davidorlah Nigeria Ltd', 0, '2026-01-15 12:07:16'),
+(181, 10, 'Your Concentrate Investment Has Been Created', 'Dear KELLY IKPEFUA, your Concentrate Production Investment has been successfully created. Please proceed with the investment payment to activate your 3-year contract. You will earn 30% after the first 12 months and 15% every 6 months thereafter.', 0, '2026-01-18 09:02:51'),
+(182, 10, 'Your Concentrate Investment Has Been Created', 'Dear KELLY IKPEFUA, your Concentrate Production Investment has been successfully created. Please proceed with the investment payment to activate your 3-year contract. You will earn 30% after the first 12 months and 15% every 6 months thereafter.', 0, '2026-01-18 09:13:52'),
+(183, 10, 'Your Concentrate Investment Has Been Created', 'Dear KELLY IKPEFUA, your Concentrate Production Investment has been successfully created. Please proceed with the investment payment to activate your 3-year contract. You will earn 30% after the first 12 months and 15% every 6 months thereafter.', 0, '2026-01-18 09:15:28');
 
 -- --------------------------------------------------------
 
@@ -2393,7 +2430,9 @@ INSERT INTO `prices` (`price_id`, `item`, `store`, `cost`, `sales_price`, `other
 (7, 24, 11, 600.00, 0.00, 0.00, 1, '2025-12-18 21:02:25', 0, NULL),
 (8, 25, 11, 290.00, 1000.00, 1000.00, 1, '2025-12-19 06:56:56', 1, '2025-12-19 10:44:11'),
 (9, 1, 1, 1200.00, 4300.00, 0.00, 1, '2025-12-23 05:54:16', 0, NULL),
-(10, 26, 10, 400.00, 0.00, 0.00, 1, '2026-01-07 12:12:28', 0, NULL);
+(10, 26, 10, 400.00, 0.00, 0.00, 1, '2026-01-07 12:12:28', 0, NULL),
+(11, 28, 1, 1300.00, 0.00, 0.00, 1, '2026-01-17 05:29:45', 0, NULL),
+(12, 27, 1, 3500.00, 0.00, 0.00, 1, '2026-01-17 05:30:07', 1, '2026-01-17 06:03:45');
 
 -- --------------------------------------------------------
 
@@ -2494,7 +2533,10 @@ INSERT INTO `purchases` (`purchase_id`, `store`, `invoice`, `item`, `cost_price`
 (24, 1, 'PO129102501333021', 18, 900.00, 0, 1, 20.00, 0.00, 'TR919231225060506', '0000-00-00', 1, NULL, 1, '2025-12-23 06:02:59'),
 (25, 10, '76567', 1, 4000.00, 0, 4, 4000.00, 0.00, '', '0000-00-00', 0, NULL, 1, '2026-01-07 11:54:48'),
 (26, 10, '6564GU', 26, 400.00, 0, 4, 50.00, 0.00, '', '0000-00-00', 0, NULL, 1, '2026-01-07 12:12:28'),
-(27, 10, '6564GU', 1, 4000.00, 0, 4, 200.00, 0.00, '', '0000-00-00', 0, NULL, 1, '2026-01-07 12:12:42');
+(27, 10, '6564GU', 1, 4000.00, 0, 4, 200.00, 0.00, '', '0000-00-00', 0, NULL, 1, '2026-01-07 12:12:42'),
+(28, 1, '9iokljklj', 28, 1300.00, 0, 1, 50.00, 0.00, '', '0000-00-00', 0, NULL, 1, '2026-01-17 05:29:45'),
+(29, 1, '9iokljklj', 27, 3500.00, 0, 1, 4.00, 0.00, '', '0000-00-00', 0, NULL, 1, '2026-01-17 05:30:07'),
+(30, 1, '8uiojkl', 27, 3500.00, 0, 1, 30.00, 0.00, '', '0000-00-00', 0, NULL, 1, '2026-01-17 06:03:45');
 
 -- --------------------------------------------------------
 
@@ -3108,7 +3150,7 @@ INSERT INTO `sub_menus` (`sub_menu_id`, `menu`, `sub_menu`, `url`, `status`) VAL
 (98, 3, 'Consumables', 'consumables', 1),
 (99, 3, 'Issue Items', 'issue_items', 0),
 (100, 5, 'Issued Items Report', 'issue_report', 0),
-(101, 3, 'Pending Issued Items', 'pending_issued', 0),
+(101, 3, 'Pending Item Requests', 'pending_issued', 0),
 (102, 5, 'Issued Item History', 'issued_item_stats', 0),
 (104, 6, 'Customer Payment Reports', 'deposit_report', 0),
 (105, 4, 'Post Debt Balance', 'post_debt', 1),
@@ -3238,7 +3280,9 @@ INSERT INTO `sub_menus` (`sub_menu_id`, `menu`, `sub_menu`, `url`, `status`) VAL
 (238, 14, 'Rent Received', 'rent_received', 0),
 (239, 5, 'Flagged Attendance', 'flagged_attendance', 0),
 (240, 4, 'Disburse Salary', 'disburse_salary', 0),
-(241, 6, 'Salary Disbursement', 'salary_disbursement', 0);
+(241, 6, 'Salary Disbursement', 'salary_disbursement', 0),
+(242, 3, 'Item Requisition', 'item_requisition', 0),
+(243, 15, 'Onboard Existing Cients', 'onboard_conc_investors', 0);
 
 -- --------------------------------------------------------
 
@@ -3791,7 +3835,9 @@ INSERT INTO `waybills` (`waybill_id`, `invoice`, `vendor`, `invoice_amount`, `wa
 (11, 'uiy7867', 1, 118000.00, 0.00, '', 11, '2025-12-18 21:02:32', 1),
 (12, 'PO129102501333021', 1, 36000.00, 0.00, 'TR919231225060506', 1, '2025-12-23 06:05:06', 1),
 (13, '76567', 4, 16000000.00, 0.00, '', 10, '2026-01-07 11:55:01', 1),
-(14, '6564GU', 4, 820000.00, 0.00, '', 10, '2026-01-07 12:12:47', 1);
+(14, '6564GU', 4, 820000.00, 0.00, '', 10, '2026-01-07 12:12:47', 1),
+(15, '9iokljklj', 1, 79000.00, 0.00, '', 1, '2026-01-17 05:30:12', 1),
+(16, '8uiojkl', 1, 105000.00, 0.00, '', 1, '2026-01-17 06:03:48', 1);
 
 --
 -- Indexes for dumped tables
@@ -4465,7 +4511,7 @@ ALTER TABLE `attendance_flagging`
 -- AUTO_INCREMENT for table `audit_trail`
 --
 ALTER TABLE `audit_trail`
-  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=173;
+  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=180;
 
 --
 -- AUTO_INCREMENT for table `banks`
@@ -4561,7 +4607,7 @@ ALTER TABLE `departments`
 -- AUTO_INCREMENT for table `deposits`
 --
 ALTER TABLE `deposits`
-  MODIFY `deposit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `deposit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
 
 --
 -- AUTO_INCREMENT for table `depreciation`
@@ -4657,37 +4703,37 @@ ALTER TABLE `harvests`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `investments`
 --
 ALTER TABLE `investments`
-  MODIFY `investment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `investment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `investment_payments`
 --
 ALTER TABLE `investment_payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `investment_returns`
 --
 ALTER TABLE `investment_returns`
-  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT for table `issue_items`
 --
 ALTER TABLE `issue_items`
-  MODIFY `issue_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `issue_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `item_transfers`
@@ -4741,7 +4787,7 @@ ALTER TABLE `multiple_payments`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=181;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=184;
 
 --
 -- AUTO_INCREMENT for table `observations`
@@ -4807,7 +4853,7 @@ ALTER TABLE `pensions`
 -- AUTO_INCREMENT for table `prices`
 --
 ALTER TABLE `prices`
-  MODIFY `price_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `price_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `principal_returns`
@@ -4825,7 +4871,7 @@ ALTER TABLE `pruning`
 -- AUTO_INCREMENT for table `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `purchase_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `purchase_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `purchase_order`
@@ -4933,7 +4979,7 @@ ALTER TABLE `stores`
 -- AUTO_INCREMENT for table `sub_menus`
 --
 ALTER TABLE `sub_menus`
-  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=242;
+  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=244;
 
 --
 -- AUTO_INCREMENT for table `sucker_removal`
@@ -4999,7 +5045,7 @@ ALTER TABLE `vendor_payments`
 -- AUTO_INCREMENT for table `waybills`
 --
 ALTER TABLE `waybills`
-  MODIFY `waybill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `waybill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

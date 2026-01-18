@@ -44,7 +44,7 @@ $get_details = new selects();
 //check if there is an exisitng unpaid investment
 $checks = $get_details->fetch_count_2cond('investments', 'customer', $customer, 'contract_status', 0);
 if($checks > 0){
-    echo "<script>The selected Client has a pending investment yet to be activated! Kindly proceed to payment in order to activate the pending investment before proceeding to start a new investment</script>";
+    echo "<script>alert('The selected Client has a pending investment yet to be activated! Kindly proceed to payment in order to activate the pending investment before proceeding to start a new investment')</script>";
     echo "<div class='success'><p style='background:red'>The selected Client has a pending investment yet to be activated! Kindly make proceed to payment in order to activate the pending investment before proceeding to start a new investment! <i class='fas fa-thumbs-down'></i></p></div>";
     exit;
 }else{
@@ -75,9 +75,9 @@ if($currency == "Dollar"){
 
     <h3 style='color:green;'>Investment Summary</h3>
     <ul>
-        <li><strong>Investment Units:</strong> $units unit(s)</li>
+        <li><strong>Units Allocated:</strong> $units unit(s)</li>
         <li><strong>Investment Value:</strong> $icon$amount_fmt</li>
-        <li><strong>Total Value in Dollar:</strong> ₦$due_fmt</li>
+        <li><strong>Total Value in Dollar:</strong> $icon$due_fmt</li>
         <li><strong>Contract Duration:</strong> $duration Years</li>
     </ul>
 

@@ -13,7 +13,7 @@ $investment = htmlspecialchars(stripslashes($_POST['investment']));
 $bank = htmlspecialchars(stripslashes($_POST['bank']));
 $trans_date = htmlspecialchars(stripslashes($_POST['trans_date']));
 $details = ucwords(htmlspecialchars(stripslashes($_POST['details'])));
-$trans_type = "Field Documentation Payment";
+$trans_type = "Investment Payment";
 $date = date("Y-m-d H:i:s");
 $company = $_SESSION['company'];
 
@@ -51,6 +51,8 @@ $get = new selects();
 /* Insert payment into deposits */
 $add_data = new add_data('deposits', $data);
 $add_data->create_data();
+
+$icon = ($currency == "Dollar") ? "$" : "₦";
 
 if(!$add_data){
     exit("Error posting payment.");
@@ -145,7 +147,7 @@ foreach($invest_returns as $ir){
     $due_date = date("jS F, Y", strtotime($ir->due_date));
     $percentage = $ir->percentage;
     $return = number_format($ir->amount_due, 2);
-    $return_schedule_html .= "<li>₦".$return." due on ".$due_date."</li>";
+    $return_schedule_html .= "<li>$icon".$return." due on ".$due_date."</li>";
 }
 $return_schedule_html .= "</ul>";
 
@@ -268,7 +270,7 @@ $fmt_total_paid  = number_format($total_paid, 2);
 $fmt_total_dollar = number_format($total_in_dollar, 2);
 $fmt_remaining   = number_format($invest_amount - $total_paid, 2);
 
-$icon = ($currency == "Dollar") ? "$" : "₦";
+
 
 /* BUILD EMAIL */
 if($total_paid >= $invest_amount){
@@ -288,9 +290,9 @@ if($total_paid >= $invest_amount){
         <ul>
             <li><strong>Duration:</strong> $duration years</li>
             <li><strong>Currency:</strong> $currency</li>
-            <li><strong>Units:</strong> $units unit(s)</li>
+            <li><strong>Allocated Units:</strong> $units unit(s)</li>
             <li><strong>Total Investment:</strong> $icon$fmt_total_cost</li>
-            <li><strong>USD Value:</strong> ₦$fmt_total_dollar</li>
+            <li><strong>USD Value:</strong> $icon$fmt_total_dollar</li>
         </ul>
 
         $return_schedule_html
@@ -303,7 +305,7 @@ if($total_paid >= $invest_amount){
     $notif_data = array(
         'client' => $customer,
         'subject' => 'Concentrate Investment Payment Update',
-        'message' => 'Dear '.$client.', your investment payment has been received. Total paid: ₦'.$fmt_total_paid.' | Remaining: ₦'.$fmt_remaining,
+        'message' => 'Dear '.$client.', your investment payment has been received. Total paid: '.$icon.$fmt_total_paid.' | Remaining: '.$icon.$fmt_remaining,
         'post_date' => $date,
     );
     (new add_data('notifications', $notif_data))->create_data();
@@ -314,8 +316,8 @@ if($total_paid >= $invest_amount){
         <ul>
             <li><strong>Units:</strong> $units unit(s)</li>
             <li><strong>Total Investment:</strong> $icon$fmt_total_cost</li>
-            <li><strong>Total Paid:</strong> ₦$fmt_total_paid</li>
-            <li><strong>Balance Remaining:</strong> ₦$fmt_remaining</li>
+            <li><strong>Total Paid:</strong> $icon$fmt_total_paid</li>
+            <li><strong>Balance Remaining:</strong> $icon$fmt_remaining</li>
         </ul>
         $return_schedule_html
 

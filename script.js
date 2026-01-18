@@ -9739,6 +9739,69 @@ function invest(){
           
      }
 }
+// onboard existing concentrate investors
+function onboardInvestors(){
+     let customer = document.getElementById("customer").value;
+     let duration = document.getElementById("duration").value;
+     let currency = document.getElementById("currency").value;
+     let exchange_rate = document.getElementById("exchange_rate")?.value || 0;
+     let amount = document.getElementById("amount").value;
+     let total_dollar = document.getElementById("total_dollar").value;
+     let units = document.getElementById("units").value;
+     let amount_paid = document.getElementById("amount_paid").value;
+     let start_date = document.getElementById("start_date").value;
+     if(customer.length == 0 || customer.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select client!");
+          $("#item").focus();
+          return;
+     }else if(!duration){
+          alert("Please select contract duration!");
+          $("#duration").focus();
+          return;
+     }else if(!currency){
+          alert("Please select transaction currency!");
+          $("#duration").focus();
+          return;
+    
+     }else if(!amount || parseFloat(amount) <= 0){
+          alert("Please input amount invested!");
+          $("#amount").focus();
+          return;
+     }else if(!units || parseFloat(units) <= 0){
+          alert("Please input amount invested!");
+          $("#amount").focus();
+          return;
+     }else if(!amount_paid || parseFloat(amount_paid) < 0){
+          alert("Please input amount paid by client so far!");
+          $("#amount_paid").focus();
+          return;
+     }else if(!start_date){
+          alert("Please input investment start date!");
+          $("#start_date").focus();
+          return;
+     }else{
+          let confirm_inv = confirm("Are you sure you want to start this investment?", "");
+          if(confirm_inv){
+               $.ajax({
+                    type : "POST",
+                    url : "../controller/onboard_investors.php",
+                    data : {customer:customer, duration:duration, exchange_rate:exchange_rate, amount:amount, total_dollar:total_dollar,currency:currency,units:units, start_date:start_date, amount_paid:amount_paid},
+                    beforeSend: function(){
+                         $("#concentrates").html("<div class='processing'><div class='loader'></div></div>");
+                    },
+                    success : function(response){
+                         $("#concentrates").html(response);
+                         setTimeout(function(){
+                              showPage("onboard_conc_investors.php");
+                         }, 2000);
+                    }
+               })
+          }else{
+               return;
+          }
+          
+     }
+}
 
 //payment for investment
 function postInvestment(){

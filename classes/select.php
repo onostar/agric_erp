@@ -760,6 +760,18 @@ public function fetch_generate_payrollpermonth($store, $payroll_date){
                 return "0";
             }
         }
+        //fetch details count without condition
+        public function check_investment($customer){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM investments WHERE customer = :customer AND (contract_status = 0 OR contract_status = 1)");
+            $get_user->bindValue("customer", $customer);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                return $get_user->rowCount();
+            }else{
+                
+                return "0";
+            }
+        }
         //fetch details count with condition
         public function fetch_count_cond($table, $column, $condition){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column");
