@@ -6,7 +6,7 @@
 
 ?>
     <div class="info"></div>
-<div class="displays allResults" id="staff_list" style="width:80%!important;margin:50px!important">
+<div class="displays allResults" id="staff_list" style="width:90%!important;margin:50px!important">
     <h2>Customer list</h2>
     <hr>
     <div class="search">
@@ -21,7 +21,7 @@
                 <td>Phone number</td>
                 <td>Address</td>
                 <td>Email</td>
-                <td>Balance</td>
+                <td>Type</td>
                 <td>Date reg</td>
             </tr>
         </thead>
@@ -45,14 +45,15 @@
                 </td> -->
                 <?php /* }else{ */?>
                 <!-- <td style="color:red"><?php echo "₦".number_format($detail->wallet_balance * (-1), 2);?> -->
-                <td style="color:red">
+                <td>
                     <?php 
-                        $fetch_bal = new selects();
+                       /*  $fetch_bal = new selects();
                         $bals = $fetch_bal->fetch_account_balance($detail->acn);
                         foreach($bals as $bal){
                             $wallet_balance = $bal->balance;
                         }
-                        echo "₦".number_format($wallet_balance, 2);
+                        echo "₦".number_format($wallet_balance, 2); */
+                        echo $detail->customer_type;
                     ?>
                 <?php /* } */?>
                 </td>
