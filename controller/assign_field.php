@@ -174,18 +174,18 @@ if($update){
     $add_data->create_data();
 
     /* send mail */
-    function smtpmailer($to, $from, $from_name, $subject, $body){
+   function smtpmailer($to, $from, $from_name, $subject, $body){
         $mail = new PHPMailer();
         $mail->IsSMTP();
         $mail->SMTPAuth = true; 
         $mail->SMTPSecure = 'ssl'; 
-        $mail->Host = 'www.dorthprosuite.com';
+        $mail->Host = 'smtppro.zoho.com';
         $mail->Port = 465; 
-        $mail->Username = 'admin@dorthprosuite.com';
-        $mail->Password = 'yMcmb@her0123!';   
+        $mail->Username = 'info@davidorlahfarms.com';
+        $mail->Password = 'Info_DFarms@2520';   
 
         $mail->IsHTML(true);
-        $mail->From="admin@dorthprosuite.com";
+        $mail->From="info@davidorlahfarms.com";
         $mail->FromName=$from_name;
         $mail->Sender=$from;
         $mail->AddReplyTo($from, $from_name);
@@ -201,7 +201,7 @@ if($update){
     }
 
     $to = $customer_email;
-    $from = 'admin@dorthprosuite.com';
+    $from = 'info@davidorlahfarms.com';
     $from_name = "Davidorlah Farms";
     $subj = 'Your Field Purchase Contract is Active';
     $msg = "<div>$message</div>";

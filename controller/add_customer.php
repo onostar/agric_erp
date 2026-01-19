@@ -109,33 +109,33 @@
                 </p>";
                 /* send mail */
                 function smtpmailer($to, $from, $from_name, $subject, $body){
-                    $mail = new PHPMailer();
-                    $mail->IsSMTP();
-                    $mail->SMTPAuth = true; 
-                    $mail->SMTPSecure = 'ssl'; 
-                    $mail->Host = 'www.dorthprosuite.com';
-                    $mail->Port = 465; 
-                    $mail->Username = 'admin@dorthprosuite.com';
-                    $mail->Password = 'yMcmb@her0123!';   
+        $mail = new PHPMailer();
+        $mail->IsSMTP();
+        $mail->SMTPAuth = true; 
+        $mail->SMTPSecure = 'ssl'; 
+        $mail->Host = 'smtppro.zoho.com';
+        $mail->Port = 465; 
+        $mail->Username = 'info@davidorlahfarms.com';
+        $mail->Password = 'Info_DFarms@2520';   
 
-                    $mail->IsHTML(true);
-                    $mail->From="admin@dorthprosuite.com";
-                    $mail->FromName=$from_name;
-                    $mail->Sender=$from;
-                    $mail->AddReplyTo($from, $from_name);
-                    $mail->Subject = $subject;
-                    $mail->Body = $body;
-                    $mail->AddAddress($to);
+        $mail->IsHTML(true);
+        $mail->From="info@davidorlahfarms.com";
+        $mail->FromName=$from_name;
+        $mail->Sender=$from;
+        $mail->AddReplyTo($from, $from_name);
+        $mail->Subject = $subject;
+        $mail->Body = $body;
+        $mail->AddAddress($to);
 
-                    if(!$mail->Send()){
-                        return "Failed to send mail";
-                    } else {
-                        return "Message Sent Successfully";
-                    }
-                }
+        if(!$mail->Send()){
+            return "Failed to send mail";
+        } else {
+            return "Message Sent Successfully";
+        }
+    }
 
                 $to = $email_address;
-                $from = 'admin@dorthprosuite.com';
+                $from = 'info@davidorlahfarms.com';
                 $from_name = "Davidorlah Nigeria Limited";
                 $subj = 'Your Customer Portal Access Details - Davidorlah Nig Ltd';
                 $msg = "<div>$message</div>";

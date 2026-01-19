@@ -74,16 +74,17 @@ if(isset($_GET['id'])){
         function smtpmailer($to, $from, $from_name, $subject, $body){
             $mail = new PHPMailer();
             $mail->IsSMTP();
-            $mail->SMTPAuth = true;
-            $mail->SMTPSecure = 'ssl';
-            $mail->Host = 'www.dorthprosuite.com';
-            $mail->Port = 465;
-            $mail->Username = 'admin@dorthprosuite.com';
-            $mail->Password = 'yMcmb@her0123!';
+            $mail->SMTPAuth = true; 
+            $mail->SMTPSecure = 'ssl'; 
+            $mail->Host = 'smtppro.zoho.com';
+            $mail->Port = 465; 
+            $mail->Username = 'info@davidorlahfarms.com';
+            $mail->Password = 'Info_DFarms@2520';   
 
             $mail->IsHTML(true);
-            $mail->From = $from;
-            $mail->FromName = $from_name;
+            $mail->From="info@davidorlahfarms.com";
+            $mail->FromName=$from_name;
+            $mail->Sender=$from;
             $mail->AddReplyTo($from, $from_name);
             $mail->Subject = $subject;
             $mail->Body = $body;
@@ -97,7 +98,7 @@ if(isset($_GET['id'])){
         }
 
         $to = $staff_email;
-        $from = 'admin@dorthprosuite.com';
+        $from = 'info@davidorlahfarms.com';
         $from_name = $company;
         $subject = "Leave Request Declined";
         $msg = $email_message;

@@ -4,7 +4,7 @@
         <h3><a href="users.php" title="Home"><i class="fas fa-home"></i> Main menus</a></h3>
         <?php
             //show mall menu fpr admin
-            if($username == 'Sysadmin'){
+            if($username == 'Sysadmin' || $username == 'Admin'){
         ?>
         <ul>
             <?php 

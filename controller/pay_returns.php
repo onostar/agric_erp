@@ -291,21 +291,21 @@
             $mail->SMTPAuth = true; 
     
             $mail->SMTPSecure = 'ssl'; 
-            $mail->Host = 'www.dorthprosuite.com';
+            $mail->Host = 'smtppro.zoho.com';
             $mail->Port = 465; 
-            $mail->Username = 'admin@dorthprosuite.com';
-            $mail->Password = 'yMcmb@her0123!';   
+            $mail->Username = 'info@davidorlahfarms.com';
+            $mail->Password = 'Info_DFarms@2520';   
     
     
             $mail->IsHTML(true);
-            $mail->From="admin@dorthprosuite.com";
+            $mail->From="info@davidorlahfarms.com";
             $mail->FromName=$from_name;
             $mail->Sender=$from;
             $mail->AddReplyTo($from, $from_name);
             $mail->Subject = $subject;
             $mail->Body = $body;
             $mail->AddAddress($to);
-            $mail->AddAddress('onostarmedia@gmail.com');
+            // $mail->AddAddress('onostarmedia@gmail.com');
             
             if(!$mail->Send())
             {
@@ -326,7 +326,7 @@
         }
         
         $to = $customer_email;
-        $from = 'admin@dorthprosuite.com';
+        $from = 'info@davidorlahfarms.com';
         $from_name = "$company";
         $name = "$company";
         $subj = 'Investment Return Payment Confirmation';

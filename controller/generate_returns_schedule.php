@@ -206,10 +206,10 @@ function smtpmailer($to, $from, $from_name, $subject, $body){
     $mail->IsSMTP();
     $mail->SMTPAuth = true;
     $mail->SMTPSecure = 'ssl';
-    $mail->Host = 'www.dorthprosuite.com';
+    $mail->Host = 'smtppro.zoho.com';
     $mail->Port = 465;
-    $mail->Username = 'admin@dorthprosuite.com';
-    $mail->Password = 'yMcmb@her0123!';
+    $mail->Username = 'info@davidorlahfarms.com';
+    $mail->Password = 'Info_DFarms@2520';
 
     $mail->IsHTML(true);
     $mail->From     = $from;
@@ -222,7 +222,7 @@ function smtpmailer($to, $from, $from_name, $subject, $body){
     return $mail->Send() ? "Mail sent" : "Mail failed";
 }
 
-smtpmailer($customer_email, "admin@dorthprosuite.com", $company,
+smtpmailer($customer_email, "info@davidorlahfarms.com", $company,
     "Investment Restructured & New Returns Schedule",
     $email_message
 );

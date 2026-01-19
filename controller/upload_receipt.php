@@ -125,23 +125,23 @@
                             Davidorlah Nigeria Limited.</p>";
                         function smtpmailer($to, $from, $from_name, $subject, $body, $photo_folder){
                             $mail = new PHPMailer();
-                            $mail->IsSMTP();
-                            $mail->SMTPAuth = true; 
-                            $mail->SMTPSecure = 'ssl'; 
-                            $mail->Host = 'www.dorthprosuite.com';
-                            $mail->Port = 465; 
-                            $mail->Username = 'admin@dorthprosuite.com';
-                            $mail->Password = 'yMcmb@her0123!';   
+                        $mail->IsSMTP();
+                        $mail->SMTPAuth = true; 
+                        $mail->SMTPSecure = 'ssl'; 
+                        $mail->Host = 'smtppro.zoho.com';
+                        $mail->Port = 465; 
+                        $mail->Username = 'info@davidorlahfarms.com';
+                        $mail->Password = 'Info_DFarms@2520';   
 
-                            $mail->IsHTML(true);
-                            $mail->From="admin@dorthprosuite.com";
-                            $mail->FromName=$from_name;
-                            $mail->Sender=$from;
-                            $mail->AddReplyTo($from, $from_name);
-                            $mail->Subject = $subject;
-                            $mail->Body = $body;
-                            $mail->AddAddress($to);
-                            $mail->AddAttachment($photo_folder);
+                        $mail->IsHTML(true);
+                        $mail->From="info@davidorlahfarms.com";
+                        $mail->FromName=$from_name;
+                        $mail->Sender=$from;
+                        $mail->AddReplyTo($from, $from_name);
+                        $mail->Subject = $subject;
+                        $mail->Body = $body;
+                        $mail->AddAddress($to);
+                        $mail->AddAttachment($photo_folder);
 
                             if(!$mail->Send()){
                                 return "Failed to send mail";
@@ -150,8 +150,8 @@
                             }
                         }
 
-                        $to = 'onostarmedia@gmail.com';
-                        $from = 'admin@dorthprosuite.com';
+                        $to = 'info@davidorlahfarms.com';
+                        $from = 'info@davidorlahfarms.com';
                         $from_name = "Davidorlah Nigeria Limited";
                         $subj = "Payment Upload from $client";
                         $msg = "<div>$message</div>";

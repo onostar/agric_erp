@@ -120,10 +120,10 @@ if($currency == "Dollar"){
         $mail->IsSMTP();
         $mail->SMTPAuth = true; 
         $mail->SMTPSecure = 'ssl'; 
-        $mail->Host = 'www.davidorlahfarms.com';
+        $mail->Host = 'smtppro.zoho.com';
         $mail->Port = 465; 
         $mail->Username = 'info@davidorlahfarms.com';
-        $mail->Password = 'Ínfo@Dfarms@1125';   
+        $mail->Password = 'Info_DFarms@2520';   
 
         $mail->IsHTML(true);
         $mail->From="info@davidorlahfarms.com";

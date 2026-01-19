@@ -199,7 +199,7 @@ date_default_timezone_set("Africa/Lagos");
                         <?php }}}?>
                     </div>
                     <?php
-                        if($role == "Admin" || $role == "Inventory Officer" || $role == "Accountant" || $designation == "HR MANAGER"){
+                        if($role == "Admin" || $role == "Accountant" || $designation == "HR MANAGER"){
                     ?>
                     <div class="change_dashboard">
                         <!-- check other stores dashboard -->

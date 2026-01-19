@@ -117,7 +117,7 @@
                         $mail->IsSMTP();
                         $mail->SMTPAuth = true; 
                         $mail->SMTPSecure = 'ssl'; 
-                        $mail->Host = 'www.davidorlahfarms.com';
+                        $mail->Host = 'smtppro.zoho.com';
                         $mail->Port = 465; 
                         $mail->Username = 'info@davidorlahfarms.com';
                         $mail->Password = 'Info_DFarms@2520';   
