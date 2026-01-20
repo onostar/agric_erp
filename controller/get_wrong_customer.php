@@ -11,6 +11,9 @@
         foreach($rows as $row):
         
     ?>
+    <!-- <div class="results">
+        <a href="javascript:void(0)" onclick="addWrongCustomer('<?php echo $row->customer_id?>', '<?php echo $row->customer?>')"></a>
+    </div> -->
     <option onclick="addWrongCustomer('<?php echo $row->customer_id?>', '<?php echo $row->customer?>')">
         <?php echo $row->customer?>
     </option>

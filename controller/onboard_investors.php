@@ -261,7 +261,7 @@ foreach($cus as $cu){
         <p>Thank you for trusting <strong>Davidorlah Nigeria Limited</strong> with your investment.</p>
 
         <p>Warm regards,<br>
-        <strong>Investment Management Team</strong><br>
+        <strong>Management</strong><br>
         Davidorlah Nigeria Limited</p>
         ";
     }

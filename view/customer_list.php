@@ -29,7 +29,7 @@
             <?php
                 $n = 1;
                 $get_details = new selects();
-                $details = $get_details->fetch_details('customers');
+                $details = $get_details->fetch_details_order('customers', 'customer');
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>

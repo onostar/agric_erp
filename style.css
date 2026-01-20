@@ -2958,7 +2958,7 @@ x
     width:100%;
     
 }
-#search_results a, #sales_item a, #transfer_item a, #raw_item a{
+#search_results a, #sales_item a, #transfer_item a, #raw_item .results a{
     color:#fff;
     display:block;
     padding:10px 5px;

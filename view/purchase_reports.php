@@ -34,7 +34,7 @@
                 <td>Invoice</td>
                 <td>Vendor</td>
                 <td>Item</td>
-                <td>Qty(kg)</td>
+                <td>Qty</td>
                 <td>Unit Cost</td>
                 <td>Total Cost</td>
                 <td>Logistics</td>

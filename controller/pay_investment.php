@@ -52,7 +52,6 @@ $get = new selects();
 $add_data = new add_data('deposits', $data);
 $add_data->create_data();
 
-$icon = ($currency == "Dollar") ? "$" : "₦";
 
 if(!$add_data){
     exit("Error posting payment.");
@@ -82,6 +81,7 @@ foreach($inv as $loan){
     $units = $loan->units;
 }
 
+$icon = ($currency == "Dollar") ? "$" : "₦";
 
 /* Calculate remaining balance */
 $new_balance = $balance - $amount;

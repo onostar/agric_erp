@@ -33,6 +33,8 @@
         $recall->updateAny('suspensions', $data, 'suspension_id', $suspesion_id);
         //update staff status on staff table
         $recall->update('staffs', 'staff_status', 'staff_id', 0, $staff);
+        //activate staff login
+        $recall->update('users', 'status', 'staff_id', 0, $staff);
         if($recall){
             echo "<div class='success'><p>You have successfully recalled $full_name to service! <i class='fas fa-thumbs-up'></i></p></div>";
         }

@@ -10,7 +10,7 @@
         $email_address = strtolower(htmlspecialchars(stripslashes($_POST['email'])));
         $type = htmlspecialchars(stripslashes(($_POST['customer_type'])));
         //check customer type and create user account
-        if($type == "Landowner"){
+        if($type == "Investor"){
             $password = 123;
         }else{
             $password = "";

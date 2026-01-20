@@ -29,6 +29,8 @@
 
         $disable_user = new Update_table();
         $disable_user->update('staffs', 'staff_status', 'staff_id', 1, $staff);
+        //disable staff login
+        $disable_user->update('users', 'status', 'staff_id', -1, $staff);
         if($disable_user){
             echo "<div class='success'><p>You have successfully suspended $full_name! <i class='fas fa-thumbs-up'></i></p></div>";
         }
