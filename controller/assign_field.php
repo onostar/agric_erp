@@ -12,6 +12,7 @@ $duration = htmlspecialchars(stripslashes($_POST['duration']));
 $payment_duration = htmlspecialchars(stripslashes($_POST['payment_duration']));
 $purchase_cost = htmlspecialchars(stripslashes($_POST['purchase_cost']));
 $discount = htmlspecialchars(stripslashes($_POST['discount']));
+$size = htmlspecialchars(stripslashes($_POST['field_size']));
 $total_due = htmlspecialchars(stripslashes($_POST['total_due']));
 $documentation = htmlspecialchars(stripslashes($_POST['documentation']));
 $rent_percentage = htmlspecialchars(stripslashes($_POST['rent_percentage']));
@@ -36,6 +37,7 @@ $assign_data = array(
     'contract_duration' => $duration,
     'payment_duration' => $payment_duration,
     'installment' => $installment_amount,
+    'field_size' => $size,
     'purchase_cost' => $purchase_cost,
     'discount' => $discount,
     'total_due' => $total_due,
@@ -59,9 +61,9 @@ $get_details = new selects();
 $update = new Update_table;
 
 // update field to mark customer ownership
-$update->update('fields', 'customer', 'field_id', $customer, $id);
+// $update->update('fields', 'customer', 'field_id', $customer, $id);
 
-if($update){
+// if($update){
     // record field assignment
     $add_data = new add_data('assigned_fields', $assign_data);
     $add_data->create_data();
@@ -81,7 +83,7 @@ if($update){
     $fds = $get_details->fetch_details_cond('fields','field_id', $id);
     foreach($fds as $fd){
         $field_name = $fd->field_name;
-        $size = $fd->field_size;
+        // $size = $fd->field_size;
         $location = $fd->location;
     }
 
@@ -131,7 +133,7 @@ if($update){
     $due_fmt = number_format($total_due, 2);
     $doc_fmt = number_format($documentation, 2);
     $annual_rent_fmt = number_format($annual_rent, 2);
-
+    $sqm = $size * 500;
     // build purchase message
     $message = "
     <p>Dear $client,</p>
@@ -141,7 +143,7 @@ if($update){
     <ul>
         <li><strong>Field:</strong> $field_name</li>
         <li><strong>Location:</strong> $location</li>
-        <li><strong>Size:</strong> $size Hectares</li>
+        <li><strong>Size:</strong> $size Plot ($sqm sqm)</li>
         <li><strong>Purchase Cost:</strong> ₦$purchase_fmt</li>
         <li><strong>Discount applied:</strong> ₦$discount_fmt</li>
         <li><strong>Total Due:</strong> ₦$due_fmt</li>
@@ -166,7 +168,7 @@ if($update){
     $notif_data = array(
         'client' => $customer,
         'subject' => 'Your Field Purchase Contract is Active',
-        'message' => 'Dear '.$client.', your field ('.$field_name.' - '.$size.' Hectares) located at '.$location.' has been successfully assigned for purchase. Once installments are completed, you will start receiving annual returns of ₦'.$annual_rent_fmt.' ('.$rent_percentage.'%) for '.$duration.' year(s).',
+        'message' => 'Dear '.$client.', your field ('.$field_name.' - '.$size.' Plot) located at '.$location.' has been successfully assigned for purchase. Once installments are completed, you will start receiving annual returns of ₦'.$annual_rent_fmt.' ('.$rent_percentage.'%) for '.$duration.' year(s).',
         'post_date' => $date,
     );
 
@@ -209,5 +211,5 @@ if($update){
     smtpmailer($to, $from, $from_name, $subj, $msg);
 
     echo "<div class='success'><p>Field purchase successfully recorded and contract activated! <i class='fas fa-thumbs-up'></i></p></div>";
-}
+// }
 ?>

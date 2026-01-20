@@ -7102,8 +7102,8 @@ function updateField(){
      let soil_type = document.getElementById("soil_type").value;
      let soil_ph = document.getElementById("soil_ph").value;
      let topography = document.getElementById("topography").value;
-     let latitude = document.getElementById("latitude").value;
-     let longitude = document.getElementById("longitude").value;
+    /*  let latitude = document.getElementById("latitude").value;
+     let longitude = document.getElementById("longitude").value; */
      let location = document.getElementById("location").value;
      // let purchase_cost = document.getElementById("purchase_cost").value;
      if(field.length == 0 || field.replace(/^\s+|\s+$/g, "").length == 0){
@@ -7126,22 +7126,22 @@ function updateField(){
           alert("Please input field location!");
           $("#location").focus();
           return;
-     }else if(!latitude){
+    /*  }else if(!latitude){
           alert("Please input field latitude!");
           $("#latitude").focus();
           return;
      }else if(!longitude){
           alert("Please input field longitude!");
           $("#longitude").focus();
-          return;
+          return; */
      /* }else if(!purchase_cost){
           alert("Please input field purchase cost!");
           $("#purchase_cost").focus();
           return; */
-     }else if(parseFloat(latitude) < 0 || parseFloat(longitude) < 0){
+    /*  }else if(parseFloat(latitude) < 0 || parseFloat(longitude) < 0){
           alert("Latitude or longitude values cannot be less than or equals to zero!");
           $("#latitude").focus();
-          return;
+          return; */
      /* }else if(parseFloat(purchase_cost) <= 0){
           alert("Field purchase cost cannot be less than or equal to zero!");
           $("#purchase_cost").focus();
@@ -7150,7 +7150,7 @@ function updateField(){
           $.ajax({
                type : "POST",
                url : "../controller/update_field.php",
-               data : {field:field, field_id:field_id,field_size:field_size, soil_type:soil_type, soil_ph:soil_ph, topography:topography, /* purchase_cost:purchase_cost,  */latitude:latitude, longitude:longitude, location:location},
+               data : {field:field, field_id:field_id,field_size:field_size, soil_type:soil_type, soil_ph:soil_ph, topography:topography, /* purchase_cost:purchase_cost,  latitude:latitude, longitude:longitude, */location:location},
                beforeSend: function(){
                     $("#farm_fields").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -7175,6 +7175,7 @@ function assignField(){
      let payment_duration = document.getElementById("payment_duration").value;
      let annual_rent = document.getElementById("annual_rent").value;
      let rent_percentage = document.getElementById("rent_percentage").value;
+     let field_size = document.getElementById("field_size").value;
      let start_date = document.getElementById("start_date").value;
      let installment_amount = document.getElementById("installment_amount").value;
      let documentation = document.getElementById("documentation").value;
@@ -7212,6 +7213,10 @@ function assignField(){
           alert("Please select rent percentage to get annual rent!");
           $("#rent_percentage").focus();
           return;
+     }else if(!field_size || field_size <= 0){
+          alert("Please input plot purchased!");
+          $("#field_size").focus();
+          return;
      }else if(!start_date){
           alert("Please input contract start date!");
           $("#start_date").focus();
@@ -7224,7 +7229,7 @@ function assignField(){
           $.ajax({
                type : "POST",
                url : "../controller/assign_field.php",
-               data : {field_id:field_id, customer:customer, duration:duration, purchase_cost:purchase_cost, discount:discount, total_due:total_due,payment_duration:payment_duration, rent_percentage:rent_percentage, annual_rent:annual_rent, documentation:documentation, start_date:start_date, installment_amount:installment_amount},
+               data : {field_id:field_id, customer:customer, duration:duration, purchase_cost:purchase_cost, discount:discount, total_due:total_due,payment_duration:payment_duration, rent_percentage:rent_percentage, annual_rent:annual_rent, documentation:documentation, start_date:start_date, installment_amount:installment_amount, field_size:field_size},
                beforeSend: function(){
                     $("#farm_fields").html("<div class='processing'><div class='loader'></div></div>");
                },

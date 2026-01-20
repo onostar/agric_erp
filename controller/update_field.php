@@ -12,8 +12,8 @@
     $topography = ucwords(htmlspecialchars(stripslashes($_POST['topography'])));
     // $customer = htmlspecialchars(stripslashes($_POST['customer']));
     //  $amount = htmlspecialchars(stripslashes($_POST['purchase_cost']));
-    $latitude = htmlspecialchars(stripslashes($_POST['latitude']));
-    $longitude = htmlspecialchars(stripslashes($_POST['longitude']));
+    /* $latitude = htmlspecialchars(stripslashes($_POST['latitude']));
+    $longitude = htmlspecialchars(stripslashes($_POST['longitude'])); */
     $location = htmlspecialchars(stripslashes($_POST['location']));
     
     $data = array(
@@ -21,8 +21,8 @@
         'field_size' => $size,
         'soil_type' => $soil_type,
         'soil_ph' => $ph,
-        'latitude' => $latitude,
-        'longitude' => $longitude,
+        /* 'latitude' => $latitude,
+        'longitude' => $longitude, */
         // 'purchase_cost' => $amount,
         'topography' => $topography,
         'location' => $location,

@@ -13,7 +13,7 @@
     
 </style>
 <div class="displays allResults" id="farm_fields" style="width:90%!important;margin:20px 50px!important">
-    <h2>Farm Fields/Lands</h2>
+    <h2>Lands/Fields Assigned to Customers</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchStaff" placeholder="Enter keyword" onkeyup="searchData(this.value)">
@@ -23,14 +23,15 @@
         <thead>
             <tr style="background:var(--moreColor)">
                 <td>S/N</td>
-                <td>Field</td>
-                <!-- <td>Owned By</td> -->
-                <td>Field Size (Plot)</td>
+                <td>Land</td>
+                <td>Owned By</td>
+                <td>Land Size (Plot)</td>
                 <td>Soil Type</td>
                 <td>Soil PH</td>
                 <td>Topography</td>
                 <td>Location</td>
-                <!-- <td>Status</td> -->
+                <td>Status</td>
+                <td>Date</td>
                 <td></td>
                 <!-- <td>Created</td> -->
             </tr>
@@ -39,17 +40,26 @@
             <?php
                 $n = 1;
                 $get_details = new selects();
-                $details = $get_details->fetch_details_order('fields', 'field_name');
+                $details = $get_details->fetch_details_order('assigned_fields', 'assigned_date');
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
+                    //get field name
+                    $names = $get_details->fetch_details_cond('fields', 'field_id', $detail->field);
+                    foreach($names as $name){
+                        $field_name = $name->field_name;
+                        $location = $name->location;
+                        $soil_type = $name->soil_type;
+                        $soil_ph = $name->soil_ph;
+                        $topography = $name->topography;
+                    }
             ?>
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
-                <td><?php echo $detail->field_name?></td>
-                <!-- <td style="color:var(--primaryColor)">
+                <td><?php echo $field_name?></td>
+                <td style="color:var(--primaryColor)">
                     <?php 
                         //get customer
-                       /*  $strs = $get_details->fetch_details_cond('customers', 'customer_id', $detail->customer);
+                        $strs = $get_details->fetch_details_cond('customers', 'customer_id', $detail->customer);
                         if(is_array($strs)){
                             foreach($strs as $str){
                                 $customer = $str->customer;
@@ -57,9 +67,9 @@
                         }else{
                             $customer = "Not Assigned";
                         }
-                        echo $customer; */
+                        echo $customer;
                     ?>
-                </td> -->
+                </td>
                 <td>
                     <?php 
                         //convert to square meters
@@ -67,23 +77,23 @@
                         echo $detail->field_size." Plot (".number_format($sqm)." m&sup2;)";
                     ?>
                 </td>
-                <td><?php echo $detail->soil_type?></td>
-                <td><?php echo $detail->soil_ph?></td>
-                <td><?php echo $detail->topography?></td>
+                <td><?php echo $soil_type?></td>
+                <td><?php echo $soil_ph?></td>
+                <td><?php echo $topography?></td>
                 <td><?php echo $detail->location?></td>
-                <!-- <td>
-                    <?php
-                        /* if($detail->field_status == 0){
-                            echo "<span style='color:green'>Available</span>";
-                        }else{
-                            echo "<span style='color:red'>Unavailable</span>";
-                        } */
-                    ?>
-                </td> -->
-                <!-- <td><?php echo date("d-m-Y", strtotime($detail->created_at))?></td> -->
                 <td>
-                    <!-- <a href="javascript:void(0)" onclick="window.open('view_field_details.php?field=<?php echo $detail->field_id?>')" style="color:#fff; background:var(--otherColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;"><i class="fas fa-eye"></i></a> -->
-                    <a href="javascript:void(0)" onclick="showPage('view_field.php?field=<?php echo $detail->field_id?>')" style="color:#fff; background:var(--tertiaryColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;"><i class="fas fa-edit"></i></a>
+                    <?php
+                        if($detail->contract_status == 1){
+                            echo "<span style='color:blue'>Pending</span>";
+                        }else{
+                            echo "<span style='color:green'>Active</span>";
+                        }
+                    ?>
+                </td>
+                <td><?php echo date("d-m-Y", strtotime($detail->assigned_date))?></td>
+                <td>
+                    <a href="javascript:void(0)" onclick="window.open('view_field_details.php?assigned=<?php echo $detail->assigned_id?>')" style="color:#fff; background:var(--otherColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;"><i class="fas fa-eye"></i></a>
+                    <a href="javascript:void(0)" onclick="showPage('view_field.php?field=<?php echo $detail->assigned_id?>')" style="color:#fff; background:var(--tertiaryColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;"><i class="fas fa-edit"></i></a>
                 </td>
                 
             </tr>

@@ -180,16 +180,7 @@
                         <div class="data" style="width:auto!important">
                             <label style="background:transparent; color:green; text-align:left;width:auto" for="other_names">Bank:</label>
                             <?php
-                                $get_reg = new selects();
-                                $details = $get_reg->fetch_details_cond('banks', 'bank_id', $row->bank);
-                                if(gettype($details) == 'array'){
-                                    foreach($details as $detail){
-                                        $bank_name = $detail->bank;
-                                    }
-                                }
-                                if(gettype($details) == "string"){
-                                    $bank_name = "";
-                                }
+                                echo $row->bank;
                             ?>
                             <input type="text" value="<?php echo $bank_name?>" readonly>
                     </div>

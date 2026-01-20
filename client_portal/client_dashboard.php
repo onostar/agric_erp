@@ -15,11 +15,11 @@
         <div class="cards" id="card4">
             <a href="javascript:void(0)" onclick="showPage('customer_field.php')">
                 <div class="infos">
-                    <p><i class="fas fa-tree"></i> My fields</p>
+                    <p><i class="fas fa-tree"></i> My Lands</p>
                     <p>
                     <?php
                         
-                        $fields = $get_info->fetch_count_cond('fields', 'customer', $user_id); echo $fields
+                        $fields = $get_info->fetch_count_cond('assigned_fields', 'customer', $user_id); echo $fields
                     ?>
                     </p>
                 </div>

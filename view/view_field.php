@@ -35,18 +35,18 @@
             <div class="inputs" style="flex-wrap:wrap; gap:1rem; justify-content:left">
                 <!-- <div class="data item_head"> -->
                     <input type="hidden" name="field_id" id="field_id" value="<?php echo $id?>" required>
-                <?php if($row->customer != 0){?>
-                <div class="data" style="width:31%">
+               
+               <!--  <div class="data" style="width:31%">
                     <label for="customer">Client</label>
                     <input type="text" name="item" id="item" value="<?php echo $customer?>" readonly>
-                </div>
-                <?php }?>
+                </div> -->
+                
                 <div class="data" style="width:31%">
                     <label for="field">Field Name</label>
                     <input type="text" name="field" id="field" value="<?php echo $row->field_name?>">
                 </div>
                 <div class="data" style="width:31%">
-                    <label for="sales_price">Field Size (Plot)
+                    <label for="sales_price">Field/Land Size (Plot)
                     <input type="text" name="field_size" id="field_size" value="<?php echo $row->field_size?>">
                 </div>
                 <div class="data" style="width:31%">
@@ -65,14 +65,14 @@
                    <label for="location"> Location</label>
                    <input type="text" name="location" id="location" value="<?php echo $row->location?>">
                 </div>
-                <div class="data" style="width:31%">
+                <!-- <div class="data" style="width:31%">
                     <label for="latitude">Latitude</label>
                     <input type="number" name="latitude" id="latitude" value="<?php echo $row->latitude?>">
                 </div>
                 <div class="data" style="width:31%">
                     <label for="longitude">Longitude</label>
                     <input type="number" name="longitude" id="longitude" value="<?php echo $row->longitude?>">
-                </div>
+                </div> -->
                 
                <!-- <div class="data" style="width:31%">
                     <label for="purchase_cost">Purchase Cost (NGN)</label>

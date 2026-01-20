@@ -86,19 +86,22 @@ if(isset($_SESSION['user'])){
 <body>
 
 <?php
-if (isset($_GET['field'])){
-    $id = $_GET['field'];
+if (isset($_GET['assigned'])){
+    $id = $_GET['assigned'];
     $get_item = new selects();
-    $rows = $get_item->fetch_details_cond('fields', 'field_id', $id);
+    
+    $rows = $get_item->fetch_details_cond('assigned_fields', 'assigned_id', $id);
     if(gettype($rows) == 'array'){
         foreach($rows as $row){
             $latitude = $row->latitude;
             $longitude = $row->longitude;
-            $field_name = $row->field_name;
             $customer = $row->customer;
             $size = $row->field_size;
+            $field = $row->field;
         }
-
+        //get field name
+        $fname = $get_item->fetch_details_group('fields','field_name','field_id', $field);
+        $field_name = $fname->field_name;
         // Get customer
         $cus = $get_item->fetch_details_cond('customers', 'customer_id', $customer);
         $owner = (is_array($cus) && count($cus) > 0) ? $cus[0]->customer : "N/A";
@@ -149,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function() {
   marker.bindPopup(`
     <b><?php echo strtoupper($field_name); ?></b><br>
     Owner: <?php echo $owner; ?><br>
-    Size: <?php echo $size; ?> Hectares<br>
+    Size: <?php echo $size; ?> Plot (<?php echo $size * 500?>m&sup2)<br>
     Latitude: ${lat}<br>
     Longitude: ${lng}
   `).openPopup();

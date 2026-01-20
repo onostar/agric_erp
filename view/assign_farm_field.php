@@ -57,7 +57,10 @@
                     </select>
                     
                 </div>
-               
+                <div class="data" style="width:31%">
+                    <label for="field_size">Size (Plot)</label>
+                    <input type="number" id="field_size" name="field_size" value="0.00" required>
+                </div>
                 <div class="data" style="width:31%">
                     <label for="purchase_cost">Purchase Amount (NGN)</label>
                     <input type="number" id="purchase_cost" name="purchase_cost" value="0.00" required oninput="getTotalDue()">

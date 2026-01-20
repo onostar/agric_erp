@@ -1,6 +1,7 @@
 <?php
 date_default_timezone_set("Africa/Lagos");
     session_start();
+    $store = $_SESSION['store_id'];
     $user = $_SESSION['user_id'];
     $asset = strtoupper(htmlspecialchars(stripslashes($_POST['asset'])));
     $supplier = strtoupper(htmlspecialchars(stripslashes($_POST['supplier'])));
@@ -80,10 +81,11 @@ date_default_timezone_set("Africa/Lagos");
             $update_asset->update('assets', 'asset_no', 'asset_id', $new_asset_no, $asset_id);
             
             //check if asset is a land asset and also add to field table.
-           /*  if($ledger_name == "LAND AND BUILDING"){
+            if($ledger_name == "LAND AND BUILDING"){
                 $field_data = array(
                     'asset_id' => $asset_id,
                     'field_name' => $asset,
+                    'farm' => $store,
                     'purchase_cost' => $cost,
                     'field_size' => $size,
                     'created_by' => $user,
@@ -91,7 +93,7 @@ date_default_timezone_set("Africa/Lagos");
                 );
                 $add_field = new add_data('fields', $field_data);
                 $add_field->create_data();
-            } */
+            }
 
             echo "<div class='success'><p>$asset added successfully <i class='fas fa-thumbs-up'></i></p></div>";
         }

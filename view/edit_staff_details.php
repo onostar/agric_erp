@@ -222,27 +222,35 @@
                     <label for="bank">Bank <span class="important">*</span></label>
                     <select name="bank" id="bank">
                         <?php
-                            $get_dep = new selects();
-                            $deps = $get_dep->fetch_details_cond('banks',  'bank_id', $row->bank);
-                            if(gettype($deps) == 'array'){
-                                foreach($deps as $dep){
-                                    $bank = $dep->bank;
-                                }
-                            }
-                            if(gettype($deps) == 'string'){
-                                $bank = "";
-                            }
+                           echo $row->bank;
                         ?>
-                        <option value="<?php echo $row->bank?>" selected><?php echo $bank?></option>
-                        <?php
-                            $get_dep = new selects();
-                            $details = $get_dep->fetch_details_order('banks', 'bank');
-                            if(gettype($details) == 'array'){
-                                foreach($details as $detail){
-                                
-                        ?>
-                        <option value="<?php echo $detail->bank_id?>"> <?php echo strtoupper($detail->bank)?></option>
-                        <?php }}?>
+                        <option value="<?php echo $row->bank?>" selected><?php echo $row->bank?></option>
+                       <option value="" selected disabled>Select Bank</option>
+                        <option>Access Bank</option>
+                        <option>Citibank Nigeria</option>
+                        <option>Ecobank Nigeria</option>
+                        <option>Fidelity Bank</option>
+                        <option>First Bank of Nigeria</option>
+                        <option>First City Monument Bank (FCMB)</option>
+                        <option>Globus Bank</option>
+                        <option>Guaranty Trust Bank (GTBank)</option>
+                        <option>Heritage Bank</option>
+                        <option>Jaiz Bank</option>
+                        <option>Keystone Bank</option>
+                        <option>Parallex Bank</option>
+                        <option>Polaris Bank</option>
+                        <option>PremiumTrust Bank</option>
+                        <option>Providus Bank</option>
+                        <option>Stanbic IBTC Bank</option>
+                        <option>Standard Chartered Bank Nigeria</option>
+                        <option>Sterling Bank</option>
+                        <option>SunTrust Bank</option>
+                        <option>Titan Trust Bank</option>
+                        <option>Union Bank of Nigeria</option>
+                        <option>United Bank for Africa (UBA)</option>
+                        <option>Unity Bank</option>
+                        <option>Wema Bank</option>
+                        <option>Zenith Bank</option>
                     </select>
                 </div>
                 <div class="data" style="width:24%">

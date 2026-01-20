@@ -37,18 +37,31 @@
             <?php
                 $n = 1;
                 $get_details = new selects();
-                $details = $get_details->fetch_details_condorder('fields', 'customer',$customer, 'field_name');
+                $details = $get_details->fetch_details_cond('assigned_fields', 'customer', $customer);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
+                     //get field name
+                    $names = $get_details->fetch_details_cond('fields', 'field_id', $detail->field);
+                    foreach($names as $name){
+                        $field_name = $name->field_name;
+                        $location = $name->location;
+                        $soil_type = $name->soil_type;
+                        $soil_ph = $name->soil_ph;
+                        $topography = $name->topography;
+                    }
             ?>
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
-                <td><?php echo $detail->field_name?></td>
+                <td>
+                    <?php 
+                       
+                        echo $field_name?>
+                </td>
                 
                 <td style="color:var(--otherColor)"><?php echo $detail->field_size?> Plot (<?php echo $detail->field_size * 500?> m&sup2)</td>
-                <td><?php echo $detail->soil_type?></td>
-                <td><?php echo $detail->soil_ph?></td>
-                <td><?php echo $detail->topography?></td>
+                <td><?php echo $soil_type?></td>
+                <td><?php echo $soil_ph?></td>
+                <td><?php echo $topography?></td>
                 <!-- <td>
                     <?php
                         /* if($detail->field_status == 0){
@@ -60,7 +73,7 @@
                 </td> -->
                 <!-- <td><?php echo date("d-m-Y", strtotime($detail->created_at))?></td> -->
                 <td>
-                    <a href="javascript:void(0)" onclick="window.open('../view/view_field_details.php?field=<?php echo $detail->field_id?>')" style="color:#fff; background:var(--otherColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;">View <i class="fas fa-eye"></i></a>
+                    <a href="javascript:void(0)" onclick="window.open('../view/view_field_details.php?assigned=<?php echo $detail->assigned_id?>')" style="color:#fff; background:var(--otherColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;">View <i class="fas fa-eye"></i></a>
                     
                 </td>
                 

@@ -67,6 +67,9 @@ date_default_timezone_set("Africa/Lagos");
                 return "Good evening! <span style='font-weight:bold'>$staff_name</span>";
             }
         }
+         if($username != "Sysadmin"){
+            $check_attendance = $fetch_user->check_attendance($staff_id);
+         }
     
         
 ?>
@@ -136,7 +139,13 @@ date_default_timezone_set("Africa/Lagos");
             
         </header>
         <div class="admin_main">
-            
+            <?php
+                if($check_attendance == 0){
+            ?>
+            <div class="attendance_alert">
+                <p><i class="fas fa-exclamation-triangle"></i> You have not marked your attendance for today. <button onclick="markAttendance(<?php echo $staff_id?>)">Check in <i class="fas fa-briefcase"></i></button></p>
+            </div>
+            <?php }?>
             <!-- side menu -->
             <?php include "side_menu.php"?>
             <!-- main contents -->
@@ -180,7 +189,7 @@ date_default_timezone_set("Africa/Lagos");
                         <!-- check if user has checked in for the day -->
                         <?php
                             if($username != "Sysadmin"){
-                                $check_attendance = $fetch_user->check_attendance($staff_id);
+                                // $check_attendance = $fetch_user->check_attendance($staff_id);
                                 if($check_attendance == 0){
                             
                         ?>

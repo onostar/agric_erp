@@ -13,7 +13,7 @@
     
 </style>
 <div class="displays allResults" id="farm_fields" style="width:90%!important;margin:20px 50px!important">
-    <h2>Assign Farm Field to Client</h2>
+    <h2>Assign Farm Land/Field to Client</h2>
     <hr>
     <div class="search">
         <input type="search" id="searchStaff" placeholder="Enter keyword" onkeyup="searchData(this.value)">
@@ -22,9 +22,9 @@
         <thead>
             <tr style="background:var(--moreColor)">
                 <td>S/N</td>
-                <td>Field</td>
+                <td>FIeld/Land</td>
                 <td>Location</td>
-                <td>Field Size (Hec)</td>
+                <td>Field Size (Plot)</td>
                 <td>Soil Type</td>
                 <td>Soil PH</td>
                 <td>Topography</td>
@@ -37,7 +37,7 @@
                 $n = 1;
                 $get_details = new selects();
                 // $details = $get_details->fetch_fields();
-                $details = $get_details->fetch_details_cond('fields', 'customer', 0);
+                $details = $get_details->fetch_details_order('fields', 'field_name');
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
             ?>
