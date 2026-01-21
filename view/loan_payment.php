@@ -99,7 +99,7 @@
                         <select name="payment_mode" id="payment_mode" onchange="checkMode(this.value)">
                             <option value=""selected>Select payment option</option>
                             <option value="Cash">Cash</option>
-                            <option value="POS">POS</option>
+                            <!-- <option value="POS">POS</option> -->
                             <option value="Transfer">Transfer</option>
                         </select>
                     </div>

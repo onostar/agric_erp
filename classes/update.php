@@ -37,6 +37,13 @@ date_default_timezone_set("Africa/Lagos");
             $update->bindValue("$condition2", $condition_value2);
             $update->execute();
         }
+        //update rent payment
+        public function updateRentPayment($assigned){
+            $update = $this->connectdb()->prepare("UPDATE rent_schedule SET payment_status = 1 WHERE assigned_id = :assigned AND due_date <= '2025-12-30'");
+            $update->bindValue("assigned", $assigned);
+           
+            $update->execute();
+        }
         //update single with 2 condition 1 negative
         public function update2cond1neg($table, $column, $condition, $condition2, $value, $condition_value){
             $update = $this->connectdb()->prepare("UPDATE $table SET $column = :$column WHERE $condition = :$condition AND $condition2 != 0.000");

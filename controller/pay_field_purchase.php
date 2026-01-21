@@ -32,7 +32,6 @@
         'amount' => $amount,
         'details' => 'Field purchase payment',
         'invoice' => $receipt,
-        'store' => $store,
         'bank' => $bank,
         'trx_type' => $trans_type,
         'trans_date' => $trans_date,
@@ -81,6 +80,7 @@
             $duration = $loan->contract_duration;
             $annual_rent = $loan->annual_rent;
             $field_id = $loan->field;
+            $size = $loan->field_size;
             $rent_percentage = $loan->rent_percentage;
             // $total_payable = $loan->total_repayment;
         }
@@ -88,7 +88,7 @@
         $fields = $get_details->fetch_details_cond('fields', 'field_id', $field_id);
         foreach($fields as $fd){
             $field_name = $fd->field_name;
-            $size = $fd->field_size;
+            // $size = $fd->field_size;
             $location = $fd->location;
         }
         //get balance 
@@ -109,13 +109,12 @@
         $principal = $amount_received - $interest - $processing_fee; */
         
         $total_paid = $amount_paid + $amount_received;
+        $update = new Update_table();
         if($new_balance <= 0){
             //update repayment schedule
-            $update = new Update_table();
             $update->update_double('field_payment_schedule', 'amount_paid', $amount_due, 'payment_status', 1, 'repayment_id', $schedule);
         }else{
             //update repayment schedule
-            $update = new Update_table();
             $update->update('field_payment_schedule', 'amount_paid', 'repayment_id', $total_paid, $schedule);
         }
         //check if there has been payment before

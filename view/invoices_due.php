@@ -33,6 +33,7 @@
                 <td>S/N</td>
                 <td>Client</td>
                 <td>Field</td>
+                <td>Size</td>
                 <td>Amount Due</td>
                 <td>Amount Paid</td>
                 <td>Balance</td>
@@ -67,6 +68,14 @@
                         //get product name
                         /* $prds = $get_customer->fetch_details_group('loan_products', 'product', 'product_id', $lns->product); */
                         echo $lns->field_name;
+                    ?>
+                </td>
+                <td>
+                    <?php
+                        //get field details
+                        $lns = $get_customer->fetch_details_group('assigned_fields', 'field_size', 'assigned_id', $detail->assigned_id);
+                        
+                        echo $lns->field_size."plot";
                     ?>
                 </td>
                 <td style="color:red">

@@ -73,6 +73,7 @@
             $purchase_cost = $loan->total_due;
             $duration = $loan->contract_duration;
             $field_id = $loan->field;
+            $size = $loan->field_size;
             $documentation = $loan->documentation;
             // $total_payable = $loan->total_repayment;
         }
@@ -80,7 +81,7 @@
         $fields = $get_details->fetch_details_cond('fields', 'field_id', $field_id);
         foreach($fields as $fd){
             $field_name = $fd->field_name;
-            $size = $fd->field_size;
+            // $size = $fd->field_size;
             $location = $fd->location;
         }
         $doc_data = array(

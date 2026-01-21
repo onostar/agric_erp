@@ -25,6 +25,9 @@
             }else{
                 $start_date = "N/A";
             }
+            //get land size
+            $sze = $get_details->fetch_details_group('assigned_fields', 'field_size', 'assigned_id', $loan);
+            $size = $sze->field_size;
             //check for rent schedule last due date
             $due_dates = $get_details->fetch_details_condLimitDesc('rent_schedule', 'assigned_id', $loan, 1, 'due_date');
             if(is_array($due_dates)){
@@ -57,6 +60,10 @@
                             ?>
                             <input type="text" value="<?php echo $product_name?>" readonly>
                        </div>
+                       <div class="data" style="width:24%;">
+                            <label for="amount" style="text-align:left!important;">Size</label>
+                            <input type="text" value="<?php echo number_format($size, 2)?>plot (<?php echo number_format($row->field_size * 500)?>m&sup2)" readonly>
+                        </div>
                         <div class="data" style="width:24%;">
                             <label for="amount" style="text-align:left!important;">Rent (₦)</label>
                             <input type="text" value="<?php echo '₦'.number_format($row->annual_rent, 2)?>" readonly style="color:green">

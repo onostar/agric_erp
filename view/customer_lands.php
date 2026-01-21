@@ -74,13 +74,13 @@
                     <?php 
                         //convert to square meters
                         $sqm = $detail->field_size * 500;
-                        echo $detail->field_size." Plot (".number_format($sqm)." m&sup2;)";
+                        echo $detail->field_size." Plot (".number_format($sqm)." m&sup2)";
                     ?>
                 </td>
                 <td><?php echo $soil_type?></td>
                 <td><?php echo $soil_ph?></td>
                 <td><?php echo $topography?></td>
-                <td><?php echo $detail->location?></td>
+                <td><?php echo $location?></td>
                 <td>
                     <?php
                         if($detail->contract_status == 1){
@@ -93,7 +93,7 @@
                 <td><?php echo date("d-m-Y", strtotime($detail->assigned_date))?></td>
                 <td>
                     <a href="javascript:void(0)" onclick="window.open('view_field_details.php?assigned=<?php echo $detail->assigned_id?>')" style="color:#fff; background:var(--otherColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;"><i class="fas fa-eye"></i></a>
-                    <a href="javascript:void(0)" onclick="showPage('view_field.php?field=<?php echo $detail->assigned_id?>')" style="color:#fff; background:var(--tertiaryColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;"><i class="fas fa-edit"></i></a>
+                    <a href="javascript:void(0)" title="update land details" onclick="showPage('view_customer_land.php?assigned=<?php echo $detail->assigned_id?>')" style="color:#fff; background:var(--tertiaryColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;"><i class="fas fa-edit"></i></a>
                 </td>
                 
             </tr>

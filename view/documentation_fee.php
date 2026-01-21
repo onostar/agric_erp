@@ -29,7 +29,8 @@
             <tr style="background:var(--moreColor)">
                 <td>S/N</td>
                 <td>Client</td>
-                <td>Field</td>
+                <td>Field/Land</td>
+                <td>Size</td>
                 <td>Purchase Cost</td>
                 <td>Documentation Fee</td>
                 <td>Amount Paid</td>
@@ -61,6 +62,7 @@
                         echo $fields->field_name
                     ?>
                 </td>
+                <td><?php echo $detail->field_size?>plot</td>
                 <td style="color:var(--otherColor)"><?php echo "₦".number_format($detail->total_due, 2);?></td>
                 <td style="color:var(--otherColor)"><?php echo "₦".number_format($detail->documentation, 2);?></td>
                 <td style="color:green">

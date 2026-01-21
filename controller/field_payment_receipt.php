@@ -24,6 +24,8 @@ if(isset($_GET['receipt'])){
         // $amount = $pay->amount;
         $assigned_id = $pay->loan;
         $store = $pay->store;
+        $posted_by = $pay->posted_by;
+
     }
     //get total amount paid
     $amts = $get_details->fetch_sum_single('field_payments','amount', 'invoice', $invoice);
@@ -55,6 +57,7 @@ if(isset($_GET['receipt'])){
     $assigned = $get_details->fetch_details_cond('assigned_fields', 'assigned_id', $assigned_id);
     foreach($assigned as $asf){
         $field = $asf->field;
+        $size = $asf->field_size;
         $purchase_cost = $asf->total_due;
         $documentation = $asf->documentation;
         
@@ -66,7 +69,7 @@ if(isset($_GET['receipt'])){
     $fields = $get_details->fetch_details_cond('fields', 'field_id', $field);
     foreach($fields as $fd){
         $field_name = $fd->field_name;
-        $size = $fd->field_size;
+        // $size = $fd->field_size;
         $location = $fd->location;
     }
 
@@ -116,7 +119,7 @@ if(isset($_GET['receipt'])){
     <div class="receipt_section">
         <h4>Field / Land Information</h4>
         <p><strong>Field Name:</strong> <?php echo $field_name; ?></p>
-        <p><strong>Field Size:</strong> <?php echo $size; ?> Plot (<?php echo $size * 500?>m&sup2)</p>
+        <p><strong>Field Size:</strong> <?php echo $size; ?> Plot (<?php echo number_format($size * 500)?>m&sup2)</p>
         <p><strong>Location:</strong> <?php echo $location; ?></p>
         <p><strong>Total Purchase Cost:</strong> ₦<?php echo number_format($purchase_cost, 2); ?></p>
         <p><strong>Documentation Fee:</strong> ₦<?php echo number_format($documentation, 2); ?></p>
@@ -147,7 +150,7 @@ if(isset($_GET['receipt'])){
     <div class="receipt_section">
         <?php
             $get_seller = new selects();
-            $seller = $get_seller->fetch_details_group('users', 'full_name', 'user_id', $user);
+            $seller = $get_seller->fetch_details_group('users', 'full_name', 'user_id', $posted_by);
             echo "<p><strong>Posted by:</strong> $seller->full_name</p>";
         ?>
        

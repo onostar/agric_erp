@@ -41,6 +41,10 @@
                             <input type="text" value="<?php echo $product_name?>" readonly>
                        </div>
                         <div class="data" style="width:24%;">
+                            <label for="amount" style="text-align:left!important;">Size</label>
+                            <input type="text" value="<?php echo number_format($row->field_size, 2)?>plot (<?php echo number_format($row->field_size * 500)?>m&sup2)" readonly style="color:green">
+                        </div>
+                        <div class="data" style="width:24%;">
                             <label for="amount" style="text-align:left!important;">Purchase Cost (₦)</label>
                             <input type="text" value="<?php echo '₦'.number_format($row->purchase_cost, 2)?>" readonly style="color:green">
                         </div>

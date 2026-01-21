@@ -25,6 +25,7 @@ if(isset($_GET['receipt'])){
         $assigned_id = $pay->assigned_id;
         $store = $pay->store;
         $field = $pay->field;
+        $posted_by = $pay->posted_by;
     }
      //get total amount paid
     $amts = $get_details->fetch_sum_single('documentation_fees','amount', 'invoice', $invoice);
@@ -57,6 +58,7 @@ if(isset($_GET['receipt'])){
     foreach($assigned as $asf){
         $documentation = $asf->documentation;
         $purchase_cost = $asf->total_due;
+        $size = $asf->field_size;
     }
 
     /* -------------------------------------------------
@@ -65,7 +67,7 @@ if(isset($_GET['receipt'])){
     $fields = $get_details->fetch_details_cond('fields', 'field_id', $field);
     foreach($fields as $fd){
         $field_name = $fd->field_name;
-        $size = $fd->field_size;
+        // $size = $fd->field_size;
         $location = $fd->location;
     }
 
@@ -145,7 +147,7 @@ if(isset($_GET['receipt'])){
     <div class="receipt_section">
         <?php
             $get_seller = new selects();
-            $seller = $get_seller->fetch_details_group('users', 'full_name', 'user_id', $user);
+            $seller = $get_seller->fetch_details_group('users', 'full_name', 'user_id', $posted_by);
             echo "<p><strong>Posted by:</strong> $seller->full_name</p>";
         ?>
        

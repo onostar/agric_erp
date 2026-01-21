@@ -48,6 +48,7 @@
                 <td>Payment Mode</td>
                 <td>Trx Date</td>
                 <td>Time</td>
+                <td>Posted By</td>
                 <td></td>
             </tr>
         </thead>
@@ -92,6 +93,13 @@
                 <td style="color:var(--moreColor)"><?php echo date("d-M-Y", strtotime($detail->trx_date))?></td>
                 <td>
                     <?php echo date("h:i:sa", strtotime($detail->post_date))?>
+                </td>
+                <td>
+                    <?php
+                        //get posted by
+                        $pst = $get_details->fetch_details_group('users', 'full_name', 'user_id', $detail->posted_by);
+                        echo $pst->full_name;
+                    ?>
                 </td>
                 <td>
                     <a href="javascript:void(0)"  onclick="printPaymentReceipt('<?php echo $detail->invoice;?>')"style="color:#fff; background:var(--otherColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #222; border-radius:15px;" title="print receipt">Print <i class="fas fa-print"></i></a>
