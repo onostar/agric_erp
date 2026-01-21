@@ -35,7 +35,7 @@
                     <input type="number" name="size" id="size" value="1">
                 </div>
                 <div class="data" style="width:23%">
-                    <label for="supplier">Manufacturer/Supplier</label>
+                    <label for="supplier">Vendor</label>
                     <input type="text" name="supplier" id="supplier">
                 </div>
                 <div class="data" style="width:23%">

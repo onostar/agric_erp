@@ -15,6 +15,7 @@ $discount = htmlspecialchars(stripslashes($_POST['discount']));
 $size = htmlspecialchars(stripslashes($_POST['field_size']));
 $total_due = htmlspecialchars(stripslashes($_POST['total_due']));
 $documentation = htmlspecialchars(stripslashes($_POST['documentation']));
+$documentation_paid = htmlspecialchars(stripslashes($_POST['documentation_paid']));
 $rent_percentage = htmlspecialchars(stripslashes($_POST['rent_percentage']));
 $annual_rent = htmlspecialchars(stripslashes($_POST['annual_rent']));
 $start = htmlspecialchars(stripslashes($_POST['start_date']));
@@ -242,8 +243,35 @@ $update = new Update_table;
                 $add_rent->create_data();
             }
         }
-        if($amount_paid == $total_due){
-            $update->update_double('assigned_fields', 'contract_status', 2, 'documentation_status', 1, 'assigned_id', $assigned_id);
+        if($amount_paid <= $total_due){
+            $update->update('assigned_fields', 'contract_status', 'assigned_id', 2, $assigned_id);
+        }
+
+        //check for documentation payment
+        if($documentation_paid > 0){
+            $doc_data = array(
+                'assigned_id' => $assigned_id,
+                'client' => $customer,
+                'field' => $id,
+                'amount' => $documentation_paid,
+                'trx_date' => $date,
+                'trx_number' => $trx_num,
+                'invoice' => $trx_num,
+                // 'payment_mode' => $mode,
+                'bank' => 0,
+                'post_date' => $date,
+                'posted_by' => $user,
+                'store' => $store
+            );
+            $add_doc = new add_data('documentation_fees', $doc_data);
+            $add_doc->create_data();
+            $doc_balance = $documentation - $documentation_paid;
+
+            if($doc_balance <= 0){
+                //documentation status
+                $update = new Update_table();
+                $update->update('assigned_fields', 'documentation_status', 'assigned_id', 1, $assigned_id);
+            }
         }
         
     }
@@ -257,6 +285,8 @@ $update = new Update_table;
     $balance_fmt = number_format($total_due - $amount_paid, 2);
     $paid_fmt = number_format($amount_paid, 2);
     $sqm = $size * 500;
+    $doc_paid = number_format($documentation_paid, 2);
+    $doc_bal = number_format($documentation - $documentation_paid, 2);
     // build purchase message
     if($balance <= 0){
         $message = "
@@ -273,6 +303,8 @@ $update = new Update_table;
             <li><strong>Total Due:</strong> ₦$due_fmt</li>
             <li><strong>Total Paid:</strong> ₦$paid_fmt</li>
             <li><strong>Documentation Fee:</strong> ₦$doc_fmt</li>
+            <li><strong>Documentation Paid:</strong> ₦$doc_paid</li>
+            <li><strong>Documentation Balance:</strong> ₦$doc_bal</li>
             <li><strong>Contract Duration:</strong> $duration year(s)</li>
             <li><strong>Annual Rent/Return:</strong> ₦$annual_rent_fmt ($rent_percentage%)</li>
             
@@ -306,6 +338,8 @@ $update = new Update_table;
             <li><strong>Balance:</strong> ₦$balance_fmt</li>
             
             <li><strong>Documentation Fee:</strong> ₦$doc_fmt</li>
+            <li><strong>Documentation Paid:</strong> ₦$doc_paid</li>
+            <li><strong>Documentation Balance:</strong> ₦$doc_bal</li>
             <li><strong>Contract Duration:</strong> $duration year(s)</li>
             <li><strong>Annual Rent/Return:</strong> ₦$annual_rent_fmt ($rent_percentage%)</li>
             

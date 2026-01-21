@@ -105,13 +105,18 @@
                     <input type="hidden" id="annual_rent" name="annual_rent">
                 </div>
                 <div class="data" style="width:31%">
-                    <label for="documentation">Documentation Fee (NGN)</label>
-                    <input type="number" id="documentation" name="documentation" required value="350000">
-                </div>
-                <div class="data" style="width:31%">
                     <label for="amount_paid">Amount Paid</label>
                     <input type="number" id="amount_paid" name="amount_paid">
                 </div>
+                <div class="data" style="width:31%">
+                    <label for="documentation">Agreed Doc. Fee (NGN)</label>
+                    <input type="number" id="documentation" name="documentation" required value="350000">
+                </div>
+                <div class="data" style="width:31%">
+                    <label for="documentation">Documentation Paid (NGN)</label>
+                    <input type="number" id="documentation_paid" name="documentation_paid" required value="0">
+                </div>
+                
                 <div class="data" style="width:31%">
                     <label for="start_date">Start Date</label>
                     <input type="date" id="start_date" name="start_date">

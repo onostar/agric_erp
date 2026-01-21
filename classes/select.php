@@ -548,6 +548,30 @@
                 return $rows;
             }
         }
+        
+public function fetch_individual_attendance($staff, $date)
+{
+    $date = date('Y-m-d', strtotime($date)); // 🔥 important
+
+    $stmt = $this->connectdb()->prepare("
+        SELECT *
+        FROM attendance
+        WHERE staff = :staff
+          AND MONTH(attendance_date) = MONTH(:date)
+          AND YEAR(attendance_date) = YEAR(:date)
+        ORDER BY attendance_date
+    ");
+
+    $stmt->bindValue(':staff', $staff);
+    $stmt->bindValue(':date', $date);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_OBJ);
+}
+
+
+
+
         //fetch total staffs present at work
         public function fetch_staff_present($store){
             $get_user = $this->connectdb()->prepare("SELECT * FROM attendance WHERE store = :store AND DATE(attendance_date) = CURDATE()");
@@ -1575,13 +1599,22 @@ public function fetch_total_working_days_month($date){
                 return $rows;
             }
         }
-        //fetch between two dates and grouped
+        //fetch monthly payroll
         public function fetch_payroll_months($store){
-            $get_user = $this->connectdb()->prepare("SELECT MIN(payroll_date) AS payroll_date 
-    FROM payroll 
-    WHERE store = :store 
-    GROUP BY YEAR(payroll_date), MONTH(payroll_date)
-    ORDER BY YEAR(payroll_date) DESC, MONTH(payroll_date) DESC");
+            $get_user = $this->connectdb()->prepare("SELECT MIN(payroll_date) AS payroll_date FROM payroll WHERE store = :store GROUP BY YEAR(payroll_date), MONTH(payroll_date)ORDER BY YEAR(payroll_date) DESC, MONTH(payroll_date) DESC");
+            $get_user->bindvalue("store", $store);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                $rows = $get_user->fetchAll();
+                return $rows;
+            }else{
+                $rows = "No records found";
+                return $rows;
+            }
+        }
+        //fetch between two dates and grouped
+        public function fetch_monthly_lateness($store){
+            $get_user = $this->connectdb()->prepare("SELECT MIN(attendance_date) AS attendance_date FROM attendance WHERE store = :store GROUP BY YEAR(attendance_date), MONTH(attendance_date)ORDER BY YEAR(attendance_date) DESC, MONTH(attendance_date) DESC");
             $get_user->bindvalue("store", $store);
             $get_user->execute();
             if($get_user->rowCount() > 0){

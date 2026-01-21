@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 19, 2026 at 06:35 AM
+-- Generation Time: Jan 21, 2026 at 04:09 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -159,6 +159,13 @@ CREATE TABLE `assets` (
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `assets`
+--
+
+INSERT INTO `assets` (`asset_id`, `asset`, `asset_no`, `location`, `supplier`, `cost`, `quantity`, `size`, `accum_dep`, `useful_life`, `salvage_value`, `book_value`, `ledger`, `specification`, `asset_status`, `purchase_date`, `deployment_date`, `store`, `post_date`, `posted_by`, `updated_by`, `updated_at`) VALUES
+(7, 'OBITUGBO LAND', 'DAVIDORLAH/Dav/2024/07/7', 1, 'OBOJO', 50000000.00, 1, 50, 0.00, 10, 2000000.00, 50000000.00, 1020524, 'Land', 0, '2024-07-30', '2025-12-17', 0, '2026-01-20 15:31:36', 1, 0, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -213,6 +220,7 @@ CREATE TABLE `assigned_fields` (
   `assigned_id` int(11) NOT NULL,
   `field` int(11) NOT NULL,
   `customer` int(11) NOT NULL,
+  `field_size` decimal(10,2) NOT NULL,
   `latitude` decimal(12,9) NOT NULL,
   `longitude` decimal(12,9) NOT NULL,
   `contract_duration` int(11) NOT NULL,
@@ -229,8 +237,17 @@ CREATE TABLE `assigned_fields` (
   `due_date` date DEFAULT NULL,
   `contract_status` int(11) NOT NULL,
   `assigned_by` int(11) NOT NULL,
-  `assigned_date` datetime DEFAULT NULL
+  `assigned_date` datetime DEFAULT NULL,
+  `updated_by` int(11) NOT NULL,
+  `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `assigned_fields`
+--
+
+INSERT INTO `assigned_fields` (`assigned_id`, `field`, `customer`, `field_size`, `latitude`, `longitude`, `contract_duration`, `payment_duration`, `rent_percentage`, `annual_rent`, `installment`, `purchase_cost`, `discount`, `total_due`, `documentation`, `documentation_status`, `start_date`, `due_date`, `contract_status`, `assigned_by`, `assigned_date`, `updated_by`, `updated_at`) VALUES
+(26, 18, 15, 4.00, 0.000000000, 0.000000000, 3, 1, 36.00, 1080000.00, 3000000.00, 3000000.00, 0.00, 3000000.00, 350000.00, 1, '2026-01-20', '2026-01-20', 2, 1, '2026-01-21 15:59:35', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -259,6 +276,14 @@ CREATE TABLE `attendance` (
   `checked_out` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `attendance`
+--
+
+INSERT INTO `attendance` (`attendance_id`, `staff`, `store`, `attendance_date`, `time_in`, `time_out`, `attendance_status`, `latitude`, `longitude`, `accuracy`, `ip_address`, `location`, `remark`, `flagged`, `marked_by`, `marked_date`, `checked_out_by`, `checked_out`) VALUES
+(35, 99910, 1, '2026-01-20', '08:53:00', NULL, 0, 0.00000000, 0.00000000, 0, '', 'Head Office', '', 0, 1, '2026-01-20 11:53:03', 0, NULL),
+(36, 99910, 1, '2026-01-21', '14:57:19', NULL, 0, 6.42854400, 3.58896600, 178, '127.0.0.1', 'Okun-Ajah, Eti Osa, Lagos, 101245, Nigeria', '', 0, 34, '2026-01-21 14:57:19', 0, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -279,6 +304,13 @@ CREATE TABLE `attendance_flagging` (
   `flagged_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `attendance_flagging`
+--
+
+INSERT INTO `attendance_flagging` (`attendance_id`, `store`, `staff`, `attendance_date`, `time_in`, `latitude`, `longitude`, `ip_address`, `location`, `post_date`, `flagged_by`) VALUES
+(2, 1, 99910, '2026-01-20', '11:48:09', 6.438334610, 3.513942260, '127.0.0.1', 'Lekki-Epe Expressway, Ikota, Jakande, Eti Osa, Lagos, 101001, Nigeria', '2026-01-20 11:49:00', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -295,6 +327,16 @@ CREATE TABLE `audit_trail` (
   `posted_by` int(11) NOT NULL,
   `post_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `audit_trail`
+--
+
+INSERT INTO `audit_trail` (`audit_id`, `store`, `item`, `transaction`, `previous_qty`, `quantity`, `posted_by`, `post_date`) VALUES
+(180, 1, 29, 'purchase', 0, 30, 1, '2026-01-20 13:14:56'),
+(181, 1, 30, 'purchase', 0, 5, 1, '2026-01-20 13:18:21'),
+(182, 1, 30, 'purchase', 5, 2, 1, '2026-01-20 13:20:33'),
+(183, 1, 30, 'issue', 7, 3, 1, '2026-01-20 13:39:26');
 
 -- --------------------------------------------------------
 
@@ -370,6 +412,17 @@ CREATE TABLE `cash_flows` (
   `post_date` datetime DEFAULT NULL,
   `posted_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `cash_flows`
+--
+
+INSERT INTO `cash_flows` (`fow_id`, `account`, `destination`, `details`, `trx_number`, `amount`, `trans_type`, `activity`, `store`, `post_date`, `posted_by`) VALUES
+(85, 1010228, 0, 'Investment Payment', 'TR415200126122752', 0.00, 'inflow', 'financing', 1, '2026-01-20 12:27:52', 1),
+(86, 1010228, 0, 'Field Purchase Payment', 'TR241210126055927', 2000000.00, 'inflow', 'investing', 1, '2026-01-21 05:59:27', 1),
+(87, 1010228, 0, 'Field Purchase Payment', 'TR923210126061150', 1000000.00, 'inflow', 'investing', 1, '2026-01-21 06:11:50', 1),
+(88, 1010228, 0, 'Field Documentation Payment', 'TR526210126061436', 350000.00, 'inflow', 'operating', 1, '2026-01-21 06:14:36', 1),
+(89, 1010228, 0, 'Loan Repayment', 'TR621210126064747', 750000.00, 'outflow', 'operating', 1, '2026-01-21 06:47:47', 1);
 
 -- --------------------------------------------------------
 
@@ -524,6 +577,14 @@ CREATE TABLE `customers` (
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `customers`
+--
+
+INSERT INTO `customers` (`customer_id`, `customer`, `ledger_id`, `acn`, `customer_type`, `user_password`, `phone_numbers`, `customer_address`, `customer_email`, `wallet_balance`, `amount_due`, `reg_date`, `created_by`, `updated_at`) VALUES
+(15, 'KELLY IKPEFUA', 106, 10104106, 'Investor', '$2y$10$WDTnvDQxMSXCpr.7z87AfeysAchTpZH2pM5c7IGF3ttjOBOCBCS22', '07068897068', 'Benin', 'onostarkels@gmail.com', 0, 0, '2026-01-19 11:50:21', 1, NULL),
+(16, 'MERCY', 107, 10104107, 'Investor', '$2y$10$lz1E2RrKf88KB1DX/RTcLOQ7UACq2dN7zJ4t7/unCmOyJE0x.pugS', '0900', 'Lagos', 'mercyoteje97@gmail.com', 0, 0, '2026-01-20 12:05:58', 1, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -541,6 +602,21 @@ CREATE TABLE `customer_trail` (
   `posted_by` int(11) NOT NULL,
   `post_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `customer_trail`
+--
+
+INSERT INTO `customer_trail` (`id`, `customer`, `invoice`, `description`, `amount`, `trx_number`, `store`, `posted_by`, `post_date`) VALUES
+(76, 15, '', 'Investment Payment', 1000.00, 'TR415200126122752', 1, 1, '2026-01-20 12:27:52'),
+(77, 15, '', 'Field Purchase Payment', 2000000.00, 'TR241210126055927', 1, 1, '2026-01-21 05:59:27'),
+(78, 15, '', 'Field Purchase Payment', 1000000.00, 'TR923210126061150', 1, 1, '2026-01-21 06:11:50'),
+(79, 15, '', 'Field Documentation Payment', 350000.00, 'TR526210126061436', 1, 1, '2026-01-21 06:14:36'),
+(80, 15, '', 'Loan Repayment', 750000.00, 'TR621210126064747', 1, 1, '2026-01-21 06:47:47'),
+(81, 15, '', 'Field purchase payment', 3000000.00, 'TR774210126110006', 1, 1, '2026-01-21 11:00:06'),
+(82, 15, '', 'Field purchase payment', 4000000.00, 'TR236210126112522', 1, 1, '2026-01-21 11:25:21'),
+(83, 15, '', 'Field purchase payment', 3000000.00, 'TR985210126112842', 1, 1, '2026-01-21 11:28:42'),
+(84, 15, '', 'Field purchase payment', 3000000.00, 'TR388210126035936', 1, 1, '2026-01-21 15:59:35');
 
 -- --------------------------------------------------------
 
@@ -630,6 +706,25 @@ CREATE TABLE `deposits` (
   `post_date` datetime DEFAULT NULL,
   `posted_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `deposits`
+--
+
+INSERT INTO `deposits` (`deposit_id`, `store`, `customer`, `amount`, `payment_mode`, `bank`, `invoice`, `trx_number`, `trx_type`, `details`, `trans_date`, `post_date`, `posted_by`) VALUES
+(78, 1, 15, 2000.00, 'Cash', 0, 'TR386190126115254', 'TR386190126115254', 'Investment Payment', 'Investment payment', '2026-01-05', '2026-01-19 11:52:54', 1),
+(79, 1, 15, 2000.00, 'Cash', 0, 'TR960190126122238', 'TR960190126122238', 'Investment Payment', 'Investment payment', '2026-01-14', '2026-01-19 12:22:38', 1),
+(80, 1, 16, 2000.00, 'Cash', 0, 'TR829200126120638', 'TR829200126120638', 'Investment Payment', 'Investment payment', '2026-01-19', '2026-01-20 12:06:38', 1),
+(81, 1, 16, 2000.00, 'Cash', 0, 'TR649200126120826', 'TR649200126120826', 'Investment Payment', 'Investment payment', '2026-01-12', '2026-01-20 12:08:26', 1),
+(82, 1, 15, 1000.00, 'Cash', 0, 'INV2001261227011123', 'TR415200126122752', 'Investment Payment', 'Investment payment', '2026-01-20', '2026-01-20 12:27:52', 1),
+(83, 1, 15, 2000000.00, 'Cash', 0, 'LP2101260558112011168', 'TR241210126055927', 'Field Purchase Payment', 'Field purchase payment', '2026-01-21', '2026-01-21 05:59:27', 1),
+(84, 1, 15, 1000000.00, 'Cash', 0, 'LP2101260611223311167', 'TR923210126061150', 'Field Purchase Payment', 'Field purchase payment', '2026-01-21', '2026-01-21 06:11:50', 1),
+(85, 1, 15, 350000.00, 'Cash', 0, 'LP210126061400002118', 'TR526210126061436', 'Field Documentation Payment', 'Documentation payment', '2026-01-21', '2026-01-21 06:14:36', 1),
+(86, 1, 15, 750000.00, 'Cash', 0, 'LP2101260646102331171', 'TR621210126064747', 'Loan Repayment', 'Rent Payment', '2026-01-21', '2026-01-21 06:47:47', 1),
+(87, 1, 15, 3000000.00, 'Cash', 0, 'TR774210126110006', 'TR774210126110006', 'Field purchase payment', 'Field purchase payment', '2023-12-21', '2026-01-21 11:00:06', 1),
+(88, 1, 15, 4000000.00, 'Cash', 0, 'TR236210126112522', 'TR236210126112522', 'Field purchase payment', 'Field purchase payment', '2023-01-21', '2026-01-21 11:25:21', 1),
+(89, 1, 15, 3000000.00, 'Cash', 0, 'TR985210126112842', 'TR985210126112842', 'Field purchase payment', 'Field purchase payment', '2024-12-11', '2026-01-21 11:28:42', 1),
+(90, 1, 15, 3000000.00, 'Cash', 0, 'TR388210126035936', 'TR388210126035936', 'Field purchase payment', 'Field purchase payment', '2026-01-20', '2026-01-21 15:59:35', 1);
 
 -- --------------------------------------------------------
 
@@ -762,6 +857,14 @@ CREATE TABLE `documentation_fees` (
   `posted_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `documentation_fees`
+--
+
+INSERT INTO `documentation_fees` (`payment_id`, `assigned_id`, `field`, `client`, `amount`, `payment_mode`, `bank`, `trx_date`, `trx_number`, `invoice`, `store`, `post_date`, `posted_by`) VALUES
+(8, 18, 18, 15, 350000.00, 'Cash', 0, '2026-01-21', 'TR526210126061436', 'LP210126061400002118', 1, '2026-01-21 06:14:36', 1),
+(9, 26, 18, 15, 350000.00, '', 0, '2026-01-21', 'TR388210126035936', 'TR388210126035936', 1, '2026-01-21 15:59:35', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -875,6 +978,13 @@ CREATE TABLE `fields` (
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `fields`
+--
+
+INSERT INTO `fields` (`field_id`, `farm`, `asset_id`, `field_name`, `customer`, `field_size`, `soil_type`, `soil_ph`, `topography`, `location`, `latitude`, `longitude`, `purchase_cost`, `field_status`, `created_at`, `created_by`, `updated_by`, `updated_at`) VALUES
+(18, 1, 7, 'OBITUGBO LAND', 0, 50.00, 'alluvial', 0.00, '', 'obitugbo', 0.000000000, 0.000000000, 50000000.00, 0, '2026-01-20 15:31:36', 1, 1, '2026-01-20 15:41:34');
+
 -- --------------------------------------------------------
 
 --
@@ -901,6 +1011,16 @@ CREATE TABLE `field_payments` (
   `trx_number` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `field_payments`
+--
+
+INSERT INTO `field_payments` (`payment_id`, `customer`, `store`, `loan`, `schedule`, `amount`, `interest`, `processing_fee`, `penalty`, `payment_mode`, `details`, `invoice`, `bank`, `trx_date`, `posted_by`, `post_date`, `trx_number`) VALUES
+(32, 15, 1, 23, 173, 3000000, 0, 0, 0.00, 'Cash', 'Field Purchase Payment', 'TR774210126110006', 0, '2023-12-21', 1, '2026-01-21 11:00:06', 'TR774210126110006'),
+(33, 15, 1, 24, 174, 4000000, 0, 0, 0.00, 'Cash', 'Field Purchase Payment', 'TR236210126112522', 0, '2023-01-21', 1, '2026-01-21 11:25:21', 'TR236210126112522'),
+(34, 15, 1, 25, 175, 3000000, 0, 0, 0.00, 'Cash', 'Field Purchase Payment', 'TR985210126112842', 0, '2024-12-11', 1, '2026-01-21 11:28:42', 'TR985210126112842'),
+(35, 15, 1, 26, 176, 3000000, 0, 0, 0.00, 'Cash', 'Field Purchase Payment', 'TR388210126035936', 0, '2026-01-20', 1, '2026-01-21 15:59:35', 'TR388210126035936');
+
 -- --------------------------------------------------------
 
 --
@@ -921,6 +1041,16 @@ CREATE TABLE `field_payment_schedule` (
   `post_date` datetime DEFAULT NULL,
   `posted_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `field_payment_schedule`
+--
+
+INSERT INTO `field_payment_schedule` (`repayment_id`, `assigned_id`, `field`, `customer`, `amount_due`, `amount_paid`, `penalty`, `store`, `due_date`, `payment_status`, `post_date`, `posted_by`) VALUES
+(173, 23, 18, 15, 3000000.00, 3000000.00, 0.00, 1, '2023-12-21', 1, '2026-01-21 11:00:06', 1),
+(174, 24, 18, 15, 4000000.00, 4000000.00, 0.00, 1, '2023-01-21', 1, '2026-01-21 11:25:21', 1),
+(175, 25, 18, 15, 5000000.00, 3000000.00, 0.00, 1, '2024-12-11', 0, '2026-01-21 11:28:42', 1),
+(176, 26, 18, 15, 3000000.00, 3000000.00, 0.00, 1, '2026-01-20', 1, '2026-01-21 15:59:35', 1);
 
 -- --------------------------------------------------------
 
@@ -979,6 +1109,14 @@ CREATE TABLE `inventory` (
   `post_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `inventory`
+--
+
+INSERT INTO `inventory` (`inventory_id`, `item`, `item_type`, `store`, `cost_price`, `quantity`, `batch_number`, `expiration_date`, `reorder_level`, `post_date`) VALUES
+(30, 29, 'Consumable', 1, 10000, 30.00, 0, NULL, 10, NULL),
+(31, 30, 'Consumable', 1, 2500, 4.00, 0, NULL, 10, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -1004,6 +1142,14 @@ CREATE TABLE `investments` (
   `date_modified` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `investments`
+--
+
+INSERT INTO `investments` (`investment_id`, `customer`, `store`, `duration`, `currency`, `units`, `amount`, `total_in_dollar`, `exchange_rate`, `contract_status`, `principal`, `posted_by`, `post_date`, `start_date`, `modified_by`, `date_modified`) VALUES
+(22, 16, 1, 3, 'Dollar', 1, 2000.00, 2000.00, 0.00, 1, 0, 1, '2026-01-20 12:08:26', '2026-01-12 00:00:00', 0, NULL),
+(23, 15, 1, 3, 'Dollar', 0.5, 1000.00, 1000.00, 0.00, 1, 0, 1, '2026-01-20 12:09:07', '2025-12-18 12:27:52', 1, '2026-01-20 12:42:10');
+
 -- --------------------------------------------------------
 
 --
@@ -1027,6 +1173,14 @@ CREATE TABLE `investment_payments` (
   `post_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `investment_payments`
+--
+
+INSERT INTO `investment_payments` (`payment_id`, `investment`, `customer`, `invoice`, `payment_mode`, `bank`, `currency`, `amount`, `amount_in_dollar`, `trx_number`, `trx_date`, `store`, `posted_by`, `post_date`) VALUES
+(19, 22, 16, 'TR649200126120826', 'Cash', 0, 'Dollar', 2000.00, 2000.00, 'TR649200126120826', '2026-01-12', 1, 1, '2026-01-20 12:08:26'),
+(20, 23, 15, 'INV2001261227011123', 'Cash', 0, 'Dollar', 1000.00, 1000.00, 'TR415200126122752', '2026-01-20', 1, 1, '2026-01-20 12:27:52');
+
 -- --------------------------------------------------------
 
 --
@@ -1046,6 +1200,22 @@ CREATE TABLE `investment_returns` (
   `posted_by` int(11) NOT NULL,
   `post_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `investment_returns`
+--
+
+INSERT INTO `investment_returns` (`schedule_id`, `investment_id`, `customer`, `due_date`, `payment_status`, `percentage`, `amount_due`, `amount_paid`, `store`, `posted_by`, `post_date`) VALUES
+(82, 22, 16, '2027-01-12', 0, 30, 600.00, 0.00, 1, 1, '2026-01-20 12:08:26'),
+(83, 22, 16, '2027-07-12', 0, 15, 300.00, 0.00, 1, 1, '2026-01-20 12:08:26'),
+(84, 22, 16, '2028-01-12', 0, 15, 300.00, 0.00, 1, 1, '2026-01-20 12:08:26'),
+(85, 22, 16, '2028-07-12', 0, 15, 300.00, 0.00, 1, 1, '2026-01-20 12:08:26'),
+(86, 22, 16, '2029-01-12', 0, 15, 300.00, 0.00, 1, 1, '2026-01-20 12:08:26'),
+(92, 23, 15, '2026-12-18', 0, 30, 300.00, 0.00, 1, 1, '2026-01-20 12:42:10'),
+(93, 23, 15, '2027-06-18', 0, 15, 150.00, 0.00, 1, 1, '2026-01-20 12:42:10'),
+(94, 23, 15, '2027-12-18', 0, 15, 150.00, 0.00, 1, 1, '2026-01-20 12:42:10'),
+(95, 23, 15, '2028-06-18', 0, 15, 150.00, 0.00, 1, 1, '2026-01-20 12:42:10'),
+(96, 23, 15, '2028-12-18', 0, 15, 150.00, 0.00, 1, 1, '2026-01-20 12:42:10');
 
 -- --------------------------------------------------------
 
@@ -1067,6 +1237,14 @@ CREATE TABLE `issue_items` (
   `issued_by` int(11) NOT NULL,
   `date_issued` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `issue_items`
+--
+
+INSERT INTO `issue_items` (`issue_id`, `from_store`, `item`, `quantity`, `issue_status`, `invoice`, `cost_price`, `department`, `posted_by`, `post_date`, `issued_by`, `date_issued`) VALUES
+(25, 1, 30, 3, 2, 'ISS226120012601351', 2500, 3, 1, '2026-01-20 13:36:02', 1, '2026-01-20 13:39:26'),
+(26, 1, 29, 2, 1, 'ISS226120012601351', 10000, 3, 1, '2026-01-20 13:36:11', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -1104,7 +1282,9 @@ INSERT INTO `items` (`item_id`, `department`, `category`, `item_name`, `item_typ
 (22, '12', 37, 'CONCENTRATE', 'Product', 0, 0, 0, 0, 0, 0, 10, '', 0, '2025-11-24 12:27:25'),
 (23, '12', 37, 'PINEAPPLE CROWN', 'Product', 0, 0, 0, 0, 0, 0, 10, '', 0, '2025-12-17 18:21:07'),
 (24, '12', 37, 'PINEAPPLE PEEL', 'Product', 0, 0, 0, 0, 0, 0, 10, '', 0, '2025-12-17 18:21:17'),
-(25, '12', 37, 'BRIQUETTE', 'Product', 0, 0, 0, 0, 0, 0, 10, '', 0, '2025-12-18 21:09:19');
+(25, '12', 37, 'BRIQUETTE', 'Product', 0, 0, 0, 0, 0, 0, 10, '', 0, '2025-12-18 21:09:19'),
+(29, '13', 32, 'HAND GLOVES', 'Consumable', 0, 0, 0, 0, 0, 0, 10, '', 0, '2026-01-20 13:10:03'),
+(30, '13', 32, 'A4 PAPER', 'Consumable', 0, 0, 0, 0, 0, 0, 10, '', 0, '2026-01-20 13:10:15');
 
 -- --------------------------------------------------------
 
@@ -1225,7 +1405,10 @@ INSERT INTO `ledgers` (`ledger_id`, `account_group`, `sub_group`, `class`, `ledg
 (88, 4, 6, 12, 'DELIVERY &AMP; LOGISTICS EXPENSE', 40601388),
 (89, 4, 6, 13, 'PRODUCTION INPUTS', 40601389),
 (103, 2, 3, 7, 'DAVIDORLAH FARMS', 20307103),
-(105, 4, 6, 12, 'SALARY AND WAGES', 406012105);
+(105, 4, 6, 12, 'SALARY AND WAGES', 406012105),
+(106, 1, 1, 4, 'KELLY IKPEFUA', 10104106),
+(107, 1, 1, 4, 'MERCY', 10104107),
+(108, 2, 3, 7, 'ABC LIMITED', 20307108);
 
 -- --------------------------------------------------------
 
@@ -1313,6 +1496,32 @@ CREATE TABLE `notifications` (
   `not_status` int(11) NOT NULL,
   `post_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`notification_id`, `client`, `subject`, `message`, `not_status`, `post_date`) VALUES
+(184, 15, 'Your Concentrate Investment Has Been Created', 'Dear KELLY IKPEFUA, your Concentrate Production Investment has been successfully created. Please proceed with the investment payment to activate your 3-year contract. You will earn 30% after the first 12 months and 15% every 6 months thereafter.', 0, '2026-01-19 11:52:54'),
+(185, 15, 'Your Concentrate Investment Has Been Created', 'Dear KELLY IKPEFUA, your Concentrate Production Investment has been successfully created. Please proceed with the investment payment to activate your 3-year contract. You will earn 30% after the first 12 months and 15% every 6 months thereafter.', 0, '2026-01-19 12:22:38'),
+(186, 15, 'Your Concentrate Investment Has Been Created', 'Dear KELLY IKPEFUA, your Concentrate Production Investment has been successfully created. Please proceed with the investment payment to activate your 3-year contract. You will earn 30% after the first 12 months and 15% every 6 months thereafter.', 0, '2026-01-20 12:02:30'),
+(187, 16, 'Your Concentrate Investment Has Been Created', 'Dear MERCY, your Concentrate Production Investment has been successfully created. Please proceed with the investment payment to activate your 3-year contract. You will earn 30% after the first 12 months and 15% every 6 months thereafter.', 0, '2026-01-20 12:06:38'),
+(188, 16, 'Your Concentrate Investment Has Been Created', 'Dear MERCY, your Concentrate Production Investment has been successfully created. Please proceed with the investment payment to activate your 3-year contract. You will earn 30% after the first 12 months and 15% every 6 months thereafter.', 0, '2026-01-20 12:08:26'),
+(189, 15, 'Your Concentrate Investment Has Been Created', 'Dear KELLY IKPEFUA, your Concentrate Production Investment has been successfully created. Please proceed with the investment payment to activate your 3-year contract. You will earn 30% after the first 12 months and 15% every 6 months thereafter.', 0, '2026-01-20 12:09:07'),
+(190, 15, 'Concentrate Investment Payment Update', 'Dear KELLY IKPEFUA, your investment payment has been received. Total paid: ₦1,000.00 | Remaining: ₦1,000.00', 0, '2026-01-20 12:27:52'),
+(191, 15, 'Investment Restructured & Returns Updated', 'Your investment was restructured due to incomplete payment within 30 days. A new returns schedule has been generated based on your actual amount paid.', 0, '2026-01-20 12:42:10'),
+(192, 15, 'Your Field Purchase Contract is Active', 'Dear KELLY IKPEFUA, your field (OBITUGBO LAND - 4 Hectares) located at obitugbo has been successfully assigned for purchase. Once installments are completed, you will start receiving annual returns of ₦750,000.00 (25%) for 3 year(s).', 0, '2026-01-20 16:22:37'),
+(193, 15, 'Field Purchase Payment Update', 'Dear KELLY IKPEFUA, your payment for OBITUGBO LAND (50.00 plot (25000 m²)) has been received. Total paid so far: ₦1,000,000.00, remaining balance: ₦2,000,000.00. Once fully paid, your annual rent of ₦750,000.00 will begin.', 0, '2026-01-21 05:59:27'),
+(194, 15, 'Field purchase Payment Confirmation', 'Dear KELLY IKPEFUA,\r\n            We confirm the receipt of your payment of ₦2,000,000.00 on 21st January 2026, 05:59am towards your Field purchase.\r\n            Transaction ID: LP2101260558112011168\r\n            Your account has been updated accordingly. Thank you for your commitment.\r\n            \r\n            If you have any questions or need a receipt, feel free to contact us\r\n\r\n            Warm regards,\r\n            Davidorlah Nigeria Limited\r\n            Customer Support', 0, '2026-01-21 05:59:27'),
+(195, 15, 'Field Purchase Completed - Annual Rent Activated', 'Dear KELLY IKPEFUA, your field (OBITUGBO LAND - 4.00 plot(2000 m²)) has been fully paid. Your annual rent of ₦750,000.00 will commence now for the next 3 year(s).', 0, '2026-01-21 06:11:50'),
+(196, 15, 'Field purchase Payment Confirmation', 'Dear KELLY IKPEFUA,\r\n            We confirm the receipt of your payment of ₦1,000,000.00 on 21st January 2026, 06:11am towards your Field purchase.\r\n            Transaction ID: LP2101260611223311167\r\n            Your account has been updated accordingly. Thank you for your commitment.\r\n            \r\n            If you have any questions or need a receipt, feel free to contact us\r\n\r\n            Warm regards,\r\n            Davidorlah Nigeria Limited\r\n            Customer Support', 0, '2026-01-21 06:11:50'),
+(197, 15, 'Field Documentation payment Completed', 'Dear KELLY IKPEFUA, Documentation for your field (OBITUGBO LAND - 50.00 plot (25000m²)) has been fully paid. ', 0, '2026-01-21 06:14:36'),
+(198, 15, 'Field Documentation Payment Confirmation', 'Dear KELLY IKPEFUA,\r\n            We confirm the receipt of your payment of ₦350,000.00 on 21st January 2026, 06:14am towards your Field documentaion.\r\n            Transaction ID: LP210126061400002118\r\n            Your account has been updated accordingly. Thank you for your commitment.\r\n            \r\n            If you have any questions or need a receipt, feel free to contact us\r\n\r\n            Warm regards,\r\n            Davidorlah Nigeria Limited\r\n            Customer Support', 0, '2026-01-21 06:14:36'),
+(199, 15, 'Rent Payment Confirmation', 'Dear KELLY IKPEFUA, Your annual rent return of ₦750000.00 has been paid for your field (OBITUGBO LAND).\r\n\r\nPayment Date: 2026-01-21 06:47:47\r\n\r\nThank you for investing with Davidorlah Nigeria Ltd', 1, '2026-01-21 06:47:47'),
+(200, 15, 'Your Field Purchase Contract is Active', 'Dear KELLY IKPEFUA, your field (OBITUGBO LAND - 4 Plot) located at obitugbo has been successfully assigned for purchase. Once installments are completed, you will start receiving annual returns of ₦750,000.00 (25%) for 5 year(s).', 0, '2026-01-21 11:00:06'),
+(201, 15, 'Your Field Purchase Contract is Active', 'Dear KELLY IKPEFUA, your field (OBITUGBO LAND - 7 Plot) located at obitugbo has been successfully assigned for purchase. Once installments are completed, you will start receiving annual returns of ₦1,000,000.00 (25%) for 3 year(s).', 0, '2026-01-21 11:25:21'),
+(202, 15, 'Your Field Purchase Contract is Active', 'Dear KELLY IKPEFUA, your field (OBITUGBO LAND - 2 Plot) located at obitugbo has been successfully assigned for purchase. Once installments are completed, you will start receiving annual returns of ₦1,250,000.00 (25%) for 3 year(s).', 0, '2026-01-21 11:28:42'),
+(203, 15, 'Your Field Purchase Contract is Active', 'Dear KELLY IKPEFUA, your field (OBITUGBO LAND - 4 Plot) located at obitugbo has been successfully assigned for purchase. Once installments are completed, you will start receiving annual returns of ₦1,080,000.00 (36%) for 3 year(s).', 0, '2026-01-21 15:59:35');
 
 -- --------------------------------------------------------
 
@@ -1490,6 +1699,13 @@ CREATE TABLE `payroll` (
   `disbursed` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `payroll`
+--
+
+INSERT INTO `payroll` (`payroll_id`, `staff`, `store`, `payroll_date`, `working_days`, `days_at_work`, `leave_days`, `suspension_days`, `absent_days`, `late_days`, `basic_salary`, `housing`, `medical`, `transport`, `utility`, `other_allowance`, `gross_pay`, `tax`, `tax_rate`, `taxable_income`, `pension`, `lateness_penalty`, `absence_penalty`, `loan_repayment`, `other_deductions`, `daily_pay`, `net_after_tax`, `net_pay`, `payroll_status`, `prepared_by`, `date_generated`, `approved`, `approved_by`, `disbursed`) VALUES
+(33, 99910, 1, '2026-01-20', 22, 1, 0, 0, 21, 1, 200000.00, 20000.00, 20000.00, 10000.00, 0.00, 0.00, 250000.00, 34500.00, 15.00, 2760000.00, 18400.00, 0.00, 188140.89, 0.00, 3000.00, 8959.09, 197100.00, 5959.11, 0, 1, '2026-01-20 11:54:17', NULL, 0, NULL);
+
 -- --------------------------------------------------------
 
 --
@@ -1510,6 +1726,14 @@ CREATE TABLE `pensions` (
   `post_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `pensions`
+--
+
+INSERT INTO `pensions` (`pension_id`, `staff`, `payroll_id`, `store`, `pensionable_income`, `employee_contribution`, `employer_contribution`, `total_contribution`, `payroll_date`, `posted_by`, `post_date`) VALUES
+(30, 99910, 32, 1, 230000, 18400.00, 23000.00, 41400.00, '2026-01-20', 1, '2026-01-20 11:45:20'),
+(31, 99910, 33, 1, 230000, 18400.00, 23000.00, 41400.00, '2026-01-20', 1, '2026-01-20 11:54:17');
+
 -- --------------------------------------------------------
 
 --
@@ -1528,6 +1752,14 @@ CREATE TABLE `prices` (
   `updated_by` int(11) NOT NULL,
   `updated_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `prices`
+--
+
+INSERT INTO `prices` (`price_id`, `item`, `store`, `cost`, `sales_price`, `other_price`, `added_by`, `added_at`, `updated_by`, `updated_at`) VALUES
+(13, 29, 1, 10000.00, 0.00, 0.00, 1, '2026-01-20 13:14:56', 0, NULL),
+(14, 30, 1, 2500.00, 0.00, 0.00, 1, '2026-01-20 13:18:21', 1, '2026-01-20 13:20:33');
 
 -- --------------------------------------------------------
 
@@ -1602,6 +1834,15 @@ CREATE TABLE `purchases` (
   `posted_by` int(11) NOT NULL,
   `post_date` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `purchases`
+--
+
+INSERT INTO `purchases` (`purchase_id`, `store`, `invoice`, `item`, `cost_price`, `sales_price`, `vendor`, `quantity`, `waybill`, `trx_number`, `expiration_date`, `purchase_status`, `purchase_date`, `posted_by`, `post_date`) VALUES
+(31, 1, '7867tyu', 29, 10000.00, 0, 5, 30.00, 0.00, '', '0000-00-00', 0, NULL, 1, '2026-01-20 13:14:56'),
+(32, 1, '7867tyu', 30, 3000.00, 0, 5, 5.00, 0.00, '', '0000-00-00', 0, NULL, 1, '2026-01-20 13:18:21'),
+(33, 1, '8yuih', 30, 2500.00, 0, 5, 2.00, 500.00, '', '0000-00-00', 0, NULL, 1, '2026-01-20 13:20:33');
 
 -- --------------------------------------------------------
 
@@ -1731,6 +1972,15 @@ CREATE TABLE `rent_payments` (
   `trx_number` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `rent_payments`
+--
+
+INSERT INTO `rent_payments` (`payment_id`, `customer`, `store`, `loan`, `schedule`, `amount`, `interest`, `processing_fee`, `penalty`, `payment_mode`, `details`, `invoice`, `bank`, `trx_date`, `posted_by`, `post_date`, `trx_number`) VALUES
+(125, 15, 1, 24, 179, 1000000, 0, 0, 0.00, '', '', '', 0, '2024-01-21', 1, '2026-01-21 11:25:21', ''),
+(126, 15, 1, 24, 180, 1000000, 0, 0, 0.00, '', '', '', 0, '2025-01-21', 1, '2026-01-21 11:25:21', ''),
+(127, 15, 1, 25, 182, 1250000, 0, 0, 0.00, '', '', 'TR985210126112842', 0, '2025-12-11', 1, '2026-01-21 11:28:42', 'TR985210126112842');
+
 -- --------------------------------------------------------
 
 --
@@ -1751,6 +2001,26 @@ CREATE TABLE `rent_schedule` (
   `post_date` datetime DEFAULT NULL,
   `posted_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `rent_schedule`
+--
+
+INSERT INTO `rent_schedule` (`repayment_id`, `assigned_id`, `field`, `customer`, `amount_due`, `amount_paid`, `penalty`, `store`, `due_date`, `payment_status`, `post_date`, `posted_by`) VALUES
+(174, 23, 18, 15, 750000.00, 0.00, 0.00, 1, '2024-12-21', 1, '2026-01-21 11:00:06', 1),
+(175, 23, 18, 15, 750000.00, 0.00, 0.00, 1, '2025-12-21', 1, '2026-01-21 11:00:06', 1),
+(176, 23, 18, 15, 750000.00, 0.00, 0.00, 1, '2026-12-21', 0, '2026-01-21 11:00:06', 1),
+(177, 23, 18, 15, 750000.00, 0.00, 0.00, 1, '2027-12-21', 0, '2026-01-21 11:00:06', 1),
+(178, 23, 18, 15, 750000.00, 0.00, 0.00, 1, '2028-12-21', 0, '2026-01-21 11:00:06', 1),
+(179, 24, 18, 15, 1000000.00, 0.00, 0.00, 1, '2024-01-21', 1, '2026-01-21 11:25:21', 1),
+(180, 24, 18, 15, 1000000.00, 0.00, 0.00, 1, '2025-01-21', 1, '2026-01-21 11:25:21', 1),
+(181, 24, 18, 15, 1000000.00, 0.00, 0.00, 1, '2026-01-21', 0, '2026-01-21 11:25:21', 1),
+(182, 25, 18, 15, 1250000.00, 0.00, 0.00, 1, '2025-12-11', 1, '2026-01-21 11:28:42', 1),
+(183, 25, 18, 15, 1250000.00, 0.00, 0.00, 1, '2026-12-11', 0, '2026-01-21 11:28:42', 1),
+(184, 25, 18, 15, 1250000.00, 0.00, 0.00, 1, '2027-12-11', 0, '2026-01-21 11:28:42', 1),
+(185, 26, 18, 15, 1080000.00, 0.00, 0.00, 1, '2027-01-20', 0, '2026-01-21 15:59:35', 1),
+(186, 26, 18, 15, 1080000.00, 0.00, 0.00, 1, '2028-01-20', 0, '2026-01-21 15:59:35', 1),
+(187, 26, 18, 15, 1080000.00, 0.00, 0.00, 1, '2029-01-20', 0, '2026-01-21 15:59:35', 1);
 
 -- --------------------------------------------------------
 
@@ -1836,6 +2106,13 @@ CREATE TABLE `salary_structure` (
   `updated_at` datetime DEFAULT NULL,
   `updated_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `salary_structure`
+--
+
+INSERT INTO `salary_structure` (`salary_id`, `store`, `staff`, `basic_salary`, `housing_allowance`, `transport_allowance`, `utility_allowance`, `medical_allowance`, `other_allowance`, `total_earnings`, `created_by`, `created_at`, `updated_at`, `updated_by`) VALUES
+(10, 1, 99910, 200000.00, 20000.00, 10000.00, 0.00, 20000.00, 0.00, 250000.00, 1, '2026-01-20 11:43:17', NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -1923,6 +2200,13 @@ CREATE TABLE `staffs` (
   `reg_date` datetime DEFAULT NULL,
   `posted_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `staffs`
+--
+
+INSERT INTO `staffs` (`staff_id`, `staff_number`, `last_name`, `other_names`, `gender`, `title`, `dob`, `marital_status`, `religion`, `phone`, `home_address`, `email_address`, `nok`, `nok_relation`, `nok_phone`, `spouse`, `spouse_phone`, `employed`, `department`, `staff_group`, `staff_category`, `designation`, `discipline`, `bank`, `account_num`, `pension`, `pension_num`, `photo`, `signature`, `staff_status`, `store`, `user_id`, `resigned`, `resigned_by`, `reg_date`, `posted_by`) VALUES
+(99910, '009', 'IKPEFUA', 'KELLY', 'Male', 'Mr.', '1994-08-08', 'Divorced', 'Muslim', '07068897068', 'Ben', 'kellyikpefua@gmail.com', 'PAL', 'BRO', '09012345678', '', '', '2026-01-01', 3, 'core staff', 'junior staff', 16, 14, 0, 0, '', '', 'user.png', '', 0, 1, 34, NULL, 0, '2026-01-20 11:42:32', 1);
 
 -- --------------------------------------------------------
 
@@ -2076,7 +2360,7 @@ INSERT INTO `sub_menus` (`sub_menu_id`, `menu`, `sub_menu`, `url`, `status`) VAL
 (72, 1, 'Add Sub-menu', 'add_sub_menu', 1),
 (73, 1, 'Edit Sub Menu', 'edit_sub_menu', 1),
 (74, 1, 'Manage Profile', 'manage_profile', 1),
-(75, 1, 'Add Location', 'add_store', 0),
+(75, 1, 'Add Location', 'add_store', 1),
 (76, 1, 'Update Store Details', 'update_store', 0),
 (77, 1, 'Add User Rights', 'add_rights', 1),
 (78, 1, 'Delete Rights', 'delete_right', 1),
@@ -2145,7 +2429,7 @@ INSERT INTO `sub_menus` (`sub_menu_id`, `menu`, `sub_menu`, `url`, `status`) VAL
 (151, 4, 'Post Fixed Asset', 'post_fixed_asset', 0),
 (152, 4, 'Post Depreciation', 'post_depreciation', 0),
 (153, 4, 'Post Other Transactions', 'post_other_trx', 0),
-(154, 11, 'Farm Fields', 'farm_fields', 0),
+(154, 11, 'Farm Lands', 'farm_fields', 0),
 (155, 11, 'Crop Cycle', 'crop_cycle', 0),
 (156, 11, 'General Tasks', 'general_task', 0),
 (158, 5, 'Crop Cycle Reports', 'crop_cycle_report', 0),
@@ -2230,7 +2514,12 @@ INSERT INTO `sub_menus` (`sub_menu_id`, `menu`, `sub_menu`, `url`, `status`) VAL
 (240, 4, 'Disburse Salary', 'disburse_salary', 0),
 (241, 6, 'Salary Disbursement', 'salary_disbursement', 0),
 (242, 3, 'Item Requisition', 'item_requisition', 0),
-(243, 15, 'Onboard Existing Cients', 'onboard_conc_investors', 0);
+(243, 15, 'Onboard Existing Cients', 'onboard_conc_investors', 0),
+(244, 11, 'Customer Lands', 'customer_lands', 0),
+(245, 11, 'Onboard Existing Clients', 'onboard_land_owners', 0),
+(246, 5, 'Onboarded Clients', 'client_created', 0),
+(247, 5, 'Lands Assigned', 'land_assigned_report', 0),
+(248, 5, 'Staff Attendance Report', 'staff_attendance_report', 0);
 
 -- --------------------------------------------------------
 
@@ -2369,6 +2658,22 @@ CREATE TABLE `transactions` (
   `posted_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `transactions`
+--
+
+INSERT INTO `transactions` (`transaction_id`, `account_type`, `sub_group`, `class`, `account`, `debit`, `credit`, `trx_number`, `details`, `trx_status`, `trans_date`, `store`, `post_date`, `posted_by`) VALUES
+(372, 1, 1, 2, 1010228, 0.000, 0.000, 'TR415200126122752', 'Investment payment', 0, '2026-01-20', 1, '2026-01-20 12:27:52', 1),
+(373, 1, 1, 4, 10104106, 0.000, 0.000, 'TR415200126122752', 'Investment Payment', 0, '2026-01-20', 1, '2026-01-20 12:27:52', 1),
+(374, 1, 1, 2, 1010228, 2000000.000, 0.000, 'TR241210126055927', 'Field Purchase payment', 0, '2026-01-21', 1, '2026-01-21 05:59:27', 1),
+(375, 1, 1, 4, 10104106, 0.000, 2000000.000, 'TR241210126055927', 'Field Purchase Payment', 0, '2026-01-21', 1, '2026-01-21 05:59:27', 1),
+(376, 1, 1, 2, 1010228, 1000000.000, 0.000, 'TR923210126061150', 'Field Purchase payment', 0, '2026-01-21', 1, '2026-01-21 06:11:50', 1),
+(377, 1, 1, 4, 10104106, 0.000, 1000000.000, 'TR923210126061150', 'Field Purchase Payment', 0, '2026-01-21', 1, '2026-01-21 06:11:50', 1),
+(378, 1, 1, 2, 1010228, 350000.000, 0.000, 'TR526210126061436', 'Field Documentation payment', 0, '2026-01-21', 1, '2026-01-21 06:14:36', 1),
+(379, 1, 1, 4, 10104106, 0.000, 350000.000, 'TR526210126061436', 'Field Documentation Payment', 0, '2026-01-21', 1, '2026-01-21 06:14:36', 1),
+(380, 1, 1, 4, 10104106, 750000.000, 0.000, 'TR621210126064747', 'Rent payment', 0, '2026-01-21', 1, '2026-01-21 06:47:47', 1),
+(381, 1, 1, 2, 1010228, 0.000, 750000.000, 'TR621210126064747', 'Rent payment', 0, '2026-01-21', 1, '2026-01-21 06:47:47', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -2415,8 +2720,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `full_name`, `username`, `user_role`, `user_password`, `status`, `store`, `staff_id`, `reg_date`, `posted_by`) VALUES
-(1, 'Administrator', 'Sysadmin', 'Admin', '123', 0, 1, 0, NULL, 1),
-(2, 'Admin', 'Admin', 'Admin', '123', 0, 1, 0, '2026-01-19 06:21:55', 1);
+(1, 'Administrator', 'Sysadmin', 'Admin', '$2y$10$08jBS1q4/vn/hT7dfRc2Peqh.y.jQRiWanS/VKxMbRpFn5XEX45/y', 0, 1, 0, NULL, 1),
+(2, 'Admin', 'Admin', 'Admin', '123', 0, 1, 0, '2026-01-19 06:21:55', 1),
+(34, 'IKPEFUA KELLY', '07068897068', 'Staff', '$2y$10$oNo3yMzXRwFCNSfNgoMc7uSopic/rXGK8JVuJ4HSKNrhRAlOOOi6m', 0, 1, 99910, '2026-01-20 11:42:32', 1);
 
 -- --------------------------------------------------------
 
@@ -2443,7 +2749,8 @@ CREATE TABLE `vendors` (
 --
 
 INSERT INTO `vendors` (`vendor_id`, `vendor`, `contact_person`, `phone`, `email_address`, `biz_address`, `balance`, `account_no`, `ledger_id`, `created_date`, `added_by`) VALUES
-(4, 'DAVIDORLAH FARMS', 'Jjhk', '908797897', '', '', 0, 20307103, 103, '2025-12-17 18:18:28', 1);
+(4, 'DAVIDORLAH FARMS', 'Jjhk', '908797897', '', '', 0, 20307103, 103, '2025-12-17 18:18:28', 1),
+(5, 'ABC LIMITED', 'John', '097867', '', 'jhgh', 0, 20307108, 108, '2026-01-20 13:12:21', 1);
 
 -- --------------------------------------------------------
 
@@ -2481,6 +2788,14 @@ CREATE TABLE `waybills` (
   `post_date` datetime DEFAULT NULL,
   `posted_by` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `waybills`
+--
+
+INSERT INTO `waybills` (`waybill_id`, `invoice`, `vendor`, `invoice_amount`, `waybill`, `trx_number`, `store`, `post_date`, `posted_by`) VALUES
+(17, '7867tyu', 5, 315000.00, 0.00, '', 1, '2026-01-20 13:18:25', 1),
+(18, '8yuih', 5, 5000.00, 500.00, '', 1, '2026-01-20 13:20:41', 1);
 
 --
 -- Indexes for dumped tables
@@ -3106,7 +3421,7 @@ ALTER TABLE `account_sub_groups`
 -- AUTO_INCREMENT for table `assets`
 --
 ALTER TABLE `assets`
-  MODIFY `asset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `asset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `asset_locations`
@@ -3124,25 +3439,25 @@ ALTER TABLE `asset_postings`
 -- AUTO_INCREMENT for table `assigned_fields`
 --
 ALTER TABLE `assigned_fields`
-  MODIFY `assigned_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `assigned_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `attendance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `attendance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `attendance_flagging`
 --
 ALTER TABLE `attendance_flagging`
-  MODIFY `attendance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `attendance_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `audit_trail`
 --
 ALTER TABLE `audit_trail`
-  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=180;
+  MODIFY `audit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=184;
 
 --
 -- AUTO_INCREMENT for table `banks`
@@ -3166,7 +3481,7 @@ ALTER TABLE `briquette_production`
 -- AUTO_INCREMENT for table `cash_flows`
 --
 ALTER TABLE `cash_flows`
-  MODIFY `fow_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
+  MODIFY `fow_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -3208,13 +3523,13 @@ ALTER TABLE `crop_removal`
 -- AUTO_INCREMENT for table `customers`
 --
 ALTER TABLE `customers`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `customer_trail`
 --
 ALTER TABLE `customer_trail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
 
 --
 -- AUTO_INCREMENT for table `cycle_changes`
@@ -3238,7 +3553,7 @@ ALTER TABLE `departments`
 -- AUTO_INCREMENT for table `deposits`
 --
 ALTER TABLE `deposits`
-  MODIFY `deposit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=78;
+  MODIFY `deposit_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
 
 --
 -- AUTO_INCREMENT for table `depreciation`
@@ -3274,7 +3589,7 @@ ALTER TABLE `disposed_assets`
 -- AUTO_INCREMENT for table `documentation_fees`
 --
 ALTER TABLE `documentation_fees`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `document_uploads`
@@ -3304,19 +3619,19 @@ ALTER TABLE `expense_heads`
 -- AUTO_INCREMENT for table `fields`
 --
 ALTER TABLE `fields`
-  MODIFY `field_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `field_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `field_payments`
 --
 ALTER TABLE `field_payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT for table `field_payment_schedule`
 --
 ALTER TABLE `field_payment_schedule`
-  MODIFY `repayment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=166;
+  MODIFY `repayment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=177;
 
 --
 -- AUTO_INCREMENT for table `finance_cost`
@@ -3334,37 +3649,37 @@ ALTER TABLE `harvests`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `inventory_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `investments`
 --
 ALTER TABLE `investments`
-  MODIFY `investment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `investment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `investment_payments`
 --
 ALTER TABLE `investment_payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `investment_returns`
 --
 ALTER TABLE `investment_returns`
-  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `schedule_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
 
 --
 -- AUTO_INCREMENT for table `issue_items`
 --
 ALTER TABLE `issue_items`
-  MODIFY `issue_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `issue_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `labour_payments`
@@ -3388,7 +3703,7 @@ ALTER TABLE `leave_types`
 -- AUTO_INCREMENT for table `ledgers`
 --
 ALTER TABLE `ledgers`
-  MODIFY `ledger_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
+  MODIFY `ledger_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
 
 --
 -- AUTO_INCREMENT for table `loans`
@@ -3412,7 +3727,7 @@ ALTER TABLE `multiple_payments`
 -- AUTO_INCREMENT for table `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=184;
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=204;
 
 --
 -- AUTO_INCREMENT for table `observations`
@@ -3460,19 +3775,19 @@ ALTER TABLE `payment_evidence`
 -- AUTO_INCREMENT for table `payroll`
 --
 ALTER TABLE `payroll`
-  MODIFY `payroll_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `payroll_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `pensions`
 --
 ALTER TABLE `pensions`
-  MODIFY `pension_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `pension_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `prices`
 --
 ALTER TABLE `prices`
-  MODIFY `price_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `price_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `principal_returns`
@@ -3490,7 +3805,7 @@ ALTER TABLE `pruning`
 -- AUTO_INCREMENT for table `purchases`
 --
 ALTER TABLE `purchases`
-  MODIFY `purchase_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `purchase_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `purchase_order`
@@ -3526,13 +3841,13 @@ ALTER TABLE `renewals`
 -- AUTO_INCREMENT for table `rent_payments`
 --
 ALTER TABLE `rent_payments`
-  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
+  MODIFY `payment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=128;
 
 --
 -- AUTO_INCREMENT for table `rent_schedule`
 --
 ALTER TABLE `rent_schedule`
-  MODIFY `repayment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=171;
+  MODIFY `repayment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=188;
 
 --
 -- AUTO_INCREMENT for table `return_payments`
@@ -3556,7 +3871,7 @@ ALTER TABLE `salary_disbursement`
 -- AUTO_INCREMENT for table `salary_structure`
 --
 ALTER TABLE `salary_structure`
-  MODIFY `salary_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `salary_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `sales`
@@ -3574,7 +3889,7 @@ ALTER TABLE `sales_returns`
 -- AUTO_INCREMENT for table `staffs`
 --
 ALTER TABLE `staffs`
-  MODIFY `staff_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99910;
+  MODIFY `staff_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99911;
 
 --
 -- AUTO_INCREMENT for table `staff_departments`
@@ -3598,7 +3913,7 @@ ALTER TABLE `stores`
 -- AUTO_INCREMENT for table `sub_menus`
 --
 ALTER TABLE `sub_menus`
-  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=244;
+  MODIFY `sub_menu_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=249;
 
 --
 -- AUTO_INCREMENT for table `sucker_removal`
@@ -3634,7 +3949,7 @@ ALTER TABLE `tax_rules`
 -- AUTO_INCREMENT for table `transactions`
 --
 ALTER TABLE `transactions`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=372;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=382;
 
 --
 -- AUTO_INCREMENT for table `transfers`
@@ -3646,13 +3961,13 @@ ALTER TABLE `transfers`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `vendors`
 --
 ALTER TABLE `vendors`
-  MODIFY `vendor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `vendor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `vendor_payments`
@@ -3664,7 +3979,7 @@ ALTER TABLE `vendor_payments`
 -- AUTO_INCREMENT for table `waybills`
 --
 ALTER TABLE `waybills`
-  MODIFY `waybill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `waybill_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -7302,6 +7302,7 @@ function assignexistingField(){
      let installment_amount = document.getElementById("installment_amount").value;
      let documentation = document.getElementById("documentation").value;
      let amount_paid = document.getElementById("amount_paid").value;
+     let documentation_paid = document.getElementById("documentation_paid").value;
      let today = new Date();
      let start = new Date(start_date);
      if(customer.length == 0 || customer.replace(/^\s+|\s+$/g, "").length == 0){
@@ -7318,6 +7319,10 @@ function assignexistingField(){
           return;
      }else if(!documentation || parseFloat(documentation) <= 0){
           alert("Please input documentation fee!");
+          $("#documentation").focus();
+          return;
+     }else if(!documentation_paid || parseFloat(documentation_paid) <= 0){
+          alert("Please input documentation amount paid!");
           $("#documentation").focus();
           return;
      }else if(!payment_duration){
@@ -7352,7 +7357,7 @@ function assignexistingField(){
           $.ajax({
                type : "POST",
                url : "../controller/onboard_land_owners.php",
-               data : {field_id:field_id, customer:customer, duration:duration, purchase_cost:purchase_cost, discount:discount, total_due:total_due,payment_duration:payment_duration, rent_percentage:rent_percentage, annual_rent:annual_rent, documentation:documentation, start_date:start_date, installment_amount:installment_amount, field_size:field_size, amount_paid:amount_paid},
+               data : {field_id:field_id, customer:customer, duration:duration, purchase_cost:purchase_cost, discount:discount, total_due:total_due,payment_duration:payment_duration, rent_percentage:rent_percentage, annual_rent:annual_rent, documentation:documentation, start_date:start_date, installment_amount:installment_amount, field_size:field_size, amount_paid:amount_paid,documentation_paid:documentation_paid},
                beforeSend: function(){
                     $("#farm_fields").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -9228,6 +9233,20 @@ function getMonthlyPayroll(payroll_date){
      $.ajax({
           type : "GET",
           url : "../controller/monthly_payroll_report.php?month="+payroll_date,
+          beforeSend : function(){
+               $(".new_data").html("<div class='processing'><div class='loader'></div></div>");
+          },
+          success : function(response){
+               $(".new_data").html(response);
+               
+          }
+     })
+}
+//get onthly staff attendance report
+function searchMonthlyAttendance(attendance_date){
+     $.ajax({
+          type : "GET",
+          url : "../controller/monthly_attendance_report.php?month="+attendance_date,
           beforeSend : function(){
                $(".new_data").html("<div class='processing'><div class='loader'></div></div>");
           },
