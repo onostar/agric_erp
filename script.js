@@ -7358,9 +7358,9 @@ function assignexistingField(){
                },
                success : function(response){
                     $("#farm_fields").html(response);
-                    /* setTimeout(function(){
+                    setTimeout(function(){
                          showPage("onboard_land_owners.php");
-                    }, 2000); */
+                    }, 2000);
                }
           })
           

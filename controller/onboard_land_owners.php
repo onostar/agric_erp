@@ -127,6 +127,7 @@ $update = new Update_table;
     // update assigned_fields with active status
     $update = new Update_table();
     $update->update_double('assigned_fields', 'contract_status', 1, 'due_date', $last_repayment_date, 'assigned_id', $assigned_id);
+    $balance = $total_due - $amount_paid;
     //check if payment was made
     if($amount_paid > 0){
         $trans_type = "Field purchase payment";
@@ -147,7 +148,7 @@ $update = new Update_table;
             'invoice' => $trx_num,
             'bank' => 0,
             'trx_type' => $trans_type,
-            'trans_date' => $start_date,
+            'trans_date' => $start,
             'post_date' => $date,
             'trx_number' => $trx_num,
             'store' => $store
@@ -182,13 +183,12 @@ $update = new Update_table;
             'posted_by' => $user,
             'post_date' => $date,
             'trx_number' => $trx_num,
-            'trx_date' => $start_date
+            'trx_date' => $start
             
         );
         $add_repayment = new add_data('field_payments', $repayment_data);
         $add_repayment->create_data();
         //update field payment schedule
-        $balance = $installment_amount - $amount_paid;
         $update = new Update_table();
         if($balance <= 0){
             //update repayment schedule
@@ -222,7 +222,30 @@ $update = new Update_table;
 
         //now update all rent schedule as paid forclients whose rent is passed 2025 december
         $update->updateRentPayment($assigned_id);
-
+        //get all rent paid and insert into rent payment table
+        $rts = $get_details->fetch_details_2cond('rent_schedule', 'assigned_id', 'payment_status', $assigned_id, 1);
+        if(is_array($rts)){
+            foreach($rts as $rt){
+                $rt_data = array(
+                    'customer' => $customer,
+                    'loan' => $assigned_id,
+                    'store' => $store,
+                    'schedule' => $rt->repayment_id,
+                    'trx_number' => $trx_num,
+                    'invoice' => $trx_num,
+                    'amount' => $annual_rent,
+                    'trx_date' => $rt->due_date,
+                    'posted_by'=> $user,
+                    'post_date' => $date
+                );
+                $add_rent = new add_data('rent_payments', $rt_data);
+                $add_rent->create_data();
+            }
+        }
+        if($amount_paid == $total_due){
+            $update->update_double('assigned_fields', 'contract_status', 2, 'documentation_status', 1, 'assigned_id', $assigned_id);
+        }
+        
     }
     // formatting
     $install_amount_fmt = number_format($installment_amount, 2);
@@ -231,39 +254,77 @@ $update = new Update_table;
     $due_fmt = number_format($total_due, 2);
     $doc_fmt = number_format($documentation, 2);
     $annual_rent_fmt = number_format($annual_rent, 2);
+    $balance_fmt = number_format($total_due - $amount_paid, 2);
+    $paid_fmt = number_format($amount_paid, 2);
     $sqm = $size * 500;
     // build purchase message
-    $message = "
-    <p>Dear $client,</p>
-    <p>Congratulations! Your <strong>field purchase contract</strong> has been successfully activated.</p>
+    if($balance <= 0){
+        $message = "
+        <p>Dear $client,</p>
+        <p>Congratulations! Your <strong>field purchase contract</strong> has been successfully activated.</p>
 
-    <h3 style='color:green;'>Purchase Details:</h3>
-    <ul>
-        <li><strong>Field:</strong> $field_name</li>
-        <li><strong>Location:</strong> $location</li>
-        <li><strong>Size:</strong> $size Plot ($sqm sqm)</li>
-        <li><strong>Purchase Cost:</strong> ₦$purchase_fmt</li>
-        <li><strong>Discount applied:</strong> ₦$discount_fmt</li>
-        <li><strong>Total Due:</strong> ₦$due_fmt</li>
-        <li><strong>Documentation Fee:</strong> ₦$doc_fmt</li>
-        <li><strong>Contract Duration:</strong> $duration year(s)</li>
-        <li><strong>Annual Rent/Return:</strong> ₦$annual_rent_fmt ($rent_percentage%)</li>
-        
-        <li><strong>Due Date:</strong> $last_repayment_date</li>
-    </ul>
+        <h3 style='color:green;'>Purchase Details:</h3>
+        <ul>
+            <li><strong>Field:</strong> $field_name</li>
+            <li><strong>Location:</strong> $location</li>
+            <li><strong>Size:</strong> $size Plot ($sqm m²)</li>
+            <li><strong>Purchase Cost:</strong> ₦$purchase_fmt</li>
+            <li><strong>Discount applied:</strong> ₦$discount_fmt</li>
+            <li><strong>Total Due:</strong> ₦$due_fmt</li>
+            <li><strong>Total Paid:</strong> ₦$paid_fmt</li>
+            <li><strong>Documentation Fee:</strong> ₦$doc_fmt</li>
+            <li><strong>Contract Duration:</strong> $duration year(s)</li>
+            <li><strong>Annual Rent/Return:</strong> ₦$annual_rent_fmt ($rent_percentage%)</li>
+            
+            <li><strong>Due Date:</strong> $last_repayment_date</li>
+        </ul>
 
-    <p>Once payment is completed, your contract will be marked as <strong>fully purchased</strong> and you will begin to receive your <strong>annual rent/returns</strong> according to the agreed rate and contract duration.</p>
+        <p>You can log in to your <strong><a href='davidorlah.dorthprosuite.com/client_portal'>Customer Portal</a></strong> anytime to track your payments, field details, and rent status.</p>
+        <p>Your Username : $customer_email<br>
+        Default Password : 123</p>
 
-    <p>You can log in to your <strong><a href='davidorlah.dorthprosuite.com/client_portal'>Customer Portal</a></strong> anytime to track your payments, field details, and rent status.</p>
-    <p>Your Username : $customer_email<br>
-    Default Password : 123</p>
+        <p><strong>N.B: The system will prompt you to change your password from the default password</strong></p>
+        <br>
+        <p>Thank you for investing with <strong>Davidorlah NIgeria Limited</strong>.</p>
+        <p>Warm regards,<br>
+        <strong>Management</strong><br>
+        Davidorlah Nigeria Limited</p>";
+    }else{
+         $message = "
+        <p>Dear $client,</p>
+        <p>Congratulations! Your <strong>field purchase contract</strong> has been successfully activated.</p>
 
-    <p><strong>N.B: The system will prompt you to change your password from the default password</strong></p>
-    <br>
-    <p>Thank you for investing with <strong>Davidorlah Farms</strong>.</p>
-    <p>Warm regards,<br>
-    <strong>Management/strong><br>
-    Davidorlah Nigeria Limited</p>";
+        <h3 style='color:green;'>Purchase Details:</h3>
+        <ul>
+            <li><strong>Field:</strong> $field_name</li>
+            <li><strong>Location:</strong> $location</li>
+            <li><strong>Size:</strong> $size Plot ($sqm sqm)</li>
+            <li><strong>Purchase Cost:</strong> ₦$purchase_fmt</li>
+            <li><strong>Discount applied:</strong> ₦$discount_fmt</li>
+            <li><strong>Total Due:</strong> ₦$due_fmt</li>
+            <li><strong>Total Paid:</strong> ₦$paid_fmt</li>
+            <li><strong>Balance:</strong> ₦$balance_fmt</li>
+            
+            <li><strong>Documentation Fee:</strong> ₦$doc_fmt</li>
+            <li><strong>Contract Duration:</strong> $duration year(s)</li>
+            <li><strong>Annual Rent/Return:</strong> ₦$annual_rent_fmt ($rent_percentage%)</li>
+            
+            <li><strong>Due Date:</strong> $last_repayment_date</li>
+        </ul>
+
+        <p>Once payment is completed, your contract will be marked as <strong>fully purchased</strong> and you will begin to receive your <strong>annual rent/returns</strong> according to the agreed rate and contract duration.</p>
+
+        <p>You can log in to your <strong><a href='davidorlah.dorthprosuite.com/client_portal'>Customer Portal</a></strong> anytime to track your payments, field details, and rent status.</p>
+        <p>Your Username : $customer_email<br>
+        Default Password : 123</p>
+
+        <p><strong>N.B: The system will prompt you to change your password from the default password</strong></p>
+        <br>
+        <p>Thank you for investing with <strong>Davidorlah Nigeria Limited</strong>.</p>
+        <p>Warm regards,<br>
+        <strong>Management</strong><br>
+        Davidorlah Nigeria Limited</p>";
+    }
 
     // notification
     $notif_data = array(

@@ -562,7 +562,7 @@
         }
         //fetch total staffs late at work
         public function fetch_late_arrivals($store){
-            $get_user = $this->connectdb()->prepare("SELECT * FROM attendance WHERE store = :store AND DATE(attendance_date) = CURDATE() AND time_in > '8:05:00'");
+            $get_user = $this->connectdb()->prepare("SELECT * FROM attendance WHERE store = :store AND DATE(attendance_date) = CURDATE() AND time_in > '9:10:00'");
             $get_user->bindValue("store", $store);
             $get_user->execute();
             if($get_user->rowCount() > 0){
@@ -813,7 +813,7 @@ public function fetch_generate_payrollpermonth($store, $payroll_date){
             $query = "SELECT COUNT(*) AS total_late_days 
                 FROM attendance 
                 WHERE staff = :staff_id 
-                AND TIME(time_in) > '08:05:00' AND time_in IS NOT NULL
+                AND TIME(time_in) > '09:10:00' AND time_in IS NOT NULL
                 AND MONTH(attendance_date) = MONTH(CURDATE()) 
                 AND YEAR(attendance_date) = YEAR(CURDATE())
             ";
@@ -835,7 +835,7 @@ public function fetch_generate_payrollpermonth($store, $payroll_date){
             $query = "SELECT COUNT(*) AS total_late_days 
                 FROM attendance 
                 WHERE staff = :staff_id 
-                AND TIME(time_in) > '08:05:00' AND time_in IS NOT NULL
+                AND TIME(time_in) > '09:10:00' AND time_in IS NOT NULL
                 AND MONTH(attendance_date) = MONTH(:attend_date) 
                 AND YEAR(attendance_date) = YEAR(:attend_date)
             ";

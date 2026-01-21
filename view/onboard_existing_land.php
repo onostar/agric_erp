@@ -59,7 +59,7 @@
                 </div>
                 <div class="data" style="width:31%">
                     <label for="field_size">Size (Plot)</label>
-                    <input type="number" id="field_size" name="field_size" value="0.00" required>
+                    <input type="number" id="field_size" name="field_size" value="0" required>
                 </div>
                 <div class="data" style="width:31%">
                     <label for="purchase_cost">Purchase Amount (NGN)</label>
@@ -106,7 +106,7 @@
                 </div>
                 <div class="data" style="width:31%">
                     <label for="documentation">Documentation Fee (NGN)</label>
-                    <input type="number" id="documentation" name="documentation" required>
+                    <input type="number" id="documentation" name="documentation" required value="350000">
                 </div>
                 <div class="data" style="width:31%">
                     <label for="amount_paid">Amount Paid</label>
