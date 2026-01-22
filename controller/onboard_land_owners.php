@@ -297,21 +297,21 @@ $update = new Update_table;
         <ul>
             <li><strong>Field:</strong> $field_name</li>
             <li><strong>Location:</strong> $location</li>
-            <li><strong>Size:</strong> $size Plot ($sqm m²)</li>
-            <li><strong>Purchase Cost:</strong> ₦$purchase_fmt</li>
-            <li><strong>Discount applied:</strong> ₦$discount_fmt</li>
-            <li><strong>Total Due:</strong> ₦$due_fmt</li>
-            <li><strong>Total Paid:</strong> ₦$paid_fmt</li>
-            <li><strong>Documentation Fee:</strong> ₦$doc_fmt</li>
-            <li><strong>Documentation Paid:</strong> ₦$doc_paid</li>
-            <li><strong>Documentation Balance:</strong> ₦$doc_bal</li>
+            <li><strong>Size:</strong> $size Plot ($sqm sqm)</li>
+            <li><strong>Purchase Cost:</strong> NGN $purchase_fmt</li>
+            <li><strong>Discount applied:</strong> NGN $discount_fmt</li>
+            <li><strong>Total Due:</strong> NGN $due_fmt</li>
+            <li><strong>Total Paid:</strong> NGN $paid_fmt</li>
+            <li><strong>Documentation Fee:</strong> NGN $doc_fmt</li>
+            <li><strong>Documentation Paid:</strong> NGN $doc_paid</li>
+            <li><strong>Documentation Balance:</strong> NGN $doc_bal</li>
             <li><strong>Contract Duration:</strong> $duration year(s)</li>
-            <li><strong>Annual Rent/Return:</strong> ₦$annual_rent_fmt ($rent_percentage%)</li>
+            <li><strong>Annual Rent/Return:</strong> NGN $annual_rent_fmt ($rent_percentage%)</li>
             
             <li><strong>Due Date:</strong> $last_repayment_date</li>
         </ul>
 
-        <p>You can log in to your <strong><a href='davidorlah.dorthprosuite.com/client_portal'>Customer Portal</a></strong> anytime to track your payments, field details, and rent status.</p>
+        <p>You can log in to your <strong><a href='https://davidorlah.dorthprosuite.com/client_portal'>Customer Portal</a></strong> anytime to track your payments, field details, and rent status.</p>
         <p>Your Username : $customer_email<br>
         Default Password : 123</p>
 
@@ -331,24 +331,24 @@ $update = new Update_table;
             <li><strong>Field:</strong> $field_name</li>
             <li><strong>Location:</strong> $location</li>
             <li><strong>Size:</strong> $size Plot ($sqm sqm)</li>
-            <li><strong>Purchase Cost:</strong> ₦$purchase_fmt</li>
-            <li><strong>Discount applied:</strong> ₦$discount_fmt</li>
-            <li><strong>Total Due:</strong> ₦$due_fmt</li>
-            <li><strong>Total Paid:</strong> ₦$paid_fmt</li>
-            <li><strong>Balance:</strong> ₦$balance_fmt</li>
+            <li><strong>Purchase Cost:</strong> NGN $purchase_fmt</li>
+            <li><strong>Discount applied:</strong> NGN $discount_fmt</li>
+            <li><strong>Total Due:</strong> NGN $due_fmt</li>
+            <li><strong>Total Paid:</strong> NGN $paid_fmt</li>
+            <li><strong>Balance:</strong> NGN $balance_fmt</li>
             
-            <li><strong>Documentation Fee:</strong> ₦$doc_fmt</li>
-            <li><strong>Documentation Paid:</strong> ₦$doc_paid</li>
-            <li><strong>Documentation Balance:</strong> ₦$doc_bal</li>
+            <li><strong>Documentation Fee:</strong> NGN $doc_fmt</li>
+            <li><strong>Documentation Paid:</strong> NGN $doc_paid</li>
+            <li><strong>Documentation Balance:</strong> NGN $doc_bal</li>
             <li><strong>Contract Duration:</strong> $duration year(s)</li>
-            <li><strong>Annual Rent/Return:</strong> ₦$annual_rent_fmt ($rent_percentage%)</li>
+            <li><strong>Annual Rent/Return:</strong> NGN $annual_rent_fmt ($rent_percentage%)</li>
             
             <li><strong>Due Date:</strong> $last_repayment_date</li>
         </ul>
 
         <p>Once payment is completed, your contract will be marked as <strong>fully purchased</strong> and you will begin to receive your <strong>annual rent/returns</strong> according to the agreed rate and contract duration.</p>
 
-        <p>You can log in to your <strong><a href='davidorlah.dorthprosuite.com/client_portal'>Customer Portal</a></strong> anytime to track your payments, field details, and rent status.</p>
+        <p>You can log in to your <strong><a href='https://davidorlah.dorthprosuite.com/client_portal'>Customer Portal</a></strong> anytime to track your payments, field details, and rent status.</p>
         <p>Your Username : $customer_email<br>
         Default Password : 123</p>
 

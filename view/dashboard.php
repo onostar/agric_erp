@@ -119,7 +119,7 @@
             <div class="cards" id="card0">
             <a href="javascript:void(0)" onclick="showPage('active_loans.php')"class="page_navs">
                 <div class="infos">
-                    <p><i class="fas fa-hand-holding-dollar"></i> Rent Receivables</p>
+                    <p><i class="fas fa-hand-holding-dollar"></i> Rent Payables</p>
                     <p>
                     <?php
                         //get total due amount

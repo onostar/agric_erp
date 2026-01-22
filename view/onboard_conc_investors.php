@@ -96,8 +96,12 @@
                     <input type="hidden" id="total_dollar" name="total_dollar" value="2000.00">
                 </div>
                 <div class="data">
+                    <label for="amount_paid">Input Amount Paid</label>
+                    <input type="number" id="amount_paid" name="amount_paid" value="0" oninput="checkPaid()">
+                </div>
+                <div class="data">
                     <label for="amount_paid">Amount Paid</label>
-                    <input type="number" id="amount_paid" name="amount_paid" value="0">
+                    <input type="text" id="amount_paid_val" name="amount_paid_val" readonly style="color:green">
                 </div>
                 <div class="data">
                     <label for="start_date">Start Date</label>

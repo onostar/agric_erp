@@ -105,16 +105,24 @@
                     <input type="hidden" id="annual_rent" name="annual_rent">
                 </div>
                 <div class="data" style="width:31%">
+                    <label for="amount_paid">Input Amount Paid</label>
+                    <input type="number" id="amount_paid" name="amount_paid" oninput="checkPaid()">
+                </div>
+                <div class="data" style="width:31%">
                     <label for="amount_paid">Amount Paid</label>
-                    <input type="number" id="amount_paid" name="amount_paid">
+                    <input type="text" id="amount_paid_val" name="amount_paid_val" readonly style="color:green">
                 </div>
                 <div class="data" style="width:31%">
                     <label for="documentation">Agreed Doc. Fee (NGN)</label>
                     <input type="number" id="documentation" name="documentation" required value="350000">
                 </div>
                 <div class="data" style="width:31%">
+                    <label for="documentation">Input Doc Paid (NGN)</label>
+                    <input type="number" id="documentation_paid" name="documentation_paid" required value="0" oninput="checkDoc()">
+                </div>
+                <div class="data" style="width:31%">
                     <label for="documentation">Documentation Paid (NGN)</label>
-                    <input type="number" id="documentation_paid" name="documentation_paid" required value="0">
+                    <input type="text" id="documentation_paid_val" name="documentation_paid_val" required style="color:red" readonly>
                 </div>
                 
                 <div class="data" style="width:31%">

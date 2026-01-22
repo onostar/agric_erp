@@ -120,10 +120,10 @@
                         <?php }?>
                     </select>
                 </div>
-                <div class="data" style="width:23%">
+                <!-- <div class="data" style="width:23%">
                     <label for="staff_id">Staff ID</label>
                     <input type="text" name="staff_id" id="staff_id" required>
-                </div>
+                </div> -->
                 <div class="data" style="width:23%">
                     <label for="staff_group">Staff Group <span class="important">*</span></label>
                     <select name="staff_group" id="staff_group">
@@ -137,6 +137,7 @@
                     <select name="staff_category" id="staff_category">
                         <option value="" selected disabled>select category</option>
                         <option value="junior staff">JUNIOR STAFF</option>
+                        <option value="Mid Level Staff">MID-LEVEL  STAFF</option>
                         <option value="senior staff">SENIOR STAFF</option>
                         <option value="managment staff">MANAGEMENT STAFF</option>
                     </select>
@@ -174,7 +175,6 @@
                     <label for="bank">Bank</label>
                     <select name="bank" id="bank">
                         <option value="" selected disabled>select bank</option>
-                       <select name="bank" id="bank">
                         <option value="" selected disabled>Select Bank</option>
                         <option>Access Bank</option>
                         <option>Citibank Nigeria</option>
@@ -202,7 +202,6 @@
                         <option>Wema Bank</option>
                         <option>Zenith Bank</option>
                     </select>
-                    </select>
                 </div>
                 <div class="data" style="width:23%">
                     <label for="account_num">Account Number</label>
@@ -222,7 +221,7 @@
                     <input type="text" name="pension_num" id="pension_num">
                 </div>
                 <div class="data" style="width:auto">
-                    <button type="submit" id="add_staff" name="add_staff" onclick="addStaff()">Add Staff <i class="fas fa-plus"></i></button>
+                    <button type="button" id="add_staff" name="add_staff" onclick="addStaff()">Add Staff <i class="fas fa-plus"></i></button>
                 </div>
             </div>
         </section>    

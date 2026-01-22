@@ -5,10 +5,11 @@
         }
     </style>
 <?php
-
+    session_start();
     if (isset($_GET['assigned'])){
         $id = $_GET['assigned'];
-    
+    $role = $_SESSION['role'];
+    $designation = $_SESSION['designation'];
 
     // instantiate class
     include "../classes/dbh.php";
@@ -53,8 +54,12 @@
                     <input type="text" name="field" id="field" value="<?php echo $row->field_name?>">
                 </div> -->
                 <div class="data" style="width:31%">
-                    <label for="sales_price">Field/Land Size (Plot)
+                    <label for="sales_price">Field/Land Size (Plot)</label>
+                    <?php if($designation == "GENERAL MANAGER" || $role = "Admin"){?>
                     <input type="text" name="field_size" id="field_size" value="<?php echo $row->field_size?>">
+                    <?php }else{?>
+                    <input type="text" name="field_size" id="field_size" value="<?php echo $row->field_size?>" readonly>
+                    <?php }?>
                 </div>
                 <!-- <div class="data" style="width:31%">
                     <label for="soil_type">Soil Type</label>

@@ -7268,20 +7268,25 @@ function assignField(){
           $("#start_date").focus();
           return; */
      }else{
-          $.ajax({
-               type : "POST",
-               url : "../controller/assign_field.php",
-               data : {field_id:field_id, customer:customer, duration:duration, purchase_cost:purchase_cost, discount:discount, total_due:total_due,payment_duration:payment_duration, rent_percentage:rent_percentage, annual_rent:annual_rent, documentation:documentation, start_date:start_date, installment_amount:installment_amount, field_size:field_size},
-               beforeSend: function(){
-                    $("#farm_fields").html("<div class='processing'><div class='loader'></div></div>");
-               },
-               success : function(response){
-                    $("#farm_fields").html(response);
-                    setTimeout(function(){
-                         showPage("assign_field.php");
-                    }, 2000);
-               }
-          })
+          let confirm_inv = confirm("Are you sure you want to assign this field to the customer?", "");
+          if(confirm_inv){
+               $.ajax({
+                    type : "POST",
+                    url : "../controller/assign_field.php",
+                    data : {field_id:field_id, customer:customer, duration:duration, purchase_cost:purchase_cost, discount:discount, total_due:total_due,payment_duration:payment_duration, rent_percentage:rent_percentage, annual_rent:annual_rent, documentation:documentation, start_date:start_date, installment_amount:installment_amount, field_size:field_size},
+                    beforeSend: function(){
+                         $("#farm_fields").html("<div class='processing'><div class='loader'></div></div>");
+                    },
+                    success : function(response){
+                         $("#farm_fields").html(response);
+                         setTimeout(function(){
+                              showPage("assign_field.php");
+                         }, 2000);
+                    }
+               })
+          }else{
+               return;
+          }
           
           return false; 
      }
@@ -7321,7 +7326,7 @@ function assignexistingField(){
           alert("Please input documentation fee!");
           $("#documentation").focus();
           return;
-     }else if(!documentation_paid || parseFloat(documentation_paid) <= 0){
+     }else if(!documentation_paid || parseFloat(documentation_paid) < 0){
           alert("Please input documentation amount paid!");
           $("#documentation").focus();
           return;
@@ -7354,20 +7359,25 @@ function assignexistingField(){
           $("#amount_paid").focus();
           return;
      }else{
-          $.ajax({
-               type : "POST",
-               url : "../controller/onboard_land_owners.php",
-               data : {field_id:field_id, customer:customer, duration:duration, purchase_cost:purchase_cost, discount:discount, total_due:total_due,payment_duration:payment_duration, rent_percentage:rent_percentage, annual_rent:annual_rent, documentation:documentation, start_date:start_date, installment_amount:installment_amount, field_size:field_size, amount_paid:amount_paid,documentation_paid:documentation_paid},
-               beforeSend: function(){
-                    $("#farm_fields").html("<div class='processing'><div class='loader'></div></div>");
-               },
-               success : function(response){
-                    $("#farm_fields").html(response);
-                    setTimeout(function(){
-                         showPage("onboard_land_owners.php");
-                    }, 2000);
-               }
-          })
+          let confirm_inv = confirm("Are you sure you want to onboard this client?", "");
+          if(confirm_inv){
+               $.ajax({
+                    type : "POST",
+                    url : "../controller/onboard_land_owners.php",
+                    data : {field_id:field_id, customer:customer, duration:duration, purchase_cost:purchase_cost, discount:discount, total_due:total_due,payment_duration:payment_duration, rent_percentage:rent_percentage, annual_rent:annual_rent, documentation:documentation, start_date:start_date, installment_amount:installment_amount, field_size:field_size, amount_paid:amount_paid,documentation_paid:documentation_paid},
+                    beforeSend: function(){
+                         $("#farm_fields").html("<div class='processing'><div class='loader'></div></div>");
+                    },
+                    success : function(response){
+                         $("#farm_fields").html(response);
+                         setTimeout(function(){
+                              showPage("onboard_land_owners.php");
+                         }, 2000);
+                    }
+               })
+          }else{
+               return;
+          }
           
           return false; 
      }
@@ -7942,7 +7952,7 @@ function addStaff(){
      let other_names = document.getElementById("other_names").value;
      let phone_number = document.getElementById("phone_number").value;
      let dob = document.getElementById("dob").value;
-     let staff_id = document.getElementById("staff_id").value;
+     // let staff_id = document.getElementById("staff_id").value;
      let title = document.getElementById("title").value;
      let gender = document.getElementById("gender").value;
      let marital_status = document.getElementById("marital_status").value;
@@ -8074,7 +8084,7 @@ function addStaff(){
           $.ajax({
                type : "POST",
                url : "../controller/add_staff.php",
-               data : {other_names:other_names, last_name:last_name, phone_number:phone_number, email:email, address:address, dob:dob, staff_id:staff_id, title:title, gender:gender, marital_status:marital_status, religion:religion, nok:nok, staff_group:staff_group,nok_phone:nok_phone, nok_relation:nok_relation, staff_category:staff_category, discipline:discipline, designation:designation, bank:bank, account_num:account_num, pension:pension, pension_num:pension_num, employed:employed, department:department,spouse_name:spouse_name, spouse_phone:spouse_phone},
+               data : {other_names:other_names, last_name:last_name, phone_number:phone_number, email:email, address:address, dob:dob, /* staff_id:staff_id, */ title:title, gender:gender, marital_status:marital_status, religion:religion, nok:nok, staff_group:staff_group,nok_phone:nok_phone, nok_relation:nok_relation, staff_category:staff_category, discipline:discipline, designation:designation, bank:bank, account_num:account_num, pension:pension, pension_num:pension_num, employed:employed, department:department,spouse_name:spouse_name, spouse_phone:spouse_phone},
                beforeSend : function(){
                     $("#add_staff").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -9301,6 +9311,44 @@ function calculateRent(){
      rent.value = total.toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 });;
      
 
+}
+function checkPaid() {
+    let rawInput = document.getElementById("amount_paid").value;
+
+    // remove commas before parsing
+    let numericValue = parseFloat(rawInput.replace(/,/g, ''));
+
+    if (isNaN(numericValue)) {
+        document.getElementById("amount_paid_val").value = "";
+        return;
+    }
+
+    // format with commas
+    let formatted = numericValue.toLocaleString('en-NG', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+
+    document.getElementById("amount_paid_val").value = formatted;
+}
+function checkDoc() {
+    let rawInput = document.getElementById("documentation_paid").value;
+
+    // remove commas before parsing
+    let numericValue = parseFloat(rawInput.replace(/,/g, ''));
+
+    if (isNaN(numericValue)) {
+        document.getElementById("documentation_paid_val").value = "";
+        return;
+    }
+
+    // format with commas
+    let formatted = numericValue.toLocaleString('en-NG', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+
+    document.getElementById("documentation_paid_val").value = formatted;
 }
 //calculate installment
 /* function calculateInstallments(){

@@ -57,7 +57,7 @@ $add_data->create_data();
 if($currency == "Dollar"){
     $icon = "$";
 }else{
-    $icon = "₦";
+    $icon = "NGN";
 }
 //check if payment was made
 if($amount_paid > 0){

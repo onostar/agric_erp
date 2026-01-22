@@ -11,7 +11,7 @@
     $email = htmlspecialchars(stripslashes($_POST['email']));
     // $store = htmlspecialchars(stripslashes(($_POST['customer_store'])));
     $dob = htmlspecialchars(stripslashes($_POST['dob']));
-    $staff_id = htmlspecialchars(stripslashes(($_POST['staff_id'])));
+    // $staff_id = htmlspecialchars(stripslashes(($_POST['staff_id'])));
     $title = htmlspecialchars(stripslashes($_POST['title']));
     $gender = htmlspecialchars(stripslashes($_POST['gender']));
     $marital_status = htmlspecialchars(stripslashes($_POST['marital_status']));
@@ -47,7 +47,7 @@
         'gender' => $gender,
         'dob' => $dob,
         'employed' => $employed,
-        'staff_number' => $staff_id,
+        // 'staff_number' => $staff_id,
         'title' => $title,
         'discipline' => $discipline,
         'religion' => $religion,
@@ -79,10 +79,10 @@
    //check if staff exists
    $check = new selects();
    $results = $check->fetch_count_2cond('staffs', 'last_name', $last_name, 'other_names', $other_names);
-   $results2 = $check->fetch_count_cond('staffs', 'staff_number',  $staff_id);
+   $results2 = $check->fetch_count_cond('staffs', 'phone',  $phone);
 
    if($results > 0 || $results2 > 0){
-       echo "<p class='exist' style='background:red;color#fff;'><span>$last_name $other_names</span> already exists!</p>";
+       echo "<p class='exist' style='background:red;color:#fff;'><span>$last_name $other_names</span> already exists!</p>";
    }else{
        //create staff record
        $add_data = new add_data('staffs', $data);
@@ -107,9 +107,12 @@
         //update staff record with user id
         $user_ids = $check->fetch_lastInserted('users', 'user_id');
         $user_id = $user_ids->user_id;
-        
+        //generate staff number
+        $emp_year = date("Y", strtotime($employed));
+        $emp_mon = date("m", strtotime($employed));
+        $staff_number = "DNL".$emp_year.$emp_mon."0".$staff_id;
         $update_user = new Update_table();
-        $update_user->update('staffs', 'user_id', 'staff_id', $user_id, $staff_id);
+        $update_user->update_double('staffs', 'user_id', $user_id, 'staff_number', $staff_number, 'staff_id', $staff_id);
         echo "<div class='success'><p><span>$last_name $other_names</span> added as a staff  successfully!</p></div>";
                 
         //display beneficiaries form

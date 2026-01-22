@@ -32,7 +32,7 @@ date_default_timezone_set("Africa/Lagos");
         }
         $_SESSION['user_id'] = $user_id;
         $_SESSION['role'] = $role;
-
+        $_SESSION['designation'] = $designation;
         /* get company */
         $fetch_comp = new selects();
         $comps = $fetch_comp->fetch_details('companies');
