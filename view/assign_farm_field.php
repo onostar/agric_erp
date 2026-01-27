@@ -45,7 +45,7 @@
                     <div class="search_results" id="search_results" style="position:relative;">
 
                     </div>
-                    <input type="hidden" id="customer" name="customer" value="<?php echo$row->customer?>">
+                    <input type="hidden" id="customer" name="customer">
                 </div>
                 <div class="data" style="width:35%">
                     <label for="duration">Contact Duration</label>

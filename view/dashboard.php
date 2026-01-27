@@ -119,11 +119,11 @@
             <div class="cards" id="card0">
             <a href="javascript:void(0)" onclick="showPage('active_loans.php')"class="page_navs">
                 <div class="infos">
-                    <p><i class="fas fa-hand-holding-dollar"></i> Rent Payables</p>
+                    <p><i class="fas fa-hand-holding-dollar"></i> Rent Due</p>
                     <p>
                     <?php
                         //get total due amount
-                        $dues = $get_prds->fetch_sum_single('rent_schedule', 'amount_due', 'payment_status', 0);
+                       /*  $dues = $get_prds->fetch_sum_single('rent_schedule', 'amount_due', 'payment_status', 0);
                         if(is_array($dues)){
                             foreach($dues as $due){
                                 $amount_due = $due->total;
@@ -140,8 +140,20 @@
                         }else{
                             $amount_paid = 0;
                         }
-                        $debt = $amount_due - $amount_paid;
-                        echo "₦".number_format($debt, 2);
+                        $debt = $amount_due - $amount_paid; */
+                        // get sum
+                        $amounts = $get_prds->fetch_sum_curdategreater2Con('rent_schedule', 'amount_paid', 'due_date', 'store', $store, 'payment_status', 0);
+                        foreach($amounts as $amount){
+                            $paid_amount = $amount->total;
+                            
+                        }
+                        $dues = $get_prds->fetch_sum_curdategreater2Con('rent_schedule', 'amount_due', 'due_date', 'store', $store, 'payment_status', 0);
+                        foreach($dues as $due){
+                            $due_amount = $due->total;
+                            
+                        }
+                        $total_due = $due_amount - $paid_amount;
+                        echo "₦".number_format($total_due, 2);
                         
                     ?>
                     </p>

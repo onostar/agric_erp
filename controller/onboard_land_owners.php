@@ -62,6 +62,23 @@ include "../classes/inserts.php";
 $get_details = new selects();
 $update = new Update_table;
 
+// get field info
+    $fds = $get_details->fetch_details_cond('fields','field_id', $id);
+    foreach($fds as $fd){
+        $field_name = $fd->field_name;
+        $total_size = $fd->field_size;
+        $location = $fd->location;
+    }
+    //get total assigned field
+$ass = $get_details->fetch_sum_single('assigned_fields', 'field_size', 'field', $id);
+if(is_array($ass)){
+    foreach($ass as $as){
+        $total_assigned = $as->total;
+    }
+}else{
+    $total_assigned = 0;
+}
+if($total_assigned < $total_size){
 // update field to mark customer ownership
 // $update->update('fields', 'customer', 'field_id', $customer, $id);
 
@@ -81,13 +98,7 @@ $update = new Update_table;
         $customer_email = $cu->customer_email;
     }
 
-    // get field info
-    $fds = $get_details->fetch_details_cond('fields','field_id', $id);
-    foreach($fds as $fd){
-        $field_name = $fd->field_name;
-        // $size = $fd->field_size;
-        $location = $fd->location;
-    }
+    
 
     // generate purchase payment schedule
     $start_date = new DateTime($start);
@@ -407,5 +418,8 @@ $update = new Update_table;
     smtpmailer($to, $from, $from_name, $subj, $msg);
 
     echo "<div class='success'><p>Field purchase successfully recorded and contract activated! <i class='fas fa-thumbs-up'></i></p></div>";
-// }
+}else{
+     echo "<div class='success'><p style='background:red'>Plots exchausted for $field_name! Kindly assign another Land to the customer <i class='fas fa-thumbs-down'></i></p></div>";
+     echo "<script>alert('Plots exchausted for $field_name! Kindly assign another Land to the customer');</script>";
+}
 ?>

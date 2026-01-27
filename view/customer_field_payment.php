@@ -12,7 +12,7 @@
     $cus = $get_details->fetch_details_group('customers', 'customer', 'customer_id', $customer_id);
     $client = $cus->customer;
     //check for current loan
-    $rows = $get_details->fetch_details_2cond('assigned_fields', 'customer', 'contract_status', $customer_id, 1);
+    $rows = $get_details->fetch_details_negCond('assigned_fields', 'contract_status', 0, 'customer', $customer_id);
     if(is_array($rows)){
         foreach($rows as $row){
             $loan = $row->assigned_id;

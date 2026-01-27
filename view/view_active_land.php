@@ -63,6 +63,10 @@
                             <input type="text" value="<?php echo '₦'.number_format($row->total_due, 2)?>" readonly style="color:red">
                         </div>
                         <div class="data" style="width:24%;">
+                            <label for="amount" style="text-align:left!important;">Documentation Fee (₦)</label>
+                            <input type="text" value="<?php echo '₦'.number_format($row->documentation, 2)?>" readonly>
+                        </div>
+                        <div class="data" style="width:24%;">
                             <label for="purpose" style="text-align:left!important;">Purchase Date:</label>
                             <input type="text" value="<?php echo date("d-M-Y, h:ia", strtotime($row->assigned_date))?>" readonly>
                         </div>

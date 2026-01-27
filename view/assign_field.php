@@ -40,6 +40,15 @@
                 $details = $get_details->fetch_details_order('fields', 'field_name');
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
+                    //get total assigned field
+                    $ass = $get_details->fetch_sum_single('assigned_fields', 'field_size', 'field', $detail->field_id);
+                    if(is_array($ass)){
+                        foreach($ass as $as){
+                            $assigned = $as->total;
+                        }
+                    }else{
+                        $assigned = 0;
+                    }
             ?>
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
@@ -79,8 +88,13 @@
                     ?>
                 </td> -->
                 <td>
+                     <?php
+                        if($assigned < $detail->field_size){
+                    ?>
                     <a href="javascript:void(0)" onclick="showPage('assign_farm_field.php?field=<?php echo $detail->field_id?>')" style="color:#fff; background:var(--tertiaryColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #cdcdcd; border-radius:15px;">Assign <i class="fas fa-user-tag"></i></a>
-                    
+                     <?php }else{?>
+                    <p style="color:red">Qty exhausted</p>
+                    <?php }?>
                 </td>
                 
             </tr>
