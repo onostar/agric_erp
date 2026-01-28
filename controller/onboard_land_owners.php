@@ -32,7 +32,14 @@ if($payment_duration == "3"){
 } else {
     $installments = 1;
 }
-
+//generate trx.number
+$todays_date = date("dmyhis");
+$ran_num ="";
+for($i = 0; $i < 3; $i++){
+    $random_num = random_int(0, 9);
+    $ran_num .= $random_num;
+}
+$trx_num = "TR".$ran_num.$todays_date.$user;
 $assign_data = array(
     'field' => $id,
     'customer' => $customer,
@@ -47,6 +54,7 @@ $assign_data = array(
     'rent_percentage' => $rent_percentage,
     'annual_rent' => $annual_rent,
     'start_date' => $start,
+    'trx_number' => $trx_num,
     'assigned_by' => $user,
     'assigned_date' => $date
 );
@@ -88,8 +96,10 @@ if($total_assigned < $total_size){
     $add_data->create_data();
 
     // get last inserted assigned_id
-    $ids = $get_details->fetch_lastInserted('assigned_fields', 'assigned_id');
-    $assigned_id = $ids->assigned_id;
+    $ids = $get_details->fetch_lastInsertedCon('assigned_fields', 'assigned_id', 'trx_number', $trx_num);
+    foreach($ids as $idss){
+        $assigned_id = $idss->assigned_id;
+    }
 
     // get customer details
     $cus = $get_details->fetch_details_cond('customers', 'customer_id', $customer);
@@ -144,13 +154,7 @@ if($total_assigned < $total_size){
     if($amount_paid > 0){
         $trans_type = "Field purchase payment";
         //insert into deposits;
-        $todays_date = date("dmyhis");
-        $ran_num ="";
-        for($i = 0; $i < 3; $i++){
-            $random_num = random_int(0, 9);
-            $ran_num .= $random_num;
-        }
-        $trx_num = "TR".$ran_num.$todays_date;
+        
         $data = array(
             'posted_by' => $user,
             'customer' => $customer,

@@ -208,7 +208,7 @@
                         $loans = $get_info->fetch_details_2cond('assigned_fields', 'customer', 'contract_status', $user_id, 2);
                         if(is_array($loans)){
                             foreach($loans as $loan){
-                                $repays = $get_info->fetch_details_2cond('rent_schedule', 'field', 'payment_status', $loan->field, 0);
+                                $repays = $get_info->fetch_details_3cond('rent_schedule', 'assigned_id', 'payment_status', 'customer', $loan->assigned_id, 0, $user_id);
                                 if(is_array($repays)){
                                 $allow_next = true; // True until first unpaid schedule is found
                                 foreach($repays as $repay){

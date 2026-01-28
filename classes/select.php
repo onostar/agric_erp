@@ -786,7 +786,7 @@ public function fetch_generate_payrollpermonth($store, $payroll_date){
         }
         //fetch details count without condition
         public function check_investment($customer){
-            $get_user = $this->connectdb()->prepare("SELECT * FROM investments WHERE customer = :customer AND (contract_status = 0 OR contract_status = 1)");
+            $get_user = $this->connectdb()->prepare("SELECT * FROM investments WHERE customer = :customer AND contract_status = 0");
             $get_user->bindValue("customer", $customer);
             $get_user->execute();
             if($get_user->rowCount() > 0){

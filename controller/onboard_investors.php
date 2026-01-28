@@ -20,7 +20,14 @@ $start_date = htmlspecialchars(stripslashes($_POST['start_date']));
 }else{
     $exchange_rate = 0;
 } */
-
+//generate trx.number
+$todays_date = date("dmyhis");
+$ran_num ="";
+for($i = 0; $i < 3; $i++){
+    $random_num = random_int(0, 9);
+    $ran_num .= $random_num;
+}
+$trx_num = "TR".$ran_num.$todays_date.$user;
 $data = array(
     'customer' => $customer,
     'duration' => $duration,
@@ -31,6 +38,7 @@ $data = array(
     'units' => $units,
     'posted_by' => $user,
     'post_date' => $date,
+    'trx_number' => $trx_num,
     // 'start_date' => $start_date,
     'store' => $store
 );
@@ -62,12 +70,11 @@ if($currency == "Dollar"){
 //check if payment was made
 if($amount_paid > 0){
     //get investment id
-    $ids = $get_details->fetch_lastInserted('investments', 'investment_id');
-    $investment = $ids->investment_id;
-    /* Generate transaction number */
-    $todays_date = date("dmyhis");
-    $ran_num = mt_rand(100, 999);
-    $trx_num = "TR".$ran_num.$todays_date;
+    $ids = $get_details->fetch_lastInsertedCon('investments', 'investment_id', 'trx_number', $trx_num);
+    foreach($ids as $idss){
+        $investment = $idss->investment_id;
+    }
+    
 
     $data = array(
         'posted_by'   => $user,

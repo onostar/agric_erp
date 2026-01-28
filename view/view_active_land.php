@@ -131,10 +131,105 @@
                             $schedule = $sche->repayment_id;
                         }
                     }
+
+                    //get documentation payment
+                    //get total paid
+                    $docx = $get_details->fetch_sum_single('documentation_fees', 'amount', 'assigned_id', $row->assigned_id);
+                    if(is_array($docx)){
+                        foreach($docx as $doc){
+                            $doc_paid = $doc->total;
+                        }
+                    }else{
+                        $doc_paid = 0;
+                    }
+                    //get total due
+                    $doc_due = $row->documentation - $doc_paid;
+                    if($doc_due < 0){
+                        $doc_due = 0;
+                    }
                 ?>
                     
                     <div class="totals" style="display:flex; gap:1rem; justify-content:flex-end; align-items:center; padding:10px;">
                         <!-- <a href="javascript:void(0)" title="Generate New Schedule" onclick="showPage('field_payment.php?schedule=<?php echo $schedule?>&customer=<?php echo $customer_id?>')" style="background:var(--tertiaryColor); color:#fff; padding:5px 10px; border-radius:15px; box-shadow:1px 1px 1px #222; border:1px solid #fff;">Post Payment <i class="fas fa-hand-holding-dollar"></i></a> -->
+                        <?php
+                        echo "<p class='total_amount' style='background:green; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:.9rem; border-radius:15px; border:1px solid #fff; box-shadow: 1px 1px 1px #222'>Land Paid: ₦".number_format($total_paid, 2)."</p>";
+                        echo "<p class='total_amount' style='background:brown; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:.9rem; border-radius:15px; border:1px solid #fff; box-shadow: 1px 1px 1px #222'>Land Due: ₦".number_format($balance, 2)."</p>";
+                        /* documentation */
+                        echo "<p class='total_amount' style='background:green; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:.9rem; border-radius:15px; border:1px solid #fff; box-shadow: 1px 1px 1px #222'>Docx. Paid: ₦".number_format($doc_paid, 2)."</p>";
+                        //
+                        echo "<p class='total_amount' style='background:brown; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:.9rem; border-radius:15px; border:1px solid #fff; box-shadow: 1px 1px 1px #222'>Docx. Due: ₦".number_format($doc_due, 2)."</p>";
+                    ?>
+                    </div>
+                
+            </div>
+        </section>
+        <section style="width:90%; margin:auto">
+             <h3 style="background:var(--labColor); text-align:center; color:#fff; font-size:.9rem;padding:5px;">Rent payment Schedule</h3>
+            <div class="displays allResults" style="width:100%!important; margin:0!important">
+                <table id="item_list_table" class="searchTable">
+                    <thead>
+                        <tr style="background:var(--tertiaryColor)">
+                            <td>S/N</td>
+                            <td>Date</td>
+                            <td>Amount Due</td>
+                            <td>Amount Paid</td>
+                            <td>Status</td>
+                        </tr>
+                    </thead>
+                    <tbody id="result">
+                        <?php
+                            $n = 1;
+                            $repays = $get_details->fetch_details_cond('rent_schedule', 'assigned_id', $row->assigned_id);
+                            $allow_next = true; // True until first unpaid schedule is found
+                            foreach($repays as $index => $repay){
+                        ?>
+                        <tr>
+                            <td style="text-align:center; color:red;"><?php echo $n?></td>
+                            <td><?php echo date("d-M-Y", strtotime($repay->due_date))?></td>
+                            <td style="color:var(--secondaryColor)"><?php echo "₦".number_format($repay->amount_due, 2)?></td>
+                            <td><?php echo "₦".number_format($repay->amount_paid, 2)?></td>
+                            <td>
+                                <?php
+                                    $date_due = new DateTime($repay->due_date);
+                                    $today = new DateTime();
+
+                                    // $button = "<a style='border-radius:15px; background:var(--tertiaryColor);color:#fff; padding:3px 6px; box-shadow:1px 1px 1px #222; border:1px solid #fff' href='javascript:void(0)' onclick=\"showPage('loan_payment.php?schedule={$repay->repayment_id}&customer={$customer_id}')\" title='Post payment'>Add Payment <i class='fas fa-hand-holding-dollar'></i></a>";
+
+                                    if($repay->payment_status == "1"){
+                                        echo "<span style='color:var(--tertiaryColor);'>Paid <i class='fas fa-check-circle'></i></span>";
+                                    } else {
+                                        // First unpaid schedule (or any overdue) is allowed to pay only if previous schedules are paid
+                                        if($allow_next || $date_due < $today){
+                                            if($date_due > $today){
+                                                echo "<span style='color:var(--primaryColor);'><i class='fas fa-spinner'></i> Pending </span>";
+                                            } else {
+                                                echo "<span style='color:red;'><i class='fas fa-clock'></i> Overdue </span>";
+                                            }
+                                            $allow_next = false; // After showing Add Payment for one, others must wait
+                                        } else {
+                                            echo "<span style='color:#999;'>Waiting for previous payment <i class='fas fa-lock'></i></span>";
+                                        }
+                                    }
+                                ?>
+                            </td>
+                        </tr>
+                        <?php $n++; }; ?>
+                    </tbody>
+                </table>
+                <?php
+                    //get total due
+                    $tlls = $get_details->fetch_sum_single('rent_schedule', 'amount_due', 'assigned_id', $row->assigned_id);
+                    foreach($tlls as $tll){
+                        $total_due = $tll->total;
+                    }
+                    //get total paid
+                    $paids = $get_details->fetch_sum_single('rent_schedule', 'amount_paid', 'assigned_id', $row->assigned_id);
+                    foreach($paids as $paid){
+                        $total_paid = $paid->total;
+                    }
+                    $balance = $total_due - $total_paid;
+                ?>
+                    <div class="totals" style="display:flex; gap:1rem; justify-content:right">
                         <?php
                         echo "<p class='total_amount' style='background:green; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:1rem;'>Total Paid: ₦".number_format($total_paid, 2)."</p>";
                         echo "<p class='total_amount' style='background:red; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:1rem;'>Total Due: ₦".number_format($balance, 2)."</p>";
