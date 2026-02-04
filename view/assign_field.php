@@ -25,9 +25,9 @@
                 <td>FIeld/Land</td>
                 <td>Location</td>
                 <td>Field Size (Plot)</td>
+                <td>Qty Assigned (Plot)</td>
                 <td>Soil Type</td>
                 <td>Soil PH</td>
-                <td>Topography</td>
                 <td></td>
                 <!-- <td>Created</td> -->
             </tr>
@@ -75,18 +75,15 @@
                         echo $detail->field_size." (".number_format($sqm)." m&sup2;)";
                     ?>
                 </td>
+                 <td>
+                    <?php
+                        echo number_format($assigned)." (".number_format($assigned * 7500)." m&sup2;)";
+                    ?>
+                </td>
                 <td><?php echo $detail->soil_type?></td>
                 <td><?php echo $detail->soil_ph?></td>
-                <td><?php echo $detail->topography?></td>
-                <!-- <td>
-                    <?php
-                        /* if($detail->field_status == 0){
-                            echo "<span style='color:green'>Available</span>";
-                        }else{
-                            echo "<span style='color:red'>Unavailable</span>";
-                        } */
-                    ?>
-                </td> -->
+                <!-- <td><?php echo $detail->topography?></td> -->
+               
                 <td>
                      <?php
                         if($assigned < $detail->field_size){

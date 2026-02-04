@@ -311,6 +311,14 @@ public function update_salary($store, $payroll_date, $date){
             $merge->bindValue("customer", $wrong); */
             $merge->execute();
         }
+        // merge ledgers
+        public function mergeledger($correct, $wrong){
+            $merge = $this->connectdb()->prepare("UPDATE transactions SET account = $correct WHERE account = $wrong");
+            /* $merge->bindValue("customer", $correct);
+            $merge->bindValue("customer", $wrong); */
+            $merge->execute();
+        }
+    
     }
 
     //controller for update
