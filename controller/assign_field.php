@@ -63,7 +63,7 @@ $update = new Update_table;
     $fds = $get_details->fetch_details_cond('fields','field_id', $id);
     foreach($fds as $fd){
         $field_name = $fd->field_name;
-        // $size = $fd->field_size;
+        $total_size = $fd->field_size;
         $location = $fd->location;
     }
 //get total assigned field
@@ -152,24 +152,24 @@ if($total_assigned < $total_size){
         <li><strong>Field:</strong> $field_name</li>
         <li><strong>Location:</strong> $location</li>
         <li><strong>Size:</strong> $size Plot ($sqm sqm)</li>
-        <li><strong>Purchase Cost:</strong> ₦$purchase_fmt</li>
-        <li><strong>Discount applied:</strong> ₦$discount_fmt</li>
-        <li><strong>Total Due:</strong> ₦$due_fmt</li>
-        <li><strong>Documentation Fee:</strong> ₦$doc_fmt</li>
+        <li><strong>Purchase Cost:</strong> NGN$purchase_fmt</li>
+        <li><strong>Discount applied:</strong> NGN$discount_fmt</li>
+        <li><strong>Total Due:</strong> NGN$due_fmt</li>
+        <li><strong>Documentation Fee:</strong> NGN$doc_fmt</li>
         <li><strong>Contract Duration:</strong> $duration year(s)</li>
-        <li><strong>Annual Rent/Return:</strong> ₦$annual_rent_fmt ($rent_percentage%)</li>
+        <li><strong>Annual Rent/Return:</strong> NGN$annual_rent_fmt ($rent_percentage%)</li>
         
         <li><strong>Due Date:</strong> $last_repayment_date</li>
     </ul>
 
     <p>Once payment is completed, your contract will be marked as <strong>fully purchased</strong> and you will begin to receive your <strong>annual rent/returns</strong> according to the agreed rate and contract duration.</p>
 
-    <p>You can log in to your <strong><a href='davidorlah.dorthprosuite.com/client_portal'>Customer Portal</a></strong> anytime to track your payments, field details, and rent status.</p>
+    <p>You can log in to your <strong><a href='https://davidorlah.dorthprosuite.com/client_portal'>Customer Portal</a></strong> anytime to track your payments, field details, and rent status.</p>
 
     <br>
     <p>Thank you for investing with <strong>Davidorlah Farms</strong>.</p>
     <p>Warm regards,<br>
-    <strong>Farm Management Team</strong><br>
+    <strong>Management</strong><br>
     Davidorlah Nigeria Limited</p>";
 
     // notification

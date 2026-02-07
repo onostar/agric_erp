@@ -221,11 +221,9 @@
                 <div class="data" style="width:24%">
                     <label for="bank">Bank <span class="important">*</span></label>
                     <select name="bank" id="bank">
-                        <?php
-                           echo $row->bank;
-                        ?>
+                       
                         <option value="<?php echo $row->bank?>" selected><?php echo $row->bank?></option>
-                       <option value="" selected disabled>Select Bank</option>
+                       
                         <option>Access Bank</option>
                         <option>Citibank Nigeria</option>
                         <option>Ecobank Nigeria</option>
@@ -259,7 +257,27 @@
                 </div>
                 <div class="data" style="width:24%">
                     <label for="nok">Pension Manager <span class="important">*</span></label>
-                    <input type="text" name="pension" id="pension" required value="<?php echo $row->pension?>">
+                    <select name="pension" id="pension">
+                        <?php
+                            //get pension manager
+                            $pns = $get_customer->fetch_details_cond('pension_managers', 'pension_manager_id', $row->pension);
+                            if(is_array($pns)){
+                                foreach($pns as $pn){
+                                    $pension = $pn->pension_manager;
+                                }
+                            }else{
+                                $pension = "N/A";
+                            }
+                        ?>
+                        <option value="<?php echo $row->pension?>"><?php echo $pension?></option>
+                        <?php
+                            $pens = $get_customer->fetch_details_order('pension_managers', 'pension_manager');
+                            foreach($pens as $pen){
+                        ?>
+                        <option value="<?php echo $pen->pension_manager_id?>"><?php echo $pen->pension_manager?></option>
+                        <?php }?>
+                    </select>
+                    
                 </div>
                 <div class="data" style="width:24%">
                     <label for="nok">Pension Number <span class="important">*</span></label>

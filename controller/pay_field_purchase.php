@@ -313,9 +313,9 @@
             $total_loan_due = $due->total;
         }
         $fmt_total_cost = number_format($purchase_cost, 2);
-        $fmt_total_paid = number_format($total_paid, 2);
+        $fmt_total_paid = number_format($total_loan_paid, 2);
         $fmt_rent = number_format($annual_rent, 2);
-        $fmt_remaining = number_format($purchase_cost - $total_paid, 2);
+        $fmt_remaining = number_format($purchase_cost - $total_loan_paid, 2);
          $sqm = $size * 500;
         if($total_loan_paid === $total_loan_due){
            

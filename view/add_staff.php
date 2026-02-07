@@ -211,8 +211,12 @@
                     <label for="pension">Pension Manager</label>
                     <select name="pension" id="pension">
                         <option value="" selected disabled>select pension manager</option>
-                        <option value="FIRST BANK">FIRST BANK</option>
-                        <option value="STANBIC IBTC">STANBIC IBTC</option>
+                        <?php
+                            $pens = $get_dep->fetch_details_order('pension_managers', 'pension_manager');
+                            foreach($pens as $pen){
+                        ?>
+                        <option value="<?php echo $pen->pension_manager_id?>"><?php echo $pen->pension_manager?></option>
+                        <?php }?>
                        
                     </select>
                 </div>

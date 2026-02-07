@@ -3888,11 +3888,10 @@ function updateCustomer(){
           alert("Please select customer type");
           $("#customer_type").focus();
           return;
-                return;
-     }else if(!isValidEmail(email)){
+     /* }else if(!isValidEmail(email)){
           alert("Please input a valid email address");
           $("#email").focus();
-          return;
+          return; */
      }else{
           $.ajax({
                type : "POST",
@@ -10651,4 +10650,28 @@ function disburseSalary(id){
                return;
           }
      }
+}
+//add pension manager
+function addPensionManager(){
+     let pension = document.getElementById("pension").value;
+     if(pension.length == 0 || pension.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input pension manager!");
+          $("#pension").focus();
+          return;
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/add_pension_manager.php",
+               data : {pension:pension},
+               beforeSend : function(){
+                    $(".info").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $(".info").html(response);
+               }
+          })
+     }
+     $("#pension").val('');
+     $("#pension").focus();
+     return false;
 }

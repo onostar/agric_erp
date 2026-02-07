@@ -179,10 +179,8 @@
                 <div class="inputs" style="width:100%; align-items:flex-end">
                         <div class="data" style="width:auto!important">
                             <label style="background:transparent; color:green; text-align:left;width:auto" for="other_names">Bank:</label>
-                            <?php
-                                echo $row->bank;
-                            ?>
-                            <input type="text" value="<?php echo $bank_name?>" readonly>
+                            
+                            <input type="text" value="<?php echo $row->bank?>" readonly>
                     </div>
                     <div class="data" style="width:auto!important">
                         <label style="background:transparent; color:green; text-align:left;width:auto" for="other_names">Account Number:</label>
@@ -191,7 +189,18 @@
                     </div>
                     <div class="data" style="width:auto!important">
                         <label style="background:transparent; color:green; text-align:left;width:auto" for="other_names">Pension Manager:</label>
-                        <input type="text"  value="<?php echo $row->pension?>" readonly>
+                        <?php
+                            //get pension manager
+                            $pens = $get_customer->fetch_details_cond('pension_managers', 'pension_manager_id', $row->pension);
+                            if(is_array($pens)){
+                                foreach($pens as $pen){
+                                    $pension_manager = $pen->pension_manager;
+                                }
+                            }else{
+                                $pension_manager = "N/A";
+                            }
+                        ?>
+                        <input type="text"  value="<?php echo $pension_manager?>" readonly>
                     
                     </div>
                     <div class="data" style="width:auto!important">
