@@ -154,7 +154,7 @@
     ?>
        
 </div>
-
+</div>
 <script src="../jquery.js"></script>
 <script src="../script.js"></script>
 <?php }else{

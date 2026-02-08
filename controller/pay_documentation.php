@@ -225,7 +225,7 @@
             </ul>
             <p>Please note that your <strong>Farm Management Contract</strong> and <strong>Deed of Assignment</strong> will be available in two weeks from today. While your <strong>Survey Documents</strong> will be available after allocation.</p>
             <p>Thank you for your trust in <strong>Davidorlah Nigeria Limited</strong>. We look forward to building a fruitful partnership with you.</p>
-            <br><p>Warm regards,<br><strong>Farm Management Team</strong><br>Davidorlah Nigeria Limited</p>";
+            <br><p>Warm regards,<br><strong>Management</strong><br>Davidorlah Nigeria Limited</p>";
 
             // insert notification
             $notif_data = array(

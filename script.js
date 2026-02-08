@@ -3814,6 +3814,9 @@ function getCustomersName(input, link){
           $.ajax({
                type : "POST",
                url : "../controller/"+link+"?input="+input,
+               beforeSend : function(){
+                    $("#search_results").html("<p>Searching....</p>");
+               },
                success : function(response){
                     $("#search_results").html(response);
                }
@@ -10674,4 +10677,39 @@ function addPensionManager(){
      $("#pension").val('');
      $("#pension").focus();
      return false;
+}
+
+//send bulk email to clients
+function sendBulkEmail(){
+     let subject = document.getElementById("subject").value;
+     let message = document.getElementById("message").value;
+     if(subject.length == 0 || subject.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input email subject!");
+          $("#subject").focus();
+          return;
+     }else if(message.length == 0 || message.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input email message!");
+          $("#message").focus();
+          return;
+     }else{
+          let confirmSend = confirm("Are you sure you want to send this email to all clients?");
+          if(confirmSend){
+               $.ajax({
+                    type : "POST",
+                    url : "../controller/send_bulk_email.php",
+                    data : {subject:subject, message:message},
+                    beforeSend : function(){
+                         $("#mails").html("<div class='processing'><div class='loader'></div></div>");
+                    },
+                    success : function(response){
+                         $("#mails").html(response);
+                         setTimeout(function(){
+                              showPage("send_bulk_mail.php");
+                         }, 2000)
+                    }
+               })
+          }else{
+               return;
+          }
+     }
 }
