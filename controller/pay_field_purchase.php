@@ -341,18 +341,18 @@
             <ul>
                 <li><strong>Field:</strong> $field_name</li>
                 <li><strong>Location:</strong> $location</li>
-                <li><strong>Size:</strong> $size Plot ($sqm m²)</li>
+                <li><strong>Size:</strong> $size Plot ($sqm sqm)</li>
                 <li><strong>Contract Duration:</strong> $duration year(s)</li>
-                <li><strong>Total Purchase Cost:</strong> ₦$fmt_total_cost</li>
-                <li><strong>Total Paid:</strong> ₦$fmt_total_paid</li>
-                <li><strong>Amount Remaining:</strong> ₦0.00 (Fully Paid)</li>
-                <li><strong>Annual Rent:</strong> ₦$fmt_rent</li>
+                <li><strong>Total Purchase Cost:</strong> NGN$fmt_total_cost</li>
+                <li><strong>Total Paid:</strong> NGN$fmt_total_paid</li>
+                <li><strong>Amount Remaining:</strong> NGN0.00 (Fully Paid)</li>
+                <li><strong>Annual Rent:</strong> NGN$fmt_rent</li>
                 <li><strong>Rent Percentage:</strong> $rent_percentage%</li>
             </ul>
             <p>Your annual rent returns will now commence according to the following schedule:</p>
             $rent_schedule_text
             <p>Thank you for your trust in <strong>Davidorlah Nigeria Limited</strong>. We look forward to building a fruitful partnership with you.</p>
-            <br><p>Warm regards,<br><strong>Farm Management Team</strong><br>Davidorlah Nigeria Limited</p>";
+            <br><p>Warm regards,<br><strong>Management</strong><br>Davidorlah Nigeria Limited</p>";
 
             // insert notification
             $notif_data = array(
@@ -374,17 +374,17 @@
             <ul>
                 <li><strong>Field:</strong> $field_name</li>
                 <li><strong>Location:</strong> $location</li>
-                <li><strong>Size:</strong> $size Plot ($sqm m²)</li>
+                <li><strong>Size:</strong> $size Plot ($sqm sqm)</li>
                 <li><strong>Contract Duration:</strong> $duration year(s)</li>
-                <li><strong>Total Purchase Cost:</strong> ₦$fmt_total_cost</li>
-                <li><strong>Total Paid So Far:</strong> ₦$fmt_total_paid</li>
-                <li><strong>Amount Remaining:</strong> ₦$fmt_remaining</li>
-                <li><strong>Annual Rent:</strong> ₦$fmt_rent</li>
+                <li><strong>Total Purchase Cost:</strong> NGN$fmt_total_cost</li>
+                <li><strong>Total Paid So Far:</strong> NGN$fmt_total_paid</li>
+                <li><strong>Amount Remaining:</strong> NGN$fmt_remaining</li>
+                <li><strong>Annual Rent:</strong> NGN$fmt_rent</li>
                 <li><strong>Rent Percentage:</strong> $rent_percentage%</li>
             </ul>
             <p>Once your installment payments are completed, your annual rent returns will start immediately.</p>
             <p>Thank you for your continued commitment.</p>
-            <br><p>Warm regards,<br><strong>Farm Management Team</strong><br>Davidorlah Nigeria Limited</p>";
+            <br><p>Warm regards,<br><strong>Management</strong><br>Davidorlah Nigeria Limited</p>";
 
             // partial payment notification
             $notif_data = array(

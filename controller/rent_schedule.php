@@ -166,11 +166,11 @@ if($update){
     <ul>
         <li><strong>Field:</strong> $field_name</li>
         <li><strong>Location:</strong> $location</li>
-        <li><strong>Size:</strong> $size Hec.</li>
+        <li><strong>Size:</strong> $size Plot.</li>
         <li><strong>Contract Duration:</strong> $duration year(s)</li>
         <li><strong>Payment Frequency:</strong> $frequency</li>
-        <li><strong>Total Rent:</strong> ₦$total</li>
-        <li><strong>Installment Amount:</strong> ₦$install_amount</li>
+        <li><strong>Total Rent:</strong> NGN$total</li>
+        <li><strong>Installment Amount:</strong> NGN$install_amount</li>
         <li><strong>First Repayment Date:</strong> $first_repayment_date</li>
         <li><strong>Final Repayment Date:</strong> $last_repayment_date</li>
     </ul>

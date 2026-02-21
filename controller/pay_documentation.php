@@ -216,11 +216,11 @@
             <ul>
                 <li><strong>Field:</strong> $field_name</li>
                 <li><strong>Location:</strong> $location</li>
-                <li><strong>Size:</strong> $size Plot ($sqm m²)</li>
+                <li><strong>Size:</strong> $size Plot ($sqm sqm)</li>
                 <li><strong>Contract Duration:</strong> $duration year(s)</li>
-                <li><strong>Total DOcumentation Cost:</strong> ₦$fmt_total_cost</li>
-                <li><strong>Total Paid:</strong> ₦$fmt_total_paid</li>
-                <li><strong>Amount Remaining:</strong> ₦0.00 (Fully Paid)</li>
+                <li><strong>Total DOcumentation Cost:</strong> NGN$fmt_total_cost</li>
+                <li><strong>Total Paid:</strong> NGN$fmt_total_paid</li>
+                <li><strong>Amount Remaining:</strong> NGN0.00 (Fully Paid)</li>
                 
             </ul>
             <p>Please note that your <strong>Farm Management Contract</strong> and <strong>Deed of Assignment</strong> will be available in two weeks from today. While your <strong>Survey Documents</strong> will be available after allocation.</p>
@@ -246,16 +246,16 @@
             <ul>
                 <li><strong>Field:</strong> $field_name</li>
                 <li><strong>Location:</strong> $location</li>
-                <li><strong>Size:</strong> $size Plot ($sqm m²)</li>
+                <li><strong>Size:</strong> $size Plot ($sqm sqm)</li>
                 <li><strong>Contract Duration:</strong> $duration year(s)</li>
-                <li><strong>Total Documentation Cost:</strong> ₦$fmt_total_cost</li>
-                <li><strong>Total Paid So Far:</strong> ₦$fmt_total_paid</li>
-                <li><strong>Amount Remaining:</strong> ₦$fmt_remaining</li>
+                <li><strong>Total Documentation Cost:</strong> NGN$fmt_total_cost</li>
+                <li><strong>Total Paid So Far:</strong> NGN$fmt_total_paid</li>
+                <li><strong>Amount Remaining:</strong> NGN$fmt_remaining</li>
                
             </ul>
             
             <p>Thank you for your continued commitment.</p>
-            <br><p>Warm regards,<br><strong>Farm Management Team</strong><br>Davidorlah Nigeria Limited</p>";
+            <br><p>Warm regards,<br><strong>Management</strong><br>Davidorlah Nigeria Limited</p>";
 
             // partial payment notification
             $notif_data = array(

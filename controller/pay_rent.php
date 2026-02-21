@@ -283,7 +283,7 @@
         
         $amount = number_format($amount, 2);
         $trx_date = date("jS F Y, h:ia", strtotime($date));
-        $message = "<p>Dear $client, <br>Your annual rent return of ₦$annual_rent has been paid for your Land ($field_name).<br>
+        $message = "<p>Dear $client, <br>Your annual rent return of NGN$annual_rent has been paid for your Land ($field_name).<br>
 Payment Date: $date.<br><br>
 Thank you for investing with Davidorlah Nigeria Ltd.<br>
         Transaction ID: $receipt<br>
@@ -296,7 +296,7 @@ Thank you for investing with Davidorlah Nigeria Ltd.<br>
         $notif_data = array(
             'client' => $customer,
             'subject' => 'Rent Payment Confirmation',
-            'message' => 'Dear '.$client.', Your annual rent return of ₦'.$annual_rent.' has been paid for your field ('.$field_name.').
+            'message' => 'Dear '.$client.', Your annual rent return of NGN'.$annual_rent.' has been paid for your field ('.$field_name.').
 
 Payment Date: '.$date.'
 

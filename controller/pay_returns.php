@@ -250,7 +250,7 @@
         if($currency == "Dollar"){
             $icon = "$";
         }else{
-            $icon = "₦";
+            $icon = "NGN";
         }
          $message = "
     <p>Dear $client,</p>
