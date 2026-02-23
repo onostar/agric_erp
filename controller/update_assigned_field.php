@@ -46,8 +46,8 @@ $assign_data = array(
     'rent_percentage' => $rent_percentage,
     'annual_rent' => $annual_rent,
     'start_date' => $start,
-    'assigned_by' => $user,
-    'assigned_date' => $date
+    'updated_by' => $user,
+    'updated_at' => $date
 );
 
 require "../PHPMailer/PHPMailerAutoload.php";
@@ -57,9 +57,39 @@ include "../classes/dbh.php";
 include "../classes/select.php";
 include "../classes/update.php";
 include "../classes/inserts.php";
+include "../classes/delete.php";
 
 $get_details = new selects();
 $update = new Update_table;
+$delete = new deletes();
+//get previous assignment details
+$rows = $get_details->fetch_details_cond('assigned_fields', 'assigned_id', $assigned_id);
+foreach($rows as $row){
+    $prev_field = $row->field;
+    $prev_size = $row->field_size;
+    $prev_customer = $row->customer;
+    $prev_duration = $row->contract_duration;
+    $prev_payment_duration = $row->payment_duration;
+    $prev_purchase_cost = $row->purchase_cost;
+    $prev_discount = $row->discount;
+    $prev_total_due = $row->total_due;
+    $prev_documentation = $row->documentation;
+    $prev_rent_percentage = $row->rent_percentage;
+    $prev_annual_rent = $row->annual_rent;
+    $prev_start = $row->start_date;
+}
+
+
+
+// get previous field info
+$fds = $get_details->fetch_details_cond('fields','field_id', $prev_field);
+foreach($fds as $fd){
+    $prev_field_name = $fd->field_name;
+    $prev_location = $fd->location;
+    $prev_total_size = $fd->field_size;
+}
+
+
  // get field info
     $fds = $get_details->fetch_details_cond('fields','field_id', $id);
     foreach($fds as $fd){
@@ -68,26 +98,30 @@ $update = new Update_table;
         $location = $fd->location;
     }
 //get total assigned field
-$ass = $get_details->fetch_sum_single('assigned_fields', 'field_size', 'field', $id);
-if(is_array($ass)){
-    foreach($ass as $as){
-        $total_assigned = $as->total;
+if($prev_field == $id){
+    $ass = $get_details->fetch_sum_single('assigned_fields', 'field_size', 'field', $prev_field);
+    if(is_array($ass)){
+        foreach($ass as $as){
+            $assigned = $as->total;
+        }
+    }else{
+        $assigned = 0;
     }
+    $total_assigned = $assigned - $prev_size;
 }else{
-    $total_assigned = 0;
+    $ass = $get_details->fetch_sum_single('assigned_fields', 'field_size', 'field', $id);
+    if(is_array($ass)){
+        foreach($ass as $as){
+            $total_assigned = $as->total;
+        }
+    }else{
+        $total_assigned = 0;
+    }
 }
 if($total_assigned < $total_size){
-// update field to mark customer ownership
-// $update->update('fields', 'customer', 'field_id', $customer, $id);
-
-// if($update){
     // record field assignment
-    $update->updateAny('assigned_fields', $data, 'assigned_id', $assigned_id);
+    $update->updateAny('assigned_fields', $assign_data, 'assigned_id', $assigned_id);
     // $add_data->create_data();
-
-    // get last inserted assigned_id
-    $ids = $get_details->fetch_lastInserted('assigned_fields', 'assigned_id');
-    $assigned_id = $ids->assigned_id;
 
     // get customer details
     $cus = $get_details->fetch_details_cond('customers', 'customer_id', $customer);
@@ -95,8 +129,16 @@ if($total_assigned < $total_size){
         $client = $cu->customer;
         $customer_email = $cu->customer_email;
     }
-
-    // generate purchase payment schedule
+    //get previous customer info
+    $cus = $get_details->fetch_details_cond('customers', 'customer_id', $prev_customer);
+    foreach($cus as $cu){
+        $prev_client = $cu->customer;
+        $prev_customer_email = $cu->customer_email;
+    }
+    //delete previous payment schedule
+    $delete->delete_item('field_payment_schedule', 'assigned_id', $assigned_id);
+    
+    // generate new purchase payment schedule
     $start_date = new DateTime($start);
     for($i = 1; $i <= $installments; $i++){
         // ✅ make the first installment = start date
@@ -143,47 +185,126 @@ if($total_assigned < $total_size){
     $doc_fmt = number_format($documentation, 2);
     $annual_rent_fmt = number_format($annual_rent, 2);
     $sqm = $size * 500;
-    // build purchase message
-    $message = "
-    <p>Dear $client,</p>
-    <p>Congratulations! Your <strong>field purchase contract</strong> has been successfully activated.</p>
+    //old purchase info formatting
+    $prev_purchase_fmt = number_format($prev_purchase_cost, 2);
+    $prev_discount_fmt = number_format($prev_discount, 2);
+    $prev_due_fmt = number_format($prev_total_due, 2);
+    $prev_doc_fmt = number_format($prev_documentation, 2);
+    $prev_annual_rent_fmt = number_format($prev_annual_rent, 2);
+    $prev_sqm = $prev_size * 500;
+    if($customer != $prev_customer){
+        // build purchase message
+        $message = "
+        <p>Dear $client,</p>
+        <p>Congratulations! Your <strong>field purchase contract</strong> has been successfully activated.</p>
 
-    <h3 style='color:green;'>Purchase Details:</h3>
-    <ul>
-        <li><strong>Field:</strong> $field_name</li>
-        <li><strong>Location:</strong> $location</li>
-        <li><strong>Size:</strong> $size Plot ($sqm sqm)</li>
-        <li><strong>Purchase Cost:</strong> NGN$purchase_fmt</li>
-        <li><strong>Discount applied:</strong> NGN$discount_fmt</li>
-        <li><strong>Total Due:</strong> NGN$due_fmt</li>
-        <li><strong>Documentation Fee:</strong> NGN$doc_fmt</li>
-        <li><strong>Contract Duration:</strong> $duration year(s)</li>
-        <li><strong>Annual Rent/Return:</strong> NGN$annual_rent_fmt ($rent_percentage%)</li>
+        <h3 style='color:green;'>Purchase Details:</h3>
+        <ul>
+            <li><strong>Field:</strong> $field_name</li>
+            <li><strong>Location:</strong> $location</li>
+            <li><strong>Size:</strong> $size Plot ($sqm sqm)</li>
+            <li><strong>Purchase Cost:</strong> NGN$purchase_fmt</li>
+            <li><strong>Discount applied:</strong> NGN$discount_fmt</li>
+            <li><strong>Total Due:</strong> NGN$due_fmt</li>
+            <li><strong>Documentation Fee:</strong> NGN$doc_fmt</li>
+            <li><strong>Contract Duration:</strong> $duration year(s)</li>
+            <li><strong>Annual Rent/Return:</strong> NGN$annual_rent_fmt ($rent_percentage%)</li>
+            
+            <li><strong>Due Date:</strong> $last_repayment_date</li>
+        </ul>
+
+        <p>Once payment is completed, your contract will be marked as <strong>fully purchased</strong> and you will begin to receive your <strong>annual rent/returns</strong> according to the agreed rate and contract duration.</p>
+
+        <p>You can log in to your <strong><a href='https://davidorlah.dorthprosuite.com/client_portal'>Customer Portal</a></strong> anytime to track your payments, field details, and rent status.</p>
+
+        <br>
+        <p>Thank you for investing with <strong>Davidorlah Nigeria Ltd</strong>.</p>
+        <p>Warm regards,<br>
+        <strong>Management</strong><br>
+        Davidorlah Nigeria Limited</p>";
+
         
-        <li><strong>Due Date:</strong> $last_repayment_date</li>
-    </ul>
+    }else{
+        $changes = "";
+        if($prev_field != $id){
+            $changes .= "<li><strong>Field:</strong> $prev_field_name → $field_name</li>";
+        }
+        if($prev_size != $size){
+            $changes .= "<li><strong>Size:</strong> $prev_size Plot → $size Plot</li>";
+        }
+        if($prev_purchase_cost != $purchase_cost){
+            $changes .= "<li><strong>Purchase Cost:</strong> NGN$prev_purchase_fmt → NGN$purchase_fmt</li>";
+        }
+        if($prev_discount != $discount){
+            $changes .= "<li><strong>Discount:</strong> NGN$prev_discount_fmt → NGN$discount_fmt</li>";
+        }
 
-    <p>Once payment is completed, your contract will be marked as <strong>fully purchased</strong> and you will begin to receive your <strong>annual rent/returns</strong> according to the agreed rate and contract duration.</p>
+        if($prev_total_due != $total_due){
+            $changes .= "<li><strong>Total Due:</strong> NGN$prev_due_fmt → NGN$due_fmt</li>";
+        }
+        if($prev_duration != $duration){
+            $changes .= "<li><strong>Contract Duration:</strong> $prev_duration year(s) → $duration year(s)</li>";
+        }
+        if($prev_payment_duration != $payment_duration){
+            $changes .= "<li><strong>Payment Duration:</strong> $prev_payment_duration month(s) → $payment_duration month(s)</li>";
+        }
+        if($prev_rent_percentage != $rent_percentage){
+            $changes .= "<li><strong>Rent Percentage:</strong> $prev_rent_percentage% → $rent_percentage%</li>";
+        }
+        if($prev_annual_rent != $annual_rent){
+            $changes .= "<li><strong>Annual Rent:</strong> NGN$prev_annual_rent_fmt → NGN$annual_rent_fmt</li>";
+        }
+        if($prev_documentation != $documentation){
+            $changes .= "<li><strong>Documentation Fee:</strong> NGN$prev_doc_fmt → NGN$doc_fmt</li>";
+        }
+        if($changes == ""){
+            $change = "<p>No changes were made to the contract details.</p>";
+        }else{
+            $change = "<h3>Changes Made:</h3><ul>$changes</ul>";
+        }
+         // build purchase message
+        $message = "
+        <p>Dear $client,</p>
+        <p>Your <strong>field purchase contract</strong> has been successfully updated with the new details below:</p>
 
-    <p>You can log in to your <strong><a href='https://davidorlah.dorthprosuite.com/client_portal'>Customer Portal</a></strong> anytime to track your payments, field details, and rent status.</p>
+        <h3 style='color:green;'>Updated Purchase Details:</h3>
+        <ul>
+            <li><strong>Field:</strong> $field_name</li>
+            <li><strong>Location:</strong> $location</li>
+            <li><strong>Size:</strong> $size Plot ($sqm sqm)</li>
+            <li><strong>Purchase Cost:</strong> NGN$purchase_fmt</li>
+            <li><strong>Discount applied:</strong> NGN$discount_fmt</li>
+            <li><strong>Total Due:</strong> NGN$due_fmt</li>
+            <li><strong>Documentation Fee:</strong> NGN$doc_fmt</li>
+            <li><strong>Contract Duration:</strong> $duration year(s)</li>
+            <li><strong>Annual Rent/Return:</strong> NGN$annual_rent_fmt ($rent_percentage%)</li>
+            
+            <li><strong>Due Date:</strong> $last_repayment_date</li>
+        </ul>
+        <div style='background:#f4f4f4; padding:10px; border-radius:5px; margin-bottom:20px;'>$change</div>
+        <p>You can log in to your <strong><a href='https://davidorlah.dorthprosuite.com/client_portal'>Customer Portal</a></strong> anytime to track your payments, field details, and rent status.</p>
 
-    <br>
-    <p>Thank you for investing with <strong>Davidorlah Farms</strong>.</p>
-    <p>Warm regards,<br>
-    <strong>Management</strong><br>
-    Davidorlah Nigeria Limited</p>";
-
+        <br>
+        <p>Thank you for investing with <strong>Davidorlah Nigeria Ltd</strong>.</p>
+        <p>Warm regards,<br>
+        <strong>Management</strong><br>
+        Davidorlah Nigeria Limited</p>";
+    }
+    if($customer != $prev_customer){
+        $subject = "Your Field Purchase Contract is Active";
+    }else{
+        $subject = "Your Field Purchase Contract has been Updated";
+    }
     // notification
     $notif_data = array(
         'client' => $customer,
-        'subject' => 'Your Field Purchase Contract is Active',
+        'subject' => $subject,
         'message' => 'Dear '.$client.', your field ('.$field_name.' - '.$size.' Plot) located at '.$location.' has been successfully assigned for purchase. Once installments are completed, you will start receiving annual returns of ₦'.$annual_rent_fmt.' ('.$rent_percentage.'%) for '.$duration.' year(s).',
         'post_date' => $date,
     );
 
     $add_data = new add_data('notifications', $notif_data);
     $add_data->create_data();
-
     /* send mail */
    function smtpmailer($to, $from, $from_name, $subject, $body){
         $mail = new PHPMailer();
@@ -210,16 +331,16 @@ if($total_assigned < $total_size){
             return "Message Sent Successfully";
         }
     }
-
+    
     $to = $customer_email;
     $from = 'info@davidorlahfarms.com';
-    $from_name = "Davidorlah Farms";
-    $subj = 'Your Field Purchase Contract is Active';
+    $from_name = "Davidorlah Nigeria Ltd";
+    $subj = $subject;
     $msg = "<div>$message</div>";
 
     smtpmailer($to, $from, $from_name, $subj, $msg);
 
-    echo "<div class='success'><p>Field purchase successfully recorded and contract activated! <i class='fas fa-thumbs-up'></i></p></div>";
+    echo "<div class='success'><p>Field purchase updated successfully! <i class='fas fa-thumbs-up'></i></p></div>";
 }else{
      echo "<div class='success'><p style='background:red'>Plots exchausted for $field_name! Kindly assign another Land to the customer <i class='fas fa-thumbs-down'></i></p></div>";
      echo "<script>alert('Plots exchausted for $field_name! Kindly assign another Land to the customer');</script>";

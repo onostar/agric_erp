@@ -7457,7 +7457,7 @@ function updateAssignedField(){
                          $("#farm_fields").html("<div class='processing'><div class='loader'></div></div>");
                     },
                     success : function(response){
-                         $("#pendingFields").html(response);
+                         $("#farm_fields").html(response);
                          setTimeout(function(){
                               showPage("pending_fields.php");
                          }, 2000);

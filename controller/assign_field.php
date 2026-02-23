@@ -213,7 +213,7 @@ if($total_assigned < $total_size){
 
     $to = $customer_email;
     $from = 'info@davidorlahfarms.com';
-    $from_name = "Davidorlah Farms";
+    $from_name = "Davidorlah Nigeria Ltd";
     $subj = 'Your Field Purchase Contract is Active';
     $msg = "<div>$message</div>";
 

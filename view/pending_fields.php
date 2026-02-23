@@ -15,7 +15,7 @@
     }
     
 </style>
-<div id="pendingFields" class="displays management" style="margin:0!important;width:100%!important">
+<div id="farm_fields" class="displays management" style="margin:0!important;width:100%!important">
    
 <div class="displays allResults new_data" id="revenue_report">
     <h2>Land/Fields Pending Payment</h2>
