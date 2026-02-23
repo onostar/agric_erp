@@ -152,12 +152,12 @@
                     <div class="totals" style="display:flex; gap:1rem; justify-content:flex-end; align-items:center; padding:10px;">
                         <!-- <a href="javascript:void(0)" title="Generate New Schedule" onclick="showPage('field_payment.php?schedule=<?php echo $schedule?>&customer=<?php echo $customer_id?>')" style="background:var(--tertiaryColor); color:#fff; padding:5px 10px; border-radius:15px; box-shadow:1px 1px 1px #222; border:1px solid #fff;">Post Payment <i class="fas fa-hand-holding-dollar"></i></a> -->
                         <?php
-                        echo "<p class='total_amount' style='background:green; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:.9rem; border-radius:15px; border:1px solid #fff; box-shadow: 1px 1px 1px #222'>Land Paid: ₦".number_format($total_paid, 2)."</p>";
-                        echo "<p class='total_amount' style='background:brown; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:.9rem; border-radius:15px; border:1px solid #fff; box-shadow: 1px 1px 1px #222'>Land Due: ₦".number_format($balance, 2)."</p>";
+                        echo "<p class='total_amount' style='background:#cdcdcd; color:#222; text-decoration:none; width:auto; font-weight:normal;float:right; padding:10px;font-size:.8rem; border-radius:15px; border:1px solid #fff; box-shadow: 1px 1px 1px #222'>Land Paid: ₦".number_format($total_paid, 2)."</p>";
+                        echo "<p class='total_amount' style='background:#cdcdcd; color:#222; text-decoration:none; width:auto; font-weight:normal;float:right; padding:10px;font-size:.8rem; border-radius:15px; border:1px solid #fff; box-shadow: 1px 1px 1px #222'>Land Due: ₦".number_format($balance, 2)."</p>";
                         /* documentation */
-                        echo "<p class='total_amount' style='background:green; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:.9rem; border-radius:15px; border:1px solid #fff; box-shadow: 1px 1px 1px #222'>Docx. Paid: ₦".number_format($doc_paid, 2)."</p>";
+                        echo "<p class='total_amount' style='background:#cdcdcd; color:#222; text-decoration:none; width:auto; font-weight:normal;float:right; padding:10px;font-size:.8rem; border-radius:15px; border:1px solid #fff; box-shadow: 1px 1px 1px #222'>Docx. Paid: ₦".number_format($doc_paid, 2)."</p>";
                         //
-                        echo "<p class='total_amount' style='background:brown; color:#fff; text-decoration:none; width:auto; float:right; padding:10px;font-size:.9rem; border-radius:15px; border:1px solid #fff; box-shadow: 1px 1px 1px #222'>Docx. Due: ₦".number_format($doc_due, 2)."</p>";
+                        echo "<p class='total_amount' style='background:#cdcdcd; color:#222; text-decoration:none; width:auto; font-weight:normal;float:right; padding:10px;font-size:.8rem; border-radius:15px; border:1px solid #fff; box-shadow: 1px 1px 1px #222'>Docx. Due: ₦".number_format($doc_due, 2)."</p>";
                     ?>
                     </div>
                 
@@ -180,6 +180,7 @@
                         <?php
                             $n = 1;
                             $repays = $get_details->fetch_details_cond('rent_schedule', 'assigned_id', $row->assigned_id);
+                            if(is_array($repays)){
                             $allow_next = true; // True until first unpaid schedule is found
                             foreach($repays as $index => $repay){
                         ?>
@@ -213,7 +214,7 @@
                                 ?>
                             </td>
                         </tr>
-                        <?php $n++; }; ?>
+                        <?php $n++; }; }?>
                     </tbody>
                 </table>
                 <?php

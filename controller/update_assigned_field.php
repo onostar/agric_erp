@@ -2,11 +2,11 @@
 session_start();
 date_default_timezone_set("Africa/Lagos");
 if(isset($_SESSION['user_id'])){
-
 $user = $_SESSION['user_id'];
 $farm = $_SESSION['store_id'];
 $date = date("Y-m-d H:i:s");
 
+$assigned_id = strtoupper(htmlspecialchars(stripslashes($_POST['assigned_id'])));
 $id = strtoupper(htmlspecialchars(stripslashes($_POST['field_id'])));
 $customer = htmlspecialchars(stripslashes($_POST['customer']));
 $duration = htmlspecialchars(stripslashes($_POST['duration']));
@@ -82,8 +82,8 @@ if($total_assigned < $total_size){
 
 // if($update){
     // record field assignment
-    $add_data = new add_data('assigned_fields', $assign_data);
-    $add_data->create_data();
+    $update->updateAny('assigned_fields', $data, 'assigned_id', $assigned_id);
+    // $add_data->create_data();
 
     // get last inserted assigned_id
     $ids = $get_details->fetch_lastInserted('assigned_fields', 'assigned_id');

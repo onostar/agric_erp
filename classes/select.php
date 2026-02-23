@@ -1599,6 +1599,16 @@ public function fetch_total_working_days_month($date){
                 return $rows;
             }
         }
+        //fetch fields pending payment
+        public function fetch_pending_field_purchase(){
+            $get_user = $this->connectdb()->prepare("SELECT af.customer, af.field, af.field_size, af.purchase_cost, af.discount, af.total_due, af.documentation, af.assigned_date, af.assigned_by, af.assigned_id FROM assigned_fields af LEFT JOIN field_payments fp ON af.assigned_id = fp.loan WHERE af.contract_status = 1 AND fp.loan IS NULL ORDER BY af.assigned_date");
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                return $get_user->fetchAll();
+            } else {
+                return "No records found";
+            }
+        }
         //fetch monthly payroll
         public function fetch_payroll_months($store){
             $get_user = $this->connectdb()->prepare("SELECT MIN(payroll_date) AS payroll_date FROM payroll WHERE store = :store GROUP BY YEAR(payroll_date), MONTH(payroll_date)ORDER BY YEAR(payroll_date) DESC, MONTH(payroll_date) DESC");

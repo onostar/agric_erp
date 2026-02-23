@@ -7384,7 +7384,92 @@ function assignexistingField(){
           return false; 
      }
 }
-
+// update assigned  farm field to client
+function updateAssignedField(){
+     let assigned_id = document.getElementById("assigned_id").value;
+     let field_id = document.getElementById("field_id").value;
+     let customer = document.getElementById("customer").value;
+     let duration = document.getElementById("duration").value;
+     let purchase_cost = document.getElementById("purchase_cost").value;
+     let discount = document.getElementById("discount")?.value || 0;
+     let total_due = document.getElementById("total_due").value;
+     let payment_duration = document.getElementById("payment_duration").value;
+     let annual_rent = document.getElementById("annual_rent").value;
+     let rent_percentage = document.getElementById("rent_percentage").value;
+     let field_size = document.getElementById("field_size").value;
+     let start_date = document.getElementById("start_date").value;
+     let installment_amount = document.getElementById("installment_amount").value;
+     let documentation = document.getElementById("documentation").value;
+     let today = new Date();
+     let start = new Date(start_date);
+     if(customer.length == 0 || customer.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please select client!");
+          $("#item").focus();
+          return;
+     }else if(!duration){
+          alert("Please select contract duration!");
+          $("#duration").focus();
+          return;
+     }else if(!total_due || parseFloat(total_due) <= 0){
+          alert("Please input purchase amount!");
+          $("#purchase_cost").focus();
+          return;
+     }else if(!documentation || parseFloat(documentation) <= 0){
+          alert("Please input documentation fee!");
+          $("#documentation").focus();
+          return;
+     }else if(!payment_duration){
+          alert("Please select purchase payment duration!");
+          $("#payment_duration").focus();
+          return;
+     }else if(!installment_amount){
+          alert("Please select frequency to get installment!");
+          $("#frequency").focus();
+          return;
+     }else if(!rent_percentage){
+          alert("Please select rent percentage to get annual rent!");
+          $("#rent_percentage").focus();
+          return;
+     }else if(!annual_rent){
+          alert("Please select rent percentage to get annual rent!");
+          $("#rent_percentage").focus();
+          return;
+     }else if(!field_size || field_size <= 0){
+          alert("Please input plot purchased!");
+          $("#field_size").focus();
+          return;
+     }else if(!start_date){
+          alert("Please input contract start date!");
+          $("#start_date").focus();
+          return;
+     /* }else if(start < today){
+          alert("Start date cannot be less than current date!");
+          $("#start_date").focus();
+          return; */
+     }else{
+          let confirm_inv = confirm("Are you sure you want to assign this field to the customer?", "");
+          if(confirm_inv){
+               $.ajax({
+                    type : "POST",
+                    url : "../controller/update_assigned_field.php",
+                    data : {assigned_id:assigned_id, field_id:field_id, customer:customer, duration:duration, purchase_cost:purchase_cost, discount:discount, total_due:total_due,payment_duration:payment_duration, rent_percentage:rent_percentage, annual_rent:annual_rent, documentation:documentation, start_date:start_date, installment_amount:installment_amount, field_size:field_size},
+                    beforeSend: function(){
+                         $("#farm_fields").html("<div class='processing'><div class='loader'></div></div>");
+                    },
+                    success : function(response){
+                         $("#pendingFields").html(response);
+                         setTimeout(function(){
+                              showPage("pending_fields.php");
+                         }, 2000);
+                    }
+               })
+          }else{
+               return;
+          }
+          
+          return false; 
+     }
+}
 //complete crop cycle
 function closeCycle(cycle_id){
      let confirm_close = confirm("Are you sure you want to close this crop cycle?", "");

@@ -26,10 +26,10 @@
                 <td>Land</td>
                 <td>Owned By</td>
                 <td>Land Size (Plot)</td>
-                <td>Soil Type</td>
+                <!-- <td>Soil Type</td>
                 <td>Soil PH</td>
                 <td>Topography</td>
-                <td>Location</td>
+                <td>Location</td> -->
                 <td>Status</td>
                 <td>Date</td>
                 <td></td>
@@ -77,10 +77,10 @@
                         echo $detail->field_size." Plot (".number_format($sqm)." m&sup2)";
                     ?>
                 </td>
-                <td><?php echo $soil_type?></td>
+                <!-- <td><?php echo $soil_type?></td>
                 <td><?php echo $soil_ph?></td>
                 <td><?php echo $topography?></td>
-                <td><?php echo $location?></td>
+                <td><?php echo $location?></td> -->
                 <td>
                     <?php
                         if($detail->contract_status == 1){
