@@ -1233,6 +1233,12 @@ function roomPriceForm(item_id){
          $(".priceForm").hide();
      
  }
+ //close beneficiary form
+ function closeBen(){
+     
+     $("#addBen").html("");
+     
+ }
 
  //change room price
  function changeRoomPrice(){
@@ -10796,5 +10802,169 @@ function sendBulkEmail(){
           }else{
                return;
           }
+     }
+}
+//showbeneficiary form
+function showBeneficiaryForm(staff_id){
+     $.ajax({
+          type : "GET",
+          url : "../controller/show_beneficiary_form.php?staff="+staff_id,
+          beforeSend : function(){
+               $("#addBen").html("<div class='processing'><div class='loader'></div></div>");
+          },
+          success : function(response){
+               $("#addBen").html(response);
+          }
+     })
+}
+//edit beneficiary form
+function editBeneficiaryForm(beneficiary_id, staff_id){
+     $.ajax({
+          type : "GET",
+          url : "../controller/edit_beneficiary_form.php?beneficiary="+beneficiary_id+"&staff="+staff_id,
+          beforeSend : function(){
+               $("#addBen").html("<div class='processing'><div class='loader'></div></div>");
+          },
+          success : function(response){
+               $("#addBen").html(response);
+          }
+     })
+}
+
+//add more beneficiaries
+function addMoreBeneficiary(){
+     let staff_id = document.getElementById("staff_id").value;
+     let beneficiary = document.getElementById("beneficiary").value;
+     let ben_relationship = document.getElementById("ben_relationship").value;
+     let ben_gender = document.getElementById("ben_gender").value;
+     let ben_phone_number = document.getElementById("ben_phone_number").value;
+     let ben_address = document.getElementById("ben_address").value;
+     let entitlement = document.getElementById("entitlement").value;
+     if(beneficiary.length == 0 || beneficiary.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter beneficiary name!");
+          $("#beneficiary").focus();
+          return;
+     }else if(ben_relationship.length == 0 || ben_relationship.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter relationship with beneficiary!");
+          $("#ben_relationship").focus();
+          return;
+     }else if(!ben_gender){
+          alert("Please select gender!");
+          $("#ben_gender").focus();
+          return;
+     }else if(ben_phone_number.length == 0 || ben_phone_number.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter phone number!");
+          $("#ben_phone_number").focus();
+          return;
+     }else if(ben_address.length == 0 || ben_address.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter address!");
+          $("#ben_address").focus();
+          return;
+     }else if(entitlement.length == 0 || entitlement.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter entitlement percentage!");
+          $("#entitlement").focus();
+          return;
+     }else if(parseFloat(entitlement) <= 0 || parseFloat(entitlement) > 100){
+          alert("Entitlement percentage must be greater than 0 and less than or equal to 100!");
+          $("#entitlement").focus();
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/add_more_beneficiary.php",
+               data : {staff_id:staff_id, beneficiary:beneficiary, ben_relationship:ben_relationship, ben_gender:ben_gender, ben_phone_number:ben_phone_number, ben_address:ben_address, entitlement:entitlement},
+               /* beforeSend: function(){
+                    $("#addBen").html("<div class='processing'><div class='loader'></div></div>");
+               }, */
+               success : function(response){
+                    $(".beneficiaries").html(response);
+                    document.getElementsByClassName("beneficiaries")[0].scrollIntoView({behavior: "smooth"});
+                    
+               }
+          });
+          $("#beneficiary").val('');
+          $("#ben_relationship").val('');
+          $("#ben_gender").val('');
+          $("#ben_phone_number").val('');
+          $("#ben_address").val('');
+          $("#entitlement").val('');
+     }
+}
+//delete beneficiary
+function deleteBeneficiary(ben_id){
+     let confirmDelete = confirm("Are you sure you want to delete this beneficiary?", "");
+     if(confirmDelete){
+          $.ajax({
+               type : "POST",
+               url : "../controller/delete_beneficiary.php",
+               data : {ben_id:ben_id},
+               beforeSend : function(){
+                    $(".beneficiaries").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $(".beneficiaries").html(response);
+               }
+          });
+     }else{
+          return;
+     }
+}
+
+//update beneficiaries details
+function updateBeneficiary(){
+     let staff_id = document.getElementById("staff_id").value;
+     let beneficiary_id = document.getElementById("beneficiary_id").value;
+     let beneficiary = document.getElementById("beneficiary").value;
+     let ben_relationship = document.getElementById("ben_relationship").value;
+     let ben_gender = document.getElementById("ben_gender").value;
+     let ben_phone_number = document.getElementById("ben_phone_number").value;
+     let ben_address = document.getElementById("ben_address").value;
+     let entitlement = document.getElementById("entitlement").value;
+     if(beneficiary.length == 0 || beneficiary.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter beneficiary name!");
+          $("#beneficiary").focus();
+          return;
+     }else if(ben_relationship.length == 0 || ben_relationship.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter relationship with beneficiary!");
+          $("#ben_relationship").focus();
+          return;
+     }else if(!ben_gender){
+          alert("Please select gender!");
+          $("#ben_gender").focus();
+          return;
+     }else if(ben_phone_number.length == 0 || ben_phone_number.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter phone number!");
+          $("#ben_phone_number").focus();
+          return;
+     }else if(ben_address.length == 0 || ben_address.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter address!");
+          $("#ben_address").focus();
+          return;
+     }else if(entitlement.length == 0 || entitlement.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please enter entitlement percentage!");
+          $("#entitlement").focus();
+          return;
+     }else if(parseFloat(entitlement) <= 0 || parseFloat(entitlement) > 100){
+          alert("Entitlement percentage must be greater than 0 and less than or equal to 100!");
+          $("#entitlement").focus();
+     }else{
+          $.ajax({
+               type : "POST",
+               url : "../controller/update_beneficiary.php",
+               data : {staff_id:staff_id, beneficiary_id:beneficiary_id, beneficiary:beneficiary, ben_relationship:ben_relationship, ben_gender:ben_gender, ben_phone_number:ben_phone_number, ben_address:ben_address, entitlement:entitlement},
+               /* beforeSend: function(){
+                    $("#addBen").html("<div class='processing'><div class='loader'></div></div>");
+               }, */
+               success : function(response){
+                    $(".beneficiaries").html(response);
+                    document.getElementsByClassName("beneficiaries")[0].scrollIntoView({behavior: "smooth"});
+                    
+               }
+          });
+          $("#beneficiary").val('');
+          $("#ben_relationship").val('');
+          $("#ben_gender").val('');
+          $("#ben_phone_number").val('');
+          $("#ben_address").val('');
+          $("#entitlement").val('');
      }
 }

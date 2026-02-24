@@ -213,8 +213,13 @@
                 
             </div>
         </section>
-        <section id="main_consult">
+        <section id="addBen">
+
+        </section>
+        <section id="main_consult" class="beneficiaries">
+            <a href="javascript:void(0)" onclick="showBeneficiaryForm('<?php echo $customer?>')" style="float:right; background:brown; padding:5px; border-radius:15px; color:#fff; box-shadow:1px 1px 1px #222; border:1px solid #fff;">Add <i class="fas fa-user-plus"></i></a>
             <h3 style="background:var(--tertiaryColor); text-align:left">Beneficiaries</h3>
+            
             <div class="displays allResults new_data" style="width:100%!important;margin:0!important">
                 <table id="data_table" class="searchTable">
                     <thead>
@@ -226,6 +231,7 @@
                             <td>Phone</td>
                             <td>Address</td>
                             <td>Entitlement</td>
+                            <td></td>
                         </tr>
                     </thead>
                     <tbody>
@@ -247,8 +253,11 @@
                             <td><?php echo $ben->relation;?></td>
                             <td><?php echo $ben->phone;?></td>
                             <td><?php echo $ben->address;?></td>
-                            <td><?php echo $ben->entitlement;?></td>
-                               
+                            <td><?php echo $ben->entitlement;?>%</td>
+                            <td>
+                                <a href="javascript:void(0)" onclick="editBeneficiaryForm('<?php echo $ben->beneficiary_id?>','<?php echo $customer?>')" style="color:var(--primaryColor)"><i class="fas fa-edit"></i></a>
+                                <a href="javascript:void(0)" onclick="deleteBeneficiary('<?php echo $ben->beneficiary_id?>')" style="color:brown"><i class="fas fa-trash"></i></a>
+                            </td>
                             
                         </tr>
                         <?php $n++; endforeach;}?>

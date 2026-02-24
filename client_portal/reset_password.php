@@ -18,7 +18,7 @@ date_default_timezone_set("Africa/Lagos");
     <meta name="keywords" content="agric erp login, client portal, farm management system, agriculture software, farmland owners dashboard, crop monitoring, farm data portal, agricultural erp nigeria, onostar media, dorthpro agric erp, field management login, agtech software, farm record system, landowner portal, agriculture business software">
     <meta name="description" content="Access your Onostar Agric ERP Client Portal to manage your farmland, monitor crop activities, view reports, and stay updated on your agricultural investments. Log in securely to track yields, payments, and field performance in real time.">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Portal | Login</title>
+    <title>Client Portal | Reset Password</title>
     <link rel="icon" type="image/png" size="32x32" href="../images/icon.png">
     <link rel="stylesheet" href="../fontawesome-free-6.0.0-web/css/all.css">
     <link rel="stylesheet" href="../fontawesome-free-6.0.0-web/css/all.min.css">
@@ -76,6 +76,7 @@ date_default_timezone_set("Africa/Lagos");
                 </div>
                 <!-- <p style="#222"><?php echo $row->company?></p> -->
                 <h2>Client Portal</h2>
+                <p>Kindly Input Secure Token sent to your E-mail.</p>
                 <?php
                     if(isset($_SESSION['success'])){
                         echo "<p class='success succeed' style='color:green'>" . $_SESSION['success']. "</p>
@@ -100,28 +101,15 @@ date_default_timezone_set("Africa/Lagos");
                         unset($_SESSION['error']);
                     }
                 ?>
-                <form action="../controller/client_login.php" method="POST">
+                <form action="../controller/reset_customer_password.php" method="POST">
                     <div class="data">
-                        <label for="username">Username</label>
-                        <input type="email" name="username" id="username" placeholder="Email Address" required value="<?php if(isset($_SESSION['email'])){
-                            echo $_SESSION['email'];
-                            unset($_SESSION['email']);
-                        }?>">
+                        <label for="username">Token</label>
+                        <input type="text" name="token" id="token" placeholder="Enter Token" required>
                         
                     </div>
+                   
                     <div class="data">
-                        <div class="pass">
-                            <label for="password">Password</label>
-                            <a href="forgot_password.php" title="Recover your password">Forgot password?</a>
-                        </div>
-                        <input type="password" name="password" id="password" class="password" placeholder="*******" required><br>
-                        <div class="show_password">
-                            <a href="javascript:void(0)" onclick="togglePassword()"><span class='icon'><i class="fas fa-eye"></i></span> <span class='icon_txt'>Show password</span></a>
-                        </div>
-                        
-                    </div>
-                    <div class="data">
-                        <button type="submit" id="submit_login" name="submit_login">Sign in <i class="fas fa-sign-in-alt"></i></button>
+                        <button type="submit" id="submit_token" name="submit_token">Reset <i class="fas fa-paper-plane"></i></button>
 
                     </div>
                     

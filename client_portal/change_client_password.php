@@ -48,7 +48,7 @@
                         <script>
                             setTimeout(function(){
                                 $('.succeed').hide();
-                                window.open('../index.php', '_parent');
+                                
                             }, 5000);
                         </script>
                         ";

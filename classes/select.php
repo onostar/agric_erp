@@ -798,8 +798,8 @@ public function fetch_generate_payrollpermonth($store, $payroll_date){
         }
         //fetch details count with condition
         public function fetch_count_cond($table, $column, $condition){
-            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column");
-            $get_user->bindValue("$column", $condition);
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :column");
+            $get_user->bindValue("column", $condition);
             $get_user->execute();
             if($get_user->rowCount() > 0){
                 return $get_user->rowCount();

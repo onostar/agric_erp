@@ -153,7 +153,7 @@
                     <input type="number" name="entitlement" id="entitlement" placeholder="Enter entitlement percentage">
                 </div>
                 <div class="data" style="width:auto">
-                    <button type="button" id="add_staff" name="add_staff" onclick="addBeneficiary()">Add Staff <i class="fas fa-plus"></i></button>
+                    <button type="button" id="add_staff" name="add_staff" onclick="addBeneficiary()">Add Beneficiary <i class="fas fa-plus"></i></button>
                 </div>
             </div>
         </form>    

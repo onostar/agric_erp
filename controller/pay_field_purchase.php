@@ -329,7 +329,7 @@
             foreach($rent_returns as $ir){
                 $due = date("jS F, Y", strtotime($ir->due_date));
                 $annual_rent = number_format($ir->amount_due, 2);
-               $rent_schedule_text .= "<li>₦" . $annual_rent . " due on " . $due . "</li>";
+               $rent_schedule_text .= "<li>NGN" . $annual_rent . " due on " . $due . "</li>";
             }
             $rent_schedule_text .= "</ul>";
 

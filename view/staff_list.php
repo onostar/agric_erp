@@ -53,7 +53,7 @@ session_start();
                 <td>Gender</td>
                 <td>Department</td>
                 <td>Designation</td>
-                <td>Employed</td>
+                <!-- <td>Employed</td> -->
                 <td>Status</td>
                 <td></td>
             </tr>
@@ -99,7 +99,7 @@ session_start();
                         
                     ?>
                 </td>
-                <td><?php echo date("d-m-Y", strtotime($detail->employed))?></td>
+                <!-- <td><?php echo date("d-m-Y", strtotime($detail->employed))?></td> -->
                 <td>
                     <?php
                         if($detail->staff_status == 0){
@@ -111,7 +111,7 @@ session_start();
                         }
                     ?>
                 </td>
-                <td>
+                <td style="display:flex;">
                     <a style="padding:5px; border-radius:15px;background:var(--tertiaryColor);color:#fff;"href="javascript:void(0)" onclick="showPage('view_staff_details.php?customer=<?php echo $detail->staff_id?>')" title="view staff details"><i class="fas fa-eye"></i></a>
                     <a style="padding:5px; border-radius:15px;background:var(--otherColor);color:#fff;"href="javascript:void(0)" onclick="showPage('edit_staff_details.php?customer=<?php echo $detail->staff_id?>')" title="Edit staff details"><i class="fas fa-edit"></i></a>
                 </td>
