@@ -20,6 +20,9 @@
                 $details = $get_items->fetch_details_2cond('purchase_order', 'vendor', 'invoice', $supplier, $invoice);
                 if(gettype($details) === 'array'){
                 foreach($details as $detail):
+                    $expiration = $detail->expiry_date;
+                    $delivery = $detail->delivery_address;
+                    $comments = $detail->comments;
             ?>
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
@@ -71,12 +74,23 @@
         // $total_worth = $total_amount * $total_qty;
         echo "<p class='total_amount' style='color:red;float:right'>Total Cost: ₦".number_format($total_amount, 2)."</p>";
     ?>
-    <div class="close_stockin add_user_form" style="width:50%; margin:0;">
+    <div class="close_stockin add_user_form" style="width:60%; margin:0;">
         <section class="addUserForm">
             <div class="inputs" style="display:flex;flex-wrap:wrap">
                 <input type="hidden" name="suppliers" id="suppliers" value="<?php echo $supplier?>">
                 <input type="hidden" name="sales_invoice" id="sales_invoice" value="<?php echo $invoice?>">
-                
+                <div class="data">
+                    <label for="delivery">Delivery Address</label>
+                    <textarea name="delivery" id="delivery" rows="5"><?php echo $delivery?></textarea>
+                </div>
+                <div class="data">
+                    <label for="comments">Comments</label>
+                    <textarea name="comments" id="comments" rows="5" placeholder="other comments"><?php echo $comments?></textarea>
+                </div>
+                <div class="data">
+                    <label for="expiration">Expiration Date</label>
+                    <input type="date" name="expiration" id="expiration">
+                </div>
                 <div class="data">
                     <button onclick="postPO()" style="background:green; padding:5px; border-radius:5px;font-size:.8rem;">Post Purchase Order <i class="fas fa-power-off"></i></button>
                 </div>

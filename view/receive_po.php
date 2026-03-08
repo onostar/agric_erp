@@ -6,7 +6,7 @@
 
 
 ?>
-<div id="pendingTransfer" class="displays management" style="width:80%!important;margin:10px 20px!important">
+<div id="pendingTransfer" class="displays management" style="width:100%!important;margin:10px 20px!important">
 <div class="displays allResults new_data" id="revenue_report">
     <h2>Receive Items from Purchase Order</h2>
     <hr>
@@ -38,7 +38,7 @@
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
                 <td style="color:var(--otherColor)"><?php echo $detail->invoice?></td>
-                <td style="color:green; text-align:Center">
+                <td style="color:green;">
                     <?php 
                         //get vendor name
                         $vens = $get_users->fetch_details_group('vendors', 'vendor', 'vendor_id',$detail->vendor);

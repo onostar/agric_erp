@@ -107,6 +107,17 @@ date_default_timezone_set("Africa/Lagos");
             $update->bindValue("$condition2", $condition_value2);
             $update->execute();
         }
+        //update quadruple with 2 condition
+        public function update_quadruple2Cond($table, $column1, $value1, $column2, $value2, $col3, $val3, $col4, $val4, $condition1, $condition_value1, $condition2, $condition_value2){
+            $update = $this->connectdb()->prepare("UPDATE $table SET $column1 = :$column1, $column2 = :$column2, $col3 = :$col3, $col4 = :$col4 WHERE $condition1 = :$condition1 AND $condition2 =:$condition2");
+            $update->bindValue("$column1", $value1);
+            $update->bindValue("$column2", $value2);
+            $update->bindValue("$col3", $val3);
+            $update->bindValue("$col4", $val4);
+            $update->bindValue("$condition1", $condition_value1);
+            $update->bindValue("$condition2", $condition_value2);
+            $update->execute();
+        }
         // update salary status for a specific month
 public function update_salary($store, $payroll_date, $date){
     $sql = "

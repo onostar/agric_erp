@@ -123,6 +123,9 @@ include "../classes/select.php";
         foreach($rows as $row){
             $date = $row->post_date;
             $vendor = $row->vendor;
+            $expiration = $row->expiry_date;
+            $delivery_address = $row->delivery_address;
+            $comments = $row->comments;
         }
         //get vendor name
         $vends = $get_items->fetch_details_cond('vendors', 'vendor_id', $vendor);
@@ -145,6 +148,7 @@ include "../classes/select.php";
         <h3>PURCHASE ORDER</h3>
         <p><strong>PO Number:</strong> <?php echo $invoice?></p>
         <p><strong>Date:</strong> <?php echo date("d-M-Y", strtotime($date))?></p>
+        <p><strong>Expiration:</strong> <?php echo date("d-M-Y", strtotime($expiration))?></p>
     </div>
 </div>
 <div class="vendor_delivery">
@@ -157,9 +161,8 @@ include "../classes/select.php";
     </div>
     <div class="vendor_details">
         <h3>Delivery Details</h3>
-        <p>Deliver to <?php echo $store?></p>
-        <p><strong>Address: </strong><?php echo $store_address?></p>
-        <p><strong>Phone No.: </strong><?php echo $phone_num?></p>
+        <p><strong>Deliver to: </strong><?php echo $delivery_address?></p>
+        <!-- <p><strong>Phone No.: </strong><?php echo $phone_num?></p> -->
     </div>
 </div>
 <div class="displays allResults sales_receipt">
@@ -227,8 +230,10 @@ include "../classes/select.php";
         }
         echo "<p class='total_amount' style='color:green'>Total amount: ₦".number_format($total_amount, 2)."</p>";
 
-        echo "<p class='sold_by'><strong>Delivery Date:</strong> Within 7 working days of order confirmation</p>
-        <p class='sold_by'><strong>Mode of Delivery:</strong> Vendor-arranged courier</p>";
+        /* echo "<p class='sold_by'><strong>Delivery Date:</strong> Within 7 working days of order confirmation</p> "*/
+
+        echo "<p style='text-align:left;'><strong>$comments</strong></p>
+        <br><p class='sold_by'><strong>Mode of Delivery:</strong> Vendor-arranged courier</p>";
         //prepared by
         $row = $get_items->fetch_details_group('users', 'full_name', 'user_id', $user);
         echo ucwords("<p class='sold_by'>Prepared by: <strong>$row->full_name</strong></p>");
@@ -240,8 +245,7 @@ include "../classes/select.php";
 </div> 
    
 <?php
-    echo "<script>window.print();
-    window.close();</script>";
+    echo "<script>window.print();</script>";
                     // }
                 }
             // }

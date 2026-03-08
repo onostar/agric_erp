@@ -6,7 +6,7 @@
 
 
 ?>
-<div id="pendingTransfer" class="displays management" style="width:80%!important;margin:10px 20px!important">
+<div id="pendingTransfer" class="displays management" style="width:100%!important;margin:10px 20px!important">
 <div class="displays allResults new_data" id="revenue_report">
     <h2>Update Purchase Orders</h2>
     <hr>
@@ -22,6 +22,7 @@
                 <td>Vendor</td>
                 <td>Total items</td>
                 <td>Post Date</td>
+                <td>Expiration</td>
                 <td>Posted by</td>
                 <td></td>
                 
@@ -38,7 +39,7 @@
             <tr>
                 <td style="text-align:center; color:red;"><?php echo $n?></td>
                 <td style="color:var(--otherColor)"><?php echo $detail->invoice?></td>
-                <td style="color:green; text-align:Center">
+                <td style="color:green;">
                     <?php 
                         //get vendor name
                         $vens = $get_users->fetch_details_group('vendors', 'vendor', 'vendor_id',$detail->vendor);
@@ -53,6 +54,7 @@
                     ?>
                 </td>
                 <td style="color:var(--moreColor)"><?php echo date("jS M, Y", strtotime($detail->post_date));?></td>
+                <td style="color:var(--moreColor)"><?php echo date("d-M-Y", strtotime($detail->expiry_date));?></td>
                 <td>
                     <?php
                         //get posted by

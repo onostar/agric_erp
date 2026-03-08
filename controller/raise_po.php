@@ -1,6 +1,7 @@
 <?php
 date_default_timezone_set("Africa/Lagos");
     session_start();
+    if(isset($_SESSION['user_id'])){
     $trans_type ="purchase order";
     $type = htmlspecialchars(stripslashes($_POST['item_type'])); 
     $posted = htmlspecialchars(stripslashes($_POST['posted_by']));
@@ -51,5 +52,7 @@ date_default_timezone_set("Africa/Lagos");
         }
     }
     include "../controller/purchase_order_details.php";
-
+    }else{
+        echo "Your session has expired, Kindly login again";
+    }
 ?>

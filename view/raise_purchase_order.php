@@ -7,15 +7,19 @@
         $store = $_SESSION['store_id'];
         //generate receipt invoice
         //get current date
-        $todays_date = date("dmyhi");
+        /* $todays_date = date("dmyhi");
         $ran_num ="";
         for($i = 0; $i < 3; $i++){
             $random_num = random_int(0, 9);
             $ran_num .= $random_num;
-        }
-        $invoice = "PO".$store.$todays_date.$ran_num.$user_id;
+        } */
+       //check po to get the next po number
+        $check = new selects();
+        $rows = $check->fetch_po();
+        $po_number = $rows + 1;
+        $invoice = "PO/0000".$po_number;
         // $_SESSION['invoice'] = $invoice;
-    
+
 ?>
 
 <div id="stockin">

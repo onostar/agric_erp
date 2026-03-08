@@ -807,6 +807,17 @@ public function fetch_generate_payrollpermonth($store, $payroll_date){
                 return "0";
             }
         }
+        //fetch purchase orderto get new invoice
+        public function fetch_po(){
+            $get_user = $this->connectdb()->prepare("SELECT * FROM purchase_order GROUP BY invoice");
+            // $get_user->bindValue("column", $condition);
+            $get_user->execute();
+            if($get_user->rowCount() > 0){
+                return $get_user->rowCount();
+            }else{
+                return "0";
+            }
+        }
         //fetch details count with condition
         public function fetch_count_cond1neg($table, $column, $condition, $negCol, $negVal){
             $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE $column = :$column AND $negCol != :negValue");

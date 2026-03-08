@@ -5136,22 +5136,40 @@ function postStockin(){
 function postPO(){
      let sales_invoice = document.getElementById("sales_invoice").value;
      let suppliers = document.getElementById("suppliers").value;
-     let confirm_post = confirm("Are you sure you want to post this purchase Order?", "");
-     if(confirm_post){
-           $.ajax({
-               type : "POST",
-               url : "../controller/post_po.php",
-               data : {sales_invoice:sales_invoice,suppliers:suppliers},
-               beforeSend : function(){
-                    $("#stockin").html("<div class='processing'><div class='loader'></div></div>");
-               },
-               success : function(response){
-               $("#stockin").html(response);
-               }
-          })
-          
-     }else{
+     let expiration = document.getElementById("expiration").value;
+     let delivery = document.getElementById("delivery").value;
+     let comments = document.getElementById("comments").value;
+     let todayDate = new Date();
+     if(!expiration){
+          alert("Please input PO expiry date");
+          $("#expiration").focus();
           return;
+     }else if(!delivery){
+          alert("Please input delivery address");
+          $("#delivery").focus();
+          return;
+     }else if(todayDate >= new Date(expiration)){
+          alert("Expiration Date must be greater than current date!");
+          $("#expiration").focus();
+          return;
+     }else{
+          let confirm_post = confirm("Are you sure you want to post this purchase Order?", "");
+          if(confirm_post){
+               $.ajax({
+                    type : "POST",
+                    url : "../controller/post_po.php",
+                    data : {sales_invoice:sales_invoice,suppliers:suppliers, expiration:expiration, delivery:delivery, comments:comments},
+                    beforeSend : function(){
+                         $("#stockin").html("<div class='processing'><div class='loader'></div></div>");
+                    },
+                    success : function(response){
+                    $("#stockin").html(response);
+                    }
+               })
+               
+          }else{
+               return;
+          }
      }
 }
 
@@ -7870,8 +7888,8 @@ function raisePO(){
           alert("Please input quantity requested!");
           $("#quantity").focus();
           return;
-     }else if(parseFloat(cost_price) < 0){
-         alert("Cost price cannot be lesser than 0");
+     }else if(parseFloat(cost_price) <= 0){
+         alert("Cost price cannot be 0");
           $("#cost_price").focus();
           return;
      }else{

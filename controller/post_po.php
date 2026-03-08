@@ -5,6 +5,9 @@
     // if(isset($_POST['change_prize'])){
         $supplier = htmlspecialchars(stripslashes($_POST['suppliers']));
         $invoice = htmlspecialchars(stripslashes($_POST['sales_invoice']));
+        $expiration = htmlspecialchars(stripslashes($_POST['expiration']));
+        $delivery = ucwords(htmlspecialchars(stripslashes($_POST['delivery'])));
+        $comments = strtoupper(htmlspecialchars(stripslashes($_POST['comments'])));
         $date = date("Y-m-d H:i:s");
 
         // instantiate classes
@@ -15,7 +18,7 @@
         
         //update invoice
         $update_po = new Update_table();
-        $update_po->update2cond('purchase_order', 'order_status', 'vendor', 'invoice', 1, $supplier, $invoice);
+        $update_po->update_quadruple2Cond('purchase_order', 'order_status', 1, 'expiry_date', $expiration, 'delivery_address',$delivery, 'comments', $comments, 'vendor',  $supplier, 'invoice', $invoice);
         
         if($update_po){
             echo "<div class='notify'><p><i class='fas fa-thumbs-up'></i> Purchase Order posted successfully</p></div>";
