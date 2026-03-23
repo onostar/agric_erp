@@ -81,7 +81,7 @@ foreach($inv as $loan){
     $units = $loan->units;
 }
 
-$icon = ($currency == "Dollar") ? "$" : "₦";
+$icon = ($currency == "Dollar") ? "USD" : "NGN";
 
 /* Calculate remaining balance */
 $new_balance = $balance - $amount;

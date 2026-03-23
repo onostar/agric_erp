@@ -58,9 +58,9 @@ foreach($cus as $cu){
     $customer_email = $cu->customer_email;
 }
 if($currency == "Dollar"){
-    $icon = "$";
+    $icon = "USD";
 }else{
-    $icon = "₦";
+    $icon = "NGN";
 }
 
     // formatting
