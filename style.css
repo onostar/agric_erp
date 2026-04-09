@@ -3831,6 +3831,7 @@ color: rgb(231, 226, 226);
         left:0;
     } */
     .logo{
+        display:none;
         width:30vw;
         height:4vh;
     }

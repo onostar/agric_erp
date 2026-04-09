@@ -12,7 +12,7 @@
     $crop_item = $names->item_name; */
 ?>  <div class="info"></div>
     <div class="add_user_form" style="width:50%; margin:10px">
-        <h3 style="padding:8px; background:var(--otherColor); font-size:.8rem;text-align:left;color:#fff;">Add Remark/Observation For <?php echo $crop_item?></h3>
+        <h3 style="padding:8px; background:var(--otherColor); font-size:.8rem;text-align:left;color:#fff;">Add Remark/Observation For Crop Cycle</h3>
         <!-- <form method="POST" id="addUserForm"> -->
         <section class="addUserForm">
             <div class="inputs">

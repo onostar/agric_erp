@@ -3635,10 +3635,10 @@ function addCustomer(){
           alert("Please enter customer name!");
           $("#customer").focus();
           return;
-     }else if(phone_number.length == 0 || phone_number.replace(/^\s+|\s+$/g, "").length == 0){
+     /* }else if(phone_number.length == 0 || phone_number.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input customer phone number");
           $("#phone_number").focus();
-          return;
+          return; */
      }else if(address.length == 0 || address.replace(/^\s+|\s+$/g, "").length == 0){
           alert("Please input customer address");
           $("#address").focus();
