@@ -106,10 +106,7 @@
 
                     <p>
                     Warm regards,<br>
-                    <strong>Investment Management Team</strong><br>
-                    Davidorlah Nigeria Limited
-                    </p>
-                    ";
+                    <strong>Management</strong><br>Davidorlah Nigeria Limited</p>";
 
                     /* send mail */
                     function smtpmailer($to, $from, $from_name, $subject, $body, $photo_folder){

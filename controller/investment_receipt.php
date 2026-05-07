@@ -39,7 +39,7 @@ if(isset($_GET['receipt'])){
     $customers = $get_details->fetch_details_cond('customers', 'customer_id', $customer);
     foreach($customers as $cust){
         $account = $cust->acn;
-        $customer_name = $cust->customer_name ?? $cust->full_name ?? "Customer";
+        $customer_name = $cust->customer;
     }
 
     /* -------------------------------------------------
