@@ -97,7 +97,7 @@
                 <td style="color:var(--primaryColor)"><?php echo date("d-M-Y", strtotime($detail->due_date));?></td>
                 <td>
                     <!-- <a href="javascript:void(0);" title="View details" style="padding:5px; background:var(--otherColor);color:#fff; border-radius:15px;" onclick="showPage('view_active_loan.php?loan=<?php echo $detail->loan?>')">View <i class="fas fa-eye"></i></a> -->
-                    <a href="javascript:void(0);" title="Post Payment" style="padding:5px; background:var(--tertiaryColor);color:#fff; border-radius:15px;" onclick="showPage('loan_payment.php?schedule=<?php echo $detail->repayment_id?>&customer=<?php echo $detail->customer?>')">Make Payment <i class="fas fa-hand-holding-dollar"></i></a>
+                    <a href="javascript:void(0);" title="Post Payment" style="padding:5px; background:var(--tertiaryColor);color:#fff; border-radius:15px;" onclick="showPage('loan_payment.php?schedule=<?php echo $detail->repayment_id?>&customer=<?php echo $detail->customer?>')">Pay <i class="fas fa-hand-holding-dollar"></i></a>
                 </td>
             </tr>
             <?php $n++; endforeach;}?>

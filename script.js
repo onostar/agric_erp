@@ -10986,3 +10986,28 @@ function updateBeneficiary(){
           $("#entitlement").val('');
      }
 }
+
+//delete document upload
+function deleteUpload(document_id, customer_id){
+     let confirmDel = confirm("Are you sure you want to delete this document upload?", "");
+     if(confirmDel){
+          
+          $.ajax({
+               type : "GET",
+               url : "../controller/delete_document.php?document_id="+document_id,
+               beforeSend : function(){
+                    $("#docx_upload").html("<div class='processing'><div class='loader'></div></div>");
+               },
+               success : function(response){
+                    $("#docx_upload").html(response);
+                    setTimeout(function(){
+                         showPage("view_docx_upload.php?customer="+customer_id);
+                    }, 1000);
+               }
+               
+          })
+          return false;
+     }else{
+          return;
+     }
+}

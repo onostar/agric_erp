@@ -97,7 +97,7 @@
         }
         //fetch with current date less than condition and 2 condition 
         public function fetch_due_payments($table, $date, $store){
-            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE date(CURDATE()) >= date($date) AND store = :store AND payment_status = 0");
+            $get_user = $this->connectdb()->prepare("SELECT * FROM $table WHERE date(CURDATE()) >= date($date) AND store = :store AND payment_status = 0 ORDER BY date($date) ASC");
             $get_user->bindValue(":store", $store);
             $get_user->execute();
             if($get_user->rowCount() > 0){

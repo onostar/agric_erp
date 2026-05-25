@@ -1,3 +1,4 @@
+<div id="docx_upload">
 <?php
     session_start();
     // $store = $_SESSION['store_id'];
@@ -75,8 +76,7 @@
                 </td>
                 <td>
                     <a href="../documents/<?php echo $detail->document?>" target=" _blank"style="color:#fff; background:var(--otherColor); padding:5px; border:1px solid #fff; box-shadow:1px 1px 1px #222; border-radius:15px;" title="view Document">View <i class="fas fa-eye"></i></a>
-                    
-                    
+                    <a href="javascript:void(0)" style="color:#fff; color:red; font-size:1rem; padding:5px;" title="delete upload" onclick="deleteUpload('<?php echo $detail->document_id?>', '<?php echo $customer_id?>')"><i class="fas fa-trash"></i></a>
                 </td>
                 
             </tr>
@@ -103,3 +103,5 @@
         echo "<p class='no_result'>Session expired. Please login again</p>";
     }
     ?>
+
+</div>
