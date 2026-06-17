@@ -86,9 +86,9 @@
                 </td>
                 
                 <td style="color:var(--primaryColor)"><?php echo date("d-M-Y", strtotime($detail->due_date));?></td>
-                <td>
-                    <a href="javascript:void(0);" title="View details" style="padding:5px; background:var(--otherColor);color:#fff; border-radius:15px;" onclick="showPage('view_active_purchase.php?assigned=<?php echo $detail->assigned_id?>')">View <i class="fas fa-eye"></i></a>
-                    <a href="javascript:void(0);" title="Post Payment" style="padding:5px; background:var(--tertiaryColor);color:#fff; border-radius:15px;" onclick="showPage('field_payment.php?schedule=<?php echo $detail->repayment_id?>&customer=<?php echo $detail->customer?>')">Make Payment <i class="fas fa-hand-holding-dollar"></i></a>
+                <td style="display:flex; align-items:center; gap:.3rem">
+                    <a href="javascript:void(0);" title="View details" style="padding:5px; background:var(--otherColor);color:#fff; border-radius:15px;" onclick="showPage('view_active_purchase.php?assigned=<?php echo $detail->assigned_id?>')"><i class="fas fa-eye"></i></a>
+                    <a href="javascript:void(0);" title="Post Payment" style="padding:5px; background:var(--tertiaryColor);color:#fff; border-radius:15px;" onclick="showPage('field_payment.php?schedule=<?php echo $detail->repayment_id?>&customer=<?php echo $detail->customer?>')"><i class="fas fa-hand-holding-dollar"></i></a>
                 </td>
             </tr>
             <?php $n++; endforeach;}?>

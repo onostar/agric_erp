@@ -115,9 +115,11 @@ if($total_assigned < $total_size){
     for($i = 1; $i <= $installments; $i++){
         // ✅ make the first installment = start date
         $due_date = clone $start_date;
-        if($i > 1){
+        /* if($i > 1){
             $due_date->modify('+' . ($i - 1) . ' month');
-        }
+        } */
+        $due_date->modify("+{$i} month");
+
 
         $repayment_data = array(
             'field' => $id,

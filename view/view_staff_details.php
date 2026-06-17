@@ -208,6 +208,16 @@
                         <input type="text"  value="<?php echo $row->pension_num?>" readonly>
                     
                     </div>
+                    <div class="data" style="width:auto!important">
+                        <label style="background:transparent; color:green; text-align:left;width:auto" for="other_names">Tax ID:</label>
+                        <input type="text"  value="<?php echo $row->tax_id?>" readonly>
+                    
+                    </div>
+                    <div class="data" style="width:auto!important">
+                        <label style="background:transparent; color:green; text-align:left;width:auto" for="other_names">NIN:</label>
+                        <input type="text"  value="<?php echo $row->nin?>" readonly>
+                    
+                    </div>
                     
                 </div>
                 

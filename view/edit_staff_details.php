@@ -283,8 +283,16 @@
                     <label for="nok">Pension Number <span class="important">*</span></label>
                     <input type="text" name="pension_num" id="pension_num" required value="<?php echo $row->pension_num?>">
                 </div>
+                <div class="data" style="width:24%">
+                    <label for="nok">Tax ID <span class="important">*</span></label>
+                    <input type="text" name="tax_id" id="tax_id" required value="<?php echo $row->tax_id?>">
+                </div>
+                <div class="data" style="width:24%">
+                    <label for="nin">NIN <span class="important">*</span></label>
+                    <input type="text" name="nin" id="nin" required value="<?php echo $row->tax_id?>">
+                </div>
                 <div class="data" style="width:50%">
-                    <button type="submit" id="update_customer" name="update_customer" onclick="updateStaff()">Update details <i class="fas fa-save"></i></button>
+                    <button type="button" id="update_customer" name="update_customer" onclick="updateStaff()">Update details <i class="fas fa-save"></i></button>
                     <a style="border-radius:15px; background:brown;color:#fff;padding:10px; box-shadow:1px 1px 1px #222"href="javascript:void(0)" onclick="showPage('staff_list.php')"><i class="fas fa-angle-double-left"></i> Return</a>
                 </div>
             </div>

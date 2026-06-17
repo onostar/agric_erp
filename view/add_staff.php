@@ -224,6 +224,14 @@
                     <label for="pension_num">Pension Number</label>
                     <input type="text" name="pension_num" id="pension_num">
                 </div>
+                <div class="data" style="width:23%">
+                    <label for="tax_id">Tax ID</label>
+                    <input type="text" name="tax_id" id="tax_id">
+                </div>
+                <div class="data" style="width:23%">
+                    <label for="nin">NIN</label>
+                    <input type="text" name="nin" id="nin">
+                </div>
                 <div class="data" style="width:auto">
                     <button type="button" id="add_staff" name="add_staff" onclick="addStaff()">Add Staff <i class="fas fa-plus"></i></button>
                 </div>

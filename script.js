@@ -8085,6 +8085,8 @@ function addStaff(){
      let account_num = document.getElementById("account_num").value;
      let pension = document.getElementById("pension").value;
      let pension_num = document.getElementById("pension_num").value;
+     let tax_id = document.getElementById("tax_id").value;
+     let nin = document.getElementById("nin").value;
      let todayDate = new Date();
      if(marital_status === "Married"){
           if(spouse_name.length == 0 || spouse_name.replace(/^\s+|\s+$/g, "").length == 0){
@@ -8183,6 +8185,10 @@ function addStaff(){
           alert("Please select staff designation");
           $("#designtation").focus();
           return;
+     }else if(nin.length == 0 || nin.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input staff NIN");
+          $("#nin").focus();
+          return;
      }else if(todayDate <= new Date(dob)){
           alert("You can not enter a futuristic date !");
           $("#dob").focus();
@@ -8195,7 +8201,7 @@ function addStaff(){
           $.ajax({
                type : "POST",
                url : "../controller/add_staff.php",
-               data : {other_names:other_names, last_name:last_name, phone_number:phone_number, email:email, address:address, dob:dob, /* staff_id:staff_id, */ title:title, gender:gender, marital_status:marital_status, religion:religion, nok:nok, staff_group:staff_group,nok_phone:nok_phone, nok_relation:nok_relation, staff_category:staff_category, discipline:discipline, designation:designation, bank:bank, account_num:account_num, pension:pension, pension_num:pension_num, employed:employed, department:department,spouse_name:spouse_name, spouse_phone:spouse_phone},
+               data : {other_names:other_names, last_name:last_name, phone_number:phone_number, email:email, address:address, dob:dob, /* staff_id:staff_id, */ title:title, gender:gender, marital_status:marital_status, religion:religion, nok:nok, staff_group:staff_group,nok_phone:nok_phone, nok_relation:nok_relation, staff_category:staff_category, discipline:discipline, designation:designation, bank:bank, account_num:account_num, pension:pension, pension_num:pension_num, employed:employed, department:department,spouse_name:spouse_name, spouse_phone:spouse_phone, nin:nin, tax_id:tax_id},
                beforeSend : function(){
                     $("#add_staff").html("<div class='processing'><div class='loader'></div></div>");
                },
@@ -8239,6 +8245,8 @@ function updateStaff(){
      let account_num = document.getElementById("account_num").value;
      let pension = document.getElementById("pension").value;
      let pension_num = document.getElementById("pension_num").value;
+     let tax_id = document.getElementById("tax_id").value;
+     let nin = document.getElementById("nin").value;
      let spouse_name = document.getElementById("spouse_name")?.value || '';
      let spouse_phone = document.getElementById("spouse_phone")?.value || '';
      let todayDate = new Date();
@@ -8339,6 +8347,10 @@ function updateStaff(){
           alert("Please select staff designation");
           $("#designtation").focus();
           return;
+     }else if(nin.length == 0 || nin.replace(/^\s+|\s+$/g, "").length == 0){
+          alert("Please input staff NIN");
+          $("#nin").focus();
+          return;
      }else if(todayDate <= new Date(dob)){
           alert("You can not enter a futuristic date !");
           $("#dob").focus();
@@ -8351,7 +8363,7 @@ function updateStaff(){
           $.ajax({
                type : "POST",
                url : "../controller/update_staff.php",
-               data : {other_names:other_names, last_name:last_name, phone_number:phone_number, email:email, address:address, dob:dob, staff_id:staff_id, staff_num:staff_num, title:title, gender:gender, marital_status:marital_status, religion:religion, nok:nok, staff_group:staff_group,nok_phone:nok_phone, nok_relation:nok_relation, staff_category:staff_category, discipline:discipline, designation:designation, bank:bank, account_num:account_num, pension:pension, pension_num:pension_num, employed:employed, department:department, spouse_name:spouse_name, spouse_phone:spouse_phone},
+               data : {other_names:other_names, last_name:last_name, phone_number:phone_number, email:email, address:address, dob:dob, staff_id:staff_id, staff_num:staff_num, title:title, gender:gender, marital_status:marital_status, religion:religion, nok:nok, staff_group:staff_group,nok_phone:nok_phone, nok_relation:nok_relation, staff_category:staff_category, discipline:discipline, designation:designation, bank:bank, account_num:account_num, pension:pension, pension_num:pension_num, employed:employed, department:department, spouse_name:spouse_name, spouse_phone:spouse_phone, tax_id:tax_id, nin:nin},
                beforeSend : function(){
                     $("#edit_customer").html("<div class='processing'><div class='loader'></div></div>");
                },

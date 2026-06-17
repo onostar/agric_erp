@@ -29,6 +29,8 @@
     $account = htmlspecialchars(stripslashes($_POST['account_num']));
     $pension = htmlspecialchars(stripslashes($_POST['pension']));
     $pension_num = htmlspecialchars(stripslashes($_POST['pension_num']));
+    $tax_id = htmlspecialchars(stripslashes($_POST['tax_id']));
+    $nin = htmlspecialchars(stripslashes($_POST['nin']));
     $employed = htmlspecialchars(stripslashes($_POST['employed']));
     $spouse = strtoupper(htmlspecialchars(stripslashes($_POST['spouse_name'])));
     $spouse_phone = htmlspecialchars(stripslashes($_POST['spouse_phone']));
@@ -67,6 +69,8 @@
         'account_num' => $account,
         'pension_num' => $pension_num,
         'pension' => $pension,
+        'tax_id' => $tax_id,
+        'nin' => $nin
     );
     // $where = "staff_id = $staff_id";
        $update = new Update_table();
